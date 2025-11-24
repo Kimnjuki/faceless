@@ -7,11 +7,13 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "sonner";
-import { supabaseApi } from "@/config/supabase";
+import { useAuth } from "@/contexts/AuthContext";
+import { signupSchema, type SignupFormData } from "@/lib/validations";
+import { handleError } from "@/lib/error-handler";
 
 export default function Signup() {
   const navigate = useNavigate();
+  const { signUp } = useAuth();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -19,25 +21,49 @@ export default function Signup() {
     password: "",
     name: ""
   });
+  const [errors, setErrors] = useState<Partial<SignupFormData>>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
     setLoading(true);
 
     try {
       if (step < 2) {
-        setStep(step + 1);
-      } else {
-        // Create user in Supabase
-        await supabaseApi.createUser({
+        // Validate email and password
+        const validated = signupSchema.parse({
           email: formData.email,
+          password: formData.password,
           name: formData.name
         });
-        toast.success("Account created! Redirecting to dashboard...");
-        setTimeout(() => navigate('/dashboard'), 1500);
+        setStep(step + 1);
+      } else {
+        // Validate all fields
+        const validated = signupSchema.parse({
+          email: formData.email,
+          password: formData.password,
+          name: formData.name
+        });
+        
+        // Create user account
+        await signUp(validated.email, validated.password, validated.name);
+        
+        // Redirect to dashboard
+        navigate('/dashboard');
       }
-    } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+    } catch (error: any) {
+      if (error.errors) {
+        // Zod validation errors
+        const fieldErrors: Partial<SignupFormData> = {};
+        error.errors.forEach((err: any) => {
+          if (err.path) {
+            fieldErrors[err.path[0] as keyof SignupFormData] = err.message;
+          }
+        });
+        setErrors(fieldErrors);
+      } else {
+        handleError(error, 'Failed to create account');
+      }
     } finally {
       setLoading(false);
     }
@@ -68,7 +94,11 @@ export default function Signup() {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     required
+                    className={errors.email ? "border-destructive" : ""}
                   />
+                  {errors.email && (
+                    <p className="text-xs text-destructive">{errors.email}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
@@ -79,8 +109,13 @@ export default function Signup() {
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     required
+                    className={errors.password ? "border-destructive" : ""}
                   />
-                  <p className="text-xs text-muted-foreground">Must be at least 8 characters</p>
+                  {errors.password ? (
+                    <p className="text-xs text-destructive">{errors.password}</p>
+                  ) : (
+                    <p className="text-xs text-muted-foreground">Must be at least 8 characters</p>
+                  )}
                 </div>
               </>
             )}
@@ -94,7 +129,11 @@ export default function Signup() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
+                  className={errors.name ? "border-destructive" : ""}
                 />
+                {errors.name && (
+                  <p className="text-xs text-destructive">{errors.name}</p>
+                )}
               </div>
             )}
 

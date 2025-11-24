@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { supabaseApi } from "@/config/supabase";
+import { useLeads } from "@/hooks/useLeads";
 
 const categories = ["All", "YouTube", "AI Tools", "Monetization", "Automation", "Niche Selection"];
 
@@ -45,16 +45,18 @@ export default function BlogIndex() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const { createLead } = useLeads();
+
   const handleLeadMagnet = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      await supabaseApi.createLead(email, 'blog-lead-magnet');
+      await createLead(email, 'blog-lead-magnet');
       toast.success("Success! Check your email for the Niche Finder Checklist.");
       setEmail("");
     } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+      // Error already handled in hook
     } finally {
       setLoading(false);
     }

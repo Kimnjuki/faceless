@@ -4,7 +4,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { supabaseApi } from "@/config/supabase";
+import { useLeads } from "@/hooks/useLeads";
 
 export default function ExitIntentModal() {
   const [open, setOpen] = useState(false);
@@ -23,16 +23,18 @@ export default function ExitIntentModal() {
     return () => document.removeEventListener("mouseleave", handleMouseLeave);
   }, [hasShown]);
 
+  const { createLead } = useLeads();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
-      await supabaseApi.createLead(email, 'exit-intent');
+      await createLead(email, 'exit-intent');
       toast.success("Success! Check your email for your 40% discount code.");
       setEmail("");
       setOpen(false);
     } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+      // Error already handled in hook
     }
   };
 

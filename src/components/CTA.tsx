@@ -3,23 +3,24 @@ import { Input } from "@/components/ui/input";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { supabaseApi } from "@/config/supabase";
+import { useLeads } from "@/hooks/useLeads";
 
 export default function CTA() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { createLead } = useLeads();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      await supabaseApi.createLead(email, 'cta');
+      await createLead(email, 'cta');
       toast.success("Success! Check your email for next steps.");
       setEmail("");
     } catch (error) {
-      console.error("Error:", error);
-      toast.error("Something went wrong. Please try again.");
+      // Error already handled in hook
     } finally {
       setLoading(false);
     }

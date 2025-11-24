@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/contexts/AuthContext";
 import HomePage from "./pages/HomePage";
 import GettingStarted from "./pages/GettingStarted";
 import BlogIndex from "./pages/BlogIndex";
@@ -20,11 +21,13 @@ import WebinarRegistration from "./pages/funnel/WebinarRegistration";
 import ChallengeFunnel from "./pages/funnel/ChallengeFunnel";
 import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
 import TermsOfService from "./pages/legal/TermsOfService";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
+    <AuthProvider>
+      <Router>
+        <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/getting-started" element={<GettingStarted />} />
         <Route path="/blog" element={<BlogIndex />} />
@@ -33,10 +36,10 @@ export default function App() {
         <Route path="/tools/niche-quiz" element={<NicheQuiz />} />
         <Route path="/auth/signup" element={<Signup />} />
         <Route path="/auth/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/dashboard/courses" element={<Courses />} />
-        <Route path="/dashboard/community" element={<Community />} />
-        <Route path="/dashboard/profile" element={<Profile />} />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/dashboard/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
+        <Route path="/dashboard/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+        <Route path="/dashboard/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/products/:category" element={<ProductListing />} />
         <Route path="/product/:slug" element={<ProductDetail />} />
         <Route path="/checkout" element={<Checkout />} />
@@ -45,8 +48,9 @@ export default function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-service" element={<TermsOfService />} />
         <Route path="/:pillarSlug" element={<PillarPage />} />
-      </Routes>
-      <Toaster />
-    </Router>
+        </Routes>
+        <Toaster />
+      </Router>
+    </AuthProvider>
   );
 }

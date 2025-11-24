@@ -1,5 +1,7 @@
 // Supabase Configuration
 // Centralized config for all Supabase API calls
+// NOTE: This file is kept for backward compatibility
+// New code should use src/lib/supabase.ts for the Supabase client
 
 export const supabaseConfig = {
   url: import.meta.env.VITE_SUPABASE_URL || 'https://fvvpfueoaacijowkpdsf.supabase.co',

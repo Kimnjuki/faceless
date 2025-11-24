@@ -10,23 +10,25 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { supabaseApi } from "@/config/supabase";
+import { useLeads } from "@/hooks/useLeads";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const { createLead, loading: leadLoading } = useLeads();
+
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      await supabaseApi.createLead(email, 'header');
+      await createLead(email, 'header');
       toast.success("Success! Check your email for free tips.");
       setEmail("");
     } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+      // Error already handled in hook
     } finally {
       setLoading(false);
     }

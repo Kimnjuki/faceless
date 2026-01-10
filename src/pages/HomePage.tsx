@@ -1,5 +1,7 @@
 import Header from "../components/Header";
 import Hero from "../components/Hero";
+import WhyAnonymity from "../components/WhyAnonymity";
+import CompetitorComparison from "../components/CompetitorComparison";
 import Stats from "../components/Stats";
 import Features from "../components/Features";
 import NichesShowcase from "../components/NichesShowcase";
@@ -19,6 +21,8 @@ export default function HomePage() {
       <ExitIntentModal />
       <main>
         <Hero />
+        <WhyAnonymity />
+        <CompetitorComparison />
         <Stats />
         <TrustIndicators />
         <Features />

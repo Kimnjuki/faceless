@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { BookOpen, Users, TrendingUp, Award, Play, Calendar, DollarSign, Eye, Heart, ArrowUpRight, ArrowDownRight, FileText, Target } from "lucide-react";
 import DashboardLayout from "../../components/DashboardLayout";
 import OnboardingModal from "../../components/OnboardingModal";
+import QuickStartWizard from "../../components/QuickStartWizard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,11 @@ import { Badge } from "@/components/ui/badge";
 
 export default function Dashboard() {
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showQuickStart, setShowQuickStart] = useState(() => {
+    // Show quick start if user hasn't completed it yet
+    const completed = localStorage.getItem('quickstart_completed');
+    return !completed;
+  });
 
   const upcomingEvents = [
     { title: "Live Q&A Session", date: "Jan 25, 2025", time: "2:00 PM EST" },
@@ -19,6 +25,13 @@ export default function Dashboard() {
   return (
     <DashboardLayout>
       <OnboardingModal open={showOnboarding} onComplete={() => setShowOnboarding(false)} />
+      <QuickStartWizard 
+        open={showQuickStart} 
+        onComplete={() => {
+          setShowQuickStart(false);
+          localStorage.setItem('quickstart_completed', 'true');
+        }} 
+      />
       
       <div className="space-y-8">
         <div className="flex items-center justify-between">

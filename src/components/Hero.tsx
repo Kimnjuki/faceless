@@ -21,12 +21,14 @@ export default function Hero() {
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
-              Build Your Faceless Content{" "}
-              <span className="gradient-text bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">Empire</span> Without Showing Your Face
+              <span className="gradient-text bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">100% Anonymous</span> Content Creation Platform
             </h1>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-muted-foreground mb-6">
+              Unlike Medium, Substack & Ghost — <span className="text-foreground">No Real Name Required</span>
+            </h2>
 
             <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
-              Join creators earning 6-figures anonymously through AI-powered content. Complete privacy protection, proven monetization strategies, and step-by-step automation.
+              Build your faceless content empire with <strong>complete anonymity</strong>. Join creators earning 6-figures anonymously through AI-powered content, proven monetization strategies, and step-by-step automation — <strong>all without revealing your identity.</strong>
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">

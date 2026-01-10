@@ -1,5 +1,4 @@
-import { useParams } from "react-router-dom";
-import { CheckCircle2, Calendar } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,6 @@ const dailySchedule = [
 ];
 
 export default function ChallengeFunnel() {
-  const { name } = useParams();
 
   return (
     <>

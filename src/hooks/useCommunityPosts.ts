@@ -14,13 +14,26 @@ export function useCommunityPosts(category?: string) {
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     try {
+      // Fetch posts with joined category
       let query = supabase
-        .from('community_posts')
-        .select('*')
+        .from('forum_posts')
+        .select(`
+          *,
+          category:community_categories(id, name, description, access_tier)
+        `)
         .order('created_at', { ascending: false });
 
       if (category && category !== 'All') {
-        query = query.eq('category', category);
+        // First, get category ID from category name
+        const { data: categoryData } = await supabase
+          .from('community_categories')
+          .select('id')
+          .eq('name', category)
+          .single();
+        
+        if (categoryData) {
+          query = query.eq('category_id', categoryData.id);
+        }
       }
 
       const { data, error } = await query;
@@ -36,23 +49,39 @@ export function useCommunityPosts(category?: string) {
     }
   }, [category]);
 
-  const createPost = useCallback(async (title: string, content: string, category: string, authorName: string) => {
+  const createPost = useCallback(async (title: string, content: string, category: string) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
+      // Get category ID from category name
+      let categoryId: string | undefined;
+      if (category && category !== 'All') {
+        const { data: categoryData } = await supabase
+          .from('community_categories')
+          .select('id')
+          .eq('name', category)
+          .single();
+        
+        if (categoryData) {
+          categoryId = categoryData.id;
+        }
+      }
+
       const { data, error } = await supabase
-        .from('community_posts')
+        .from('forum_posts')
         .insert({
           author_id: user.id,
-          author_name: authorName,
           title,
           content,
-          category,
-          likes: 0,
-          replies: 0,
+          category_id: categoryId,
+          post_type: 'discussion',
+          status: 'published',
         })
-        .select()
+        .select(`
+          *,
+          category:community_categories(id, name, description, access_tier)
+        `)
         .single();
 
       if (error) throw error;

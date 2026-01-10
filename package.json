@@ -1,7 +1,8 @@
 {
-  "name": "faceless-success-hub",
+  "name": "content-anonymity",
   "private": true,
   "version": "1.0.0",
+  "description": "ContentAnonymity - Build Your Faceless Content Empire",
   "type": "module",
   "scripts": {
     "dev": "vite",

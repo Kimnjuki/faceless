@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Calendar, Clock, Users } from "lucide-react";
 import Header from "../../components/Header";
@@ -10,7 +9,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 export default function WebinarRegistration() {
-  const { slug } = useParams();
   const [timeLeft, setTimeLeft] = useState({ hours: 2, minutes: 34, seconds: 12 });
 
   useEffect(() => {

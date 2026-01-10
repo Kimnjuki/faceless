@@ -10,12 +10,14 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
 import { signupSchema, type SignupFormData } from "@/lib/validations";
 import { handleError } from "@/lib/error-handler";
+import { supabase } from "@/lib/supabase";
 
 export default function Signup() {
   const navigate = useNavigate();
-  const { signUp } = useAuth();
+  const { signUp, signInWithGoogle } = useAuth();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -30,37 +32,78 @@ export default function Signup() {
 
     try {
       if (step < 2) {
-        // Validate email and password
-        const validated = signupSchema.parse({
+        // Validate email and password only
+        const emailPasswordSchema = signupSchema.pick({ email: true, password: true });
+        emailPasswordSchema.parse({
           email: formData.email,
-          password: formData.password,
-          name: formData.name
+          password: formData.password
         });
-        setStep(step + 1);
+        
+        // If validation passes, move to next step
+        setStep(2);
       } else {
-        // Validate all fields
+        // Validate all fields including name
         const validated = signupSchema.parse({
           email: formData.email,
           password: formData.password,
-          name: formData.name
+          name: formData.name || undefined
         });
         
         // Create user account
-        await signUp(validated.email, validated.password, validated.name);
+        const result = await signUp(validated.email, validated.password, validated.name);
         
-        // Redirect to dashboard
-        navigate('/dashboard');
+        // Check result and handle accordingly
+        if (result.error) {
+          // Error already shown in toast by signUp function
+          // Check if it's a validation error we should show in form
+          if (result.error.message?.toLowerCase().includes('email') || 
+              result.error.message?.toLowerCase().includes('user already registered')) {
+            setErrors({ email: result.error.message });
+          } else if (result.error.message?.toLowerCase().includes('password')) {
+            setErrors({ password: result.error.message });
+          }
+          return; // Don't redirect on error
+        }
+        
+        // Check if user was created
+        if (result.user) {
+          // Check if we have a session (email confirmation might be disabled)
+          const { data: { session } } = await supabase.auth.getSession();
+          
+          if (session) {
+            // User is immediately signed in (email confirmation disabled)
+            // Redirect to dashboard
+            setTimeout(() => {
+              navigate('/dashboard');
+            }, 500);
+          } else {
+            // Email confirmation required - show message and redirect to login
+            setTimeout(() => {
+              navigate('/auth/login?message=Please check your email to verify your account');
+            }, 2000);
+          }
+        }
       }
     } catch (error: any) {
       if (error.errors) {
         // Zod validation errors
         const fieldErrors: Partial<SignupFormData> = {};
         error.errors.forEach((err: any) => {
-          if (err.path) {
-            fieldErrors[err.path[0] as keyof SignupFormData] = err.message;
+          if (err.path && err.path.length > 0) {
+            const fieldName = err.path[0] as keyof SignupFormData;
+            fieldErrors[fieldName] = err.message;
           }
         });
         setErrors(fieldErrors);
+      } else if (error.message) {
+        // Other errors
+        handleError(error, 'Failed to create account');
+        // Try to extract field-specific errors
+        if (error.message.toLowerCase().includes('email')) {
+          setErrors({ email: error.message });
+        } else if (error.message.toLowerCase().includes('password')) {
+          setErrors({ password: error.message });
+        }
       } else {
         handleError(error, 'Failed to create account');
       }
@@ -73,9 +116,15 @@ export default function Signup() {
     <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <div className="flex items-center gap-2 mb-4">
-            <div className="h-8 w-8 rounded-lg bg-primary" />
-            <span className="font-bold text-xl">FSH</span>
+          <div className="flex items-center justify-center mb-6">
+            <div className="flex items-center justify-center p-4 rounded-xl bg-white shadow-lg border-2 border-border/50 hover:shadow-xl hover:border-primary/30 transition-all">
+              <img 
+                src="/assets/logo.png" 
+                alt="ContentAnonymity.com" 
+                className="h-20 w-auto object-contain max-w-[300px] drop-shadow-md"
+                style={{ imageRendering: 'crisp-edges' }}
+              />
+            </div>
           </div>
           <CardTitle>Create Your Account</CardTitle>
           <CardDescription>Join 10,000+ faceless creators building profitable businesses</CardDescription>
@@ -153,8 +202,59 @@ export default function Signup() {
 
           <div className="mt-6">
             <Separator className="mb-4" />
-            <Button variant="outline" className="w-full">
-              Continue with Google
+            <Button 
+              variant="outline" 
+              className="w-full"
+              onClick={async () => {
+                setGoogleLoading(true);
+                try {
+                  const result = await signInWithGoogle();
+                  if (result.error) {
+                    // Error already shown in toast with helpful message
+                    // If it's the "provider not enabled" error, show additional help
+                    if (result.error.message?.includes('provider is not enabled') || 
+                        result.error.message?.includes('Unsupported provider')) {
+                      // Error message already shown in context
+                    }
+                  }
+                  // If no error, OAuth redirect will happen automatically
+                } catch (error: any) {
+                  // Fallback error handling
+                  handleError(error, 'Failed to sign in with Google');
+                } finally {
+                  setGoogleLoading(false);
+                }
+              }}
+              disabled={googleLoading || loading}
+            >
+              {googleLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Connecting...
+                </>
+              ) : (
+                <>
+                  <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                    />
+                  </svg>
+                  Continue with Google
+                </>
+              )}
             </Button>
           </div>
 

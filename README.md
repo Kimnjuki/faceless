@@ -1,8 +1,8 @@
-# Faceless Success Hub (FSH)
+# ContentAnonymity
 
-> The definitive platform for anonymous digital entrepreneurship. Build profitable faceless content businesses with AI automation.
+> The definitive platform for anonymous digital entrepreneurship. Build profitable faceless content businesses with AI automation and complete privacy.
 
-![FSH Platform](https://img.shields.io/badge/Status-Production%20Ready-success)
+![ContentAnonymity](https://img.shields.io/badge/Status-Production%20Ready-success)
 ![React](https://img.shields.io/badge/React-18-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
 ![Supabase](https://img.shields.io/badge/Database-Supabase-green)
@@ -22,8 +22,8 @@ setup-github.bat
 # Option 3: Manual push
 git init
 git add .
-git commit -m "Initial commit: FSH Platform"
-git remote add origin https://github.com/Sugow-dot/faceless.git
+git commit -m "Initial commit: ContentAnonymity Platform"
+git remote add origin https://github.com/Kimnjuki/faceless.git
 git branch -M main
 git push -u origin main
 ```
@@ -32,7 +32,7 @@ git push -u origin main
 
 ```bash
 # Clone the repository
-git clone https://github.com/Sugow-dot/faceless.git
+git clone https://github.com/Kimnjuki/faceless.git
 cd faceless
 
 # Install dependencies

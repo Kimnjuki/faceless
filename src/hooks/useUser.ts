@@ -18,13 +18,20 @@ export function useUser() {
     const fetchUser = async () => {
       try {
         const { data, error } = await supabase
-          .from('users')
+          .from('profiles')
           .select('*')
-          .eq('id', authUser.id)
+          .eq('user_id', authUser.id)
           .single();
 
         if (error) throw error;
-        setUser(data as User);
+        // Map profile to User interface for backward compatibility
+        const userData = data as any;
+        setUser({
+          ...userData,
+          id: userData.user_id, // Map user_id to id for compatibility
+          name: userData.full_name, // Map full_name to name
+          niche: userData.primary_niche, // Map primary_niche to niche
+        } as User);
       } catch (error) {
         console.error('Error fetching user:', error);
       } finally {
@@ -39,15 +46,29 @@ export function useUser() {
     if (!authUser) return;
 
     try {
+      // Map User fields to Profile fields
+      const profileData: any = {};
+      if (data.name !== undefined) profileData.full_name = data.name;
+      if (data.niche !== undefined) profileData.primary_niche = data.niche;
+      if (data.email !== undefined) profileData.email = data.email;
+      // Add other fields as needed
+
       const { data: updated, error } = await supabase
-        .from('users')
-        .update(data)
-        .eq('id', authUser.id)
+        .from('profiles')
+        .update(profileData)
+        .eq('user_id', authUser.id)
         .select()
         .single();
 
       if (error) throw error;
-      setUser(updated as User);
+      // Map back to User interface
+      const userData = updated as any;
+      setUser({
+        ...userData,
+        id: userData.user_id,
+        name: userData.full_name,
+        niche: userData.primary_niche,
+      } as User);
       return updated;
     } catch (error) {
       console.error('Error updating user:', error);

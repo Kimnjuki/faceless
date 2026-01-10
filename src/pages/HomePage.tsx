@@ -3,10 +3,12 @@ import Hero from "../components/Hero";
 import Stats from "../components/Stats";
 import Features from "../components/Features";
 import NichesShowcase from "../components/NichesShowcase";
+import ToolsShowcase from "../components/ToolsShowcase";
 import ProductLadder from "../components/ProductLadder";
 import Testimonials from "../components/Testimonials";
 import FAQ from "../components/FAQ";
 import CTA from "../components/CTA";
+import TrustIndicators from "../components/TrustIndicators";
 import Footer from "../components/Footer";
 import ExitIntentModal from "../components/ExitIntentModal";
 
@@ -18,8 +20,10 @@ export default function HomePage() {
       <main>
         <Hero />
         <Stats />
+        <TrustIndicators />
         <Features />
         <NichesShowcase />
+        <ToolsShowcase />
         <Testimonials />
         <ProductLadder />
         <FAQ />

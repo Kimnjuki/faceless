@@ -1,10 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, ArrowRight, PlayCircle, FileText, Zap } from "lucide-react";
+import { CheckCircle2, ArrowRight, PlayCircle, FileText, Zap, BookOpen, GraduationCap } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useLearningPaths } from "@/hooks/useLearningPaths";
 
 export default function GettingStarted() {
+  const { paths, loading } = useLearningPaths({ featured: true });
+  const featuredPaths = paths.slice(0, 2);
+
   return (
     <div className="min-h-screen">
       {/* Hero */}
@@ -200,6 +204,72 @@ export default function GettingStarted() {
           </div>
         </div>
       </section>
+
+      {/* Featured Learning Paths */}
+      {!loading && featuredPaths.length > 0 && (
+        <section className="py-20 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-12">
+                <Badge className="mb-4">Recommended Learning Paths</Badge>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                  Start Your Learning Journey
+                </h2>
+                <p className="text-lg text-muted-foreground">
+                  Follow these structured paths to master faceless content creation
+                </p>
+              </div>
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                {featuredPaths.map((path) => (
+                  <Card key={path.id} className="hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                          <GraduationCap className="h-6 w-6 text-primary" />
+                        </div>
+                        {path.difficulty_level && (
+                          <Badge variant="outline" className="capitalize">
+                            {path.difficulty_level}
+                          </Badge>
+                        )}
+                      </div>
+                      <CardTitle className="text-xl">{path.name}</CardTitle>
+                      <CardDescription className="mt-2">
+                        {path.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                          {path.estimated_duration && (
+                            <span>{path.estimated_duration}</span>
+                          )}
+                          {path.modules && path.modules.length > 0 && (
+                            <span>{path.modules.length} modules</span>
+                          )}
+                        </div>
+                        <Button asChild>
+                          <Link to={`/learning-paths/${path.id}`}>
+                            Start Path <ArrowRight className="ml-2 h-4 w-4" />
+                          </Link>
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              <div className="text-center">
+                <Button variant="outline" size="lg" asChild>
+                  <Link to="/learning-paths">
+                    <BookOpen className="mr-2 h-4 w-4" />
+                    View All Learning Paths
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="py-20 bg-primary text-primary-foreground">

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { BookOpen, Users, TrendingUp, Award, Play, Calendar } from "lucide-react";
+import { BookOpen, Users, TrendingUp, Award, Play, Calendar, DollarSign, Eye, Heart, ArrowUpRight, ArrowDownRight, FileText, Target } from "lucide-react";
 import DashboardLayout from "../../components/DashboardLayout";
 import OnboardingModal from "../../components/OnboardingModal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,6 +30,67 @@ export default function Dashboard() {
             Restart Onboarding
           </Button>
         </div>
+
+        {/* Analytics Overview */}
+        <Card className="border-2">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5" />
+              Analytics Overview
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-4 rounded-lg bg-muted/50">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-muted-foreground">Total Revenue</span>
+                  <DollarSign className="h-4 w-4 text-green-500" />
+                </div>
+                <div className="text-2xl font-bold">$4,250</div>
+                <div className="flex items-center gap-1 text-xs text-green-600 mt-1">
+                  <ArrowUpRight className="h-3 w-3" />
+                  <span>+18.2% from last month</span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-lg bg-muted/50">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-muted-foreground">Total Followers</span>
+                  <Users className="h-4 w-4 text-blue-500" />
+                </div>
+                <div className="text-2xl font-bold">12.5K</div>
+                <div className="flex items-center gap-1 text-xs text-green-600 mt-1">
+                  <ArrowUpRight className="h-3 w-3" />
+                  <span>+1.2K this month</span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-lg bg-muted/50">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-muted-foreground">Total Views</span>
+                  <Eye className="h-4 w-4 text-purple-500" />
+                </div>
+                <div className="text-2xl font-bold">245K</div>
+                <div className="flex items-center gap-1 text-xs text-green-600 mt-1">
+                  <ArrowUpRight className="h-3 w-3" />
+                  <span>+32K this month</span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-lg bg-muted/50">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-muted-foreground">Engagement Rate</span>
+                  <Heart className="h-4 w-4 text-red-500" />
+                </div>
+                <div className="text-2xl font-bold">8.4%</div>
+                <div className="flex items-center gap-1 text-xs text-red-600 mt-1">
+                  <ArrowDownRight className="h-3 w-3" />
+                  <span>-0.3% from last month</span>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           <Card>
@@ -140,39 +201,74 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent className="space-y-2">
               <Button variant="outline" className="w-full justify-start" asChild>
+                <Link to="/dashboard/content">Create Content</Link>
+              </Button>
+              <Button variant="outline" className="w-full justify-start" asChild>
                 <Link to="/dashboard/courses">Continue Learning</Link>
               </Button>
               <Button variant="outline" className="w-full justify-start" asChild>
                 <Link to="/dashboard/community">Join Discussion</Link>
               </Button>
               <Button variant="outline" className="w-full justify-start" asChild>
-                <Link to="/products/all">Browse Products</Link>
+                <Link to="/dashboard/analytics">View Analytics</Link>
               </Button>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Recent Activity</CardTitle>
+              <CardTitle>Resource Library</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-3 text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-primary" />
-                  <span className="text-muted-foreground">Completed lesson: AI Tools Overview</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-primary" />
-                  <span className="text-muted-foreground">Posted in Community forum</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-primary" />
-                  <span className="text-muted-foreground">Earned "Fast Learner" badge</span>
-                </div>
-              </div>
+            <CardContent className="space-y-2">
+              <Button variant="outline" className="w-full justify-start" asChild>
+                <Link to="/resources/templates">
+                  <FileText className="mr-2 h-4 w-4" />
+                  Templates
+                </Link>
+              </Button>
+              <Button variant="outline" className="w-full justify-start" asChild>
+                <Link to="/resources/niches">
+                  <Target className="mr-2 h-4 w-4" />
+                  Niche Database
+                </Link>
+              </Button>
+              <Button variant="outline" className="w-full justify-start" asChild>
+                <Link to="/learning-paths">
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  Learning Paths
+                </Link>
+              </Button>
+              <Button variant="outline" className="w-full justify-start" asChild>
+                <Link to="/platform-guides">
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  Platform Guides
+                </Link>
+              </Button>
             </CardContent>
           </Card>
         </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Activity</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3 text-sm">
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-primary" />
+                <span className="text-muted-foreground">Completed lesson: AI Tools Overview</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-primary" />
+                <span className="text-muted-foreground">Posted in Community forum</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-primary" />
+                <span className="text-muted-foreground">Earned "Fast Learner" badge</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </DashboardLayout>
   );

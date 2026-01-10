@@ -17,14 +17,14 @@ export default function TermsOfService() {
               <section>
                 <h2 className="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
                 <p className="text-muted-foreground">
-                  By accessing and using Faceless Success Hub (the "Service"), you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Service.
+                  By accessing and using ContentAnonymity.com (the "Service"), you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Service.
                 </p>
               </section>
 
               <section>
                 <h2 className="text-2xl font-semibold mb-4">2. Description of Service</h2>
                 <p className="text-muted-foreground">
-                  Faceless Success Hub provides educational content, tools, and community resources for individuals interested in building faceless content businesses. The Service includes courses, templates, tools, and community access.
+                  ContentAnonymity.com provides educational content, tools, and community resources for individuals interested in building faceless content businesses. The Service includes courses, templates, tools, and community access.
                 </p>
               </section>
 
@@ -80,7 +80,7 @@ export default function TermsOfService() {
               <section>
                 <h2 className="text-2xl font-semibold mb-4">7. Intellectual Property</h2>
                 <p className="text-muted-foreground">
-                  All content, features, and functionality of the Service are owned by Faceless Success Hub and protected by copyright, trademark, and other intellectual property laws. You may not copy, modify, or create derivative works without our permission.
+                  All content, features, and functionality of the Service are owned by ContentAnonymity.com and protected by copyright, trademark, and other intellectual property laws. You may not copy, modify, or create derivative works without our permission.
                 </p>
               </section>
 
@@ -94,7 +94,7 @@ export default function TermsOfService() {
               <section>
                 <h2 className="text-2xl font-semibold mb-4">9. Limitation of Liability</h2>
                 <p className="text-muted-foreground">
-                  To the maximum extent permitted by law, Faceless Success Hub shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of the Service.
+                  To the maximum extent permitted by law, ContentAnonymity.com shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of the Service.
                 </p>
               </section>
 
@@ -115,7 +115,7 @@ export default function TermsOfService() {
               <section>
                 <h2 className="text-2xl font-semibold mb-4">12. Governing Law</h2>
                 <p className="text-muted-foreground">
-                  These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which Faceless Success Hub operates, without regard to its conflict of law provisions.
+                  These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which ContentAnonymity.com operates, without regard to its conflict of law provisions.
                 </p>
               </section>
 

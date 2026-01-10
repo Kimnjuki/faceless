@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { User, Mail, Lock, Bell } from "lucide-react";
+import { User, Lock, Bell } from "lucide-react";
 import DashboardLayout from "../../components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Filter } from "lucide-react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -32,6 +32,7 @@ const products = [
 
 export default function ProductListing() {
   const { category } = useParams();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -68,7 +69,12 @@ export default function ProductListing() {
                   <div className="text-3xl font-bold text-primary">${product.price}</div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full">View Details</Button>
+                  <Button 
+                    className="w-full"
+                    onClick={() => navigate(`/product/${product.name.toLowerCase().replace(/\s+/g, '-')}`)}
+                  >
+                    View Details
+                  </Button>
                 </CardFooter>
               </Card>
             ))}

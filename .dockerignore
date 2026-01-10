@@ -1,0 +1,62 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Build outputs
+dist
+build
+.cache
+.parcel-cache
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md
+!README.md
+
+# Scripts
+*.sh
+*.bat
+*.ps1
+
+# Temporary files
+*.tmp
+*.log
+
+# Deployment configs
+.vercel
+.netlify
+
+# SQL files (not needed in Docker image)
+*.sql
+
+# JSON configs (not needed)
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!tsconfig.node.json
+

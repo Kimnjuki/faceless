@@ -49,6 +49,20 @@ The Dockerfile uses a multi-stage build:
 1. **Builder stage**: Installs dependencies and builds the React app
 2. **Production stage**: Serves the built app with nginx
 
+### Security Note on Environment Variables
+
+**Important**: Vite requires environment variables at BUILD TIME (not runtime), which means they must be available during the Docker build process. The current Dockerfile uses `ARG` and `ENV` instructions, which means these values are stored in the Docker image layers.
+
+**Security Considerations**:
+- The Supabase anonymous key is designed to be public-facing (it's safe to expose in client-side code)
+- However, if you want enhanced security, you can use BuildKit secrets (see `Dockerfile.buildkit` for an example)
+- Coolify handles build arguments securely, but be aware that anyone with access to your Docker image can extract these values
+
+**For Enhanced Security** (Optional):
+1. Use the `Dockerfile.buildkit` version which uses BuildKit secrets
+2. Configure Coolify to use BuildKit secrets instead of build arguments
+3. This prevents secrets from being stored in image layers
+
 ## Nginx Configuration
 
 The app includes a custom `nginx.conf` that:
@@ -73,12 +87,35 @@ Remember: Vite embeds environment variables at BUILD TIME. If you change them, y
 
 ## Manual Docker Build (for testing)
 
+### Standard Build (with ARG/ENV)
+
 ```bash
 # Build with environment variables
 docker build \
   --build-arg VITE_SUPABASE_URL=your_url \
   --build-arg VITE_SUPABASE_ANON_KEY=your_key \
   -t faceless-app .
+
+# Run locally
+docker run -p 3000:80 faceless-app
+```
+
+### Secure Build (with BuildKit secrets)
+
+```bash
+# Create secret files (don't commit these!)
+echo "your_supabase_url" > /tmp/supabase_url
+echo "your_supabase_key" > /tmp/supabase_key
+
+# Build with BuildKit secrets
+DOCKER_BUILDKIT=1 docker build \
+  --secret id=supabase_url,src=/tmp/supabase_url \
+  --secret id=supabase_key,src=/tmp/supabase_key \
+  -f Dockerfile.buildkit \
+  -t faceless-app .
+
+# Clean up secret files
+rm /tmp/supabase_url /tmp/supabase_key
 
 # Run locally
 docker run -p 3000:80 faceless-app

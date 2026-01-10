@@ -7,13 +7,15 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci
+# Install dependencies (using npm install for flexibility with or without lockfile)
+RUN npm install --frozen-lockfile || npm install
 
 # Copy source code
 COPY . .
 
 # Build arguments for environment variables (Vite needs them at build time)
+# Note: These are required at build time for Vite. For better security, use BuildKit secrets
+# See COOLIFY.md for BuildKit secrets setup instructions
 ARG VITE_SUPABASE_URL
 ARG VITE_SUPABASE_ANON_KEY
 
@@ -23,6 +25,10 @@ ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
 
 # Build the application
 RUN npm run build
+
+# Note: Environment variables are baked into the build output (dist folder)
+# They are not needed in the final nginx image, but they remain in the builder stage history
+# For enhanced security, use Dockerfile.buildkit with BuildKit secrets
 
 # Production stage with nginx
 FROM nginx:alpine

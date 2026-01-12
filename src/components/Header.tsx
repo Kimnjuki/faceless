@@ -47,14 +47,14 @@ export default function Header() {
             </span>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-8" aria-label="Main navigation">
             <Link to="/" className="text-sm font-semibold hover:text-primary transition-colors relative group">
               Home
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-purple-600 group-hover:w-full transition-all duration-300"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-purple-600 group-hover:w-full transition-all duration-300" aria-hidden="true"></span>
             </Link>
             <Link to="/getting-started" className="text-sm font-semibold hover:text-primary transition-colors relative group">
               Getting Started
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-purple-600 group-hover:w-full transition-all duration-300"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-purple-600 group-hover:w-full transition-all duration-300" aria-hidden="true"></span>
             </Link>
             
             <DropdownMenu>
@@ -137,17 +137,27 @@ export default function Header() {
             </DropdownMenu>
           </nav>
 
-          <form onSubmit={handleEmailSubmit} className="hidden md:flex items-center gap-2">
+          <form 
+            onSubmit={handleEmailSubmit} 
+            className="hidden md:flex items-center gap-2"
+            aria-label="Email subscription form"
+          >
+            <label htmlFor="header-email" className="sr-only">
+              Enter your email to get free tips
+            </label>
             <Input
+              id="header-email"
               type="email"
               placeholder="Your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-48"
               required
+              aria-required="true"
+              aria-label="Email address"
             />
-            <Button type="submit" size="sm" disabled={loading}>
-              <Mail className="h-4 w-4 mr-1" />
+            <Button type="submit" size="sm" disabled={loading} aria-label="Subscribe to get free tips">
+              <Mail className="h-4 w-4 mr-1" aria-hidden="true" />
               Get Free Tips
             </Button>
           </form>
@@ -161,15 +171,26 @@ export default function Header() {
             </Button>
           </div>
 
-          <button className="lg:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X /> : <Menu />}
+          <button 
+            className="lg:hidden" 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
+          >
+            {mobileMenuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
           </button>
         </div>
       </div>
 
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t bg-background p-4">
-          <nav className="flex flex-col gap-4">
+        <div 
+          id="mobile-menu"
+          className="lg:hidden border-t bg-background p-4"
+          role="dialog"
+          aria-label="Mobile navigation menu"
+        >
+          <nav className="flex flex-col gap-4" aria-label="Main navigation">
             <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">
               Home
             </Link>

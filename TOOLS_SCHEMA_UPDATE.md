@@ -176,3 +176,4 @@ The platform is now fully compatible with your Supabase schema structure:
 
 
 
+

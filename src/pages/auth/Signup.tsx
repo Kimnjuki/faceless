@@ -154,10 +154,14 @@ export default function Signup() {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     required
+                    aria-required="true"
+                    aria-invalid={!!errors.email}
+                    aria-describedby={errors.email ? "email-error" : undefined}
+                    autoComplete="email"
                     className={errors.email ? "border-destructive" : ""}
                   />
                   {errors.email && (
-                    <p className="text-xs text-destructive">{errors.email}</p>
+                    <p className="text-xs text-destructive" role="alert" id="email-error">{errors.email}</p>
                   )}
                   <p className="text-xs text-muted-foreground">
                     🔒 Your email is kept private and never displayed publicly. We only use it for account verification and important updates.
@@ -172,12 +176,15 @@ export default function Signup() {
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     required
+                    aria-required="true"
+                    aria-invalid={!!errors.password}
+                    aria-describedby={errors.password ? "password-error" : "password-help"}
                     className={errors.password ? "border-destructive" : ""}
                   />
                   {errors.password ? (
-                    <p className="text-xs text-destructive">{errors.password}</p>
+                    <p className="text-xs text-destructive" role="alert" id="password-error">{errors.password}</p>
                   ) : (
-                    <p className="text-xs text-muted-foreground">Must be at least 8 characters</p>
+                    <p className="text-xs text-muted-foreground" id="password-help">Must be at least 8 characters</p>
                   )}
                 </div>
               </>

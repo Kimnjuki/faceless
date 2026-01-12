@@ -63,9 +63,9 @@ export default function Footer() {
           </div>
           
           {footerSections.map((section, index) => (
-            <div key={index} className="animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
-              <h3 className="font-bold text-base mb-5 gradient-text">{section.title}</h3>
-              <ul className="space-y-3">
+            <nav key={index} className="animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }} aria-labelledby={`footer-${section.title.toLowerCase().replace(/\s+/g, '-')}`}>
+              <h3 id={`footer-${section.title.toLowerCase().replace(/\s+/g, '-')}`} className="font-bold text-base mb-5 gradient-text">{section.title}</h3>
+              <ul className="space-y-3" role="list">
                 {section.links.map((link, i) => (
                   <li key={i}>
                     <Link 
@@ -77,7 +77,7 @@ export default function Footer() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </nav>
           ))}
         </div>
         

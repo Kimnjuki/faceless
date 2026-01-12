@@ -19,7 +19,7 @@ export default function HomePage() {
     <>
       <Header />
       <ExitIntentModal />
-      <main>
+      <main id="main-content" role="main">
         <Hero />
         <WhyAnonymity />
         <CompetitorComparison />

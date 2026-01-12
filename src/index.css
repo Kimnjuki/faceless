@@ -10,7 +10,7 @@
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --muted: 240 4.8% 96.9%;
-    --muted-foreground: 240 3.8% 46.1%;
+    --muted-foreground: 240 5.9% 35%; /* Darkened from 46.1% to 35% for better contrast (meets 4.5:1 on white) */
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
     --border: 240 5.9% 92%;
@@ -250,5 +250,27 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: gradient-shift 3s ease infinite;
+  }
+  
+  /* High contrast text for light colored backgrounds (WCAG AA compliant) */
+  .text-on-light {
+    color: hsl(240, 10%, 25%);
+  }
+  
+  /* Ensure text on light colored backgrounds meets WCAG AA contrast (4.5:1) */
+  /* Target elements with bg-primary/5 or similar light backgrounds */
+  [class*="bg-primary/5"] .text-muted-foreground,
+  [class*="bg-primary/10"] .text-muted-foreground,
+  [class*="bg-muted/50"] .text-muted-foreground,
+  [class*="bg-muted/30"] .text-muted-foreground,
+  [class*="bg-muted/20"] .text-muted-foreground {
+    color: hsl(240, 10%, 30%) !important; /* Force darker color for WCAG compliance */
+  }
+  
+  /* For text-xs specifically on light backgrounds - ensure minimum 4.5:1 */
+  [class*="bg-primary/5"] .text-xs.text-muted-foreground,
+  [class*="bg-primary/10"] .text-xs.text-muted-foreground,
+  [class*="bg-muted/50"] .text-xs.text-muted-foreground {
+    color: hsl(240, 10%, 28%) !important;
   }
 }

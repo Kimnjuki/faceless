@@ -55,7 +55,7 @@ export default function Features() {
                   <feature.icon className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground text-sm">{feature.description}</p>
+                <p className="text-foreground/75 text-sm">{feature.description}</p>
               </CardContent>
             </Card>
           ))}

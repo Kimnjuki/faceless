@@ -12,7 +12,7 @@ export default function TrustIndicators() {
                 <Shield className="h-6 w-6 text-green-600 dark:text-green-400" />
               </div>
               <h3 className="font-semibold text-sm mb-1">SSL Secured</h3>
-              <p className="text-xs text-muted-foreground">256-bit encryption</p>
+              <p className="text-xs text-foreground/75">256-bit encryption</p>
             </div>
 
             {/* Payment Security */}
@@ -21,7 +21,7 @@ export default function TrustIndicators() {
                 <Lock className="h-6 w-6 text-blue-600 dark:text-blue-400" />
               </div>
               <h3 className="font-semibold text-sm mb-1">Secure Payments</h3>
-              <p className="text-xs text-muted-foreground">Stripe & PayPal</p>
+              <p className="text-xs text-foreground/75">Stripe & PayPal</p>
             </div>
 
             {/* Money Back Guarantee */}
@@ -30,7 +30,7 @@ export default function TrustIndicators() {
                 <Award className="h-6 w-6 text-purple-600 dark:text-purple-400" />
               </div>
               <h3 className="font-semibold text-sm mb-1">30-Day Guarantee</h3>
-              <p className="text-xs text-muted-foreground">Money-back promise</p>
+              <p className="text-xs text-foreground/75">Money-back promise</p>
             </div>
 
             {/* Verified Platform */}
@@ -39,13 +39,13 @@ export default function TrustIndicators() {
                 <CheckCircle2 className="h-6 w-6 text-orange-600 dark:text-orange-400" />
               </div>
               <h3 className="font-semibold text-sm mb-1">Verified Platform</h3>
-              <p className="text-xs text-muted-foreground">10,000+ members</p>
+              <p className="text-xs text-foreground/75">10,000+ members</p>
             </div>
           </div>
 
           {/* Payment Processor Logos */}
           <div className="mt-8 pt-8 border-t flex flex-wrap items-center justify-center gap-6 opacity-60">
-            <div className="text-xs font-medium text-muted-foreground">Accepted Payment Methods:</div>
+            <div className="text-xs font-medium text-foreground/80">Accepted Payment Methods:</div>
             <div className="flex items-center gap-4">
               <div className="px-3 py-1 bg-white dark:bg-gray-800 rounded text-xs font-semibold border">Stripe</div>
               <div className="px-3 py-1 bg-white dark:bg-gray-800 rounded text-xs font-semibold border">PayPal</div>

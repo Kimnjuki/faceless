@@ -149,7 +149,7 @@ export default function CompetitorComparison() {
                   >
                     <div className="font-medium">
                       <div className="mb-1">{row.feature}</div>
-                      <div className="text-xs text-muted-foreground">{row.description}</div>
+                      <div className={`text-xs ${row.contentAnonymity ? "text-foreground/80" : "text-muted-foreground"}`}>{row.description}</div>
                     </div>
                     <div className="flex justify-center">{getIcon(row.contentAnonymity)}</div>
                     <div className="flex justify-center">{getIcon(row.medium)}</div>

@@ -11,6 +11,7 @@ import { supabase } from "@/lib/supabase";
 import { Article } from "@/lib/supabase";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { trackContentView } from "@/utils/analytics";
 
 export default function ArticleDetail() {
   const { slug } = useParams();
@@ -85,6 +86,9 @@ export default function ArticleDetail() {
         }
 
         console.log('✅ Article fetched successfully:', data.title);
+
+        // Track content view
+        trackContentView('article', data.id?.toString() || slug || 'unknown', data.title);
 
         // Transform tags array - handle both object and string formats
         let tagsArray: string[] = [];

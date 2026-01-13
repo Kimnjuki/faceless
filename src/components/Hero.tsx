@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Play, Shield, Zap, Users, TrendingUp, CheckCircle2 } from "lucide-react";
+import { trackButtonClick } from "@/utils/analytics";
 
 export default function Hero() {
   return (
@@ -32,12 +33,22 @@ export default function Hero() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-              <Button size="lg" className="text-base px-8 gradient-primary hover:shadow-glow transition-all duration-300 hover-lift" asChild>
+              <Button 
+                size="lg" 
+                className="text-base px-8 gradient-primary hover:shadow-glow transition-all duration-300 hover-lift" 
+                asChild
+                onClick={() => trackButtonClick('start-journey', 'hero')}
+              >
                 <Link to="/auth/signup">
                   Start Your Faceless Journey <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="text-base glass border-primary/20 hover:border-primary/40 hover:bg-primary/5 transition-all duration-300">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="text-base glass border-primary/20 hover:border-primary/40 hover:bg-primary/5 transition-all duration-300"
+                onClick={() => trackButtonClick('watch-demo', 'hero')}
+              >
                 <Play className="mr-2 h-4 w-4" /> Watch How It Works
               </Button>
             </div>

@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useLeads } from "@/hooks/useLeads";
+import { trackButtonClick } from "@/utils/analytics";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -156,7 +157,13 @@ export default function Header() {
               aria-required="true"
               aria-label="Email address"
             />
-            <Button type="submit" size="sm" disabled={loading} aria-label="Subscribe to get free tips">
+            <Button 
+              type="submit" 
+              size="sm" 
+              disabled={loading} 
+              aria-label="Subscribe to get free tips"
+              onClick={() => trackButtonClick('get-free-tips', 'header')}
+            >
               <Mail className="h-4 w-4 mr-1" aria-hidden="true" />
               Get Free Tips
             </Button>

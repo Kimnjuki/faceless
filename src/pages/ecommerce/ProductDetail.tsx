@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import { useEffect } from "react";
 import { Check, Star, ShoppingCart, Shield, RefreshCw, Zap } from "lucide-react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -6,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { trackContentView } from "@/utils/analytics";
 
 const features = [
   "Lifetime access to all materials",
@@ -30,6 +32,12 @@ const trustBadges = [
 
 export default function ProductDetail() {
   const { slug } = useParams();
+
+  useEffect(() => {
+    if (slug) {
+      trackContentView('product', slug, slug.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase()));
+    }
+  }, [slug]);
 
   return (
     <>

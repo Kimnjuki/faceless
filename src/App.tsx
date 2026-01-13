@@ -1,6 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/contexts/AuthContext";
+import AnalyticsConsent from "@/components/AnalyticsConsent";
+import { trackPageView } from "@/utils/analytics";
 import HomePage from "./pages/HomePage";
 import GettingStarted from "./pages/GettingStarted";
 import BlogIndex from "./pages/BlogIndex";
@@ -39,10 +42,24 @@ import Events from "./pages/community/Events";
 import Challenges from "./pages/community/Challenges";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+// Component to track page views on route changes
+function PageViewTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    // Track page view on route change
+    trackPageView(location.pathname + location.search, document.title);
+  }, [location]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <AuthProvider>
       <Router>
+        <PageViewTracker />
+        <AnalyticsConsent />
         <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/getting-started" element={<GettingStarted />} />

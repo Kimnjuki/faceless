@@ -11,6 +11,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { signupSchema, type SignupFormData } from "@/lib/validations";
 import { handleError } from "@/lib/error-handler";
 import { supabase } from "@/lib/supabase";
+import { trackSignup, trackFormSubmit } from "@/utils/analytics";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -52,6 +53,9 @@ export default function Signup() {
           name: creatorName
         });
         
+        // Track form submission
+        trackFormSubmit('signup', 'signup-page');
+        
         // Create user account with pseudonym
         const result = await signUp(validated.email, validated.password, validated.name);
         
@@ -70,6 +74,9 @@ export default function Signup() {
         
         // Check if user was created
         if (result.user) {
+          // Track successful signup
+          trackSignup('email');
+          
           // Check if we have a session (email confirmation might be disabled)
           const { data: { session } } = await supabase.auth.getSession();
           
@@ -245,8 +252,12 @@ export default function Signup() {
               className="w-full"
               onClick={async () => {
                 setGoogleLoading(true);
+                trackFormSubmit('google-signup', 'signup-page');
                 try {
                   const result = await signInWithGoogle();
+                  if (!result.error) {
+                    trackSignup('google');
+                  }
                   if (result.error) {
                     // Error already shown in toast with helpful message
                     // If it's the "provider not enabled" error, show additional help

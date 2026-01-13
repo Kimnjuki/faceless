@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { trackButtonClick, trackPurchase } from "@/utils/analytics";
 
 export default function Checkout() {
   const [discount, setDiscount] = useState("");
@@ -95,7 +96,22 @@ export default function Checkout() {
                     <span>$197</span>
                   </div>
                   
-                  <Button size="lg" className="w-full">Complete Purchase</Button>
+                  <Button 
+                    size="lg" 
+                    className="w-full"
+                    onClick={() => {
+                      trackButtonClick('complete-purchase', 'checkout');
+                      // Track purchase event (adjust with actual transaction data)
+                      trackPurchase(
+                        `txn_${Date.now()}`,
+                        197,
+                        'USD',
+                        [{ id: 'blueprint', name: 'Faceless Automation Blueprint', price: 197, quantity: 1 }]
+                      );
+                    }}
+                  >
+                    Complete Purchase
+                  </Button>
                   
                   <p className="text-xs text-center text-muted-foreground">
                     30-day money-back guarantee

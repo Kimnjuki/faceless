@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Lead } from '@/lib/supabase';
 import { toast } from 'sonner';
+import { trackEmailCapture } from '@/utils/analytics';
 
 export function useLeads() {
   const [loading, setLoading] = useState(false);
@@ -16,6 +17,10 @@ export function useLeads() {
         .single();
 
       if (error) throw error;
+      
+      // Track email capture for analytics
+      trackEmailCapture(source || 'unknown');
+      
       return data as Lead;
     } catch (error: any) {
       // Handle unique constraint violation (email already exists)

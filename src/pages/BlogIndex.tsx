@@ -4,6 +4,7 @@ import { Search, TrendingUp, Download, Loader2, Clock, Eye, RefreshCw } from "lu
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ExitIntentModal from "../components/ExitIntentModal";
+import SEO from "../components/SEO";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -57,6 +58,29 @@ export default function BlogIndex() {
 
   return (
     <>
+      <SEO
+        title="Blog - Faceless Business Resources & Guides"
+        description="Discover expert guides, strategies, and resources for building profitable faceless content businesses. Learn from proven methods and real success stories."
+        keywords="faceless business blog, anonymous content guides, faceless content strategies, content anonymity resources, faceless business tips"
+        url="https://contentanonymity.com/blog"
+        canonical="https://contentanonymity.com/blog"
+        type="website"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Blog",
+          "name": "ContentAnonymity Blog",
+          "url": "https://contentanonymity.com/blog",
+          "description": "Expert guides and resources for building profitable faceless content businesses",
+          "publisher": {
+            "@type": "Organization",
+            "name": "ContentAnonymity",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://contentanonymity.com/logo-icon.svg"
+            }
+          }
+        }}
+      />
       <Header />
       <ExitIntentModal />
       <main className="py-12">

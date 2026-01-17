@@ -8,6 +8,7 @@ Allow: /
 Disallow: /dashboard/
 Disallow: /auth/
 Disallow: /api/
+Disallow: /checkout
 
 # Allow important pages
 Allow: /blog
@@ -15,12 +16,26 @@ Allow: /getting-started
 Allow: /tools/
 Allow: /privacy-policy
 Allow: /terms-of-service
+Allow: /products/
+Allow: /learning-paths
+Allow: /platform-guides
+Allow: /community/
 
-# Sitemap location
+# Sitemap location (Critical for SEO)
 Sitemap: https://contentanonymity.com/sitemap.xml
 
 # Crawl delay (optional, for rate limiting)
 Crawl-delay: 1
+
+# Specific rules for major search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0
+
 
 
 

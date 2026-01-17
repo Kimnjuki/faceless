@@ -1,10 +1,19 @@
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import SEO from "../../components/SEO";
 import { Badge } from "@/components/ui/badge";
 
 export default function PrivacyPolicy() {
   return (
     <>
+      <SEO
+        title="Privacy Policy"
+        description="ContentAnonymity's Privacy Policy. Learn how we collect, use, and protect your personal information. GDPR compliant privacy practices for anonymous content creators."
+        keywords="privacy policy, data protection, GDPR, privacy rights, data security, anonymous data"
+        url="https://contentanonymity.com/privacy-policy"
+        canonical="https://contentanonymity.com/privacy-policy"
+        noindex={false}
+      />
       <Header />
       <div className="min-h-screen py-20">
         <div className="container mx-auto px-4">

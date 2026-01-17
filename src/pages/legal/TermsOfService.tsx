@@ -1,10 +1,19 @@
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import SEO from "../../components/SEO";
 import { Badge } from "@/components/ui/badge";
 
 export default function TermsOfService() {
   return (
     <>
+      <SEO
+        title="Terms of Service"
+        description="ContentAnonymity's Terms of Service. Read our terms and conditions for using our platform. Includes service description, user rights, refund policy, and acceptable use policy."
+        keywords="terms of service, terms and conditions, user agreement, service terms, refund policy"
+        url="https://contentanonymity.com/terms-of-service"
+        canonical="https://contentanonymity.com/terms-of-service"
+        noindex={false}
+      />
       <Header />
       <div className="min-h-screen py-20">
         <div className="container mx-auto px-4">

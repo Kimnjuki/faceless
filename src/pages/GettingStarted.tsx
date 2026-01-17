@@ -4,14 +4,46 @@ import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, ArrowRight, PlayCircle, FileText, Zap, BookOpen, GraduationCap } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLearningPaths } from "@/hooks/useLearningPaths";
+import SEO from "@/components/SEO";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function GettingStarted() {
   const { paths, loading } = useLearningPaths({ featured: true });
   const featuredPaths = paths.slice(0, 2);
 
   return (
-    <div className="min-h-screen">
-      {/* Hero */}
+    <>
+      <SEO
+        title="Getting Started - Your Roadmap to Faceless Content Success"
+        description="Follow this proven 4-step system to launch your faceless content business in the next 30 days. Learn how to build an anonymous content empire with AI automation."
+        keywords="faceless content business, anonymous content creation, faceless business roadmap, content anonymity guide, faceless content strategy"
+        url="https://contentanonymity.com/getting-started"
+        canonical="https://contentanonymity.com/getting-started"
+        type="article"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": "Getting Started - Your Roadmap to Faceless Content Success",
+          "description": "Follow this proven 4-step system to launch your faceless content business in the next 30 days.",
+          "url": "https://contentanonymity.com/getting-started",
+          "author": {
+            "@type": "Organization",
+            "name": "ContentAnonymity"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "ContentAnonymity",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://contentanonymity.com/logo-icon.svg"
+            }
+          }
+        }}
+      />
+      <Header />
+      <div className="min-h-screen">
+        {/* Hero */}
       <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-background">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
@@ -294,6 +326,8 @@ export default function GettingStarted() {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+      <Footer />
+    </>
   );
 }

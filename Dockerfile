@@ -23,8 +23,8 @@ ARG VITE_SUPABASE_ANON_KEY
 ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
 ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
 
-# Build the application
-RUN npm run build
+# Build the application with pre-rendering for SEO
+RUN npm run build:prerender || npm run build
 
 # Note: Environment variables are baked into the build output (dist folder)
 # They are not needed in the final nginx image, but they remain in the builder stage history

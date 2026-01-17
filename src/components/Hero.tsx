@@ -22,7 +22,7 @@ export default function Hero() {
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
-              <span className="gradient-text bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">100% Anonymous</span> Content Creation Platform
+              Build a Profitable <span className="gradient-text bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">Faceless Content Business</span> in 2025
             </h1>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-muted-foreground mb-6">
               Unlike Medium, Substack & Ghost — <span className="text-foreground">No Real Name Required</span>

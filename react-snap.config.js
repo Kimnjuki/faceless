@@ -15,16 +15,28 @@ module.exports = {
     collapseWhitespace: false,
     removeComments: false,
   },
-  puppeteerArgs: ['--no-sandbox', '--disable-setuid-sandbox'],
+  puppeteerArgs: [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--disable-accelerated-2d-canvas',
+    '--no-first-run',
+    '--no-zygote',
+    '--disable-gpu'
+  ],
   skipThirdPartyRequests: true,
   cacheAjaxRequests: false,
   removeScriptTags: false,
   removeStyleTags: false,
-  // Wait for React to hydrate
-  waitFor: 1000,
+  // Wait for React to hydrate and content to load
+  waitFor: 2000,
   // Crawl from these pages
   crawlFrom: '/',
-  // Don't pre-render authenticated pages
-  skipThirdPartyRequests: true,
+  // Fix external links
+  fixWebpackChunksIssue: false,
+  // Headless browser options
+  headless: true,
+  // Timeout for page load
+  timeout: 30000,
 };
 

@@ -12,7 +12,7 @@ interface SEOProps {
   modifiedTime?: string;
   canonical?: string;
   noindex?: boolean;
-  structuredData?: object;
+  structuredData?: object | object[];
 }
 
 export default function SEO({
@@ -89,9 +89,17 @@ export default function SEO({
       <meta name="twitter:image" content={image} />
 
       {/* Structured Data */}
-      <script type="application/ld+json">
-        {JSON.stringify(finalStructuredData)}
-      </script>
+      {Array.isArray(structuredData) ? (
+        structuredData.map((data, index) => (
+          <script key={index} type="application/ld+json">
+            {JSON.stringify(data)}
+          </script>
+        ))
+      ) : (
+        <script type="application/ld+json">
+          {JSON.stringify(finalStructuredData)}
+        </script>
+      )}
     </Helmet>
   );
 }

@@ -102,18 +102,27 @@ function convertTipTapToHTML(node: any): string {
   }
 }
 
+// Type for content that might have children property
+interface ContentWithChildren {
+  children?: unknown;
+  type?: string;
+  content?: unknown;
+  [key: string]: unknown;
+}
+
 // Check if content is TipTap/ProseMirror format
-function isTipTapFormat(content: any): boolean {
+function isTipTapFormat(content: unknown): boolean {
   if (!content) return false;
   
   // Check for TipTap/ProseMirror structure in object
   if (typeof content === 'object' && content !== null) {
-    if (content.type === 'doc' && Array.isArray(content.content)) {
+    const contentObj = content as ContentWithChildren;
+    if (contentObj.type === 'doc' && Array.isArray(contentObj.content)) {
       return true;
     }
     // Check if it's wrapped in a React component-like structure
-    if (content.children && typeof content.children === 'object') {
-      return isTipTapFormat(content.children);
+    if (contentObj.children && typeof contentObj.children === 'object') {
+      return isTipTapFormat(contentObj.children);
     }
   }
   
@@ -187,9 +196,10 @@ export function ArticleContentRenderer({ content }: { content: unknown }) {
     
     // Handle object format
     if (typeof content === "object" && content !== null) {
+      const contentObj = content as ContentWithChildren;
       // If wrapped in children prop
-      if (content.children && typeof content.children === 'object') {
-        tipTapContent = content.children;
+      if (contentObj.children && typeof contentObj.children === 'object') {
+        tipTapContent = contentObj.children;
       } else {
         tipTapContent = content;
       }

@@ -1,0 +1,8 @@
+# Netlify redirects for URL canonicalization
+# Redirect www to non-www (or vice versa - choose one)
+# https://contentanonymity.com/* https://www.contentanonymity.com/:splat 301
+https://www.contentanonymity.com/* https://contentanonymity.com/:splat 301
+
+# Redirect trailing slashes (optional)
+/* /:splat 200
+

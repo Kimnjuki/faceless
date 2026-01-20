@@ -1,0 +1,17 @@
+{
+  "name": "ContentAnonymity",
+  "short_name": "ContentAnonymity",
+  "description": "Build Your Faceless Content Empire",
+  "icons": [
+    {
+      "src": "/logo-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#8b5cf6",
+  "background_color": "#ffffff"
+}
+

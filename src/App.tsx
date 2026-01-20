@@ -40,9 +40,8 @@ import ResourceDownloads from "./pages/learning/ResourceDownloads";
 import MemberDirectory from "./pages/community/MemberDirectory";
 import Events from "./pages/community/Events";
 import Challenges from "./pages/community/Challenges";
+import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
-import HowToStartFacelessYouTube2026 from "./pages/blog/HowToStartFacelessYouTube2026";
-
 // Component to track page views on route changes
 function PageViewTracker() {
   const location = useLocation();
@@ -66,7 +65,6 @@ export default function App() {
         <Route path="/getting-started" element={<GettingStarted />} />
         <Route path="/blog" element={<BlogIndex />} />
         <Route path="/blog/:slug" element={<ArticleDetail />} />
-        <Route path="/blog/how-to-start-faceless-youtube-channel-2026" element={<HowToStartFacelessYouTube2026 />} />
         <Route path="/tools/all" element={<ToolComparison />} />
         <Route path="/tools/:category" element={<ToolComparison />} />
         <Route path="/tools/calculator" element={<ProfitabilityCalculator />} />
@@ -100,6 +98,7 @@ export default function App() {
         <Route path="/community/events" element={<Events />} />
         <Route path="/community/challenges" element={<Challenges />} />
         <Route path="/:pillarSlug" element={<PillarPage />} />
+        <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />
       </Router>

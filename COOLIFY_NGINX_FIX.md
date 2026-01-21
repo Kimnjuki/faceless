@@ -61,3 +61,4 @@ After deployment, check:
 4. SSL works (handled by Coolify proxy)
 
 
+

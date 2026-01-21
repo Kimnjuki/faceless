@@ -135,3 +135,4 @@ ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
 3. Ensure `strict: true` is set in tsconfig.json (for better type safety)
 
 
+

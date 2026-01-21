@@ -15,6 +15,7 @@ import LatestArticles from "../components/LatestArticles";
 import Footer from "../components/Footer";
 import ExitIntentModal from "../components/ExitIntentModal";
 import SEO from "../components/SEO";
+import AdSenseDisplay from "../components/AdSenseDisplay";
 
 export default function HomePage() {
   return (
@@ -146,10 +147,14 @@ export default function HomePage() {
         <CompetitorComparison />
         <Stats />
         <TrustIndicators />
+        {/* Ad Banner */}
+        <AdSenseDisplay size="728x90" className="my-8" />
         <Features />
         <NichesShowcase />
         <ToolsShowcase />
         <LatestArticles />
+        {/* Ad Banner */}
+        <AdSenseDisplay size="300x250" className="my-8" />
         <Testimonials />
         <ProductLadder />
         <FAQ />

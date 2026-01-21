@@ -13,6 +13,8 @@ import { Article } from "@/lib/supabase";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { trackContentView } from "@/utils/analytics";
+import AdSenseInArticle from "@/components/AdSenseInArticle";
+import AdSenseDisplay from "@/components/AdSenseDisplay";
 
 export default function ArticleDetail() {
   const { slug } = useParams();
@@ -444,6 +446,12 @@ export default function ArticleDetail() {
                             prose-hr:my-12 prose-hr:border-muted">
                 <ArticleContentRenderer content={article.content} />
               </div>
+
+              {/* In-Article Ad (after first paragraph) */}
+              <AdSenseInArticle />
+
+              {/* Display Ad (before footer) */}
+              <AdSenseDisplay size="728x90" className="my-8" />
 
               {/* Article Footer */}
               <div className="mt-16 pt-8 border-t">

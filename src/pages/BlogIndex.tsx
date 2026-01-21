@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useLeads } from "@/hooks/useLeads";
 import { useArticles } from "@/hooks/useArticles";
+import AdSenseDisplay from "@/components/AdSenseDisplay";
 
 export default function BlogIndex() {
   const navigate = useNavigate();
@@ -174,9 +175,23 @@ export default function BlogIndex() {
 
           {/* Articles Grid */}
           {!articlesLoading && !error && (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {articles.length > 0 ? (
-                articles.map((article) => (
+            <>
+              {/* Ad Banner (top of articles) */}
+              {articles.length > 0 && (
+                <div className="mb-8">
+                  <AdSenseDisplay size="728x90" />
+                </div>
+              )}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                {articles.length > 0 ? (
+                  articles.map((article, index) => (
+                    <div key={article.id}>
+                      {index === 3 && (
+                        <div className="col-span-full mb-6">
+                          <AdSenseDisplay size="728x90" />
+                        </div>
+                      )}
+                      <Card
                   <Card 
                     key={article.id} 
                     className="hover:border-primary transition-colors cursor-pointer group"
@@ -276,7 +291,8 @@ export default function BlogIndex() {
                       </div>
                     </CardContent>
                   </Card>
-                ))
+                    </div>
+                  ))
               ) : (
                 <div className="col-span-full text-center py-12">
                   <p className="text-muted-foreground mb-4">No articles found.</p>
@@ -291,6 +307,7 @@ export default function BlogIndex() {
                     </p>
                   )}
                 </div>
+              </>
               )}
             </div>
           )}

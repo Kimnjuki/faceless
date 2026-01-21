@@ -96,6 +96,18 @@ export default function Header() {
                 <DropdownMenuItem asChild>
                   <Link to="/tools/niche-quiz">Niche Finder Quiz</Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/tools/seo-audit">SEO Audit Tool</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/tools/keyword-research">Keyword Research</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/tools/backlink-checker">Backlink Checker</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/tools/performance">Performance Monitor</Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 

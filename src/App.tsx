@@ -12,6 +12,10 @@ import PillarPage from "./pages/PillarPage";
 import ToolComparison from "./pages/ToolComparison";
 import ProfitabilityCalculator from "./pages/tools/ProfitabilityCalculator";
 import NicheQuiz from "./pages/tools/NicheQuiz";
+import SEOAudit from "./pages/tools/SEOAudit";
+import KeywordResearch from "./pages/tools/KeywordResearch";
+import BacklinkChecker from "./pages/tools/BacklinkChecker";
+import PerformanceMonitor from "./pages/tools/PerformanceMonitor";
 import Signup from "./pages/auth/Signup";
 import Login from "./pages/auth/Login";
 import OAuthCallback from "./pages/auth/OAuthCallback";
@@ -69,6 +73,10 @@ export default function App() {
         <Route path="/tools/:category" element={<ToolComparison />} />
         <Route path="/tools/calculator" element={<ProfitabilityCalculator />} />
         <Route path="/tools/niche-quiz" element={<NicheQuiz />} />
+        <Route path="/tools/seo-audit" element={<SEOAudit />} />
+        <Route path="/tools/keyword-research" element={<KeywordResearch />} />
+        <Route path="/tools/backlink-checker" element={<BacklinkChecker />} />
+        <Route path="/tools/performance" element={<PerformanceMonitor />} />
         <Route path="/auth/signup" element={<Signup />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/callback" element={<OAuthCallback />} />

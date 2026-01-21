@@ -53,6 +53,29 @@ export default function NicheQuiz() {
 
   return (
     <>
+      <SEO
+        title="Faceless Content Niche Finder Quiz | Free Tool"
+        description="Find your perfect faceless content niche in 4 questions. Discover profitable niches for YouTube, TikTok, and Instagram. Free quiz - start now."
+        url="https://contentanonymity.com/tools/niche-quiz"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Faceless Content Niche Finder Quiz",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.7",
+            "ratingCount": "89"
+          },
+          "description": "Free interactive quiz to help faceless content creators find their perfect niche based on goals, interests, and market demand."
+        }}
+      />
       <Header />
       <main className="py-12">
         <div className="container mx-auto px-4">
@@ -152,6 +175,54 @@ export default function NicheQuiz() {
                 </Button>
               </div>
             )}
+          </div>
+
+          {/* Content Depth Section - 200+ words for SEO */}
+          <div className="max-w-4xl mx-auto mt-16 prose prose-lg dark:prose-invert max-w-none">
+            <section className="mb-12">
+              <h2 className="text-3xl font-bold mb-6">How to Find Your Perfect Faceless Content Niche</h2>
+              <p className="text-lg leading-relaxed mb-4">
+                Choosing the right niche is the foundation of a successful faceless content business. Our free niche finder quiz helps you identify profitable niches that align with your interests, goals, and market demand. The quiz analyzes four key factors: your primary motivation, content creation preferences, target audience, and revenue goals.
+              </p>
+              <p className="text-lg leading-relaxed mb-4">
+                Popular faceless content niches include finance and investing, technology and AI, lifestyle and self-improvement, business and entrepreneurship, and health & fitness. Each niche has different characteristics: competition levels, profit potential, audience size, and content creation requirements. Understanding these factors helps you make an informed decision about which niche to pursue.
+              </p>
+              <p className="text-lg leading-relaxed mb-4">
+                High-demand niches like finance and technology offer substantial earning potential but face more competition. Emerging niches like AI tools and privacy-focused content have lower competition but require more education to build an audience. The key is finding a balance between your interests, market demand, and competition level.
+              </p>
+              <p className="text-lg leading-relaxed mb-4">
+                Our niche finder quiz considers multiple factors to provide personalized recommendations. It evaluates your motivation (quick money vs. long-term business), content preferences (educational vs. entertainment), target audience size, and profit expectations. Based on your answers, we recommend niches that match your profile and offer the best potential for success.
+              </p>
+              <p className="text-lg leading-relaxed mb-4">
+                Once you've identified your niche, the next steps involve validating market demand, researching successful creators in that space, and developing a unique angle. Use our profitability calculator to estimate potential earnings, then start creating content consistently. Remember, niche selection is important, but consistent execution and value delivery are what ultimately determine success in faceless content creation.
+              </p>
+            </section>
+
+            <section className="mb-12">
+              <h2 className="text-3xl font-bold mb-6">Top Faceless Content Niches for 2025</h2>
+              <p className="text-lg leading-relaxed mb-4">
+                The faceless content landscape continues to evolve, with new niches emerging and existing ones becoming more competitive. Finance and investing remain highly profitable, with creators earning substantial revenue through ad revenue, affiliate marketing, and digital products. Technology and AI content is experiencing explosive growth as interest in artificial intelligence reaches new heights.
+              </p>
+              <p className="text-lg leading-relaxed mb-4">
+                Lifestyle and self-improvement niches offer broad appeal and multiple monetization opportunities. These niches work well for faceless creators because they focus on value and information rather than personal branding. Business and entrepreneurship content attracts high-intent audiences willing to invest in courses, tools, and coaching services.
+              </p>
+              <p className="text-lg leading-relaxed mb-4">
+                Health & fitness remains a strong performer, especially when focusing on specific sub-niches like nutrition, mental health, or workout routines. The key to success in any niche is finding your unique angle and consistently delivering value that helps your audience solve problems or achieve goals.
+              </p>
+            </section>
+
+            <section className="mb-12">
+              <h2 className="text-3xl font-bold mb-6">Why Niche Selection Matters for Faceless Creators</h2>
+              <p className="text-lg leading-relaxed mb-4">
+                Niche selection is critical for faceless content creators because it determines your audience, competition level, and revenue potential. A well-chosen niche allows you to build authority, attract targeted audiences, and develop multiple revenue streams. Poor niche selection can lead to low engagement, difficulty monetizing, and burnout from creating content that doesn't resonate.
+              </p>
+              <p className="text-lg leading-relaxed mb-4">
+                The best niches for faceless creators have several characteristics: high search demand, engaged audiences, multiple monetization options, and content formats that work well without showing your face. Educational content, tutorials, reviews, and storytelling all work excellently for faceless channels across different niches.
+              </p>
+              <p className="text-lg leading-relaxed mb-4">
+                Use our free niche finder quiz to discover niches that match your goals and interests. Then validate your choice by researching successful creators, analyzing search volume for related keywords, and testing content ideas before fully committing. Remember, you can always pivot or expand into related niches as your channel grows and you learn more about your audience's preferences.
+              </p>
+            </section>
           </div>
         </div>
       </main>

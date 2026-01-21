@@ -29,19 +29,40 @@ export default function SEO({
   noindex = false,
   structuredData,
 }: SEOProps) {
-  const fullTitle = title.includes('ContentAnonymity') ? title : `${title} | ContentAnonymity`;
+  // Enforce < 60 characters for title (SEO best practice)
+  const truncatedTitle = title.length > 60 ? title.substring(0, 57) + '...' : title;
+  const fullTitle = truncatedTitle.includes('ContentAnonymity') ? truncatedTitle : `${truncatedTitle} | ContentAnonymity`;
+  
+  // Enforce < 60 characters for full title (with site name)
+  const finalTitle = fullTitle.length > 60 ? fullTitle.substring(0, 57) + '...' : fullTitle;
+  
+  // Enforce < 155 characters for description and add CTA if missing
+  let finalDescription = description;
+  if (finalDescription.length > 155) {
+    finalDescription = finalDescription.substring(0, 152) + '...';
+  }
+  // Add CTA if description doesn't end with action words
+  const hasCTA = /(free|start|try|get|download|click|learn|join|sign up|anonymize|use|calculate)/i.test(finalDescription);
+  if (!hasCTA && finalDescription.length < 140) {
+    finalDescription += ' Start free today.';
+  }
+  
   const canonicalUrl = canonical || url;
   const baseStructuredData = {
     '@context': 'https://schema.org',
     '@type': type === 'article' ? 'Article' : type === 'product' ? 'Product' : 'WebPage',
-    name: title,
-    description: description,
+    name: finalTitle,
+    description: finalDescription,
     url: canonicalUrl,
     image: image,
     publisher: {
       '@type': 'Organization',
       name: 'ContentAnonymity',
       url: 'https://contentanonymity.com',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://contentanonymity.com/logo-icon.svg'
+      }
     },
   };
 
@@ -61,9 +82,9 @@ export default function SEO({
   return (
     <Helmet>
       {/* Primary Meta Tags */}
-      <title>{fullTitle}</title>
-      <meta name="title" content={fullTitle} />
-      <meta name="description" content={description.length > 160 ? description.substring(0, 157) + '...' : description} />
+      <title>{finalTitle}</title>
+      <meta name="title" content={finalTitle} />
+      <meta name="description" content={finalDescription} />
       <meta name="keywords" content={keywords} />
       <meta name="author" content={author} />
       <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
@@ -73,8 +94,8 @@ export default function SEO({
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
       <meta property="og:url" content={url} />
-      <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description.length > 200 ? description.substring(0, 197) + '...' : description} />
+      <meta property="og:title" content={finalTitle} />
+      <meta property="og:description" content={finalDescription} />
       <meta property="og:image" content={image} />
       <meta property="og:site_name" content="ContentAnonymity" />
       <meta property="og:locale" content="en_US" />
@@ -85,9 +106,11 @@ export default function SEO({
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:url" content={url} />
-      <meta name="twitter:title" content={fullTitle} />
-      <meta name="twitter:description" content={description.length > 200 ? description.substring(0, 197) + '...' : description} />
+      <meta name="twitter:title" content={finalTitle} />
+      <meta name="twitter:description" content={finalDescription} />
       <meta name="twitter:image" content={image} />
+      <meta name="twitter:site" content="@contentanonymity" />
+      <meta name="twitter:creator" content="@contentanonymity" />
 
       {/* Structured Data */}
       {Array.isArray(structuredData) ? (

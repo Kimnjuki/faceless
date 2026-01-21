@@ -11,6 +11,7 @@ import Testimonials from "../components/Testimonials";
 import FAQ from "../components/FAQ";
 import CTA from "../components/CTA";
 import TrustIndicators from "../components/TrustIndicators";
+import LatestArticles from "../components/LatestArticles";
 import Footer from "../components/Footer";
 import ExitIntentModal from "../components/ExitIntentModal";
 import SEO from "../components/SEO";
@@ -148,6 +149,7 @@ export default function HomePage() {
         <Features />
         <NichesShowcase />
         <ToolsShowcase />
+        <LatestArticles />
         <Testimonials />
         <ProductLadder />
         <FAQ />

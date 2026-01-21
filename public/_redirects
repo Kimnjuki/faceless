@@ -6,3 +6,4 @@ https://www.contentanonymity.com/* https://contentanonymity.com/:splat 301
 # Redirect trailing slashes (optional)
 /* /:splat 200
 
+

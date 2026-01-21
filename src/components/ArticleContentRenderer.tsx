@@ -190,24 +190,35 @@ export function ArticleContentRenderer({ content }: { content: unknown }) {
     return EMPTY_STATE;
   }
 
-  // Check if content is TipTap/ProseMirror format first
-  if (isTipTapFormat(content)) {
-    let tipTapContent = content;
+  // First, try to parse if it's a string that might be JSON
+  let parsedContent: unknown = content;
+  if (typeof content === "string" && content.trim().startsWith("{")) {
+    try {
+      parsedContent = JSON.parse(content);
+    } catch {
+      // Not JSON, keep as string
+      parsedContent = content;
+    }
+  }
+
+  // Check if parsed content is TipTap/ProseMirror format
+  if (isTipTapFormat(parsedContent)) {
+    let tipTapContent = parsedContent;
     
     // Handle object format
-    if (typeof content === "object" && content !== null) {
-      const contentObj = content as ContentWithChildren;
+    if (typeof parsedContent === "object" && parsedContent !== null) {
+      const contentObj = parsedContent as ContentWithChildren;
       // If wrapped in children prop
       if (contentObj.children && typeof contentObj.children === 'object') {
         tipTapContent = contentObj.children;
       } else {
-        tipTapContent = content;
+        tipTapContent = parsedContent;
       }
     }
     
     // Handle string format
-    if (typeof content === "string") {
-      let cleanContent = content.trim();
+    if (typeof parsedContent === "string") {
+      let cleanContent = parsedContent.trim();
       // Extract JSON from HTML/React component wrappers
       if (cleanContent.includes('children=')) {
         const match = cleanContent.match(/children=["']({.*?})["']/);
@@ -241,38 +252,26 @@ export function ArticleContentRenderer({ content }: { content: unknown }) {
     return EMPTY_STATE;
   }
 
+  // Now check if it's structured content (intro + sections format)
   let obj: Record<string, unknown> | null = null;
 
-  if (typeof content === "string") {
+  if (typeof parsedContent === "object" && !Array.isArray(parsedContent) && parsedContent !== null) {
+    obj = parsedContent as Record<string, unknown>;
+  } else if (typeof content === "string") {
+    // If original content is string and not parsed yet, try parsing
     try {
       const parsed = JSON.parse(content);
-      // Check if parsed content is TipTap format
-      if (isTipTapFormat(parsed)) {
-        const htmlContent = convertTipTapToHTML(parsed);
-        if (htmlContent) {
-          return (
-            <div className={PROSE}>
-              <ReactMarkdown>{htmlContent}</ReactMarkdown>
-            </div>
-          );
-        }
-        return EMPTY_STATE;
-      }
       if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
         obj = parsed;
       }
     } catch {
-      /* not JSON — treat as Markdown */
-    }
-    if (!obj) {
+      // Not JSON — treat as Markdown
       return (
         <div className={PROSE}>
           <ReactMarkdown>{content}</ReactMarkdown>
         </div>
       );
     }
-  } else if (typeof content === "object" && !Array.isArray(content) && content !== null) {
-    obj = content as Record<string, unknown>;
   }
 
   if (!obj) return EMPTY_STATE;
@@ -285,15 +284,18 @@ export function ArticleContentRenderer({ content }: { content: unknown }) {
   const toolsHeading =
     (typeof obj.tools_heading === "string" ? obj.tools_heading : null) ?? "Tools";
 
-  const hasStructured =
-    (typeof intro === "string" && intro.length > 0) ||
+  // Check if we have structured content
+  const hasIntro = (typeof intro === "string" && intro.length > 0) ||
     (typeof intro === "object" && intro !== null && isTipTapFormat(intro)) ||
-    (typeof body === "string" && body.length > 0) ||
-    (typeof body === "object" && body !== null && isTipTapFormat(body)) ||
-    tools.length > 0 ||
-    sections.length > 0 ||
-    (typeof conclusion === "string" && conclusion.length > 0) ||
+    (Array.isArray(intro) && intro.length > 0);
+  const hasBody = (typeof body === "string" && body.length > 0) ||
+    (typeof body === "object" && body !== null && isTipTapFormat(body));
+  const hasSections = sections.length > 0;
+  const hasTools = tools.length > 0;
+  const hasConclusion = (typeof conclusion === "string" && conclusion.length > 0) ||
     (typeof conclusion === "object" && conclusion !== null && isTipTapFormat(conclusion));
+
+  const hasStructured = hasIntro || hasBody || hasTools || hasSections || hasConclusion;
 
   if (!hasStructured) {
     if (typeof content === "string") {
@@ -312,33 +314,38 @@ export function ArticleContentRenderer({ content }: { content: unknown }) {
 
   return (
     <>
-      {typeof intro === "string" && intro.length > 0 && (
-        <div className={`${PROSE} mb-8`}>
-          {isTipTapFormat(intro) ? (
-            <ReactMarkdown>{convertTipTapToHTML(typeof intro === "string" ? JSON.parse(intro) : intro)}</ReactMarkdown>
-          ) : (
-            <ReactMarkdown>{intro}</ReactMarkdown>
+      {/* Intro Section - Large, prominent opening */}
+      {hasIntro && (
+        <div className={`${PROSE} mb-12 pb-8 border-b`}>
+          {typeof intro === "string" && intro.length > 0 && (
+            <>
+              {isTipTapFormat(intro) ? (
+                <ReactMarkdown>{convertTipTapToHTML(typeof intro === "string" ? JSON.parse(intro) : intro)}</ReactMarkdown>
+              ) : (
+                <div className="text-xl leading-relaxed text-foreground/90 font-light">
+                  <ReactMarkdown>{intro}</ReactMarkdown>
+                </div>
+              )}
+            </>
           )}
-        </div>
-      )}
-      {typeof intro === "object" && intro !== null && isTipTapFormat(intro) && (
-        <div className={`${PROSE} mb-8`}>
-          <ReactMarkdown>{convertTipTapToHTML(intro)}</ReactMarkdown>
-        </div>
-      )}
-      {Array.isArray(intro) && intro.length > 0 && (
-        <div className={`${PROSE} mb-8`}>
-          {intro
-            .filter((p): p is string => typeof p === "string")
-            .map((p, i) => (
-              <div key={i}>
-                {isTipTapFormat(p) ? (
-                  <ReactMarkdown>{convertTipTapToHTML(JSON.parse(p))}</ReactMarkdown>
-                ) : (
-                  <ReactMarkdown>{p}</ReactMarkdown>
-                )}
-              </div>
-            ))}
+          {typeof intro === "object" && intro !== null && !Array.isArray(intro) && isTipTapFormat(intro) && (
+            <ReactMarkdown>{convertTipTapToHTML(intro)}</ReactMarkdown>
+          )}
+          {Array.isArray(intro) && intro.length > 0 && (
+            <>
+              {intro
+                .filter((p): p is string => typeof p === "string")
+                .map((p, i) => (
+                  <div key={i} className={i === 0 ? "text-xl leading-relaxed text-foreground/90 font-light mb-4" : ""}>
+                    {isTipTapFormat(p) ? (
+                      <ReactMarkdown>{convertTipTapToHTML(JSON.parse(p))}</ReactMarkdown>
+                    ) : (
+                      <ReactMarkdown>{p}</ReactMarkdown>
+                    )}
+                  </div>
+                ))}
+            </>
+          )}
         </div>
       )}
       {typeof body === "string" && body.length > 0 && (
@@ -396,7 +403,7 @@ export function ArticleContentRenderer({ content }: { content: unknown }) {
           </div>
         </div>
       )}
-      {sections.length > 0 &&
+      {hasSections &&
         sections.map((s, i) => {
           const heading = s.heading || s.title;
           let sectionContent = s.content;
@@ -416,16 +423,27 @@ export function ArticleContentRenderer({ content }: { content: unknown }) {
             }
           }
           
+          // Ensure sectionContent is a string
+          if (sectionContent && typeof sectionContent !== "string") {
+            if (typeof sectionContent === "object") {
+              sectionContent = JSON.stringify(sectionContent);
+            } else {
+              sectionContent = String(sectionContent);
+            }
+          }
+          
           return (
-            <section key={i} className="mb-12">
+            <section key={i} className="mb-12 scroll-mt-20">
               {heading && (
-                <h2 className="text-3xl font-bold mb-6 mt-12 first:mt-0 text-foreground">
+                <h2 className="text-3xl font-bold mb-6 mt-12 first:mt-0 text-foreground tracking-tight">
                   {String(heading)}
                 </h2>
               )}
-              <div className={PROSE}>
-                <ReactMarkdown>{typeof sectionContent === "string" ? sectionContent : ""}</ReactMarkdown>
-              </div>
+              {sectionContent && (
+                <div className={PROSE}>
+                  <ReactMarkdown>{sectionContent}</ReactMarkdown>
+                </div>
+              )}
             </section>
           );
         })}

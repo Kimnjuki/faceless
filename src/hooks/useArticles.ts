@@ -40,11 +40,33 @@ export function useArticles(filters: ArticleFilters = {}) {
     fetchCategories();
   }, []); // Only run once on mount
 
+  // Normalize article from DB (supports common column name variants)
+  const normalizeArticle = useCallback((row: any, fromJoin: boolean): any => {
+    const tags = (() => {
+      const t = row.tags;
+      if (Array.isArray(t)) return t.map((x: any) => typeof x === 'string' ? x : (x?.tag ?? x?.name ?? String(x ?? ''))).filter(Boolean);
+      if (typeof t === 'string') return t.split(',').map((s: string) => s.trim()).filter(Boolean);
+      return [];
+    })();
+    return {
+      ...row,
+      slug: (row.slug && String(row.slug).trim()) || '',
+      title: (row.title && String(row.title)) || 'Untitled',
+      content: row.content ?? row.body ?? row.full_content ?? row.body_html ?? row.article_text ?? '',
+      excerpt: row.excerpt ?? row.description ?? row.meta_description ?? '',
+      featured_image: row.featured_image ?? row.image ?? row.image_url ?? undefined,
+      published_at: row.published_at ?? row.created_at ?? row.updated_at,
+      category: fromJoin ? row.category : (row.category ? { name: String(row.category) } : null),
+      author: fromJoin ? row.author : (typeof row.author === 'string' ? { full_name: row.author } : (row.author || null)),
+      tags,
+    };
+  }, []);
+
   const fetchArticles = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      // Build articles query
+      // Build articles query with joins (articles + content_categories + profiles + article_tags)
       let query = supabase
         .from('articles')
         .select(`
@@ -56,83 +78,89 @@ export function useArticles(filters: ArticleFilters = {}) {
         .eq('status', filters.status || 'published')
         .order('published_at', { ascending: false });
 
-      // Apply category filter - fetch category ID directly from database
       if (filters.category && filters.category !== 'all') {
-        // Always fetch category ID directly to avoid dependency on categories state
         const { data: catData } = await supabase
           .from('content_categories')
           .select('id')
           .or(`slug.eq.${filters.category},name.eq.${filters.category}`)
           .maybeSingle();
-        
-        if (catData) {
-          query = query.eq('category_id', catData.id);
-        }
+        if (catData) query = query.eq('category_id', catData.id);
       }
-
-      // Apply limit
-      if (filters.limit) {
-        query = query.limit(filters.limit);
-      }
+      if (filters.limit) query = query.limit(filters.limit);
 
       const { data, error: queryError } = await query;
 
       if (queryError) throw queryError;
 
-      let articlesData = (data as any[]) || [];
+      let articlesData = ((data as any[]) || []).map((a) => normalizeArticle(a, true)).filter((a: any) => a.slug && a.slug.trim() !== '');
 
-      // Transform tags array and validate article data
-      articlesData = articlesData.map((article: any) => {
-        // Ensure slug exists and is valid
-        if (!article.slug || typeof article.slug !== 'string') {
-          console.warn('Article missing or invalid slug:', article);
-        }
-        
-        return {
-          ...article,
-          slug: article.slug ? String(article.slug).trim() : '',
-          title: article.title ? String(article.title) : 'Untitled',
-          tags: (article.tags || []).map((t: any) => {
-            if (typeof t === 'string') return t;
-            if (t && typeof t === 'object') return t.tag || t.name || String(t);
-            return String(t || '');
-          }).filter((tag: string) => tag && tag.trim() !== ''),
-        };
-      }).filter((article: any) => {
-        // Filter out articles without valid slugs
-        return article.slug && article.slug.trim() !== '';
-      });
-
-      // Client-side search filtering
+      // Client-side search
       if (filters.searchQuery) {
-        const searchLower = filters.searchQuery.toLowerCase();
+        const q = filters.searchQuery.toLowerCase();
         articlesData = articlesData.filter(
-          (article) => {
-            const contentStr = typeof article.content === 'string' 
-              ? article.content 
-              : JSON.stringify(article.content || {});
-            return (
-              article.title.toLowerCase().includes(searchLower) ||
-              article.excerpt?.toLowerCase().includes(searchLower) ||
-              contentStr.toLowerCase().includes(searchLower) ||
-              article.tags?.some((tag: string) => tag.toLowerCase().includes(searchLower))
-            );
-          }
+          (a: any) =>
+            (a.title || '').toLowerCase().includes(q) ||
+            (a.excerpt || '').toLowerCase().includes(q) ||
+            (typeof a.content === 'string' && a.content.toLowerCase().includes(q)) ||
+            (a.tags || []).some((t: string) => t.toLowerCase().includes(q))
         );
       }
 
       setArticles(articlesData as Article[]);
     } catch (err: any) {
-      console.error('Error fetching articles:', err);
-      setError(err.message || 'Failed to fetch articles');
-      if (err.code !== 'PGRST116') {
-        toast.error('Failed to load articles');
+      console.warn('Articles query with joins failed, trying simple select:', err);
+      try {
+        // Fallback: simple select (no content_categories, profiles, article_tags)
+        // Resolve category_id when content_categories exists (for category filter)
+        let catId: string | undefined;
+        if (filters.category && filters.category !== 'all') {
+          try {
+            const { data: catData } = await supabase
+              .from('content_categories')
+              .select('id')
+              .or(`slug.eq.${filters.category},name.eq.${filters.category}`)
+              .maybeSingle();
+            if (catData) catId = catData.id;
+          } catch (_) { /* content_categories may not exist */ }
+        }
+
+        let q = supabase
+          .from('articles')
+          .select('*')
+          .order('created_at', { ascending: false });
+        if (catId) q = q.eq('category_id', catId);
+        if (filters.limit) q = q.limit(filters.limit);
+
+        const { data, error: e2 } = await q;
+        if (e2) throw e2;
+
+        let articlesData = ((data as any[]) || []).map((a) => normalizeArticle(a, false)).filter((a: any) => a.slug && a.slug.trim() !== '');
+        // Filter to published only when status column may not exist
+        articlesData = articlesData.filter((a: any) => !(a.status === 'draft' || a.status === 'archived' || a.published === false));
+
+        if (filters.searchQuery) {
+          const q = filters.searchQuery.toLowerCase();
+          articlesData = articlesData.filter(
+            (a: any) =>
+              (a.title || '').toLowerCase().includes(q) ||
+              (a.excerpt || '').toLowerCase().includes(q) ||
+              (typeof a.content === 'string' && a.content.toLowerCase().includes(q)) ||
+              (a.tags || []).some((t: string) => t.toLowerCase().includes(q))
+          );
+        }
+
+        setArticles(articlesData as Article[]);
+        setError(null);
+      } catch (fallbackErr: any) {
+        console.error('Error fetching articles:', fallbackErr);
+        setError(fallbackErr.message || 'Failed to fetch articles');
+        if (fallbackErr.code !== 'PGRST116') toast.error('Failed to load articles');
+        setArticles([]);
       }
-      setArticles([]);
     } finally {
       setLoading(false);
     }
-  }, [filters.category, filters.searchQuery, filters.status, filters.limit]);
+  }, [filters.category, filters.searchQuery, filters.status, filters.limit, normalizeArticle]);
 
   useEffect(() => {
     fetchArticles();

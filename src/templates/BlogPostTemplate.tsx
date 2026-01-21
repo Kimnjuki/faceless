@@ -112,8 +112,8 @@ export default function BlogPostTemplate({
             )}
           </header>
 
-          {/* Article Content */}
-          <div className="prose prose-lg max-w-none">
+          {/* Article Content — full view, no truncation */}
+          <div className="article-body prose prose-lg max-w-none overflow-visible">
             {/* 
               TODO: Replace this with your actual blog post content.
               Structure your content with:

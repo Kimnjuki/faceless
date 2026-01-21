@@ -213,7 +213,7 @@ export default function BlogIndex() {
                     )}
                     <CardHeader>
                       <div className="flex items-center gap-2 mb-2">
-                        {article.category && (
+                        {article.category?.name && (
                           <Badge variant="secondary">{article.category.name}</Badge>
                         )}
                         {article.view_count && article.view_count > 100 && (

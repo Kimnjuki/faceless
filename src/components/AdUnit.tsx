@@ -73,7 +73,7 @@ export default function AdUnit({
       if (googletag && googletag.apiReady) {
         googletag.cmd.push(() => {
           const slots = googletag.pubads().getSlots();
-          slots.forEach(slot => {
+          slots.forEach((slot: any) => {
             if (slot.getSlotElementId() === adSlot) {
               googletag.destroySlots([slot]);
             }

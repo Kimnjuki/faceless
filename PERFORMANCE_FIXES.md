@@ -152,3 +152,4 @@ After deployment, monitor:
 4. **Preloading**: Preload critical resources
 5. **DNS Prefetch**: Add DNS prefetch for external domains
 
+

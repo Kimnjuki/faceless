@@ -273,4 +273,14 @@
   [class*="bg-muted/50"] .text-xs.text-muted-foreground {
     color: hsl(240, 10%, 28%) !important;
   }
+
+  /* Article body: full content, no clipping (800+ words) */
+  .article-body {
+    overflow: visible;
+  }
+  .article-body.prose p,
+  .article-body.prose li,
+  .article-body.prose blockquote {
+    max-height: none;
+  }
 }

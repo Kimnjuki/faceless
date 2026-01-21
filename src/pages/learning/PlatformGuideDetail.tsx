@@ -135,10 +135,10 @@ export default function PlatformGuideDetail() {
               </Card>
             )}
 
-            {/* Guide Content */}
+            {/* Guide Content — full view, no truncation */}
             <Card className="mb-8">
               <CardContent className="pt-6">
-                <div className="prose prose-slate max-w-none dark:prose-invert">
+                <div className="article-body prose prose-slate prose-lg max-w-none dark:prose-invert overflow-visible">
                   {guide.content ? (
                     <div 
                       className="whitespace-pre-wrap"

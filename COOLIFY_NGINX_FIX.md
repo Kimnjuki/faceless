@@ -60,3 +60,4 @@ After deployment, check:
 3. Application is accessible via Coolify's domain
 4. SSL works (handled by Coolify proxy)
 
+

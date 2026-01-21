@@ -306,9 +306,9 @@ export default function BlogIndex() {
                     </p>
                   )}
                 </div>
-              </>
               )}
             </div>
+            </>
           )}
 
           <Card className="max-w-2xl mx-auto bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">

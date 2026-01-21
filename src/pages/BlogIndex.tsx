@@ -192,7 +192,6 @@ export default function BlogIndex() {
                         </div>
                       )}
                       <Card
-                  <Card 
                     key={article.id} 
                     className="hover:border-primary transition-colors cursor-pointer group"
                     onClick={() => {

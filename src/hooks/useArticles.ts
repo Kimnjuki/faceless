@@ -94,6 +94,19 @@ export function useArticles(filters: ArticleFilters = {}) {
 
       let articlesData = ((data as any[]) || []).map((a) => normalizeArticle(a, true)).filter((a: any) => a.slug && a.slug.trim() !== '');
 
+      // Deduplicate articles by slug (prevent same article appearing multiple times)
+      const seenSlugs = new Set<string>();
+      articlesData = articlesData.filter((a: any) => {
+        const slug = a.slug?.trim().toLowerCase();
+        if (!slug) return false;
+        if (seenSlugs.has(slug)) {
+          console.warn(`Duplicate article found with slug: ${slug}. Keeping first occurrence.`);
+          return false;
+        }
+        seenSlugs.add(slug);
+        return true;
+      });
+
       // Client-side search
       if (filters.searchQuery) {
         const q = filters.searchQuery.toLowerCase();
@@ -137,6 +150,19 @@ export function useArticles(filters: ArticleFilters = {}) {
         let articlesData = ((data as any[]) || []).map((a) => normalizeArticle(a, false)).filter((a: any) => a.slug && a.slug.trim() !== '');
         // Filter to published only when status column may not exist
         articlesData = articlesData.filter((a: any) => !(a.status === 'draft' || a.status === 'archived' || a.published === false));
+
+        // Deduplicate articles by slug (prevent same article appearing multiple times)
+        const seenSlugs = new Set<string>();
+        articlesData = articlesData.filter((a: any) => {
+          const slug = a.slug?.trim().toLowerCase();
+          if (!slug) return false;
+          if (seenSlugs.has(slug)) {
+            console.warn(`Duplicate article found with slug: ${slug}. Keeping first occurrence.`);
+            return false;
+          }
+          seenSlugs.add(slug);
+          return true;
+        });
 
         if (filters.searchQuery) {
           const q = filters.searchQuery.toLowerCase();

@@ -30,7 +30,8 @@ export default function LatestArticles() {
                   <div className="aspect-video w-full overflow-hidden rounded-t-lg bg-muted">
                     <img
                       src={article.featured_image}
-                      alt=""
+                      alt={article.title}
+                      loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>

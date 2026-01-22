@@ -91,3 +91,4 @@ The script generates unique intros based on article title keywords:
 If you need to revert, you can restore from a backup or manually update specific articles. However, the new intros are better for SEO and user experience, so reverting is not recommended.
 
 
+

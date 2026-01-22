@@ -51,6 +51,7 @@ export default function Footer() {
                   src="/logo-icon.svg" 
                   alt="ContentAnonymity" 
                   className="h-10 w-10 object-contain"
+                  loading="lazy"
                 />
               </div>
               <span className="text-xl font-bold gradient-text">

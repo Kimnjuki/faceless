@@ -41,6 +41,8 @@ export default function Header() {
                 src="/logo-icon.svg" 
                 alt="ContentAnonymity" 
                 className="h-8 w-8 object-contain"
+                loading="eager"
+                fetchPriority="high"
               />
             </div>
             <span className="hidden sm:block text-xl font-bold gradient-text">

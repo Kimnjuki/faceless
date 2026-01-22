@@ -34,6 +34,20 @@ export default defineConfig({
           'supabase': ['@supabase/supabase-js'],
           'utils': ['date-fns', 'zod', 'clsx', 'tailwind-merge'],
         },
+        // Optimize chunk file names for better caching
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: (assetInfo) => {
+          const info = assetInfo.name?.split('.') || [];
+          const ext = info[info.length - 1];
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext)) {
+            return `assets/images/[name]-[hash][extname]`;
+          }
+          if (/woff2?|eot|ttf|otf/i.test(ext)) {
+            return `assets/fonts/[name]-[hash][extname]`;
+          }
+          return `assets/[name]-[hash][extname]`;
+        },
       },
     },
     // Optimize chunk size
@@ -44,6 +58,10 @@ export default defineConfig({
     sourcemap: false,
     // Optimize asset handling
     assetsInlineLimit: 4096, // Inline assets smaller than 4kb
+    // CSS code splitting
+    cssCodeSplit: true,
+    // Target modern browsers for smaller bundle
+    target: 'es2015',
   },
   // Optimize dependencies
   optimizeDeps: {

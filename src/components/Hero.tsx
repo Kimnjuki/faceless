@@ -5,7 +5,7 @@ import { trackButtonClick } from "@/utils/analytics";
 
 export default function Hero() {
   return (
-    <section className="relative py-20 md:py-32 overflow-hidden">
+    <section className="relative py-20 md:py-32 overflow-hidden min-h-[600px] md:min-h-[700px]" style={{ containIntrinsicSize: '600px 700px' }}>
       {/* Modern gradient background with animated blur */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-purple-500/5 via-background to-background" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(139,92,246,0.1),transparent_50%)] animate-pulse-slow" />

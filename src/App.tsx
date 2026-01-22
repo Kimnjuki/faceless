@@ -46,6 +46,8 @@ import Events from "./pages/community/Events";
 import Challenges from "./pages/community/Challenges";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PerformanceOptimizer from "./components/PerformanceOptimizer";
+
 // Component to track page views on route changes
 function PageViewTracker() {
   const location = useLocation();
@@ -62,6 +64,7 @@ export default function App() {
   return (
     <AuthProvider>
       <Router>
+        <PerformanceOptimizer />
         <PageViewTracker />
         <AnalyticsConsent />
         <Routes>

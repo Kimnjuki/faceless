@@ -27,11 +27,13 @@ export default function LatestArticles() {
             <Link key={article.id} to={`/blog/${article.slug}`}>
               <Card className="group h-full overflow-hidden hover:border-primary/50 transition-colors">
                 {article.featured_image && (
-                  <div className="aspect-video w-full overflow-hidden rounded-t-lg bg-muted">
+                  <div className="aspect-video w-full overflow-hidden rounded-t-lg bg-muted" style={{ minHeight: '180px' }}>
                     <img
                       src={article.featured_image}
                       alt={article.title}
                       loading="lazy"
+                      width="640"
+                      height="360"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>

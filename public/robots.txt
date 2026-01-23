@@ -9,9 +9,13 @@ Disallow: /dashboard/
 Disallow: /auth/
 Disallow: /api/
 Disallow: /checkout
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /static/
 
-# Allow important pages
+# Allow important pages and content
 Allow: /blog
+Allow: /blog/
 Allow: /getting-started
 Allow: /tools/
 Allow: /privacy-policy
@@ -32,9 +36,16 @@ User-agent: Googlebot
 Allow: /
 Crawl-delay: 0
 
+User-agent: Googlebot-Image
+Allow: /
+
 User-agent: Bingbot
 Allow: /
 Crawl-delay: 0
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
 
 
 

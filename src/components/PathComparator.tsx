@@ -13,7 +13,7 @@ interface PathComparatorProps {
 }
 
 export default function PathComparator({ paths, selectedIds, onRemove, onClear }: PathComparatorProps) {
-  const selectedPaths = paths.filter(p => selectedIds.includes(p.id));
+  const selectedPaths = paths.filter(p => p.id && selectedIds.includes(p.id));
 
   if (selectedPaths.length === 0) return null;
 
@@ -44,14 +44,14 @@ export default function PathComparator({ paths, selectedIds, onRemove, onClear }
               <tr>
                 <th className="text-left p-2 border-b">Criteria</th>
                 {selectedPaths.map((path) => (
-                  <th key={path.id} className="text-left p-2 border-b min-w-[200px]">
+                  <th key={path.id || path._id || ''} className="text-left p-2 border-b min-w-[200px]">
                     <div className="flex items-center justify-between">
                       <span className="font-semibold">{path.name}</span>
                       <Button
                         variant="ghost"
                         size="icon"
                         className="h-6 w-6"
-                        onClick={() => onRemove(path.id)}
+                        onClick={() => path.id && onRemove(path.id)}
                       >
                         <X className="h-3 w-3" />
                       </Button>
@@ -71,28 +71,38 @@ export default function PathComparator({ paths, selectedIds, onRemove, onClear }
                         {criterion.label}
                       </div>
                     </td>
-                    {selectedPaths.map((path) => (
-                      <td key={path.id} className="p-3">
-                        {criterion.key === "modules" ? (
-                          <Badge variant="secondary">{getModuleCount(path)} modules</Badge>
-                        ) : criterion.key === "difficulty_level" ? (
-                          <Badge variant="outline" className="capitalize">
-                            {path[criterion.key as keyof LearningPath] || "N/A"}
-                          </Badge>
-                        ) : (
-                          <span className="text-sm">
-                            {path[criterion.key as keyof LearningPath] || "N/A"}
-                          </span>
-                        )}
-                      </td>
-                    ))}
+                    {selectedPaths.map((path) => {
+                      const pathId = path.id || path._id || '';
+                      const value = path[criterion.key as keyof LearningPath];
+                      const displayValue = typeof value === 'string' || typeof value === 'number' 
+                        ? String(value) 
+                        : criterion.key === 'modules' 
+                          ? String(getModuleCount(path))
+                          : "N/A";
+                      
+                      return (
+                        <td key={pathId} className="p-3">
+                          {criterion.key === "modules" ? (
+                            <Badge variant="secondary">{getModuleCount(path)} modules</Badge>
+                          ) : criterion.key === "difficulty_level" ? (
+                            <Badge variant="outline" className="capitalize">
+                              {displayValue}
+                            </Badge>
+                          ) : (
+                            <span className="text-sm">
+                              {displayValue}
+                            </span>
+                          )}
+                        </td>
+                      );
+                    })}
                   </tr>
                 );
               })}
               <tr>
                 <td className="p-3 font-medium">Description</td>
                 {selectedPaths.map((path) => (
-                  <td key={path.id} className="p-3 text-sm text-muted-foreground">
+                  <td key={path.id || path._id || ''} className="p-3 text-sm text-muted-foreground">
                     {path.description?.substring(0, 100)}...
                   </td>
                 ))}

@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, ArrowRight, X, CheckCircle2, Target, Zap, Users, TrendingUp } from "lucide-react";
+import { Sparkles, ArrowRight, X, CheckCircle2, Target, Zap, Users, TrendingUp, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface QuizQuestion {

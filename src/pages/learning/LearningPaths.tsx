@@ -20,7 +20,8 @@ import {
   Users,
   ChevronDown,
   ChevronUp,
-  Sparkles
+  Sparkles,
+  CheckCircle2
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -80,10 +81,11 @@ export default function LearningPaths() {
     
     switch (sortBy) {
       case "newest":
+        // Sort by order_index as proxy for newest (lower index = newer)
         return filtered.sort((a, b) => {
-          const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
-          const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
-          return dateB - dateA;
+          const indexA = a.order_index ?? a.orderIndex ?? 0;
+          const indexB = b.order_index ?? b.orderIndex ?? 0;
+          return indexA - indexB;
         });
       case "duration":
         return filtered.sort((a, b) => {
@@ -113,7 +115,8 @@ export default function LearningPaths() {
     }
   }, [paths, sortBy, recommendedPaths]);
 
-  const handleComparisonToggle = (pathId: string) => {
+  const handleComparisonToggle = (pathId: string | undefined) => {
+    if (!pathId) return;
     setSelectedForComparison(prev => {
       if (prev.includes(pathId)) {
         return prev.filter(id => id !== pathId);
@@ -287,14 +290,14 @@ export default function LearningPaths() {
                     const progress = calculatePathProgress(path);
                     const totalModules = path.modules?.length || 0;
                     const completedModules = path.modules?.filter((m: any) => m.progress?.completed).length || 0;
-
-                    const isRecommended = recommendedPaths.some(rp => rp.id === path.id);
-                    const isSelectedForComparison = selectedForComparison.includes(path.id);
-                    const isExpanded = expandedPath === path.id;
+                    const pathId = path.id || path._id || '';
+                    const isRecommended = recommendedPaths.some(rp => (rp.id || rp._id) === pathId);
+                    const isSelectedForComparison = pathId ? selectedForComparison.includes(pathId) : false;
+                    const isExpanded = expandedPath === pathId;
 
                     return (
                       <Card 
-                        key={path.id} 
+                        key={pathId} 
                         className={`hover:shadow-lg transition-shadow flex flex-col ${
                           isRecommended ? 'border-primary/50 border-2' : ''
                         } ${isSelectedForComparison ? 'ring-2 ring-primary' : ''}`}
@@ -361,7 +364,7 @@ export default function LearningPaths() {
                                   variant="ghost"
                                   size="sm"
                                   className="w-full justify-between"
-                                  onClick={() => setExpandedPath(isExpanded ? null : path.id)}
+                                  onClick={() => setExpandedPath(isExpanded ? null : pathId)}
                                 >
                                   <span className="text-xs">Preview Syllabus</span>
                                   {isExpanded ? (
@@ -374,9 +377,9 @@ export default function LearningPaths() {
                                   <div className="mt-2 p-3 bg-muted/50 rounded-lg max-h-48 overflow-y-auto">
                                     <ul className="space-y-1 text-xs">
                                       {path.modules.slice(0, 5).map((module, idx) => (
-                                        <li key={idx} className="flex items-center gap-2">
+                                        <li key={module.id || module._id || idx} className="flex items-center gap-2">
                                           <CheckCircle2 className="h-3 w-3 text-muted-foreground" />
-                                          <span>{module.name || `Module ${idx + 1}`}</span>
+                                          <span>{module.title || `Module ${idx + 1}`}</span>
                                         </li>
                                       ))}
                                       {path.modules.length > 5 && (
@@ -404,25 +407,27 @@ export default function LearningPaths() {
                             )}
 
                             {/* Comparison Checkbox */}
-                            <div className="flex items-center space-x-2">
-                              <Checkbox
-                                id={`compare-${path.id}`}
-                                checked={isSelectedForComparison}
-                                onCheckedChange={() => handleComparisonToggle(path.id)}
-                                disabled={selectedForComparison.length >= 3 && !isSelectedForComparison}
-                              />
-                              <label
-                                htmlFor={`compare-${path.id}`}
-                                className="text-xs text-muted-foreground cursor-pointer"
-                              >
-                                {selectedForComparison.length >= 3 && !isSelectedForComparison
-                                  ? "Max 3 paths"
-                                  : "Compare"}
-                              </label>
-                            </div>
+                            {pathId && (
+                              <div className="flex items-center space-x-2">
+                                <Checkbox
+                                  id={`compare-${pathId}`}
+                                  checked={isSelectedForComparison}
+                                  onCheckedChange={() => handleComparisonToggle(pathId)}
+                                  disabled={selectedForComparison.length >= 3 && !isSelectedForComparison}
+                                />
+                                <label
+                                  htmlFor={`compare-${pathId}`}
+                                  className="text-xs text-muted-foreground cursor-pointer"
+                                >
+                                  {selectedForComparison.length >= 3 && !isSelectedForComparison
+                                    ? "Max 3 paths"
+                                    : "Compare"}
+                                </label>
+                              </div>
+                            )}
 
                             <Button className="w-full" asChild>
-                              <Link to={`/learning-paths/${path.id}`}>
+                              <Link to={`/learning-paths/${pathId}`}>
                                 {user && progress > 0 ? "Continue Learning" : "Start Path"}
                                 <ArrowRight className="ml-2 h-4 w-4" />
                               </Link>

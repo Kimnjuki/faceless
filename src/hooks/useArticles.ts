@@ -1,8 +1,8 @@
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useQuery, useMutation, usePaginatedQuery } from "convex/react";
 import type { Id } from "../../convex/_generated/dataModel";
 import { api } from "../../convex/_generated/api";
-import type { Article, ContentCategory } from "@/types";
+import type { Article, ContentCategory } from "@/types/index";
 
 interface ArticleFilters {
   category?: string;
@@ -36,7 +36,17 @@ function toContentCategory(c: any): ContentCategory {
 }
 
 export function useArticles(filters: ArticleFilters = {}) {
-  const categoriesRaw = useQuery(api.contentCategories.list);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+
+  // Check if Convex is configured
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+
+  const categoriesRaw = useQuery(
+    api.contentCategories.list,
+    hasConvex ? {} : "skip"
+  );
+
   const categoryIdFromSlug = useMemo((): string | undefined => {
     if (!filters.category || filters.category === "all" || !categoriesRaw) return undefined;
     if (filters.category === "uncategorized") return "uncategorized";
@@ -55,12 +65,12 @@ export function useArticles(filters: ArticleFilters = {}) {
 
   const articlesRaw = useQuery(
     api.articles.list,
-    usePagination ? "skip" : {
+    hasConvex && !usePagination ? {
       status: filters.status ?? "published",
       categoryId: listCategoryId,
       limit: filters.limit,
       sortBy: filters.sortBy ?? "publishedAt",
-    }
+    } : "skip"
   );
 
   const paginatedArgs = {
@@ -68,39 +78,81 @@ export function useArticles(filters: ArticleFilters = {}) {
   };
   const paginated = usePaginatedQuery(
     api.articles.listPaginated,
-    usePagination ? paginatedArgs : "skip",
+    hasConvex && usePagination ? paginatedArgs : "skip",
     { initialNumItems: 24 }
   );
 
   const incrementViews = useMutation(api.articles.incrementViews);
 
+  // Handle connection errors
+  useEffect(() => {
+    if (!hasConvex) {
+      setConnectionError("Convex backend not configured. Set VITE_CONVEX_URL environment variable.");
+      return;
+    }
+
+    // Reset error on successful connection
+    if ((articlesRaw !== undefined || paginated.results !== undefined) && categoriesRaw !== undefined) {
+      setConnectionError(null);
+      setRetryCount(0);
+    }
+
+    // Detect if query is stuck in loading state (potential connection issue)
+    if ((articlesRaw === undefined || categoriesRaw === undefined) && retryCount < 3) {
+      const timeout = setTimeout(() => {
+        if (articlesRaw === undefined || categoriesRaw === undefined) {
+          setRetryCount(prev => prev + 1);
+          setConnectionError("Connection timeout. Please check your internet connection and try again.");
+        }
+      }, 10000); // 10 second timeout
+
+      return () => clearTimeout(timeout);
+    }
+  }, [articlesRaw, categoriesRaw, paginated.results, hasConvex, retryCount]);
+
   const categories: ContentCategory[] = useMemo(
-    () => (categoriesRaw ?? []).filter((c: any) => c._id).map(toContentCategory),
-    [categoriesRaw]
+    () => {
+      if (!hasConvex || !categoriesRaw) return [];
+      try {
+        return (categoriesRaw ?? []).filter((c: any) => c._id).map(toContentCategory);
+      } catch (error) {
+        console.error("Error processing categories:", error);
+        return [];
+      }
+    },
+    [categoriesRaw, hasConvex]
   );
 
   const rawList = usePagination ? (paginated.results ?? []) : (articlesRaw ?? []);
   const articles: Article[] = useMemo(() => {
-    let list = rawList.map(toArticle);
-    if (filters.searchQuery) {
-      const q = filters.searchQuery.toLowerCase();
-      list = list.filter(
-        (a) =>
-          (a.title ?? "").toLowerCase().includes(q) ||
-          (a.excerpt ?? "").toLowerCase().includes(q) ||
-          (typeof a.content === "string" && a.content.toLowerCase().includes(q)) ||
-          (a.tags ?? []).some((t: string) => t.toLowerCase().includes(q))
-      );
+    if (!hasConvex) return [];
+    try {
+      let list = rawList.map(toArticle);
+      if (filters.searchQuery) {
+        const q = filters.searchQuery.toLowerCase();
+        list = list.filter(
+          (a) =>
+            (a.title ?? "").toLowerCase().includes(q) ||
+            (a.excerpt ?? "").toLowerCase().includes(q) ||
+            (typeof a.content === "string" && a.content.toLowerCase().includes(q)) ||
+            (a.tags ?? []).some((t: string) => t.toLowerCase().includes(q))
+        );
+      }
+      return list;
+    } catch (error) {
+      console.error("Error processing articles:", error);
+      return [];
     }
-    return list;
-  }, [rawList, filters.searchQuery]);
+  }, [rawList, filters.searchQuery, hasConvex]);
 
   const loading = usePagination
     ? paginated.status === "LoadingFirstPage" || paginated.status === "LoadingMore"
-    : articlesRaw === undefined || categoriesRaw === undefined;
-  const error: string | null = null;
+    : hasConvex && (articlesRaw === undefined || categoriesRaw === undefined);
+  
+  const error = connectionError || (hasConvex && articlesRaw === null ? "Failed to load articles" : null);
 
   const incrementViewCount = async (slug: string) => {
+    if (!hasConvex) return;
     try {
       await incrementViews({ slug });
     } catch (e) {
@@ -108,12 +160,19 @@ export function useArticles(filters: ArticleFilters = {}) {
     }
   };
 
+  const refetch = () => {
+    setRetryCount(0);
+    setConnectionError(null);
+    // Convex queries automatically refetch, but we can trigger a re-render
+    window.location.reload();
+  };
+
   return {
     articles,
     categories,
     loading,
     error,
-    refetch: () => {},
+    refetch,
     incrementViewCount,
     pagination: usePagination
       ? {

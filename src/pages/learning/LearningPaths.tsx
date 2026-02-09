@@ -29,6 +29,7 @@ import SEO from "@/components/SEO";
 import { useLearningPaths } from "@/hooks/useLearningPaths";
 import { useAuth } from "@/contexts/AuthContext";
 import PathComparator from "@/components/PathComparator";
+import DataStateMessage from "@/components/DataStateMessage";
 import type { LearningPath } from "@/types/index";
 
 const iconMap: Record<string, any> = {
@@ -251,21 +252,16 @@ export default function LearningPaths() {
               </Select>
             </div>
 
-            {/* Loading State */}
-            {loading && (
-              <div className="flex items-center justify-center py-12">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
-            )}
-
-            {/* Error State */}
-            {error && !loading && (
-              <div className="text-center py-12">
-                <p className="text-destructive mb-4">{error}</p>
-                <p className="text-sm text-muted-foreground">
-                  Make sure you've run the LEARNING_PATHS_SCHEMA.sql script in Supabase.
-                </p>
-              </div>
+            {/* Data State Messages */}
+            {(loading || error || sortedPaths.length === 0) && (
+              <DataStateMessage
+                loading={loading}
+                error={error}
+                empty={!loading && !error && sortedPaths.length === 0}
+                emptyMessage="No learning paths found. Paths will appear here once they are added to the database."
+                onRetry={refetch}
+                type="paths"
+              />
             )}
 
             {/* Tool CTAs — internal links for SEO + high-intent users */}
@@ -282,10 +278,9 @@ export default function LearningPaths() {
             )}
 
             {/* Learning Paths Grid */}
-            {!loading && !error && (
+            {!loading && !error && sortedPaths.length > 0 && (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {sortedPaths.length > 0 ? (
-                  sortedPaths.map((path) => {
+                {sortedPaths.map((path) => {
                     const IconComponent = iconMap[path.icon_name || 'BookOpen'] || BookOpen;
                     const progress = calculatePathProgress(path);
                     const totalModules = path.modules?.length || 0;
@@ -436,28 +431,7 @@ export default function LearningPaths() {
                         </CardContent>
                       </Card>
                     );
-                  })
-                ) : (
-                  <div className="col-span-full text-center py-12">
-                    <BookOpen className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                    <p className="text-lg font-medium mb-2">No learning paths found.</p>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      {error 
-                        ? error 
-                        : "The learning paths table is empty. Add learning paths in Supabase or run the LEARNING_PATHS_SCHEMA.sql script to create sample data."
-                      }
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-                      <Button variant="outline" onClick={() => refetch()}>
-                        <RefreshCw className="h-4 w-4 mr-2" />
-                        Refresh
-                      </Button>
-                      <p className="text-xs text-muted-foreground">
-                        Make sure the LEARNING_PATHS_SCHEMA.sql script has been run in Supabase
-                      </p>
-                    </div>
-                  </div>
-                )}
+                  })}
               </div>
             )}
 

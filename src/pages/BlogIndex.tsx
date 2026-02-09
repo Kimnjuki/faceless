@@ -15,6 +15,7 @@ import { useArticles } from "@/hooks/useArticles";
 import ArticleImage from "@/components/ArticleImage";
 import AdSenseDisplay from "@/components/AdSenseDisplay";
 import ForeMediaAd from "@/components/ForeMediaAd";
+import DataStateMessage from "@/components/DataStateMessage";
 
 export default function BlogIndex() {
   const navigate = useNavigate();
@@ -163,50 +164,32 @@ export default function BlogIndex() {
             ))}
           </div>
 
-          {/* Loading State */}
-          {articlesLoading && (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
-          )}
-
-          {/* Error State */}
-          {error && !articlesLoading && (
-            <div className="text-center py-12">
-              <p className="text-destructive mb-4 font-semibold">{error}</p>
-              <div className="bg-muted p-6 rounded-lg max-w-2xl mx-auto text-left">
-                <p className="text-sm text-muted-foreground mb-2">
-                  <strong>Missing Database Tables:</strong> The articles or content_categories tables don't exist in your Supabase database.
-                </p>
-                <p className="text-sm text-muted-foreground mb-4">
-                  To fix this:
-                </p>
-                <ol className="text-sm text-muted-foreground list-decimal list-inside space-y-2 mb-4">
-                  <li>Open your Supabase Dashboard</li>
-                  <li>Go to SQL Editor</li>
-                  <li>Run the SQL script from <code className="bg-background px-1 py-0.5 rounded">MISSING_TABLES_SETUP.sql</code></li>
-                  <li>Refresh this page</li>
-                </ol>
-                <p className="text-xs text-muted-foreground">
-                  See <code className="bg-background px-1 py-0.5 rounded">FIX_MISSING_TABLES.md</code> for detailed instructions.
-                </p>
-              </div>
-            </div>
+          {/* Data State Messages */}
+          {(articlesLoading || error || articles.length === 0) && (
+            <DataStateMessage
+              loading={articlesLoading}
+              error={error}
+              empty={!articlesLoading && !error && articles.length === 0}
+              emptyMessage={searchQuery 
+                ? "No articles found matching your search. Try adjusting your filters."
+                : selectedCategory !== "all"
+                ? "No articles in this category yet."
+                : "No articles found. Articles will appear here once they are published."}
+              onRetry={refetch}
+              type="articles"
+            />
           )}
 
           {/* Articles Grid */}
-          {!articlesLoading && !error && (
+          {!articlesLoading && !error && articles.length > 0 && (
             <>
               {/* Ad Banner (top of articles) */}
-              {articles.length > 0 && (
-                <div className="mb-8 flex flex-col items-center gap-6">
-                  <AdSenseDisplay size="728x90" />
-                  <ForeMediaAd slot="c3" className="min-h-[250px]" wrapperClassName="w-full max-w-[336px]" />
-                </div>
-              )}
+              <div className="mb-8 flex flex-col items-center gap-6">
+                <AdSenseDisplay size="728x90" />
+                <ForeMediaAd slot="c3" className="min-h-[250px]" wrapperClassName="w-full max-w-[336px]" />
+              </div>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                {articles.length > 0 ? (
-                  articles.map((article, index) => (
+                {articles.map((article, index) => (
                     <div key={article.id}>
                       {index === 3 && (
                         <div className="col-span-full mb-6">
@@ -310,25 +293,10 @@ export default function BlogIndex() {
                         </Button>
                       </div>
                     </CardContent>
-                  </Card>
+                    </Card>
                     </div>
-                  ))
-              ) : (
-                <div className="col-span-full text-center py-12">
-                  <p className="text-muted-foreground mb-4">No articles found.</p>
-                  {searchQuery && (
-                    <p className="text-sm text-muted-foreground">
-                      Try adjusting your search or category filter.
-                    </p>
-                  )}
-                  {!searchQuery && selectedCategory !== 'all' && (
-                    <p className="text-sm text-muted-foreground">
-                      No articles in this category yet.
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
+                  ))}
+              </div>
             {pagination?.canLoadMore && (
               <div className="flex justify-center mt-8">
                 <Button

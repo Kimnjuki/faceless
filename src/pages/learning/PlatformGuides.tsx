@@ -20,6 +20,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { usePlatformGuides } from "@/hooks/usePlatformGuides";
+import DataStateMessage from "@/components/DataStateMessage";
 
 const platformIcons: Record<string, any> = {
   youtube: Youtube,
@@ -157,28 +158,22 @@ export default function PlatformGuides() {
               </div>
             </div>
 
-            {/* Loading State */}
-            {loading && (
-              <div className="flex items-center justify-center py-12">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
-            )}
-
-            {/* Error State */}
-            {error && !loading && (
-              <div className="text-center py-12">
-                <p className="text-destructive mb-4">{error}</p>
-                <p className="text-sm text-muted-foreground">
-                  Make sure you've run the LEARNING_PATHS_SCHEMA.sql script in Supabase.
-                </p>
-              </div>
+            {/* Data State Messages */}
+            {(loading || error || guides.length === 0) && (
+              <DataStateMessage
+                loading={loading}
+                error={error}
+                empty={!loading && !error && guides.length === 0}
+                emptyMessage="No platform guides found. Guides will appear here once they are added to the database."
+                onRetry={refetch}
+                type="guides"
+              />
             )}
 
             {/* Guides Grid */}
-            {!loading && !error && (
+            {!loading && !error && guides.length > 0 && (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {guides.length > 0 ? (
-                  guides.map((guide) => {
+                {guides.map((guide) => {
                     const PlatformIcon = platformIcons[guide.platform] || BookOpen;
 
                     return (
@@ -250,15 +245,7 @@ export default function PlatformGuides() {
                         </CardContent>
                       </Card>
                     );
-                  })
-                ) : (
-                  <div className="col-span-full text-center py-12">
-                    <p className="text-muted-foreground mb-4">No guides found matching your filters.</p>
-                    <p className="text-sm text-muted-foreground">
-                      Run the LEARNING_PATHS_SCHEMA.sql script in Supabase to add platform guides.
-                    </p>
-                  </div>
-                )}
+                  })}
               </div>
             )}
           </div>

@@ -1,10 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthProvider, AuthProviderFallback } from "@/contexts/AuthContext";
 import AnalyticsConsent from "@/components/AnalyticsConsent";
 import { trackPageView } from "@/utils/analytics";
+import { initWebVitals } from "@/utils/webVitals";
 import HomePage from "./pages/HomePage";
+import StartHere from "./pages/StartHere";
 import GettingStarted from "./pages/GettingStarted";
 import BlogIndex from "./pages/BlogIndex";
 import ArticleDetail from "./pages/ArticleDetail";
@@ -36,6 +38,7 @@ import TemplatesLibrary from "./pages/resources/TemplatesLibrary";
 import NicheDatabase from "./pages/resources/NicheDatabase";
 import LearningPaths from "./pages/learning/LearningPaths";
 import LearningPathDetail from "./pages/learning/LearningPathDetail";
+import CreatorStudio from "./pages/creator-studio/CreatorStudio";
 import PlatformGuides from "./pages/learning/PlatformGuides";
 import PlatformGuideDetail from "./pages/learning/PlatformGuideDetail";
 import CaseStudies from "./pages/learning/CaseStudies";
@@ -45,8 +48,11 @@ import MemberDirectory from "./pages/community/MemberDirectory";
 import Events from "./pages/community/Events";
 import Challenges from "./pages/community/Challenges";
 import NotFound from "./pages/NotFound";
+import Health from "./pages/Health";
+import News from "./pages/News";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PerformanceOptimizer from "./components/PerformanceOptimizer";
+import ForeMediaAd from "./components/ForeMediaAd";
 
 // Component to track page views on route changes
 function PageViewTracker() {
@@ -60,15 +66,26 @@ function PageViewTracker() {
   return null;
 }
 
+// Initialize Web Vitals monitoring (production only)
+if (import.meta.env.PROD) {
+  initWebVitals();
+}
+
+const hasAuth0 = Boolean(import.meta.env.VITE_AUTH0_DOMAIN && import.meta.env.VITE_AUTH0_CLIENT_ID);
+
 export default function App() {
+  const AuthWrapper = hasAuth0 ? AuthProvider : AuthProviderFallback;
   return (
-    <AuthProvider>
+    <AuthWrapper>
       <Router>
         <PerformanceOptimizer />
         <PageViewTracker />
         <AnalyticsConsent />
+        {/* ForeMedia POP_ADS - loads once site-wide */}
+        <ForeMediaAd slot="pop_ads" />
         <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/start-here" element={<StartHere />} />
         <Route path="/getting-started" element={<GettingStarted />} />
         <Route path="/blog" element={<BlogIndex />} />
         <Route path="/blog/:slug" element={<ArticleDetail />} />
@@ -101,6 +118,7 @@ export default function App() {
         <Route path="/learning-paths" element={<LearningPaths />} />
         <Route path="/learning-paths/:pathId" element={<LearningPathDetail />} />
         <Route path="/platform-guides" element={<PlatformGuides />} />
+        <Route path="/creator-studio" element={<CreatorStudio />} />
         <Route path="/platform-guides/:slug" element={<PlatformGuideDetail />} />
         <Route path="/learning/case-studies" element={<CaseStudies />} />
         <Route path="/learning/workshops" element={<LiveWorkshops />} />
@@ -108,11 +126,14 @@ export default function App() {
         <Route path="/community/members" element={<MemberDirectory />} />
         <Route path="/community/events" element={<Events />} />
         <Route path="/community/challenges" element={<Challenges />} />
+        <Route path="/404" element={<NotFound />} />
+        <Route path="/health" element={<Health />} />
+        <Route path="/news" element={<News />} />
         <Route path="/:pillarSlug" element={<PillarPage />} />
         <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />
       </Router>
-    </AuthProvider>
+    </AuthWrapper>
   );
 }

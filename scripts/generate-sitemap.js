@@ -1,105 +1,173 @@
-// Generate dynamic sitemap.xml for ContentAnonymity.com
-// Run this script to generate/update sitemap.xml
-// Usage: node scripts/generate-sitemap.js
+/**
+ * Dynamic Sitemap Generator
+ *
+ * Fetches dynamic routes from Convex HTTP API when CONVEX_SITE_URL is set.
+ * Otherwise uses static routes only.
+ *
+ * Usage:
+ *   node scripts/generate-sitemap.js
+ *
+ * Env: CONVEX_SITE_URL (e.g. https://your-deployment.convex.site) or
+ *      derive from VITE_CONVEX_URL by replacing .convex.cloud with .convex.site
+ */
 
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import dotenv from 'dotenv';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 
-// Base URL
-const BASE_URL = 'https://contentanonymity.com';
+dotenv.config({ path: path.join(__dirname, '../.env.local') });
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
-// Static pages with priority and changefreq
-const staticPages = [
-  { url: '', priority: '1.0', changefreq: 'weekly' },
-  { url: '/getting-started', priority: '0.9', changefreq: 'monthly' },
-  { url: '/blog', priority: '0.9', changefreq: 'daily' },
-  { url: '/tools/all', priority: '0.8', changefreq: 'monthly' },
-  { url: '/tools/calculator', priority: '0.8', changefreq: 'monthly' },
-  { url: '/tools/niche-quiz', priority: '0.8', changefreq: 'monthly' },
-  { url: '/tools/seo-audit', priority: '0.7', changefreq: 'monthly' },
-  { url: '/tools/keyword-research', priority: '0.7', changefreq: 'monthly' },
-  { url: '/tools/backlink-checker', priority: '0.7', changefreq: 'monthly' },
-  { url: '/tools/performance', priority: '0.7', changefreq: 'monthly' },
-  { url: '/privacy-policy', priority: '0.5', changefreq: 'yearly' },
-  { url: '/terms-of-service', priority: '0.5', changefreq: 'yearly' },
-  { url: '/learning-paths', priority: '0.8', changefreq: 'monthly' },
-  { url: '/platform-guides', priority: '0.8', changefreq: 'monthly' },
+const SITE_URL = 'https://contentanonymity.com';
+const SITEMAP_PATH = path.join(__dirname, '../public/sitemap.xml');
+
+const staticRoutes = [
+  // Homepage - Highest Priority
+  { path: '/', priority: '1.0', changefreq: 'daily' },
+  
+  // Core Pages - High Priority
+  { path: '/getting-started', priority: '0.9', changefreq: 'weekly' },
+  { path: '/blog', priority: '0.9', changefreq: 'daily' },
+  { path: '/news', priority: '0.8', changefreq: 'daily' },
+  
+  // Tools - High Priority
+  { path: '/tools/all', priority: '0.8', changefreq: 'monthly' },
+  { path: '/tools/calculator', priority: '0.8', changefreq: 'monthly' },
+  { path: '/tools/niche-quiz', priority: '0.8', changefreq: 'monthly' },
+  { path: '/tools/seo-audit', priority: '0.7', changefreq: 'monthly' },
+  { path: '/tools/keyword-research', priority: '0.7', changefreq: 'monthly' },
+  { path: '/tools/backlink-checker', priority: '0.7', changefreq: 'monthly' },
+  { path: '/tools/performance', priority: '0.7', changefreq: 'monthly' },
+  
+  // Learning Resources - High Priority
+  { path: '/learning-paths', priority: '0.8', changefreq: 'monthly' },
+  { path: '/platform-guides', priority: '0.8', changefreq: 'monthly' },
+  { path: '/learning/case-studies', priority: '0.8', changefreq: 'weekly' },
+  { path: '/learning/workshops', priority: '0.7', changefreq: 'monthly' },
+  { path: '/learning/resources', priority: '0.7', changefreq: 'monthly' },
+  
+  // Resources - Medium Priority
+  { path: '/resources/templates', priority: '0.7', changefreq: 'monthly' },
+  { path: '/resources/niches', priority: '0.7', changefreq: 'monthly' },
+  
+  // Products - Medium Priority
+  { path: '/products/all', priority: '0.8', changefreq: 'weekly' },
+  
+  // Community - Medium Priority
+  { path: '/community/members', priority: '0.6', changefreq: 'weekly' },
+  { path: '/community/events', priority: '0.6', changefreq: 'weekly' },
+  { path: '/community/challenges', priority: '0.6', changefreq: 'weekly' },
+  
+  // Legal Pages - Low Priority (but important for completeness)
+  { path: '/privacy-policy', priority: '0.5', changefreq: 'yearly' },
+  { path: '/terms-of-service', priority: '0.5', changefreq: 'yearly' },
+  
+  // Health Check (excluded from indexing but good to have in sitemap for monitoring)
+  // Note: Health endpoint should have noindex meta tag
 ];
 
-// Generate sitemap XML
-function generateSitemap(articles = []) {
-  const now = new Date().toISOString();
-  
-  let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+function generateSitemap(routes) {
+  const currentDate = new Date().toISOString().split('T')[0];
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml"
-        xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 `;
-
-  // Add static pages
-  staticPages.forEach(page => {
-    sitemap += `  <url>
-    <loc>${BASE_URL}${page.url}</loc>
-    <lastmod>${now}</lastmod>
-    <changefreq>${page.changefreq}</changefreq>
-    <priority>${page.priority}</priority>
+  routes.forEach((route) => {
+    xml += `  <url>
+    <loc>${SITE_URL}${route.path}</loc>
+    <lastmod>${route.lastmod || currentDate}</lastmod>
+    <changefreq>${route.changefreq}</changefreq>
+    <priority>${route.priority}</priority>
   </url>
 `;
   });
-
-  // Add blog articles
-  articles.forEach(article => {
-    if (article.slug && article.status === 'published') {
-      const lastmod = article.updated_at || article.published_at || now;
-      sitemap += `  <url>
-    <loc>${BASE_URL}/blog/${article.slug}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-`;
-    }
-  });
-
-  sitemap += `</urlset>`;
-
-  return sitemap;
+  xml += `</urlset>`;
+  return xml;
 }
 
-// Main function
+/**
+ * Fetch dynamic routes from Convex HTTP API (/api/sitemap-data)
+ */
+async function fetchDynamicRoutes() {
+  let baseUrl = process.env.CONVEX_SITE_URL;
+  if (!baseUrl && process.env.VITE_CONVEX_URL) {
+    baseUrl = process.env.VITE_CONVEX_URL.replace('.convex.cloud', '.convex.site');
+  }
+  if (!baseUrl) {
+    console.warn('⚠️  Convex URL not found. Skipping dynamic routes.');
+    console.warn('   Set CONVEX_SITE_URL or VITE_CONVEX_URL in .env.local');
+    return [];
+  }
+  const url = baseUrl.replace(/\/$/, '') + '/api/sitemap-data';
+  const dynamicRoutes = [];
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (data.articles && data.articles.length) {
+      data.articles.forEach((a) => {
+        dynamicRoutes.push({
+          path: a.path.replace(SITE_URL, ''),
+          priority: '0.8',
+          changefreq: 'weekly',
+          lastmod: a.lastmod,
+        });
+      });
+      console.log(`   ✅ Fetched ${data.articles.length} blog articles`);
+    }
+    if (data.guides && data.guides.length) {
+      data.guides.forEach((g) => {
+        dynamicRoutes.push({
+          path: g.path.replace(SITE_URL, ''),
+          priority: '0.7',
+          changefreq: 'monthly',
+          lastmod: g.lastmod,
+        });
+      });
+      console.log(`   ✅ Fetched ${data.guides.length} platform guides`);
+    }
+    if (data.paths && data.paths.length) {
+      data.paths.forEach((p) => {
+        dynamicRoutes.push({
+          path: p.path.replace(SITE_URL, ''),
+          priority: '0.7',
+          changefreq: 'monthly',
+          lastmod: p.lastmod,
+        });
+      });
+      console.log(`   ✅ Fetched ${data.paths.length} learning paths`);
+    }
+  } catch (err) {
+    console.warn('   ⚠️  Could not fetch Convex sitemap data:', err.message);
+  }
+  return dynamicRoutes;
+}
+
 async function main() {
   try {
-    // For now, generate sitemap with static pages only
-    // In production, you would fetch articles from Supabase here
-    const sitemap = generateSitemap([]);
-    
-    // Write to public/sitemap.xml
-    const sitemapPath = path.join(__dirname, '..', 'public', 'sitemap.xml');
-    fs.writeFileSync(sitemapPath, sitemap, 'utf8');
-    
-    console.log('✅ Sitemap generated successfully!');
-    console.log(`📄 Location: ${sitemapPath}`);
-    console.log(`📊 Total URLs: ${staticPages.length}`);
-    console.log('\n💡 To include articles, fetch from Supabase and pass to generateSitemap()');
+    console.log('🚀 Generating sitemap...');
+    const dynamic = await fetchDynamicRoutes();
+    const allRoutes = [...staticRoutes, ...dynamic];
+    const xml = generateSitemap(allRoutes);
+    fs.writeFileSync(SITEMAP_PATH, xml, 'utf8');
+    console.log(`✅ Sitemap generated successfully!`);
+    console.log(`   Location: ${SITEMAP_PATH}`);
+    console.log(`   Total URLs: ${allRoutes.length}`);
+    console.log(`   Static: ${staticRoutes.length}, Dynamic: ${dynamic.length}`);
   } catch (error) {
     console.error('❌ Error generating sitemap:', error);
     process.exit(1);
   }
 }
 
-// Run if called directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main();
-}
+// Run if executed directly
+main();
 
-export { generateSitemap };
-
-
-
+export { generateSitemap, fetchDynamicRoutes };

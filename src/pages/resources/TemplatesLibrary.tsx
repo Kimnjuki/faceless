@@ -7,8 +7,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Download, Search, Filter, FileText, Video, Image, Loader2, RefreshCw } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { useTemplates } from "@/hooks/useTemplates";
-import { Template } from "@/lib/supabase";
+import type { Template } from "@/types";
 
 const formatIcons = {
   pdf: FileText,
@@ -30,7 +31,7 @@ export default function TemplatesLibrary() {
   });
 
   const handleDownload = async (template: Template) => {
-    await incrementDownload(template.id);
+    await incrementDownload(template.id ?? template._id ?? '');
     // Open download URL
     if (template.download_url) {
       window.open(template.download_url, '_blank');
@@ -39,6 +40,15 @@ export default function TemplatesLibrary() {
 
   return (
     <>
+      <SEO
+        title="Content Templates Library - Free Templates for Faceless Creators | ContentAnonymity"
+        description="Download free content templates, scripts, and resources for faceless creators. Scripts, calendars, and planning templates included."
+        keywords="content templates, faceless content templates, free templates, content scripts, video templates, faceless creator resources"
+        url="https://contentanonymity.com/resources/templates"
+        canonical="https://contentanonymity.com/resources/templates"
+        type="website"
+        breadcrumbItems={[{ name: 'Templates Library', url: 'https://contentanonymity.com/resources/templates' }]}
+      />
       <Header />
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-12">
@@ -166,8 +176,8 @@ export default function TemplatesLibrary() {
                             <Download className="h-4 w-4" />
                             {template.download_count || 0}
                           </span>
-                          {template.rating > 0 && (
-                            <span>⭐ {template.rating.toFixed(1)}</span>
+                          {(template.rating ?? 0) > 0 && (
+                            <span>⭐ {(template.rating ?? 0).toFixed(1)}</span>
                           )}
                           {template.file_format && (
                             <span className="flex items-center gap-1">

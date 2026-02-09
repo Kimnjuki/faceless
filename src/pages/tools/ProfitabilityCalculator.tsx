@@ -44,9 +44,14 @@ export default function ProfitabilityCalculator() {
   return (
     <>
       <SEO
-        title="Faceless Content Profitability Calculator | Free Tool"
-        description="Calculate potential earnings from faceless content creation. Estimate monthly and yearly revenue for YouTube, TikTok, and Instagram. Free tool - start calculating now."
+        title="How Much Can You Earn? Free Faceless Calculator 2026"
+        description="Estimate your earning potential from faceless content in seconds. Input your niche, hours & platform — get a detailed revenue breakdown. Try it free now."
         url="https://contentanonymity.com/tools/calculator"
+        canonical="https://contentanonymity.com/tools/calculator"
+        breadcrumbItems={[
+          { name: 'Tools', url: 'https://contentanonymity.com/tools/all' },
+          { name: 'Profitability Calculator', url: 'https://contentanonymity.com/tools/calculator' }
+        ]}
         structuredData={{
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",

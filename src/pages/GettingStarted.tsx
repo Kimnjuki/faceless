@@ -15,29 +15,34 @@ export default function GettingStarted() {
   return (
     <>
       <SEO
-        title="Getting Started - Your Roadmap to Faceless Content Success"
-        description="Follow this proven 4-step system to launch your faceless content business in the next 30 days. Learn how to build an anonymous content empire with AI automation."
-        keywords="faceless content business, anonymous content creation, faceless business roadmap, content anonymity guide, faceless content strategy"
+        title="4-Step System to Launch Your Faceless Business in 30 Days"
+        description="Follow this proven roadmap to launch your faceless content business in 30 days. Step-by-step system with AI automation. Start your free trial today."
+        keywords="faceless content business, anonymous content creation, faceless business roadmap, content anonymity guide, faceless content strategy 2026"
         url="https://contentanonymity.com/getting-started"
         canonical="https://contentanonymity.com/getting-started"
         type="article"
+        breadcrumbItems={[{ name: 'Getting Started', url: 'https://contentanonymity.com/getting-started' }]}
+        howToData={{
+          name: "How to Launch Your Faceless Content Business in 30 Days",
+          description: "A proven 4-step system to choose your niche, set up your content system, create your first videos, and launch monetization.",
+          steps: [
+            { name: "Choose Your Profitable Niche", text: "Use our Niche Finder Quiz and profitability calculator to select a niche with high demand and low competition. Week 1 • 2-3 hours.", url: "https://contentanonymity.com/getting-started#step-1-choose-niche" },
+            { name: "Set Up Your Content System", text: "Get the right tools and templates to create professional content efficiently. Choose AI tools, download templates, set up your channel. Week 2 • 5-7 hours.", url: "https://contentanonymity.com/getting-started#step-2-create-content" },
+            { name: "Create Your First 10 Videos", text: "Follow our proven content frameworks to batch-create your first videos. Quality over quantity, but consistency is key. Week 3-4 • 10-15 hours.", url: "https://contentanonymity.com/getting-started#step-3-automate" },
+            { name: "Launch & Monetize", text: "Publish consistently, analyze performance, and activate multiple revenue streams. Your first $1K is just the beginning. Ongoing • scale as you grow.", url: "https://contentanonymity.com/getting-started#step-4-monetize" }
+          ]
+        }}
         structuredData={{
           "@context": "https://schema.org",
           "@type": "Article",
-          "headline": "Getting Started - Your Roadmap to Faceless Content Success",
-          "description": "Follow this proven 4-step system to launch your faceless content business in the next 30 days.",
+          "headline": "4-Step System to Launch Your Faceless Business in 30 Days",
+          "description": "Follow this proven roadmap to launch your faceless content business in 30 days.",
           "url": "https://contentanonymity.com/getting-started",
-          "author": {
-            "@type": "Organization",
-            "name": "ContentAnonymity"
-          },
+          "author": { "@type": "Organization", "name": "ContentAnonymity" },
           "publisher": {
             "@type": "Organization",
             "name": "ContentAnonymity",
-            "logo": {
-              "@type": "ImageObject",
-              "url": "https://contentanonymity.com/logo-icon.svg"
-            }
+            "logo": { "@type": "ImageObject", "url": "https://contentanonymity.com/logo-icon.svg" }
           }
         }}
       />
@@ -51,6 +56,9 @@ export default function GettingStarted() {
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               Your Roadmap to Faceless Content Success
             </h1>
+            <p className="text-lg font-medium text-foreground mb-4 max-w-2xl mx-auto">
+              To start a faceless content business, follow these 4 steps: choose a profitable niche, create content using AI and automation tools, set up your monetization (ads, affiliates, or products), and scale with a consistent publishing schedule. This guide walks you through each step in detail.
+            </p>
             <p className="text-lg text-muted-foreground mb-8">
               Follow this proven 4-step system to launch your faceless content business in the next 30 days
             </p>
@@ -64,11 +72,11 @@ export default function GettingStarted() {
       </section>
 
       {/* 4-Step Process */}
-      <section className="py-20">
+      <section className="py-20" id="steps">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-8">
             {/* Step 1 */}
-            <Card className="border-l-4 border-l-primary">
+            <Card id="step-1-choose-niche" className="border-l-4 border-l-primary scroll-mt-24">
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div>
@@ -115,7 +123,7 @@ export default function GettingStarted() {
             </Card>
 
             {/* Step 2 */}
-            <Card className="border-l-4 border-l-primary">
+            <Card id="step-2-create-content" className="border-l-4 border-l-primary scroll-mt-24">
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div>
@@ -155,7 +163,7 @@ export default function GettingStarted() {
             </Card>
 
             {/* Step 3 */}
-            <Card className="border-l-4 border-l-primary">
+            <Card id="step-3-automate" className="border-l-4 border-l-primary scroll-mt-24">
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div>
@@ -195,7 +203,7 @@ export default function GettingStarted() {
             </Card>
 
             {/* Step 4 */}
-            <Card className="border-l-4 border-l-primary">
+            <Card id="step-4-monetize" className="border-l-4 border-l-primary scroll-mt-24">
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div>

@@ -89,6 +89,7 @@ export default function BacklinkChecker() {
       <SEO
         title="Free Backlink Checker - Analyze Backlinks | ContentAnonymity"
         description="Free backlink checker to analyze your backlink profile. See referring domains, anchor text, and link types. Alternative to Ahrefs backlink tool."
+        canonical="https://contentanonymity.com/tools/backlink-checker"
       />
       <Header />
       <main className="min-h-screen py-12 bg-background">
@@ -273,6 +274,8 @@ export default function BacklinkChecker() {
     </>
   );
 }
+
+
 
 
 

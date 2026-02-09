@@ -52,7 +52,11 @@ export function lazyLoadImage(
 
   observer.observe(img);
 
-  return () => observer.disobserve(img);
+  return () => {
+    if (observer && 'unobserve' in observer) {
+      observer.unobserve(img);
+    }
+  };
 }
 
 /**
@@ -127,4 +131,6 @@ export function getOptimalImageFormat(baseUrl: string): string {
   }
   return baseUrl;
 }
+
+
 

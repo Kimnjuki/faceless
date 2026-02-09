@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star, ArrowRight } from "lucide-react";
+import { Star, ArrowRight, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTools } from "@/hooks/useTools";
 
@@ -50,10 +50,10 @@ export default function ToolsShowcase() {
                   <Badge variant="secondary" className="capitalize">
                     {tool.category?.name || 'Tool'}
                   </Badge>
-                  {tool.rating > 0 && (
+                  {(tool.rating ?? 0) > 0 && (
                     <div className="flex items-center gap-1">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm font-medium">{tool.rating.toFixed(1)}</span>
+                      <span className="text-sm font-medium">{(tool.rating ?? 0).toFixed(1)}</span>
                     </div>
                   )}
                 </div>
@@ -85,11 +85,19 @@ export default function ToolsShowcase() {
         </div>
 
         <div className="text-center">
-          <Button size="lg" asChild>
-            <Link to="/tools/all">
-              View All Tools <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Button size="lg" asChild>
+              <Link to="/tools/all">
+                View All Tools <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <Link to="/learning-paths">
+                <BookOpen className="mr-2 h-4 w-4" />
+                Learn How to Use Tools
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
     </section>

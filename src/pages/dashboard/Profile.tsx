@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+import SEO from "@/components/SEO";
 
 export default function Profile() {
   const [loading, setLoading] = useState(false);
@@ -35,6 +36,13 @@ export default function Profile() {
   };
 
   return (
+    <>
+      <SEO
+        title="Account Settings - Private Profile"
+        description="Manage your private account settings and notifications. This profile dashboard page is not indexed by search engines."
+        noindex
+        canonical="https://contentanonymity.com/dashboard/profile"
+      />
     <DashboardLayout>
       <div className="space-y-6">
         <div>
@@ -152,5 +160,6 @@ export default function Profile() {
         </Card>
       </div>
     </DashboardLayout>
+    </>
   );
 }

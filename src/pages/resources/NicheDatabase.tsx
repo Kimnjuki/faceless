@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, TrendingUp, TrendingDown, Minus, Star, DollarSign, Loader2, RefreshCw } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { useNiches } from "@/hooks/useNiches";
 
 const TrendIcon = ({ status }: { status: string }) => {
@@ -35,6 +36,18 @@ export default function NicheDatabase() {
 
   return (
     <>
+      <SEO
+        title="Profitable Niche Database - Find Your Perfect Faceless Niche | ContentAnonymity"
+        description="Browse 100+ profitable niches for faceless content creators. Find niches by profitability, difficulty, and growth potential. Start exploring today."
+        keywords="profitable niches, faceless content niches, niche database, anonymous content niches, best niches for faceless creators"
+        url="https://contentanonymity.com/resources/niches"
+        canonical="https://contentanonymity.com/resources/niches"
+        type="website"
+        breadcrumbItems={[
+          { name: 'Resources', url: 'https://contentanonymity.com/resources/templates' },
+          { name: 'Niche Database', url: 'https://contentanonymity.com/resources/niches' }
+        ]}
+      />
       <Header />
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-12">
@@ -135,8 +148,8 @@ export default function NicheDatabase() {
                               : niche.category?.name || 'Uncategorized'}
                           </Badge>
                       <div className="flex items-center gap-1">
-                        <TrendIcon status={niche.trend_status} />
-                        <span className="text-xs text-muted-foreground capitalize">{niche.trend_status}</span>
+                        <TrendIcon status={niche.trend_status ?? 'stable'} />
+                        <span className="text-xs text-muted-foreground capitalize">{niche.trend_status ?? 'stable'}</span>
                       </div>
                     </div>
                     <CardTitle className="text-xl">{niche.niche_name}</CardTitle>

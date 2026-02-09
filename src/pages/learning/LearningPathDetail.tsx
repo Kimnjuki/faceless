@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { useLearningPaths } from "@/hooks/useLearningPaths";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -126,6 +127,13 @@ export default function LearningPathDetail() {
   if (loading) {
     return (
       <>
+        <SEO
+          title={pathId ? `Loading: ${pathId} - Learning Path | ContentAnonymity` : "Loading Learning Path | ContentAnonymity"}
+          description="Loading learning path content..."
+          url={`https://contentanonymity.com/learning-paths/${pathId || ''}`}
+          canonical={`https://contentanonymity.com/learning-paths/${pathId || ''}`}
+          noindex={true}
+        />
         <Header />
         <div className="min-h-screen flex items-center justify-center">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -154,8 +162,26 @@ export default function LearningPathDetail() {
 
   const overallProgress = calculateOverallProgress();
 
+  const pageTitle = path ? `${path.name} - Learning Path | ContentAnonymity` : `Learning Path ${pathId || ''} | ContentAnonymity`;
+  const pageDescription = path 
+    ? `Master ${path.name.toLowerCase()} with this structured learning path. ${path.description || 'Step-by-step modules to build your faceless content skills.'}`
+    : 'Structured learning path to master faceless content creation.';
+  const canonicalUrl = `https://contentanonymity.com/learning-paths/${pathId}`;
+
   return (
     <>
+      <SEO
+        title={pageTitle}
+        description={pageDescription}
+        keywords={`${path?.name?.toLowerCase() || 'learning path'}, faceless content course, structured learning, content creation training`}
+        url={canonicalUrl}
+        canonical={canonicalUrl}
+        type="course"
+        breadcrumbItems={[
+          { name: 'Learning Paths', url: 'https://contentanonymity.com/learning-paths' },
+          { name: path?.name || 'Path', url: canonicalUrl }
+        ]}
+      />
       <Header />
       <main className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-12">

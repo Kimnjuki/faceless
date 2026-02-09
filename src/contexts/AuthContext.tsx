@@ -1,14 +1,22 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User as SupabaseUser, Session } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
-import { toast } from 'sonner';
+import { createContext, useContext, useEffect, ReactNode } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { toast } from "sonner";
 
-interface AuthContextType {
-  user: SupabaseUser | null;
-  session: Session | null;
+/** Minimal user shape compatible with existing UI (Supabase used id, email, user_metadata). */
+export interface AuthUser {
+  id: string;
+  email?: string | null;
+  user_metadata?: { full_name?: string; name?: string; avatar_url?: string };
+}
+
+export interface AuthContextType {
+  user: AuthUser | null;
+  session: { user: AuthUser } | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ user: SupabaseUser | null; error: Error | null }>;
-  signUp: (email: string, password: string, name?: string) => Promise<{ user: SupabaseUser | null; error: Error | null }>;
+  signIn: (email: string, password: string) => Promise<{ user: AuthUser | null; error: Error | null }>;
+  signUp: (email: string, password: string, name?: string) => Promise<{ user: AuthUser | null; error: Error | null }>;
   signInWithGoogle: () => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   updateProfile: (data: { name?: string; niche?: string; goal?: string }) => Promise<void>;
@@ -16,241 +24,151 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const FALLBACK_AUTH: AuthContextType = {
+  user: null,
+  session: null,
+  loading: false,
+  signIn: async () => {
+    toast.error("Auth not configured. Set VITE_AUTH0_DOMAIN and VITE_AUTH0_CLIENT_ID.");
+    return { user: null, error: new Error("Not configured") };
+  },
+  signUp: async () => {
+    toast.error("Auth not configured. Set VITE_AUTH0_DOMAIN and VITE_AUTH0_CLIENT_ID.");
+    return { user: null, error: new Error("Not configured") };
+  },
+  signInWithGoogle: async () => {
+    toast.error("Auth not configured.");
+    return { error: new Error("Not configured") };
+  },
+  signOut: async () => {},
+  updateProfile: async () => {
+    throw new Error("No user logged in");
+  },
+};
+
+/** Use when Auth0 is configured; must be inside Auth0Provider. */
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<SupabaseUser | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
+  const {
+    user: auth0User,
+    isAuthenticated,
+    isLoading: auth0Loading,
+    loginWithRedirect,
+    logout,
+    getAccessTokenSilently,
+  } = useAuth0();
+  const upsertFromAuth = useMutation(api.profiles.upsertFromAuth);
+  const updateProfileMutation = useMutation(api.profiles.update);
+
+  const user: AuthUser | null = auth0User
+    ? {
+        id: auth0User.sub!,
+        email: auth0User.email ?? null,
+        user_metadata: {
+          full_name: auth0User.name ?? undefined,
+          name: auth0User.name ?? undefined,
+          avatar_url: auth0User.picture ?? undefined,
+        },
+      }
+    : null;
+
+  const session = user ? { user } : null;
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      // Handle OAuth sign in - create user record if needed
-      if (event === 'SIGNED_IN' && session?.user) {
-        try {
-          // Check if profile record exists
-          const { data: existingProfile } = await supabase
-            .from('profiles')
-            .select('id')
-            .eq('user_id', session.user.id)
-            .single();
-
-          // Create profile record if it doesn't exist (for OAuth users)
-          if (!existingProfile) {
-            const userMetadata = session.user.user_metadata || {};
-            const { error: insertError } = await supabase.from('profiles').insert({
-              user_id: session.user.id,
-              email: session.user.email || '',
-              full_name: userMetadata.full_name || 
-                        userMetadata.name || 
-                        userMetadata.preferred_username ||
-                        session.user.email?.split('@')[0] || '',
-            });
-            
-            // Ignore duplicate key errors
-            if (insertError && insertError.code !== '23505') {
-              console.error('Error creating profile record:', insertError);
-            }
-          }
-        } catch (error) {
-          // User table might not exist yet, that's okay
-          console.warn('Could not check/create user record:', error);
-        }
+    if (!isAuthenticated || !auth0User) return;
+    (async () => {
+      try {
+        await upsertFromAuth({
+          userId: auth0User.sub!,
+          email: auth0User.email ?? "",
+          fullName: auth0User.name ?? auth0User.email?.split("@")[0] ?? "",
+          avatarUrl: auth0User.picture ?? undefined,
+        });
+      } catch (e) {
+        console.warn("Profile sync to Convex failed:", e);
       }
-      
-      setLoading(false);
-    });
+    })();
+  }, [isAuthenticated, auth0User, upsertFromAuth]);
 
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (_email: string, _password: string) => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        toast.error(error.message);
-        return { user: null, error };
-      }
-
-      toast.success('Signed in successfully!');
-      return { user: data.user, error: null };
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to sign in');
-      return { user: null, error };
+      await loginWithRedirect();
+      return { user: null, error: null };
+    } catch (e: any) {
+      toast.error(e?.message ?? "Sign in failed");
+      return { user: null, error: e ?? null };
     }
   };
 
-  const signUp = async (email: string, password: string, name?: string) => {
+  const signUp = async (_email: string, _password: string, _name?: string) => {
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            name: name || '',
-          },
-          emailRedirectTo: `${window.location.origin}/dashboard`,
-        },
-      });
-
-      if (error) {
-        toast.error(error.message);
-        return { user: null, error };
-      }
-
-            // Create profile record in profiles table
-            if (data.user) {
-              try {
-                const { error: insertError } = await supabase.from('profiles').insert({
-                  user_id: data.user.id,
-                  email: data.user.email || email,
-                  full_name: name || '',
-                });
-
-                if (insertError && insertError.code !== '23505') {
-                  // Ignore duplicate key errors (profile already exists)
-                  console.error('Error creating profile record:', insertError);
-                }
-              } catch (insertErr) {
-                // Profiles table might not exist yet, that's okay
-                console.warn('Could not create profile record:', insertErr);
-              }
-            }
-
-      // Check if email confirmation is required
-      // If session is null, Supabase requires email confirmation
-      if (!data.session && data.user) {
-        toast.success('Account created! Please check your email to verify your account.', { duration: 6000 });
-        return { user: data.user, error: null };
-      }
-
-      // If session exists, user is immediately signed in (email confirmation disabled)
-      if (data.session) {
-        toast.success('Account created successfully!');
-        return { user: data.user, error: null };
-      }
-
-      return { user: data.user, error: null };
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to create account');
-      return { user: null, error };
+      await loginWithRedirect({ authorizationParams: { screen_hint: "signup" } });
+      return { user: null, error: null };
+    } catch (e: any) {
+      toast.error(e?.message ?? "Sign up failed");
+      return { user: null, error: e ?? null };
     }
   };
 
   const signInWithGoogle = async () => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
-          },
-        },
-      });
-
-      if (error) {
-        // Check if it's the "provider not enabled" error
-        if (error.message?.includes('provider is not enabled') || error.message?.includes('Unsupported provider')) {
-          toast.error(
-            'Google sign-in is not enabled. Please enable it in Supabase Dashboard → Authentication → Providers → Google',
-            { duration: 6000 }
-          );
-        } else {
-          toast.error(error.message || 'Failed to sign in with Google');
-        }
-        return { error };
-      }
-
+      await loginWithRedirect({ authorizationParams: { connection: "google" } });
       return { error: null };
-    } catch (error: any) {
-      if (error.message?.includes('provider is not enabled') || error.message?.includes('Unsupported provider')) {
-        toast.error(
-          'Google sign-in is not enabled. Please enable it in Supabase Dashboard → Authentication → Providers → Google',
-          { duration: 6000 }
-        );
-      } else {
-        toast.error(error.message || 'Failed to sign in with Google');
-      }
-      return { error };
+    } catch (e: any) {
+      toast.error(e?.message ?? "Google sign in failed");
+      return { error: e ?? null };
     }
   };
 
   const signOut = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        toast.error(error.message);
-        throw error;
-      }
-      toast.success('Signed out successfully');
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to sign out');
-      throw error;
+      logout({ logoutParams: { returnTo: window.location.origin } });
+      toast.success("Signed out successfully");
+    } catch (e: any) {
+      toast.error(e?.message ?? "Sign out failed");
+      throw e;
     }
   };
 
   const updateProfile = async (data: { name?: string; niche?: string; goal?: string }) => {
-    if (!user) throw new Error('No user logged in');
-
-    // Map legacy fields to profile fields
-    const updateData: Record<string, any> = {};
-    if (data.name) updateData.full_name = data.name;
-    if (data.niche) updateData.primary_niche = data.niche;
-    // Note: 'goal' field doesn't exist in profiles table, but we'll keep it for backward compatibility
-
-    const { error } = await supabase
-      .from('profiles')
-      .update(updateData)
-      .eq('user_id', user.id);
-
-    if (error) {
-      toast.error(error.message);
-      throw error;
+    if (!user) throw new Error("No user logged in");
+    try {
+      await updateProfileMutation({
+        userId: user.id,
+        fullName: data.name,
+        primaryNiche: data.niche,
+      });
+      toast.success("Profile updated!");
+    } catch (e: any) {
+      toast.error(e?.message ?? "Update failed");
+      throw e;
     }
-
-    toast.success('Profile updated!');
   };
 
+  const value: AuthContextType = {
+    user,
+    session,
+    loading: auth0Loading,
+    signIn,
+    signUp,
+    signInWithGoogle,
+    signOut,
+    updateProfile,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+/** Use when Auth0 is not configured; provides null user and no-op auth. */
+export function AuthProviderFallback({ children }: { children: ReactNode }) {
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        session,
-        loading,
-        signIn,
-        signUp,
-        signInWithGoogle,
-        signOut,
-        updateProfile,
-      }}
-    >
+    <AuthContext.Provider value={FALLBACK_AUTH}>
       {children}
     </AuthContext.Provider>
   );
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+  const ctx = useContext(AuthContext);
+  if (ctx === undefined) throw new Error("useAuth must be used within an AuthProvider");
+  return ctx;
 }
-

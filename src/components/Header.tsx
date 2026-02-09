@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Menu, X, Mail, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import ForeMediaAd from "@/components/ForeMediaAd";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,10 +40,11 @@ export default function Header() {
             <div className="flex items-center justify-center p-1.5 rounded-xl bg-gradient-to-br from-white/95 to-white/85 backdrop-blur-md shadow-lg border border-primary/10 group-hover:shadow-xl group-hover:border-primary/30 group-hover:scale-105 transition-all duration-300">
               <img 
                 src="/logo-icon.svg" 
-                alt="ContentAnonymity" 
+                alt="" 
                 className="h-8 w-8 object-contain"
                 loading="eager"
                 fetchPriority="high"
+                aria-hidden="true"
               />
             </div>
             <span className="hidden sm:block text-xl font-bold gradient-text">
@@ -129,6 +131,15 @@ export default function Header() {
                   <Link to="/platform-guides">Platform Guides</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  <Link to="/learning/case-studies">Case Studies</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/learning/workshops">Live Workshops</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/learning/resources">Resource Downloads</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link to="/getting-started">Start Here</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -140,10 +151,22 @@ export default function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem asChild>
+                  <Link to="/news">LiveWire News</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link to="/resources/templates">Templates Library</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/resources/niches">Niche Database</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/community/members">Member Directory</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/community/events">Community Events</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/community/challenges">Challenges</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/tools/all">Tool Comparison</Link>
@@ -202,6 +225,15 @@ export default function Header() {
             {mobileMenuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
           </button>
         </div>
+        {/* ForeMedia: C1 (Logo area), C2 (Menu area) */}
+        <div className="hidden lg:flex items-center justify-center gap-4 py-2 border-t border-primary/5">
+          <div className="min-h-[50px] flex-1 max-w-[728px] flex justify-center">
+            <ForeMediaAd slot="c1" className="min-h-[50px]" />
+          </div>
+          <div className="min-h-[50px] w-[300px] shrink-0 flex justify-center">
+            <ForeMediaAd slot="c2" className="min-h-[50px]" />
+          </div>
+        </div>
       </div>
 
       {mobileMenuOpen && (
@@ -232,6 +264,24 @@ export default function Header() {
             </Link>
             <Link to="/blog" className="text-sm font-medium hover:text-primary transition-colors">
               Blog & Articles
+            </Link>
+            <Link to="/learning-paths" className="text-sm font-medium hover:text-primary transition-colors">
+              Learning Paths
+            </Link>
+            <Link to="/platform-guides" className="text-sm font-medium hover:text-primary transition-colors">
+              Platform Guides
+            </Link>
+            <Link to="/learning/case-studies" className="text-sm font-medium hover:text-primary transition-colors">
+              Case Studies
+            </Link>
+            <Link to="/community/members" className="text-sm font-medium hover:text-primary transition-colors">
+              Member Directory
+            </Link>
+            <Link to="/community/events" className="text-sm font-medium hover:text-primary transition-colors">
+              Community Events
+            </Link>
+            <Link to="/news" className="text-sm font-medium hover:text-primary transition-colors">
+              LiveWire News
             </Link>
             <Link to="/resources/templates" className="text-sm font-medium hover:text-primary transition-colors">
               Templates Library

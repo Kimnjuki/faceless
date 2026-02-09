@@ -1,0 +1,8 @@
+id,name,slug,description,sort_order,created_at
+09014ec5-9006-47c4-8016-d4da5e5bece8,Templates,templates,Ready-to-use content templates,1,2025-11-18 15:00:10.473031+00
+11b84b83-09cd-4f8c-a75d-db32371c3e8b,Bundles,bundles,Curated product packages,5,2025-11-18 15:00:10.473031+00
+47081a3d-77a8-4996-8f7e-58ffc58ce833,Video Templates,video-templates,Ready-to-use video templates,0,2025-11-24 16:02:03.917266+00
+58abf757-64d7-4e4a-9fcf-1c444f666519,Courses,courses,In-depth training programs,2,2025-11-18 15:00:10.473031+00
+9176a074-13ee-423f-a94a-8a5c3abf8ec6,Tools,tools,Software tools and applications,0,2025-11-24 16:02:03.917266+00
+987e167e-7d85-47b4-8b84-336073b55dd1,Services,services,Done-for-you solutions,3,2025-11-18 15:00:10.473031+00
+f3c42c67-327b-4743-b458-a822c3e83e6c,Subscriptions,subscriptions,Recurring access to resources,4,2025-11-18 15:00:10.473031+00

@@ -1,3 +1,25 @@
+# ads.txt - required for ad platform approval (IAB spec: text/plain)
+/ads.txt
+  Content-Type: text/plain; charset=utf-8
+
+# robots.txt - ensure text/plain (Ahrefs accessibility)
+/robots.txt
+  Content-Type: text/plain; charset=utf-8
+
+# sitemap.xml - ensure application/xml
+/sitemap.xml
+  Content-Type: application/xml; charset=utf-8
+
+# All pages: security + cache
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+  Cache-Control: public, max-age=3600, must-revalidate
+
 # Cache headers for static assets
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
@@ -10,10 +32,5 @@
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
-# HTML files - short cache
-/*
-  Cache-Control: public, max-age=3600, must-revalidate
-  X-Content-Type-Options: nosniff
-  X-Frame-Options: DENY
-  X-XSS-Protection: 1; mode=block
+
 

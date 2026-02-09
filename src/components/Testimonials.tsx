@@ -23,6 +23,20 @@ const testimonials = [
     content: "The niche research tools helped me find 3 profitable niches in a week. Incredible ROI.",
     rating: 5,
     initials: "JP"
+  },
+  {
+    name: "Morgan L.",
+    role: "Anonymous Creator",
+    content: "The step-by-step learning paths took me from complete beginner to monetized in 6 weeks. No face, no problem.",
+    rating: 5,
+    initials: "ML"
+  },
+  {
+    name: "Casey R.",
+    role: "TikTok Creator",
+    content: "Profitability calculator and niche quiz saved me months of guesswork. Now I know exactly where to focus.",
+    rating: 5,
+    initials: "CR"
   }
 ];
 

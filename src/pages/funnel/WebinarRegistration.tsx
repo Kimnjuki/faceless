@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Calendar, Clock, Users } from "lucide-react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import SEO from "../../components/SEO";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,7 +11,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 export default function WebinarRegistration() {
+  const { slug } = useParams();
   const [timeLeft, setTimeLeft] = useState({ hours: 2, minutes: 34, seconds: 12 });
+  const webinarTitle = slug ? slug.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase()) : "Faceless Business";
+  const canonicalUrl = slug ? `https://contentanonymity.com/webinar/${slug}` : "https://contentanonymity.com/webinar";
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -25,6 +30,14 @@ export default function WebinarRegistration() {
 
   return (
     <>
+      <SEO
+        title={slug ? `Free Webinar: ${webinarTitle} | ContentAnonymity` : "Free Webinar: Build $10K/Month Faceless Business | ContentAnonymity"}
+        description="Join our free live webinar and learn the exact system used by 1,000+ creators to generate $10K/month passive income without showing their face. Limited spots available."
+        keywords="free webinar, faceless business webinar, passive income webinar, faceless content training"
+        url={canonicalUrl}
+        canonical={canonicalUrl}
+        type="event"
+      />
       <Header />
       <main className="py-12">
         <div className="container mx-auto px-4">

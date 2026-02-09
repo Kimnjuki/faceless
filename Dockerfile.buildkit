@@ -19,10 +19,11 @@ COPY . .
 
 # Use BuildKit secrets (requires DOCKER_BUILDKIT=1 and --secret flags)
 # This prevents secrets from being stored in image layers
-RUN --mount=type=secret,id=supabase_url \
-    --mount=type=secret,id=supabase_key \
-    export VITE_SUPABASE_URL=$(cat /run/secrets/supabase_url) && \
-    export VITE_SUPABASE_ANON_KEY=$(cat /run/secrets/supabase_key) && \
+# Example: DOCKER_BUILDKIT=1 docker build --secret id=convex_url --secret id=clerk_key .
+RUN --mount=type=secret,id=convex_url \
+    --mount=type=secret,id=clerk_key \
+    export VITE_CONVEX_URL=$(cat /run/secrets/convex_url) && \
+    export VITE_CLERK_PUBLISHABLE_KEY=$(cat /run/secrets/clerk_key) && \
     npm run build
 
 # Production stage with nginx
@@ -39,6 +40,8 @@ EXPOSE 80
 
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"]
+
+
 
 
 

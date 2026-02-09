@@ -6,7 +6,7 @@ interface SEOProps {
   keywords?: string;
   image?: string;
   url?: string;
-  type?: 'website' | 'article' | 'product' | 'course' | 'tool';
+  type?: 'website' | 'article' | 'product' | 'course' | 'tool' | 'event';
   author?: string;
   publishedTime?: string;
   modifiedTime?: string;
@@ -23,7 +23,7 @@ interface SEOProps {
   howToData?: {
     name: string;
     description: string;
-    steps: Array<{ name: string; text: string; image?: string }>;
+    steps: Array<{ name: string; text: string; image?: string; url?: string }>;
   };
   softwareApplication?: {
     name: string;
@@ -35,6 +35,8 @@ interface SEOProps {
       priceCurrency: string;
     };
   };
+  /** BreadcrumbList schema - use on all pages except homepage */
+  breadcrumbItems?: Array<{ name: string; url: string }>;
 }
 
 export default function SEO({
@@ -54,6 +56,7 @@ export default function SEO({
   reviewData,
   howToData,
   softwareApplication,
+  breadcrumbItems,
 }: SEOProps) {
   // Enforce < 60 characters for title (SEO best practice)
   const truncatedTitle = title.length > 60 ? title.substring(0, 57) + '...' : title;
@@ -62,18 +65,20 @@ export default function SEO({
   // Enforce < 60 characters for full title (with site name)
   const finalTitle = fullTitle.length > 60 ? fullTitle.substring(0, 57) + '...' : fullTitle;
   
-  // Enforce < 155 characters for description and add CTA if missing
+  // Enforce 155-160 characters for description (Google SERP display) and add strong CTA if missing
   let finalDescription = description;
-  if (finalDescription.length > 155) {
-    finalDescription = finalDescription.substring(0, 152) + '...';
+  if (finalDescription.length > 160) {
+    finalDescription = finalDescription.substring(0, 157) + '...';
   }
-  // Add CTA if description doesn't end with action words
-  const hasCTA = /(free|start|try|get|download|click|learn|join|sign up|anonymize|use|calculate)/i.test(finalDescription);
-  if (!hasCTA && finalDescription.length < 140) {
-    finalDescription += ' Start free today.';
+  const hasCTA = /(start|try|get|learn|join|discover|master|build|today|free|now)/i.test(finalDescription);
+  if (!hasCTA && finalDescription.length < 145) {
+    finalDescription += ' Start building today.';
   }
   
-  const canonicalUrl = canonical || url;
+  // Always generate canonical URL - use provided canonical, or construct from url, or default to homepage
+  // Normalize: remove trailing slash (except for homepage) to fix "Duplicate pages without canonical"
+  const rawCanonical = canonical || url || 'https://contentanonymity.com';
+  const canonicalUrl = rawCanonical.replace(/\/+$/, '') || rawCanonical;
   const baseStructuredData = {
     '@context': 'https://schema.org',
     '@type': type === 'article' ? 'Article' : type === 'product' ? 'Product' : 'WebPage',
@@ -157,6 +162,24 @@ export default function SEO({
 
     schemas.push(organizationSchema, websiteSchema);
 
+    // BreadcrumbList Schema (all pages except homepage)
+    if (breadcrumbItems && breadcrumbItems.length > 0) {
+      const breadcrumbSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://contentanonymity.com' },
+          ...breadcrumbItems.map((item, i) => ({
+            '@type': 'ListItem' as const,
+            position: i + 2,
+            name: item.name,
+            item: item.url.startsWith('http') ? item.url : `https://contentanonymity.com${item.url}`,
+          })),
+        ],
+      };
+      schemas.push(breadcrumbSchema);
+    }
+
     // FAQ Schema
     if (faqData && faqData.length > 0) {
       const faqSchema = {
@@ -203,6 +226,7 @@ export default function SEO({
           position: index + 1,
           name: step.name,
           text: step.text,
+          ...(step.url && { url: step.url }),
           ...(step.image && {
             image: {
               '@type': 'ImageObject',
@@ -307,9 +331,26 @@ export default function SEO({
       schemas.push(courseSchema);
     }
 
-    // Use custom structured data if provided, otherwise use built schemas
+    // Use custom structured data if provided, but always merge BreadcrumbList when breadcrumbItems given
     if (structuredData) {
-      return Array.isArray(structuredData) ? structuredData : [structuredData];
+      const customSchemas = Array.isArray(structuredData) ? structuredData : [structuredData];
+      if (breadcrumbItems && breadcrumbItems.length > 0) {
+        const breadcrumbSchema = {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://contentanonymity.com' },
+            ...breadcrumbItems.map((item, i) => ({
+              '@type': 'ListItem' as const,
+              position: i + 2,
+              name: item.name,
+              item: item.url.startsWith('http') ? item.url : `https://contentanonymity.com${item.url}`,
+            })),
+          ],
+        };
+        return [breadcrumbSchema, ...customSchemas];
+      }
+      return customSchemas;
     }
 
     // Fallback to base structured data if no schemas were built
@@ -330,26 +371,33 @@ export default function SEO({
       <link rel="canonical" href={canonicalUrl} />
       <meta httpEquiv="Content-Type" content="text/html; charset=UTF-8" />
 
-      {/* Open Graph / Facebook */}
-      <meta property="og:type" content={type} />
-      <meta property="og:url" content={url} />
+      {/* Open Graph / Facebook - Enhanced */}
+      <meta property="og:type" content={type === 'article' ? 'article' : type === 'product' ? 'product' : 'website'} />
+      <meta property="og:url" content={canonicalUrl} />
       <meta property="og:title" content={finalTitle} />
       <meta property="og:description" content={finalDescription} />
       <meta property="og:image" content={image} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={finalTitle} />
       <meta property="og:site_name" content="ContentAnonymity" />
       <meta property="og:locale" content="en_US" />
-      {publishedTime && <meta property="article:published_time" content={publishedTime} />}
-      {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
-      {author && <meta property="article:author" content={author} />}
+      {type === 'article' && publishedTime && <meta property="article:published_time" content={publishedTime} />}
+      {type === 'article' && modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+      {type === 'article' && author && <meta property="article:author" content={author} />}
+      {type === 'article' && <meta property="article:section" content="Faceless Content Creation" />}
+      {keywords && <meta property="og:keywords" content={keywords} />}
 
-      {/* Twitter */}
+      {/* Twitter Card - Enhanced */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:url" content={url} />
+      <meta name="twitter:url" content={canonicalUrl} />
       <meta name="twitter:title" content={finalTitle} />
       <meta name="twitter:description" content={finalDescription} />
       <meta name="twitter:image" content={image} />
+      <meta name="twitter:image:alt" content={finalTitle} />
       <meta name="twitter:site" content="@contentanonymity" />
       <meta name="twitter:creator" content="@contentanonymity" />
+      <meta name="twitter:domain" content="contentanonymity.com" />
 
       {/* Structured Data - Multiple schemas */}
       {allStructuredData.map((data, index) => (

@@ -1,10 +1,28 @@
 # Netlify redirects for URL canonicalization
-# Redirect www to non-www (or vice versa - choose one)
-# https://contentanonymity.com/* https://www.contentanonymity.com/:splat 301
+# Redirect www to non-www
 https://www.contentanonymity.com/* https://contentanonymity.com/:splat 301
 
-# Redirect trailing slashes (optional)
-/* /:splat 200
+# Redirect trailing slashes to non-trailing (prevents duplicate content)
+/*/  /:splat 301
+
+# Redirect old/wrong URLs to correct paths (fixes 404 from sitemap mismatches)
+/case-studies  /learning/case-studies  301
+
+# Redirect base paths to canonical URLs (fixes duplicate pages)
+/tools  /tools/all  301
+/products  /products/all  301
+
+# CRITICAL: Serve static SEO files BEFORE SPA fallback (fixes "Robots.txt is not accessible")
+# These must come before the catch-all so crawlers get actual file content
+/robots.txt  /robots.txt  200
+/sitemap.xml  /sitemap.xml  200
+/ads.txt  /ads.txt  200
+/site.webmanifest  /site.webmanifest  200
+
+# SPA fallback - must be last
+/*  /index.html  200
+
+
 
 
 

@@ -1,0 +1,18 @@
+id,name,company,commission_rate,cookie_duration,status,terms_url,created_at,product_category,is_recurring,quality_score,updated_at
+0972bbb7-a72f-4049-bcc3-40898a7f71fe,Descript Video Editor,Descript,25.00,,active,,2025-11-24 16:02:03.917266+00,video_editing,true,3,2025-11-24 16:02:03.917266+00
+21fcb3d3-cff8-44c9-81b0-e51d14d4a4ad,Descript,Descript,25.00,60,active,,2025-11-19 17:21:22.612386+00,video_editing,true,5,2025-11-19 17:21:22.612386+00
+22484bb3-06d7-4eac-bab2-144cdfad3976,CapCut Pro,ByteDance,15.00,,active,,2025-11-24 17:05:18.89047+00,video_editing,true,4,2025-11-24 17:05:18.89047+00
+332afe97-22a6-47f6-a7e1-bb2789e6366d,Synthesia AI Avatar,Synthesia,25.00,,active,,2025-11-24 17:05:18.89047+00,ai_avatar,true,4,2025-11-24 17:05:18.89047+00
+51ce4ef4-9663-4899-b806-71542295bcb0,ElevenLabs,ElevenLabs,30.00,90,active,,2025-11-19 17:21:22.612386+00,ai_voiceover,true,5,2025-11-19 17:21:22.612386+00
+57b28409-e257-4536-8c79-e34d01999e80,ConvertKit,ConvertKit,30.00,60,active,,2025-11-19 17:21:22.612386+00,email_marketing,true,5,2025-11-19 17:21:22.612386+00
+657fcf87-3f2b-4713-9f06-35bc2b0d4b03,Pictory,Pictory AI,30.00,90,active,,2025-11-19 17:21:22.612386+00,video_creation,true,5,2025-11-19 17:21:22.612386+00
+6a58e4ef-b23b-41eb-804c-b2bddb61b4c0,RunwayML Gen-2,Runway,20.00,,active,,2025-11-24 17:05:18.89047+00,generative_video,true,5,2025-11-24 17:05:18.89047+00
+70340ddd-c09d-48b0-b03c-8521f19dd686,ChatGPT Plus,OpenAI,10.00,30,active,,2025-11-19 17:21:22.612386+00,ai_scripting,false,5,2025-11-19 17:21:22.612386+00
+732d7187-e853-434c-9dbd-d282fba639e8,ElevenLabs Voice AI,ElevenLabs,30.00,,active,,2025-11-24 16:02:03.917266+00,ai_voiceover,true,3,2025-11-24 16:02:03.917266+00
+900dadc5-914e-4063-a24a-ccf70f174c07,Pictory Video Creator,Pictory AI,30.00,,active,,2025-11-24 16:02:03.917266+00,video_creation,true,3,2025-11-24 16:02:03.917266+00
+a1b7aff7-b860-4c6c-b3fb-335763e33e83,Wondershare Filmora,Wondershare,30.00,,active,,2025-11-24 17:05:18.89047+00,video_editing,false,3,2025-11-24 17:05:18.89047+00
+a4cd856b-29ed-45b6-900d-f40900482b3a,InVideo AI,InVideo,25.00,60,active,,2025-11-19 17:21:22.612386+00,video_creation,true,4,2025-11-19 17:21:22.612386+00
+caca769b-3f27-45f8-8e16-73d78ae8e8b5,Canva Pro,Canva,25.00,30,active,,2025-11-19 17:21:22.612386+00,design_software,false,5,2025-11-19 17:21:22.612386+00
+e02379e9-39fe-47d3-a4b7-7ee27c5bcd68,RunwayML,Runway,20.00,45,active,,2025-11-19 17:21:22.612386+00,generative_ai,true,5,2025-11-19 17:21:22.612386+00
+eae5bd7f-003d-4aad-a235-0d9e402d1f63,ThriveCart,ThriveCart,500.00,90,active,,2025-11-19 17:21:22.612386+00,e-commerce,false,5,2025-11-19 17:21:22.612386+00
+fbe61e97-bf3d-482a-addd-6c177d54294f,VidIQ/TubeBuddy,VidIQ,15.00,45,active,,2025-11-19 17:21:22.612386+00,seo_optimization,true,4,2025-11-19 17:21:22.612386+00

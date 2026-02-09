@@ -109,6 +109,7 @@ export default function SEOAudit() {
       <SEO
         title="SEO Audit Tool - Free Technical SEO Checker | ContentAnonymity"
         description="Free SEO audit tool to check technical SEO issues, page performance, and optimization opportunities. Alternative to Ahrefs and Semrush."
+        canonical="https://contentanonymity.com/tools/seo-audit"
       />
       <Header />
       <main className="min-h-screen py-12 bg-background">

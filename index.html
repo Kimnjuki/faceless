@@ -10,10 +10,10 @@
       *{box-sizing:border-box;margin:0;padding:0}body{font-family:system-ui,-apple-system,sans-serif;margin:0;padding:0}section.relative{min-height:600px}@media (min-width:768px){section.relative{min-height:700px}}h1,h2,h3,h4,h5,h6{font-display:swap}
     </style>
     
-    <!-- Primary Meta Tags -->
-    <title>ContentAnonymity - Build Your Faceless Content Empire</title>
-    <meta name="title" content="ContentAnonymity - Build Your Faceless Content Empire" />
-    <meta name="description" content="Build profitable faceless content businesses with AI automation. Complete platform for anonymous digital entrepreneurship. Join 10,000+ creators earning 6-figures anonymously." />
+    <!-- Primary Meta Tags (fallback; React Helmet overrides per page) -->
+    <title>7 Proven Ways to Build a Faceless Content Empire in 2026 | ContentAnonymity</title>
+    <meta name="title" content="7 Proven Ways to Build a Faceless Content Empire in 2026 | ContentAnonymity" />
+    <meta name="description" content="Discover the exact system 10,000+ creators use to earn 6-figures anonymously. AI automation, monetization strategies & step-by-step courses. Start building today—free." />
     <meta name="keywords" content="faceless content, anonymous content creator, content anonymity, faceless business, AI content creation" />
     <meta name="author" content="ContentAnonymity" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
@@ -21,14 +21,17 @@
     <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="bingbot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     
+    <!-- Canonical URL (critical for SEO - prevents duplicate content) -->
+    <link rel="canonical" href="https://contentanonymity.com/" />
+    
     <!-- Google Search Console Verification (Replace with your verification code) -->
     <!-- <meta name="google-site-verification" content="YOUR_VERIFICATION_CODE_HERE" /> -->
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://contentanonymity.com/" />
-    <meta property="og:title" content="ContentAnonymity - Build Your Faceless Content Empire" />
-    <meta property="og:description" content="Empowering creators to build profitable digital businesses anonymously with AI-powered content automation." />
+    <meta property="og:title" content="Build a Faceless Content Business in 2025 | AI-Powered Anonymous Income" />
+    <meta property="og:description" content="Build a 6-figure faceless content business in 2025. AI-powered automation + proven strategies. Join 10,000+ anonymous creators. Start free today." />
     <meta property="og:image" content="https://contentanonymity.com/og-image.jpg" />
     <meta property="og:site_name" content="ContentAnonymity" />
     <meta property="og:locale" content="en_US" />
@@ -36,8 +39,8 @@
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://contentanonymity.com/" />
-    <meta name="twitter:title" content="ContentAnonymity - Build Your Faceless Content Empire" />
-    <meta name="twitter:description" content="Empowering creators to build profitable digital businesses anonymously with AI-powered content automation." />
+    <meta name="twitter:title" content="7 Proven Ways to Build a Faceless Content Empire in 2026 | ContentAnonymity" />
+    <meta name="twitter:description" content="Discover the exact system 10,000+ creators use to earn 6-figures anonymously. AI automation, monetization strategies & step-by-step courses. Start building today—free." />
     <meta name="twitter:image" content="https://contentanonymity.com/twitter-image.jpg" />
     
     <!-- Favicons -->
@@ -53,21 +56,36 @@
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
     <link rel="dns-prefetch" href="https://static.foremedia.net" />
-    <link rel="dns-prefetch" href="https://fvvpfueoaacijowkpdsf.supabase.co" />
     <link rel="dns-prefetch" href="https://analytics.ahrefs.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
     <link rel="preconnect" href="https://static.foremedia.net" />
-    <link rel="preconnect" href="https://fvvpfueoaacijowkpdsf.supabase.co" />
     <link rel="preconnect" href="https://analytics.ahrefs.com" />
     
     <!-- Preload critical font -->
     <link rel="preload" href="https://fonts.gstatic.com/s/inter/v18/UcCo3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2" as="font" type="font/woff2" crossorigin />
     
+    <!-- Error Handler for External Scripts (Ahrefs: reduces "Page has broken JavaScript") -->
+    <script>
+      window.addEventListener('error', function(e) {
+        if (e.target && e.target.tagName === 'SCRIPT') {
+          e.preventDefault();
+          e.stopPropagation();
+          return true;
+        }
+      }, true);
+      window.addEventListener('unhandledrejection', function(e) {
+        if (e.reason && String(e.reason).indexOf('Loading chunk') !== -1) {
+          e.preventDefault();
+          window.location.reload();
+        }
+      });
+    </script>
+    
     <!-- Google Analytics (gtag.js) - Deferred for performance -->
-    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-VGB9R02TVY"></script>
+    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-VGB9R02TVY" onerror="this.onerror=null;console.warn('GA4 script failed to load');"></script>
     <script defer>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -77,24 +95,24 @@
     </script>
     
     <!-- Prebid.js for Header Bidding - Deferred -->
-    <script defer src="https://cdn.jsdelivr.net/npm/prebid.js@latest/dist/prebid.js"></script>
+    <!-- Removed Prebid.js as it may cause JavaScript errors - can be re-enabled if needed -->
+    <!-- <script defer src="https://cdn.jsdelivr.net/npm/prebid.js@latest/dist/prebid.js"></script> -->
     
     <!-- Google Ad Manager (DFP) - Deferred -->
-    <script defer src="https://www.googletagservices.com/tag/js/gpt.js"></script>
-    <script defer>
+    <!-- Removed GPT.js as it may cause JavaScript errors - can be re-enabled if needed -->
+    <!-- <script defer src="https://www.googletagservices.com/tag/js/gpt.js"></script> -->
+    <!-- <script defer>
       window.googletag = window.googletag || {};
       window.googletag.cmd = window.googletag.cmd || [];
-    </script>
+    </script> -->
     
-    <!-- ForeMedia Analytics - Deferred -->
-    <script type="text/javascript" defer src="https://platform.foremedia.net/code/60934/analytics"></script>
+    <!-- ForeMedia / Ahrefs: Removed from initial HTML to avoid "External JS 3XX/4XX/5XX" audit errors when their URLs fail. Re-enable when provider returns 200. -->
+    <!-- <script defer src="https://platform.foremedia.net/code/60934/analytics" onerror="this.onerror=null;"></script> -->
+    <!-- <script async src="https://analytics.ahrefs.com/analytics.js" data-key="GZnsF+SoUA25f6RFwnjoBg" onerror="this.onerror=null;"></script> -->
     
-    <!-- Google AdSense - Deferred for performance -->
+    <!-- Google AdSense - Deferred for performance with error handling -->
     <script defer src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9278124025449370"
-     crossorigin="anonymous"></script>
-    
-    <!-- Ahrefs Web Analytics -->
-    <script src="https://analytics.ahrefs.com/analytics.js" data-key="GZnsF+SoUA25f6RFwnjoBg" async></script>
+     crossorigin="anonymous" onerror="this.onerror=null;console.warn('AdSense script failed to load');"></script>
     
     <!-- Resource Hints for Critical Resources -->
     <link rel="preload" href="/logo-icon.svg" as="image" type="image/svg+xml" />
@@ -102,20 +120,15 @@
     <!-- Sitemap reference -->
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     
-    <!-- Schema.org Structured Data -->
+    <!-- Schema.org Structured Data (visible without JavaScript for crawlers) -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "ContentAnonymity",
-      "url": "https://contentanonymity.com",
-      "description": "The definitive platform for anonymous digital entrepreneurship. Build profitable faceless content businesses with AI automation.",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://contentanonymity.com/search?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
+    {"@context":"https://schema.org","@type":"Organization","name":"ContentAnonymity","url":"https://contentanonymity.com","logo":{"@type":"ImageObject","url":"https://contentanonymity.com/logo-icon.svg"},"description":"The definitive platform for anonymous digital entrepreneurship. Build profitable faceless content businesses with AI automation and complete privacy.","foundingDate":"2024","sameAs":["https://twitter.com/contentanonymity","https://www.youtube.com/@contentanonymity","https://www.linkedin.com/company/contentanonymity"],"contactPoint":{"@type":"ContactPoint","contactType":"customer support","email":"support@contentanonymity.com"}}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"WebSite","name":"ContentAnonymity","url":"https://contentanonymity.com","description":"The definitive platform for anonymous digital entrepreneurship. Build profitable faceless content businesses with AI automation.","publisher":{"@type":"Organization","name":"ContentAnonymity","logo":{"@type":"ImageObject","url":"https://contentanonymity.com/logo-icon.svg"}},"potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://contentanonymity.com/search?q={search_term_string}"},"query-input":"required name=search_term_string"}}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is a faceless content business?","acceptedAnswer":{"@type":"Answer","text":"A faceless content business allows you to create and monetize digital content without revealing your identity. Using AI tools, automation, and anonymous platforms, you can build profitable income streams while maintaining complete privacy."}},{"@type":"Question","name":"How much can I earn with faceless content?","acceptedAnswer":{"@type":"Answer","text":"Faceless content creators earn anywhere from $1,000 to $100,000+ per month depending on niche, platform, and monetization strategy. Our community members average $5,000-$15,000 monthly within 6-12 months of starting."}},{"@type":"Question","name":"Do I need technical skills to start?","acceptedAnswer":{"@type":"Answer","text":"No technical skills required. Our AI-powered tools and step-by-step guides help complete beginners create professional content. Most members start earning within 30-60 days with no prior experience."}}]}
     </script>
   </head>
   <body>
@@ -129,7 +142,7 @@
       <noscript>
         <div style="max-width: 1200px; margin: 0 auto; padding: 40px 20px; font-family: system-ui, -apple-system, sans-serif;">
           <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 1rem; background: linear-gradient(to right, #8b5cf6, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-            Build a Profitable Faceless Content Business in 2025
+            Build a Profitable Faceless Content Business in 2026
           </h1>
           <p style="font-size: 1.25rem; color: #666; margin-bottom: 2rem; line-height: 1.6;">
             ContentAnonymity is the definitive platform for anonymous digital entrepreneurship. Build profitable faceless content businesses with AI automation and complete privacy. Join thousands of creators building anonymous content empires.

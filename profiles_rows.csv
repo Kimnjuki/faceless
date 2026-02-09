@@ -1,0 +1,4 @@
+id,user_id,email,full_name,avatar_url,bio,skill_level,primary_niche,subscription_tier,email_verified,marketing_consent,created_at,updated_at,last_login,lifetime_value,total_purchases,website_url,job_title,company_name,social_links,credentials,knows_about,verified_expert
+00bb0297-7dad-46e5-86e1-05cd2fdcc6cc,33b440c0-5a9a-4208-a39c-387e9aa1f81a,kimnjuki2@gmail.com,kim,,,,,free,false,false,2025-12-04 13:03:46.153701+00,2025-12-04 13:03:46.153701+00,,0.00,0,,,,{},[],[],false
+1b92e96e-f231-4595-b33e-941e1f6d2789,5d2521dc-2622-4217-8010-8eecfdf0de8c,cloverastabull@gmail.com,cloverastabull-a11y's Org,,,,,free,false,false,2025-12-03 16:30:35.758738+00,2025-12-03 16:30:35.758738+00,,0.00,0,,,,{},[],[],false
+984b1342-f30d-4e6c-8f6f-275c05584f42,2efb5661-57da-4ac1-8329-4749ab586737,abdinassirkim@gmail.com,System Admin,,,expert,,vip,false,false,2025-11-24 18:46:40.895511+00,2025-11-24 18:46:40.895511+00,,0.00,0,,,,{},[],[],false

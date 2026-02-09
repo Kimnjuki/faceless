@@ -1,62 +1,28 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
+import { useAuth0 } from '@auth0/auth0-react';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import SEO from '@/components/SEO';
 
-export default function OAuthCallback() {
+const hasAuth0 = Boolean(import.meta.env.VITE_AUTH0_DOMAIN && import.meta.env.VITE_AUTH0_CLIENT_ID);
+
+function OAuthCallbackWithAuth0() {
   const navigate = useNavigate();
+  const { isAuthenticated, isLoading, error } = useAuth0();
 
   useEffect(() => {
-    const handleOAuthCallback = async () => {
-      try {
-        // Get the session from the URL hash
-        const { data: { session }, error } = await supabase.auth.getSession();
-
-        if (error) {
-          console.error('OAuth error:', error);
-          navigate('/auth/login?error=oauth_failed');
-          return;
-        }
-
-        if (session?.user) {
-          // Check if profile record exists, create if not
-          const { data: existingProfile } = await supabase
-            .from('profiles')
-            .select('id')
-            .eq('user_id', session.user.id)
-            .single();
-
-          if (!existingProfile) {
-            // Create profile record for OAuth users
-            try {
-              await supabase.from('profiles').insert({
-                user_id: session.user.id,
-                email: session.user.email || '',
-                full_name: session.user.user_metadata?.full_name || 
-                          session.user.user_metadata?.name || 
-                          session.user.email?.split('@')[0] || '',
-              });
-            } catch (insertError: any) {
-              // Ignore duplicate key errors
-              if (insertError.code !== '23505') {
-                console.error('Error creating profile record:', insertError);
-              }
-            }
-          }
-
-          // Redirect to dashboard
-          navigate('/dashboard');
-        } else {
-          navigate('/auth/login');
-        }
-      } catch (error) {
-        console.error('OAuth callback error:', error);
-        navigate('/auth/login?error=oauth_failed');
-      }
-    };
-
-    handleOAuthCallback();
-  }, [navigate]);
+    if (isLoading) return;
+    if (error) {
+      console.error('OAuth error:', error);
+      navigate('/auth/login?error=oauth_failed');
+      return;
+    }
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    } else {
+      navigate('/auth/login');
+    }
+  }, [isAuthenticated, isLoading, error, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -68,3 +34,31 @@ export default function OAuthCallback() {
   );
 }
 
+function OAuthCallbackFallback() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate('/auth/login');
+  }, [navigate]);
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <LoadingSpinner />
+        <p className="mt-4 text-muted-foreground">Redirecting...</p>
+      </div>
+    </div>
+  );
+}
+
+export default function OAuthCallback() {
+  return (
+    <>
+      <SEO
+        title="Completing Secure Sign In | ContentAnonymity"
+        description="Completing your secure OAuth sign in. This intermediary callback page is not indexed by search engines."
+        noindex
+        canonical="https://contentanonymity.com/auth/callback"
+      />
+      {hasAuth0 ? <OAuthCallbackWithAuth0 /> : <OAuthCallbackFallback />}
+    </>
+  );
+}

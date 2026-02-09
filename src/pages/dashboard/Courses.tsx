@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useLearningPaths } from "@/hooks/useLearningPaths";
 import { useAuth } from "@/contexts/AuthContext";
+import SEO from "@/components/SEO";
 
 export default function Courses() {
   const { user } = useAuth();
@@ -24,6 +25,13 @@ export default function Courses() {
   });
 
   return (
+    <>
+      <SEO
+        title="My Courses - Private Learning Dashboard"
+        description="View and continue your private faceless creator courses. This learning dashboard is not indexed by search engines."
+        noindex
+        canonical="https://contentanonymity.com/dashboard/courses"
+      />
     <DashboardLayout>
       <div className="space-y-8">
         <div className="flex items-center gap-4">
@@ -132,5 +140,6 @@ export default function Courses() {
         </Card>
       </div>
     </DashboardLayout>
+    </>
   );
 }

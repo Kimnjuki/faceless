@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Clock, Eye, Loader2, RefreshCw, Wrench, Lightbulb } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { usePlatformGuides } from "@/hooks/usePlatformGuides";
 // Using simple HTML rendering for now - can be enhanced with markdown later
 
@@ -17,13 +18,20 @@ export default function PlatformGuideDetail() {
 
   useEffect(() => {
     if (guide) {
-      incrementViewCount(guide.id);
+      incrementViewCount(guide.id ?? guide._id ?? '');
     }
   }, [guide, incrementViewCount]);
 
   if (loading) {
     return (
       <>
+        <SEO
+          title={slug ? `Loading: ${slug} - Platform Guide | ContentAnonymity` : "Loading Platform Guide | ContentAnonymity"}
+          description="Loading platform guide..."
+          url={`https://contentanonymity.com/platform-guides/${slug || ''}`}
+          canonical={`https://contentanonymity.com/platform-guides/${slug || ''}`}
+          noindex={true}
+        />
         <Header />
         <div className="min-h-screen flex items-center justify-center">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -41,7 +49,7 @@ export default function PlatformGuideDetail() {
           <div className="text-center">
             <p className="text-destructive mb-4">{error || 'Guide not found'}</p>
             <Button asChild>
-              <Link to="/learning/guides">Back to Platform Guides</Link>
+              <Link to="/platform-guides">Back to Platform Guides</Link>
             </Button>
           </div>
         </div>
@@ -50,8 +58,26 @@ export default function PlatformGuideDetail() {
     );
   }
 
+  const pageTitle = guide ? `${guide.title} - Platform Guide | ContentAnonymity` : `Platform Guide ${slug || ''} | ContentAnonymity`;
+  const pageDescription = guide
+    ? `${guide.excerpt || `Learn how to master ${guide.platform} for faceless content creation. Step-by-step guide with proven strategies.`}`
+    : 'Platform-specific guide for faceless content creators.';
+  const canonicalUrl = `https://contentanonymity.com/platform-guides/${slug}`;
+
   return (
     <>
+      <SEO
+        title={pageTitle}
+        description={pageDescription}
+        keywords={`${guide?.platform || 'platform'} guide, faceless content strategy, ${guide?.platform || ''} automation, anonymous creator guide`}
+        url={canonicalUrl}
+        canonical={canonicalUrl}
+        type="article"
+        breadcrumbItems={[
+          { name: 'Platform Guides', url: 'https://contentanonymity.com/platform-guides' },
+          { name: guide?.title || 'Guide', url: canonicalUrl }
+        ]}
+      />
       <Header />
       <main className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-12">
@@ -59,7 +85,7 @@ export default function PlatformGuideDetail() {
             {/* Back Button and Refresh */}
             <div className="flex items-center justify-between mb-6">
               <Button variant="ghost" asChild>
-                <Link to="/learning/guides">
+                <Link to="/platform-guides">
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Back to Platform Guides
                 </Link>

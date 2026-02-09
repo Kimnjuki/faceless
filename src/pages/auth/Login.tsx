@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
 import { loginSchema, type LoginFormData } from "@/lib/validations";
 import { handleError } from "@/lib/error-handler";
+import SEO from "@/components/SEO";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -64,7 +65,14 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
+    <>
+      <SEO
+        title="Login - Secure Faceless Creator Account | ContentAnonymity"
+        description="Sign in securely to your ContentAnonymity account. This authentication page is private and not indexed by search engines."
+        noindex
+        canonical="https://contentanonymity.com/auth/login"
+      />
+      <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <div className="flex items-center justify-center mb-6">
@@ -202,5 +210,6 @@ export default function Login() {
         </CardContent>
       </Card>
     </div>
+    </>
   );
 }

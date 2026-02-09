@@ -30,7 +30,7 @@ export default function LatestArticles() {
                   <div className="aspect-video w-full overflow-hidden rounded-t-lg bg-muted" style={{ minHeight: '180px' }}>
                     <img
                       src={article.featured_image}
-                      alt={article.title}
+                      alt={`${article.title} - Featured image`}
                       loading="lazy"
                       width="640"
                       height="360"

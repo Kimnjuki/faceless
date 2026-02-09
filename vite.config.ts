@@ -31,7 +31,6 @@ export default defineConfig({
             '@radix-ui/react-tabs',
             '@radix-ui/react-toast',
           ],
-          'supabase': ['@supabase/supabase-js'],
           'utils': ['date-fns', 'zod', 'clsx', 'tailwind-merge'],
         },
         // Optimize chunk file names for better caching
@@ -66,7 +65,7 @@ export default defineConfig({
   // Optimize dependencies
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom'],
-    exclude: ['@supabase/supabase-js'], // Let it be bundled separately
+    exclude: [],
   },
   // Server configuration for development
   server: {

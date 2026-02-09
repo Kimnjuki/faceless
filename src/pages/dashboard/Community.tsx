@@ -12,8 +12,10 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useCommunityPosts } from "@/hooks/useCommunityPosts";
-import { supabase } from "@/lib/supabase";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 import { formatDistanceToNow } from "date-fns";
+import SEO from "@/components/SEO";
 
 export default function Community() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,7 +23,12 @@ export default function Community() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [newPost, setNewPost] = useState({ title: "", category: "", content: "" });
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [categories, setCategories] = useState<Array<{ id: string; name: string }>>([]);
+
+  const categoriesRaw = useQuery(api.community.listCategories);
+  const categories = useMemo(
+    () => (categoriesRaw ?? []).map((c: any) => ({ id: c._id ?? c.id, name: c.name })),
+    [categoriesRaw]
+  );
 
   // Debounce search
   useEffect(() => {
@@ -30,18 +37,6 @@ export default function Community() {
     }, 300);
     return () => clearTimeout(timer);
   }, [searchQuery]);
-
-  // Fetch categories
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const { data } = await supabase
-        .from('community_categories')
-        .select('id, name')
-        .order('sort_order', { ascending: true });
-      if (data) setCategories(data);
-    };
-    fetchCategories();
-  }, []);
 
   const categoryFilter = useMemo(() => {
     if (selectedCategory === 'all') return undefined;
@@ -78,6 +73,13 @@ export default function Community() {
   };
 
   return (
+    <>
+      <SEO
+        title="Community Hub - Private Member Space"
+        description="Participate in the private ContentAnonymity creator community. This dashboard space is only for members and is not indexed by search engines."
+        noindex
+        canonical="https://contentanonymity.com/dashboard/community"
+      />
     <DashboardLayout>
       <div className="space-y-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -410,5 +412,6 @@ export default function Community() {
         </Tabs>
       </div>
     </DashboardLayout>
+    </>
   );
 }

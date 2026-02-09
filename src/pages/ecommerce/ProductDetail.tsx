@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Check, Star, ShoppingCart, Shield, RefreshCw, Zap } from "lucide-react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import SEO from "../../components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -39,8 +40,21 @@ export default function ProductDetail() {
     }
   }, [slug]);
 
+  const productTitle = slug?.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase()) || 'Product';
+  const pageTitle = `${productTitle} - Digital Product for Faceless Creators | ContentAnonymity`;
+  const pageDescription = `Get ${productTitle.toLowerCase()} - Complete toolkit to launch and scale your faceless content business with proven systems, templates, and step-by-step guidance.`;
+  const canonicalUrl = `https://contentanonymity.com/product/${slug}`;
+
   return (
     <>
+      <SEO
+        title={pageTitle}
+        description={pageDescription}
+        keywords={`${productTitle.toLowerCase()}, faceless content product, digital product, anonymous content creator tools, faceless business resources`}
+        url={canonicalUrl}
+        canonical={canonicalUrl}
+        type="product"
+      />
       <Header />
       <main className="py-12">
         <div className="container mx-auto px-4">

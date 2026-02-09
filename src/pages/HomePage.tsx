@@ -11,22 +11,53 @@ import Testimonials from "../components/Testimonials";
 import FAQ from "../components/FAQ";
 import CTA from "../components/CTA";
 import TrustIndicators from "../components/TrustIndicators";
-import LatestArticles from "../components/LatestArticles";
+import ArticleGrid from "../components/ArticleGrid";
+import ExploreSection from "../components/ExploreSection";
 import Footer from "../components/Footer";
 import ExitIntentModal from "../components/ExitIntentModal";
 import SEO from "../components/SEO";
 import AdSenseDisplay from "../components/AdSenseDisplay";
+import ForeMediaAd from "../components/ForeMediaAd";
+import { faqs as faqData } from "../components/FAQ";
 
 export default function HomePage() {
   return (
     <>
       <SEO
-        title="Free AI Content Anonymizer & Faceless Platform"
-        description="Build profitable faceless content businesses in 2025. AI automation, monetization strategies, step-by-step courses. Join 10,000+ creators earning 6-figures anonymously. Start free today."
-        keywords="faceless content business, anonymous content creator, faceless YouTube channel, faceless TikTok, faceless Instagram, AI content creation, anonymous entrepreneurship, faceless business 2025, how to make money without showing face"
+        title="7 Proven Ways to Build a Faceless Content Empire in 2026"
+        description="Discover the exact system 10,000+ creators use to earn 6-figures anonymously. AI automation, monetization strategies & step-by-step courses. Start building today—free."
+        keywords="faceless content business, anonymous content creator, faceless YouTube channel, faceless TikTok, faceless Instagram, AI content creation, faceless business 2026, how to make money without showing face"
         url="https://contentanonymity.com"
         canonical="https://contentanonymity.com"
+        faqData={faqData}
+        reviewData={{ rating: 4.8, reviewCount: 10000, bestRating: 5, worstRating: 1 }}
+        softwareApplication={{
+          name: "ContentAnonymity",
+          description: "AI-powered platform for building profitable faceless content businesses. Complete toolkit for anonymous digital entrepreneurship with AI automation, monetization strategies, and step-by-step courses.",
+          applicationCategory: "BusinessApplication",
+          operatingSystem: "Web",
+          offers: {
+            price: "0.00",
+            priceCurrency: "USD"
+          }
+        }}
         structuredData={[
+          {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "ContentAnonymity",
+            "operatingSystem": "All",
+            "applicationCategory": "AI Content Tool",
+            "offers": {
+              "@type": "Offer",
+              "price": "0.00",
+              "priceCurrency": "USD"
+            },
+            "description": "AI-powered platform for building profitable faceless content businesses. Complete toolkit for anonymous digital entrepreneurship.",
+            "url": "https://contentanonymity.com",
+            "applicationSubCategory": "Content Creation Software",
+            "screenshot": "https://contentanonymity.com/og-image.jpg"
+          },
           {
             "@context": "https://schema.org",
             "@type": "WebSite",
@@ -144,19 +175,33 @@ export default function HomePage() {
       <main id="main-content" role="main">
         <Hero />
         <WhyAnonymity />
+        {/* ForeMedia E1 - top content */}
+        <div className="flex justify-center my-6">
+          <ForeMediaAd slot="e1" className="min-h-[90px]" wrapperClassName="w-full max-w-[970px] mx-auto" />
+        </div>
         <CompetitorComparison />
         <Stats />
         <TrustIndicators />
         {/* Ad Banner */}
         <AdSenseDisplay size="728x90" className="my-8" />
         <Features />
+        {/* ForeMedia C3 */}
+        <div className="flex justify-center my-6">
+          <ForeMediaAd slot="c3" className="min-h-[250px]" wrapperClassName="w-full max-w-[336px] mx-auto" />
+        </div>
         <NichesShowcase />
         <ToolsShowcase />
-        <LatestArticles />
+        {/* ForeMedia C4, C5 */}
+        <div className="flex flex-wrap justify-center gap-6 my-8">
+          <ForeMediaAd slot="c4" className="min-h-[250px]" wrapperClassName="w-full max-w-[336px]" />
+          <ForeMediaAd slot="c5" className="min-h-[250px]" wrapperClassName="w-full max-w-[336px]" />
+        </div>
+        <ArticleGrid />
         {/* Ad Banner */}
         <AdSenseDisplay size="300x250" className="my-8" />
         <Testimonials />
         <ProductLadder />
+        <ExploreSection />
         <FAQ />
         <CTA />
       </main>

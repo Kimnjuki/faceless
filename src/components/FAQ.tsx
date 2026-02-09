@@ -6,7 +6,8 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 
-const faqs = [
+/** Exported for FAQ schema on HomePage SEO */
+export const faqs = [
   {
     question: "Do I really need to show my face to make money online?",
     answer: "Absolutely not! Thousands of creators are earning 6-figures without ever showing their face. Our platform teaches you proven strategies for faceless content across YouTube, TikTok, Instagram, and more. You'll learn to use AI voices, stock footage, animations, and other techniques to create engaging content while staying completely anonymous."

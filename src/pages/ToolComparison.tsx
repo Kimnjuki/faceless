@@ -1,16 +1,18 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 import { Check, X, ExternalLink, Star, Loader2, Search, RefreshCw } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import SEO from "../components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTools } from "@/hooks/useTools";
-import { Tool } from "@/lib/supabase";
-import { supabase } from "@/lib/supabase";
+import type { Tool } from "@/types";
 
 // Map URL category to database category name
 const categoryMap: Record<string, string> = {
@@ -35,43 +37,18 @@ export default function ToolComparison() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<'rating' | 'name' | 'created_at'>('rating');
   const [selectedCategory, setSelectedCategory] = useState<string>(category || 'all');
-  const [availableCategories, setAvailableCategories] = useState<string[]>([]);
-  
-  // Update selected category when URL param changes
+
+  const categoriesRaw = useQuery(api.tools.listCategories);
+  const availableCategories = useMemo(
+    () => (categoriesRaw ?? []).map((c: any) => c.name).filter(Boolean),
+    [categoriesRaw]
+  );
+
   useEffect(() => {
-    if (category) {
-      setSelectedCategory(category);
-    }
+    if (category) setSelectedCategory(category);
   }, [category]);
-  
-  // Map URL category to database category
+
   const dbCategory = selectedCategory ? categoryMap[selectedCategory] || selectedCategory : 'all';
-  
-  // Fetch available categories from tools
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const { data: toolsData } = await supabase
-          .from('tools')
-          .select('category_id, category:tool_categories(name)');
-        
-        if (toolsData) {
-          const uniqueCategories = Array.from(
-            new Set(
-              toolsData
-                .map((t: any) => t.category?.name)
-                .filter(Boolean)
-            )
-          ) as string[];
-          setAvailableCategories(uniqueCategories);
-        }
-      } catch (err) {
-        console.warn('Could not fetch categories:', err);
-      }
-    };
-    
-    fetchCategories();
-  }, []);
   
   const handleCategoryChange = (newCategory: string) => {
     setSelectedCategory(newCategory);
@@ -89,16 +66,38 @@ export default function ToolComparison() {
   });
 
   const handleToolClick = async (tool: Tool) => {
-    await trackClick(tool.id);
+    await trackClick(tool.id ?? tool._id ?? '');
     // Use affiliate link if available, otherwise website URL
-    const url = tool.affiliate_url || tool.affiliate_link?.destination_url || tool.website_url;
+    const url = tool.affiliate_url || tool.affiliate_link?.destination_url || tool.websiteUrl || tool.website_url;
     if (url) {
       window.open(url, '_blank', 'noopener,noreferrer');
     }
   };
 
+  const pageTitle = category && category !== 'all' 
+    ? `Best ${category.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase())} Tools for Faceless Creators`
+    : 'Content Creation Tools Comparison - Find Your Perfect Tool';
+  const pageDescription = category && category !== 'all'
+    ? `Compare the best ${category.replace(/-/g, " ")} tools for faceless content creators. Find features, pricing, and reviews to choose the perfect tool for your anonymous content business.`
+    : 'Compare AI tools, video editors, voice generators, and more for faceless content creation. Find the perfect tools to build your anonymous content empire.';
+  const canonicalUrl = category && category !== 'all'
+    ? `https://contentanonymity.com/tools/${category}`
+    : 'https://contentanonymity.com/tools/all';
+
   return (
     <>
+      <SEO
+        title={pageTitle}
+        description={pageDescription}
+        keywords={`${category ? category.replace(/-/g, " ") + " " : ""}tools, faceless content tools, AI content creation tools, video editing tools, anonymous content creator tools`}
+        url={canonicalUrl}
+        canonical={canonicalUrl}
+        type="website"
+        breadcrumbItems={[
+          { name: 'Tools', url: 'https://contentanonymity.com/tools/all' },
+          ...(category && category !== 'all' ? [{ name: pageTitle, url: canonicalUrl }] : [])
+        ].filter(Boolean) as Array<{ name: string; url: string }>}
+      />
       <Header />
       <main className="py-12">
         <div className="container mx-auto px-4">
@@ -252,12 +251,12 @@ export default function ToolComparison() {
                       {tool.pricing && (
                         <div className="text-2xl font-bold text-primary mt-2">{tool.pricing}</div>
                       )}
-                      {tool.rating > 0 && (
+                      {(tool.rating ?? 0) > 0 && (
                         <div className="flex items-center gap-1 mt-2">
                           <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          <span className="text-sm font-medium">{tool.rating.toFixed(1)}</span>
-                          {tool.rating_count > 0 && (
-                            <span className="text-sm text-muted-foreground">({tool.rating_count})</span>
+                          <span className="text-sm font-medium">{(tool.rating ?? 0).toFixed(1)}</span>
+                          {(tool.rating_count ?? tool.ratingCount ?? 0) > 0 && (
+                            <span className="text-sm text-muted-foreground">({tool.rating_count ?? tool.ratingCount ?? 0})</span>
                           )}
                         </div>
                       )}
@@ -303,11 +302,11 @@ export default function ToolComparison() {
                       )}
 
                       <div className="mt-auto space-y-2">
-                        {tool.tutorial_url && (
+                        {(tool.tutorialUrl ?? tool.tutorial_url) && (
                           <Button 
                             variant="outline" 
                             className="w-full"
-                            onClick={() => window.open(tool.tutorial_url, '_blank')}
+                            onClick={() => window.open((tool.tutorialUrl ?? tool.tutorial_url)!, '_blank')}
                           >
                             View Tutorial
                           </Button>

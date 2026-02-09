@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Search, Calendar, Trophy, Users, Target, Loader2, TrendingUp, Clock, RefreshCw } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -43,6 +44,15 @@ export default function Challenges() {
 
   return (
     <>
+      <SEO
+        title="Community Challenges - Grow Your Faceless Skills | ContentAnonymity"
+        description="Join community challenges to grow your skills and compete with fellow faceless creators. Content, growth, and monetization challenges."
+        keywords="faceless creator challenges, content challenges, growth challenges, creator competitions, skill building challenges"
+        url="https://contentanonymity.com/community/challenges"
+        canonical="https://contentanonymity.com/community/challenges"
+        type="website"
+        noindex={true}
+      />
       <Header />
       <main className="min-h-screen bg-background py-12">
         <div className="container mx-auto px-4">
@@ -167,8 +177,8 @@ export default function Challenges() {
                             <div className="flex items-center gap-2">
                               <Calendar className="h-4 w-4" />
                               <span>
-                                {format(new Date(challenge.start_date), 'MMM d')} -{' '}
-                                {format(new Date(challenge.end_date), 'MMM d, yyyy')}
+                                {format(new Date(challenge.start_date ?? 0), 'MMM d')} -{' '}
+                                {format(new Date(challenge.end_date ?? 0), 'MMM d, yyyy')}
                               </span>
                             </div>
                             {challenge.duration_days && (
@@ -197,7 +207,7 @@ export default function Challenges() {
                             <div className="flex gap-2">
                               <Button
                                 className="flex-1"
-                                onClick={() => handleJoin(challenge.id)}
+                                onClick={() => handleJoin(challenge.id ?? challenge._id ?? '')}
                               >
                                 Join Challenge
                               </Button>

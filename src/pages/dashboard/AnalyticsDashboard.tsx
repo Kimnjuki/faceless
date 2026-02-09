@@ -21,6 +21,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
+import SEO from "@/components/SEO";
 
 export default function AnalyticsDashboard() {
   const [timeRange, setTimeRange] = useState("30d");
@@ -53,6 +54,13 @@ export default function AnalyticsDashboard() {
   ];
 
   return (
+    <>
+      <SEO
+        title="Analytics Dashboard - Private Creator Insights"
+        description="View your private performance analytics across platforms. This dashboard is only for logged-in users and is not indexed by search engines."
+        noindex
+        canonical="https://contentanonymity.com/dashboard/analytics"
+      />
     <DashboardLayout>
       <div className="space-y-8">
         <div className="flex items-center justify-between">
@@ -335,6 +343,7 @@ export default function AnalyticsDashboard() {
         </Tabs>
       </div>
     </DashboardLayout>
+    </>
   );
 }
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Search, Calendar, Clock, Users, Loader2, ExternalLink, Video, RefreshCw } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -57,6 +58,15 @@ export default function Events() {
 
   return (
     <>
+      <SEO
+        title="Events & Webinars - Live Sessions for Faceless Creators | ContentAnonymity"
+        description="Join live webinars, workshops, and networking events with the faceless creator community. Learn from experts and connect with peers."
+        keywords="faceless creator events, webinars, workshops, live sessions, creator networking, faceless content events"
+        url="https://contentanonymity.com/community/events"
+        canonical="https://contentanonymity.com/community/events"
+        type="website"
+        noindex={true}
+      />
       <Header />
       <main className="min-h-screen bg-background py-12">
         <div className="container mx-auto px-4">
@@ -149,8 +159,8 @@ export default function Events() {
                       <CardHeader>
                         <div className="flex items-center gap-2 mb-2">
                           <Badge variant="secondary" className="capitalize flex items-center gap-1">
-                            {getEventTypeIcon(event.event_type)}
-                            {event.event_type.replace('_', ' ')}
+                            {getEventTypeIcon(event.event_type ?? '')}
+                            {(event.event_type ?? '').replace('_', ' ')}
                           </Badge>
                           {event.status === 'live' && (
                             <Badge className="bg-red-500">Live Now</Badge>
@@ -166,11 +176,11 @@ export default function Events() {
                           <div className="space-y-2 text-sm text-muted-foreground">
                             <div className="flex items-center gap-2">
                               <Calendar className="h-4 w-4" />
-                              <span>{format(new Date(event.start_date), 'MMM d, yyyy')}</span>
+                              <span>{format(new Date(event.start_date ?? event.scheduledAt ?? 0), 'MMM d, yyyy')}</span>
                             </div>
                             <div className="flex items-center gap-2">
                               <Clock className="h-4 w-4" />
-                              <span>{format(new Date(event.start_date), 'h:mm a')}</span>
+                              <span>{format(new Date(event.start_date ?? event.scheduledAt ?? 0), 'h:mm a')}</span>
                             </div>
                             <div className="flex items-center gap-2">
                               <Users className="h-4 w-4" />
@@ -179,16 +189,16 @@ export default function Events() {
                                 {event.max_participants && ` / ${event.max_participants}`} registered
                               </span>
                             </div>
-                            {event.price > 0 && (
+                            {(event.price ?? 0) > 0 && (
                               <div className="font-semibold text-foreground">
-                                ${event.price} {event.currency || 'USD'}
+                                ${event.price ?? 0} {event.currency || 'USD'}
                               </div>
                             )}
                           </div>
                           {event.registration_open ? (
                             <Button
                               className="w-full"
-                              onClick={() => handleRegister(event.id, event.registration_url)}
+                              onClick={() => handleRegister(event.id ?? '', event.registration_url ?? '')}
                             >
                               {event.registration_url ? (
                                 <>

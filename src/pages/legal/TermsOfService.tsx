@@ -7,7 +7,7 @@ export default function TermsOfService() {
   return (
     <>
       <SEO
-        title="Terms of Service"
+        title="Terms of Service - User Agreement & Refund Policy | ContentAnonymity"
         description="ContentAnonymity's Terms of Service. Read our terms and conditions for using our platform. Includes service description, user rights, refund policy, and acceptable use policy."
         keywords="terms of service, terms and conditions, user agreement, service terms, refund policy"
         url="https://contentanonymity.com/terms-of-service"

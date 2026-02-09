@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { usePlatformGuides } from "@/hooks/usePlatformGuides";
 
 const platformIcons: Record<string, any> = {
@@ -42,8 +43,8 @@ export default function PlatformGuides() {
   });
 
   const handleGuideClick = async (guide: any) => {
-    await incrementViewCount(guide.id);
-    navigate(`/learning/guides/${guide.slug}`);
+    await incrementViewCount(guide.id ?? guide._id ?? '');
+    navigate(`/platform-guides/${guide.slug}`);
   };
 
   const getDifficultyColor = (level?: string) => {
@@ -64,6 +65,20 @@ export default function PlatformGuides() {
 
   return (
     <>
+      <SEO
+        title="Master YouTube, TikTok & Instagram Faceless in 2026"
+        description="Master YouTube, TikTok & Instagram without revealing your identity. Platform-specific guides with proven strategies and AI tools. Dive in today."
+        keywords="YouTube automation guide, TikTok growth guide, Instagram Reels guide, platform-specific content strategies, faceless platform guides"
+        url="https://contentanonymity.com/platform-guides"
+        canonical="https://contentanonymity.com/platform-guides"
+        type="article"
+        breadcrumbItems={[{ name: 'Platform Guides', url: 'https://contentanonymity.com/platform-guides' }]}
+        faqData={[
+          { question: "Which platform is best for faceless content creators?", answer: "It depends on your content style. YouTube Shorts and TikTok are best for video-first creators, while Instagram Reels works well for visual storytelling. Our guides cover strategies for all three platforms." },
+          { question: "Can I really build an audience without showing my face?", answer: "Yes. Thousands of creators earn full-time income using screen recordings, animations, voiceovers, and AI-generated content. Our platform guides walk you through proven methods for each platform." },
+          { question: "Do the platform guides include monetization tips?", answer: "Absolutely. Each guide covers platform-specific monetization — from YouTube's Partner Program to TikTok's Creator Fund and Instagram's subscription features." }
+        ]}
+      />
       <Header />
       <main className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-12">

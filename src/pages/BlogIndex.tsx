@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Search, TrendingUp, Download, Loader2, Clock, Eye, RefreshCw } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { Search, TrendingUp, Download, Loader2, Clock, Eye, RefreshCw, ArrowDownAZ, BarChart2, Share2 } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ExitIntentModal from "../components/ExitIntentModal";
@@ -12,13 +12,16 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useLeads } from "@/hooks/useLeads";
 import { useArticles } from "@/hooks/useArticles";
+import ArticleImage from "@/components/ArticleImage";
 import AdSenseDisplay from "@/components/AdSenseDisplay";
+import ForeMediaAd from "@/components/ForeMediaAd";
 
 export default function BlogIndex() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [sortBy, setSortBy] = useState<"publishedAt" | "viewCount" | "shareCount" | "title">("publishedAt");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -38,9 +41,11 @@ export default function BlogIndex() {
     category: selectedCategory !== 'all' ? selectedCategory : undefined,
     searchQuery: debouncedSearchQuery || undefined,
     status: 'published' as const,
-  }), [selectedCategory, debouncedSearchQuery]);
+    sortBy,
+    usePagination: true,
+  }), [selectedCategory, debouncedSearchQuery, sortBy]);
 
-  const { articles, categories, loading: articlesLoading, error, refetch, incrementViewCount } = useArticles(filters);
+  const { articles, categories, loading: articlesLoading, error, refetch, incrementViewCount, pagination } = useArticles(filters);
 
   const handleLeadMagnet = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,12 +65,13 @@ export default function BlogIndex() {
   return (
     <>
       <SEO
-        title="Blog - Faceless Business Resources & Guides"
-        description="Discover expert guides, strategies, and resources for building profitable faceless content businesses. Learn from proven methods and real success stories."
-        keywords="faceless business blog, anonymous content guides, faceless content strategies, content anonymity resources, faceless business tips"
+        title="50+ Faceless Content Strategies & Guides for 2026"
+        description="Browse 50+ expert guides on faceless content creation, monetization & AI automation. Real strategies, real results. Start reading and building today."
+        keywords="faceless YouTube channel ideas, faceless business blog, anonymous content guides, faceless content strategies 2025, content anonymity resources"
         url="https://contentanonymity.com/blog"
         canonical="https://contentanonymity.com/blog"
         type="website"
+        breadcrumbItems={[{ name: 'Blog', url: 'https://contentanonymity.com/blog' }]}
         structuredData={{
           "@context": "https://schema.org",
           "@type": "Blog",
@@ -119,6 +125,21 @@ export default function BlogIndex() {
                 className="pl-10"
               />
             </div>
+          </div>
+
+          {/* Internal links to tools & getting started (SEO + UX) */}
+          <div className="flex flex-wrap gap-3 justify-center mb-8 text-sm">
+            <span className="text-muted-foreground mr-2">Popular:</span>
+            <Link to="/tools/niche-quiz" className="text-primary hover:underline font-medium">Take the free Niche Finder Quiz</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/tools/calculator" className="text-primary hover:underline font-medium">Estimate earnings with our Profitability Calculator</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/getting-started" className="text-primary hover:underline font-medium">Start with our 4-step Getting Started guide</Link>
+          </div>
+
+          {/* ForeMedia E1 - top content */}
+          <div className="flex justify-center my-6">
+            <ForeMediaAd slot="e1" className="min-h-[90px]" wrapperClassName="w-full max-w-[970px] mx-auto" />
           </div>
 
           {/* Categories */}
@@ -178,8 +199,9 @@ export default function BlogIndex() {
             <>
               {/* Ad Banner (top of articles) */}
               {articles.length > 0 && (
-                <div className="mb-8">
+                <div className="mb-8 flex flex-col items-center gap-6">
                   <AdSenseDisplay size="728x90" />
+                  <ForeMediaAd slot="c3" className="min-h-[250px]" wrapperClassName="w-full max-w-[336px]" />
                 </div>
               )}
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
@@ -203,7 +225,7 @@ export default function BlogIndex() {
                       }
                       
                       // Increment view count in background (don't wait for it)
-                      incrementViewCount(article.id).catch(err => {
+                      incrementViewCount(article.slug ?? article.id ?? '').catch(err => {
                         console.warn('Failed to increment view count:', err);
                       });
                       
@@ -216,15 +238,14 @@ export default function BlogIndex() {
                       }
                     }}
                   >
-                    {article.featured_image && (
-                      <div className="aspect-video w-full overflow-hidden rounded-t-lg">
-                        <img 
-                          src={article.featured_image} 
-                          alt={article.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
-                    )}
+                    <div className="aspect-video w-full overflow-hidden rounded-t-lg bg-muted">
+                      <ArticleImage
+                        src={article.featured_image}
+                        alt={`${article.title} - Featured image`}
+                        loading="lazy"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
                     <CardHeader>
                       <div className="flex items-center gap-2 mb-2">
                         {article.category?.name && (
@@ -272,7 +293,7 @@ export default function BlogIndex() {
                             }
                             
                             // Increment view count in background
-                            incrementViewCount(article.id).catch(err => {
+                            incrementViewCount(article.slug ?? article.id ?? '').catch(err => {
                               console.warn('Failed to increment view count:', err);
                             });
                             
@@ -308,6 +329,20 @@ export default function BlogIndex() {
                 </div>
               )}
             </div>
+            {pagination?.canLoadMore && (
+              <div className="flex justify-center mt-8">
+                <Button
+                  variant="outline"
+                  onClick={() => pagination.loadMore(12)}
+                  disabled={pagination.status === "LoadingMore"}
+                >
+                  {pagination.status === "LoadingMore" ? (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  ) : null}
+                  Load More Articles
+                </Button>
+              </div>
+            )}
             </>
           )}
 
@@ -337,6 +372,67 @@ export default function BlogIndex() {
               </p>
             </CardContent>
           </Card>
+
+          {/* Additional Resources Section */}
+          <div className="max-w-4xl mx-auto mt-12">
+            <h2 className="text-2xl font-bold mb-6 text-center">Explore More Resources</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <Card className="hover:border-primary transition-colors">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold mb-2">Learning Paths</h3>
+                  <p className="text-sm text-muted-foreground mb-4">Structured courses to master faceless content creation</p>
+                  <Button variant="outline" size="sm" asChild className="w-full">
+                    <Link to="/learning-paths">Explore Paths →</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+              <Card className="hover:border-primary transition-colors">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold mb-2">Platform Guides</h3>
+                  <p className="text-sm text-muted-foreground mb-4">Step-by-step guides for YouTube, TikTok, Instagram</p>
+                  <Button variant="outline" size="sm" asChild className="w-full">
+                    <Link to="/platform-guides">View Guides →</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+              <Card className="hover:border-primary transition-colors">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold mb-2">Case Studies</h3>
+                  <p className="text-sm text-muted-foreground mb-4">Real success stories from faceless creators</p>
+                  <Button variant="outline" size="sm" asChild className="w-full">
+                    <Link to="/learning/case-studies">Read Stories →</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+              <Card className="hover:border-primary transition-colors">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold mb-2">Tool Comparison</h3>
+                  <p className="text-sm text-muted-foreground mb-4">Compare AI tools for faceless content creation</p>
+                  <Button variant="outline" size="sm" asChild className="w-full">
+                    <Link to="/tools/all">Compare Tools →</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+              <Card className="hover:border-primary transition-colors">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold mb-2">Templates Library</h3>
+                  <p className="text-sm text-muted-foreground mb-4">Ready-to-use templates and scripts</p>
+                  <Button variant="outline" size="sm" asChild className="w-full">
+                    <Link to="/resources/templates">Browse Templates →</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+              <Card className="hover:border-primary transition-colors">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold mb-2">Getting Started</h3>
+                  <p className="text-sm text-muted-foreground mb-4">Your 4-step roadmap to faceless success</p>
+                  <Button variant="outline" size="sm" asChild className="w-full">
+                    <Link to="/getting-started">Start Journey →</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </main>
       <Footer />

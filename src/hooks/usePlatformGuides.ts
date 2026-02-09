@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/lib/supabase';
-import { PlatformGuide } from '@/lib/supabase';
-import { toast } from 'sonner';
+import { useMemo } from "react";
+import { useQuery, useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import type { Id } from "@/lib/convex-ids";
+import type { PlatformGuide } from "@/types";
 
 interface PlatformGuideFilters {
   platform?: string;
@@ -10,110 +11,55 @@ interface PlatformGuideFilters {
   searchQuery?: string;
 }
 
-export function usePlatformGuides(filters: PlatformGuideFilters = {}) {
-  const [guides, setGuides] = useState<PlatformGuide[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchGuides = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      let query = supabase
-        .from('platform_guides')
-        .select(`
-          *,
-          author:profiles(user_id, full_name, avatar_url)
-        `)
-        .eq('published', true)
-        .order('published_at', { ascending: false });
-
-      if (filters.platform && filters.platform !== 'all') {
-        query = query.eq('platform', filters.platform);
-      }
-      if (filters.category && filters.category !== 'all') {
-        query = query.eq('category', filters.category);
-      }
-      if (filters.difficulty && filters.difficulty !== 'all') {
-        query = query.eq('difficulty_level', filters.difficulty);
-      }
-
-      const { data, error: queryError } = await query;
-
-      if (queryError) throw queryError;
-
-      let guidesData = (data as PlatformGuide[]) || [];
-
-      // Client-side search filtering
-      if (filters.searchQuery) {
-        const searchLower = filters.searchQuery.toLowerCase();
-        guidesData = guidesData.filter(
-          (guide) =>
-            guide.title.toLowerCase().includes(searchLower) ||
-            guide.excerpt?.toLowerCase().includes(searchLower) ||
-            guide.content.toLowerCase().includes(searchLower)
-        );
-      }
-
-      setGuides(guidesData);
-    } catch (err: any) {
-      console.error('Error fetching platform guides:', err);
-      setError(err.message || 'Failed to fetch platform guides');
-      if (err.code !== 'PGRST116') {
-        toast.error('Failed to load platform guides');
-      }
-      setGuides([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [filters.platform, filters.category, filters.difficulty, filters.searchQuery]);
-
-  useEffect(() => {
-    fetchGuides();
-  }, [fetchGuides]);
-
-  const incrementViewCount = useCallback(async (guideId: string) => {
-    try {
-      const { error } = await supabase.rpc('increment_guide_views', {
-        guide_id: guideId,
-      });
-
-      if (error) {
-        // If RPC doesn't exist, manually update
-        const { data: current } = await supabase
-          .from('platform_guides')
-          .select('view_count')
-          .eq('id', guideId)
-          .single();
-
-        if (current) {
-          await supabase
-            .from('platform_guides')
-            .update({ view_count: (current.view_count || 0) + 1 })
-            .eq('id', guideId);
-        }
-      }
-    } catch (err) {
-      console.warn('Could not increment view count:', err);
-    }
-  }, []);
-
-  return { guides, loading, error, refetch: fetchGuides, incrementViewCount };
+function toGuide(g: any): PlatformGuide {
+  return {
+    ...g,
+    id: g._id ?? g.id,
+    author_id: g.authorId,
+    featured_image: g.featuredImage,
+    read_time: g.readTime,
+    view_count: g.viewCount,
+    published_at: g.publishedAt,
+    tool_tags: g.toolTags,
+    example_applications: g.exampleApplications,
+    created_at: g.createdAt != null ? new Date(g.createdAt).toISOString() : undefined,
+    updated_at: g.updatedAt != null ? new Date(g.updatedAt).toISOString() : undefined,
+  };
 }
 
+export function usePlatformGuides(filters: PlatformGuideFilters = {}) {
+  const raw = useQuery(api.platformGuides.list, {
+    platform: filters.platform && filters.platform !== "all" ? filters.platform : undefined,
+    category: filters.category && filters.category !== "all" ? filters.category : undefined,
+    difficultyLevel: filters.difficulty && filters.difficulty !== "all" ? filters.difficulty : undefined,
+  });
 
+  const incrementViews = useMutation(api.platformGuides.incrementViews);
 
+  const guides: PlatformGuide[] = useMemo(() => {
+    let list = (raw ?? []).map(toGuide);
+    if (filters.searchQuery) {
+      const q = filters.searchQuery.toLowerCase();
+      list = list.filter(
+        (g) =>
+          (g.title ?? "").toLowerCase().includes(q) ||
+          (g.excerpt ?? "").toLowerCase().includes(q) ||
+          (g.content ?? "").toLowerCase().includes(q)
+      );
+    }
+    return list;
+  }, [raw, filters.searchQuery]);
 
+  const loading = raw === undefined;
+  const error: string | null = null;
 
+  const incrementViewCount = async (guideId: string) => {
+    try {
+      await incrementViews({ guideId: guideId as Id<"platform_guides"> });
+    } catch (e) {
+      console.warn("Could not increment view count:", e);
+    }
+  };
 
-
-
-
-
-
-
-
-
-
-
-
+  return { guides, loading, error, refetch: () => {}, incrementViewCount };
+}

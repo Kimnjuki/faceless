@@ -14,6 +14,7 @@ import {
   RefreshCw,
   BarChart3
 } from "lucide-react";
+import { measureAllWebVitals } from "@/utils/webVitals";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
@@ -39,8 +40,6 @@ export default function PerformanceMonitor() {
     setLoading(true);
     
     try {
-      // Import and use the web vitals utility
-      const { measureAllWebVitals } = await import('@/utils/webVitals');
       const vitals = await measureAllWebVitals();
       
       setWebVitals(vitals);
@@ -119,6 +118,7 @@ export default function PerformanceMonitor() {
       <SEO
         title="Performance Monitor - Core Web Vitals Checker | ContentAnonymity"
         description="Monitor Core Web Vitals and page performance metrics. Check LCP, FID, CLS, and other Google ranking factors."
+        canonical="https://contentanonymity.com/tools/performance"
       />
       <Header />
       <main className="min-h-screen py-12 bg-background">

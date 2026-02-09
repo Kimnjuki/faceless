@@ -104,6 +104,7 @@ export default function KeywordResearch() {
       <SEO
         title="Free Keyword Research Tool - Find SEO Keywords | ContentAnonymity"
         description="Free keyword research tool to find high-value keywords, search questions, and content ideas. Alternative to Ahrefs and Semrush keyword tools."
+        canonical="https://contentanonymity.com/tools/keyword-research"
       />
       <Header />
       <main className="min-h-screen py-12 bg-background">
@@ -316,6 +317,8 @@ export default function KeywordResearch() {
     </>
   );
 }
+
+
 
 
 

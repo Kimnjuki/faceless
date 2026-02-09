@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, DollarSign, Users, Clock } from "lucide-react";
+import { TrendingUp, DollarSign, Users, Clock, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const niches = [
@@ -122,11 +122,18 @@ export default function NichesShowcase() {
         </div>
 
         <div className="text-center">
-          <Button size="lg" asChild>
-            <Link to="/tools/niche-quiz">
-              Find Your Perfect Niche <TrendingUp className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Button size="lg" asChild>
+              <Link to="/tools/niche-quiz">
+                Find Your Perfect Niche <TrendingUp className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <Link to="/resources/niches">
+                Browse Niche Database <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
     </section>

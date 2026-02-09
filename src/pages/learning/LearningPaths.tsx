@@ -29,7 +29,7 @@ import SEO from "@/components/SEO";
 import { useLearningPaths } from "@/hooks/useLearningPaths";
 import { useAuth } from "@/contexts/AuthContext";
 import PathComparator from "@/components/PathComparator";
-import type { LearningPath } from "@/types";
+import type { LearningPath } from "@/types/index";
 
 const iconMap: Record<string, any> = {
   PlayCircle,
@@ -83,8 +83,8 @@ export default function LearningPaths() {
       case "newest":
         // Sort by order_index as proxy for newest (lower index = newer)
         return filtered.sort((a, b) => {
-          const indexA = a.order_index ?? a.orderIndex ?? 0;
-          const indexB = b.order_index ?? b.orderIndex ?? 0;
+          const indexA = a.order_index ?? 0;
+          const indexB = b.order_index ?? 0;
           return indexA - indexB;
         });
       case "duration":

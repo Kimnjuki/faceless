@@ -18,21 +18,21 @@ export default function Hero() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
               </span>
-              <span className="gradient-text font-bold">10,000+ Creators</span> Earning 6-Figures Anonymously
+              <span className="gradient-text font-bold">10,000+ Creators</span> Earning $1,000+ Monthly Anonymously
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
-              Free AI Content Anonymizer & <span className="gradient-text bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">Faceless Business Platform</span> 2025
+              Join 10,000+ Anonymous Creators Earning $1,000+ Monthly (Without Showing Your Face)
             </h1>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-muted-foreground mb-6">
-              Unlike Medium, Substack & Ghost — <span className="text-foreground">No Real Name Required</span>
+              The All-In-One Platform with AI Tools, Templates, and Community to Build Your Faceless Empire in 30 Days
             </h2>
 
             <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
-              Build your faceless content empire with <strong>complete anonymity</strong>. Join creators earning 6-figures anonymously through AI-powered content, proven monetization strategies, and step-by-step automation — <strong>all without revealing your identity.</strong>
+              Create 30 days of content in 2 hours with AI. Build profitable income streams with <strong>complete anonymity</strong>. Proven strategies, step-by-step automation, and 10,000+ creators earning $1K+ monthly — <strong>all without revealing your identity.</strong>
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
               <Button 
                 size="lg" 
                 className="text-base px-8 gradient-primary hover:shadow-glow transition-all duration-300 hover-lift" 
@@ -40,7 +40,7 @@ export default function Hero() {
                 onClick={() => trackButtonClick('start-journey', 'hero')}
               >
                 <Link to="/auth/signup">
-                  Start Your Faceless Journey <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  Get Free Access to Creator Tools <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
               <Button 
@@ -53,7 +53,7 @@ export default function Hero() {
               </Button>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-6 text-sm">
+            <div className="flex flex-wrap justify-center gap-6 text-sm mb-8">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <CheckCircle2 className="h-5 w-5 text-green-500" />
                 No credit card required
@@ -65,6 +65,35 @@ export default function Hero() {
               <div className="flex items-center gap-2 text-muted-foreground">
                 <CheckCircle2 className="h-5 w-5 text-green-500" />
                 Cancel anytime
+              </div>
+            </div>
+
+            {/* Trust badges row (CRO): user count, success metric, security */}
+            <div className="flex flex-wrap justify-center items-center gap-8 py-6 px-4 rounded-2xl glass border border-primary/10 mb-4">
+              <div className="flex items-center gap-3">
+                <Users className="h-8 w-8 text-primary" />
+                <div className="text-left">
+                  <div className="font-bold text-foreground">10,000+</div>
+                  <div className="text-xs text-muted-foreground">Active Creators</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <TrendingUp className="h-8 w-8 text-primary" />
+                <div className="text-left">
+                  <div className="font-bold text-foreground">$1K+</div>
+                  <div className="text-xs text-muted-foreground">Avg. Monthly Earnings</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <Shield className="h-8 w-8 text-green-600 dark:text-green-400" />
+                <div className="text-left">
+                  <div className="font-bold text-foreground">SSL Secured</div>
+                  <div className="text-xs text-muted-foreground">256-bit encryption</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0" />
+                <span>Verified platform • Stripe & PayPal</span>
               </div>
             </div>
           </div>
@@ -83,16 +112,16 @@ export default function Hero() {
               <div className="h-14 w-14 rounded-2xl gradient-primary flex items-center justify-center mb-5 shadow-glow group-hover:scale-110 transition-transform duration-300">
                 <Zap className="h-7 w-7 text-white" />
               </div>
-              <h3 className="font-bold text-lg mb-3 gradient-text">AI-Powered Content Creation</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Automate your content with cutting-edge AI tools</p>
+              <h3 className="font-bold text-lg mb-3 gradient-text">Create 30 Days of Content in 2 Hours</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">AI-powered automation for faceless videos and posts</p>
             </div>
 
             <div className="flex flex-col items-center text-center p-8 rounded-2xl glass border border-primary/10 hover-lift transition-all duration-300 group">
               <div className="h-14 w-14 rounded-2xl gradient-primary flex items-center justify-center mb-5 shadow-glow group-hover:scale-110 transition-transform duration-300">
                 <TrendingUp className="h-7 w-7 text-white" />
               </div>
-              <h3 className="font-bold text-lg mb-3 gradient-text">Proven Monetization Strategies</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Follow step-by-step systems that actually work</p>
+              <h3 className="font-bold text-lg mb-3 gradient-text">$5K–$15K/Month Within 6–12 Months</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">Proven monetization strategies that actually work</p>
             </div>
 
             <div className="flex flex-col items-center text-center p-8 rounded-2xl glass border border-primary/10 hover-lift transition-all duration-300 group">

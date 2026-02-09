@@ -55,12 +55,23 @@ The ads.txt file format is:
 - ✅ File must use UTF-8 encoding
 - ✅ File must be publicly accessible (no authentication required)
 
+### Vercel / SPA deployment (critical for approval)
+
+For single-page apps on Vercel, a catch-all rewrite `"source": "/(.*)"` sends **every** request (including `/ads.txt`) to `index.html`, so ad platforms never see the real file.
+
+**Fix applied in this project:**
+- `vercel.json` rewrites now **exclude** `/ads.txt`, `/robots.txt`, `/sitemap.xml`, and other root static files so they are served from `public/` instead of the app.
+- `vercel.json` sets `Content-Type: text/plain; charset=utf-8` for `/ads.txt` (required by IAB).
+- After deploy, confirm: `curl -I https://contentanonymity.com/ads.txt` returns `200` and `Content-Type: text/plain`.
+
 ### Common Issues
 
-**Issue: File not found**
+**Issue: File not found / Ad platform says ads.txt not found**
+- **Vercel:** Ensure `vercel.json` rewrites do **not** match `/ads.txt` (see "Vercel / SPA deployment" above).
 - Ensure the file is in the `public/` directory
 - Rebuild and redeploy the application
 - Check that the file is copied to the build output
+- Verify: open `https://yourdomain.com/ads.txt` in a browser — you must see plain text, not your app’s HTML.
 
 **Issue: Wrong format**
 - Ensure no extra spaces or characters
@@ -96,5 +107,7 @@ The ads.txt file format is:
 
 **Last Updated:** January 2026  
 **Status:** ✅ File Created - Awaiting Deployment and Google Crawl
+
+
 
 

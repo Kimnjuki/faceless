@@ -55,9 +55,14 @@ export default function NicheQuiz() {
   return (
     <>
       <SEO
-        title="Faceless Content Niche Finder Quiz | Free Tool"
-        description="Find your perfect faceless content niche in 4 questions. Discover profitable niches for YouTube, TikTok, and Instagram. Free quiz - start now."
+        title="Find Your Perfect Niche in 2 Minutes | Free Quiz 2026"
+        description="Not sure what niche to pick? Take our 2-minute quiz and discover the perfect faceless content niche matched to your skills & interests. Start now—it's free."
         url="https://contentanonymity.com/tools/niche-quiz"
+        canonical="https://contentanonymity.com/tools/niche-quiz"
+        breadcrumbItems={[
+          { name: 'Tools', url: 'https://contentanonymity.com/tools/all' },
+          { name: 'Niche Finder Quiz', url: 'https://contentanonymity.com/tools/niche-quiz' }
+        ]}
         structuredData={{
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",

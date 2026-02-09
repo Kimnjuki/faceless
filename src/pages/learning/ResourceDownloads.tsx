@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Search, Download, FileText, Calendar, CheckSquare, TrendingUp, Users } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const resources = [
   {
@@ -86,6 +87,14 @@ export default function ResourceDownloads() {
 
   return (
     <>
+      <SEO
+        title="Resource Downloads - Free Templates & Checklists | ContentAnonymity"
+        description="Download free resources: content calendars, niche lists, script templates, SEO checklists, and worksheets for faceless creators."
+        keywords="free templates, content calendar template, niche research worksheet, video script template, SEO checklist, faceless creator resources"
+        url="https://contentanonymity.com/resources/downloads"
+        canonical="https://contentanonymity.com/learning/resources"
+        type="website"
+      />
       <Header />
       <main className="min-h-screen bg-background py-12">
         <div className="container mx-auto px-4">
@@ -166,6 +175,7 @@ export default function ResourceDownloads() {
     </>
   );
 }
+
 
 
 

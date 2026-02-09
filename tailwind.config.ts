@@ -62,6 +62,12 @@ const tailwindConfig: Config = {
           4: "hsl(var(--chart-4))",
           5: "hsl(var(--chart-5))",
         },
+        // Faceless Cyber-Minimalism / Shadow-Identity theme
+        cyber: {
+          bg: "#050505",
+          neon: "#00FF41",
+          "neon-dim": "rgba(0, 255, 65, 0.6)",
+        },
       },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",

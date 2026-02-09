@@ -38,46 +38,48 @@ function convertTipTapToHTML(node: any): string {
   }
 
   // Handle different node types
-  let html = '';
   const content = node.content || [];
 
   switch (node.type) {
     case 'doc':
-      return content.map((child: any) => convertTipTapToHTML(child)).filter(Boolean).join('\n\n');
+      return content.map((child: unknown) => convertTipTapToHTML(child)).filter(Boolean).join('\n\n');
     
-    case 'paragraph':
-      const paraContent = content.map((child: any) => convertTipTapToHTML(child)).join('');
-      // Return plain text for paragraphs (ReactMarkdown will wrap it in <p>)
-      // Strip any HTML tags that might have leaked through
+    case 'paragraph': {
+      const paraContent = content.map((child: unknown) => convertTipTapToHTML(child)).join('');
       return paraContent ? stripHTMLTags(paraContent) : '';
+    }
     
-    case 'heading':
+    case 'heading': {
       const level = node.attrs?.level || 1;
-      const headingContent = content.map((child: any) => convertTipTapToHTML(child)).join('');
+      const headingContent = content.map((child: unknown) => convertTipTapToHTML(child)).join('');
       const hashes = '#'.repeat(level);
       return headingContent ? `${hashes} ${headingContent}\n\n` : '';
+    }
     
     case 'bulletList':
-      return content.map((child: any) => convertTipTapToHTML(child)).join('\n');
+      return content.map((child: unknown) => convertTipTapToHTML(child)).join('\n');
     
     case 'orderedList':
-      return content.map((child: any, index: number) => {
+      return content.map((child: unknown, index: number) => {
         const itemContent = convertTipTapToHTML(child);
         return itemContent ? `${index + 1}. ${itemContent.replace(/^- /, '')}` : '';
       }).join('\n');
     
-    case 'listItem':
-      const itemContent = content.map((child: any) => convertTipTapToHTML(child)).join('');
+    case 'listItem': {
+      const itemContent = content.map((child: unknown) => convertTipTapToHTML(child)).join('');
       return itemContent ? `- ${itemContent}` : '';
+    }
     
-    case 'blockquote':
-      const quoteContent = content.map((child: any) => convertTipTapToHTML(child)).join('');
+    case 'blockquote': {
+      const quoteContent = content.map((child: unknown) => convertTipTapToHTML(child)).join('');
       return quoteContent ? `> ${quoteContent.split('\n').join('\n> ')}\n\n` : '';
+    }
     
-    case 'codeBlock':
-      const codeContent = content.map((child: any) => child.text || '').join('\n');
+    case 'codeBlock': {
+      const codeContent = content.map((child: unknown) => (child as { text?: string })?.text || '').join('\n');
       const language = node.attrs?.language || '';
       return `\`\`\`${language}\n${codeContent}\n\`\`\`\n\n`;
+    }
     
     case 'hardBreak':
       return '\n';
@@ -85,18 +87,18 @@ function convertTipTapToHTML(node: any): string {
     case 'horizontalRule':
       return '---\n\n';
     
-    case 'image':
+    case 'image': {
       const src = node.attrs?.src || '';
       const alt = node.attrs?.alt || '';
       return src ? `![${alt}](${src})\n\n` : '';
+    }
     
     case 'text':
       return node.text || '';
     
     default:
-      // For unknown types, try to extract text content
       if (content && Array.isArray(content)) {
-        return content.map((child: any) => convertTipTapToHTML(child)).join('');
+        return content.map((child: unknown) => convertTipTapToHTML(child)).join('');
       }
       return '';
   }
@@ -190,6 +192,18 @@ export function ArticleContentRenderer({ content }: { content: unknown }) {
     return EMPTY_STATE;
   }
 
+  // Plain Markdown: non-empty string that doesn't look like JSON — render immediately
+  if (typeof content === "string") {
+    const trimmed = content.trim();
+    if (trimmed.length > 0 && !trimmed.startsWith("{")) {
+      return (
+        <div className={PROSE}>
+          <ReactMarkdown>{content}</ReactMarkdown>
+        </div>
+      );
+    }
+  }
+
   // First, try to parse if it's a string that might be JSON
   let parsedContent: unknown = content;
   if (typeof content === "string" && content.trim().startsWith("{")) {
@@ -281,7 +295,7 @@ export function ArticleContentRenderer({ content }: { content: unknown }) {
   const tools = (Array.isArray(obj.tools) ? obj.tools : []) as ToolItem[];
   const sections = (Array.isArray(obj.sections) ? obj.sections : []) as SectionItem[];
   const conclusion = obj.conclusion as string | undefined;
-  const toolsHeading =
+  const toolsHeading: string =
     (typeof obj.tools_heading === "string" ? obj.tools_heading : null) ?? "Tools";
 
   // Check if we have structured content
@@ -410,7 +424,7 @@ export function ArticleContentRenderer({ content }: { content: unknown }) {
           
           // Handle TipTap format in section content
           if (sectionContent && isTipTapFormat(sectionContent)) {
-            let tipTapContent = sectionContent;
+            let tipTapContent: string | object | null = sectionContent;
             if (typeof sectionContent === "string") {
               try {
                 tipTapContent = JSON.parse(sectionContent);

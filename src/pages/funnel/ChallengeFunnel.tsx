@@ -1,6 +1,8 @@
+import { useParams } from "react-router-dom";
 import { CheckCircle2 } from "lucide-react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import SEO from "../../components/SEO";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,9 +18,20 @@ const dailySchedule = [
 ];
 
 export default function ChallengeFunnel() {
+  const { name } = useParams();
+  const challengeName = name ? name.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase()) : "Launch Your Faceless Business";
+  const canonicalUrl = name ? `https://contentanonymity.com/challenge/${name}` : "https://contentanonymity.com/challenge";
 
   return (
     <>
+      <SEO
+        title={name ? `5-Day Challenge: ${challengeName} | ContentAnonymity` : "5-Day Challenge: Launch Your Faceless Business | ContentAnonymity"}
+        description="Join 5,000+ creators in our free 5-day challenge to launch your faceless business. Step-by-step system to build a profitable anonymous content empire."
+        keywords="faceless business challenge, 5 day challenge, faceless content challenge, free challenge"
+        url={canonicalUrl}
+        canonical={canonicalUrl}
+        type="event"
+      />
       <Header />
       <main className="py-12">
         <div className="container mx-auto px-4">

@@ -1,10 +1,10 @@
-# ContentAnonymity Robots.txt
-# https://contentanonymity.com/robots.txt
+# Robots.txt for contentanonymity.com
+# Optimized for maximum crawlability and SEO performance
 
 User-agent: *
 Allow: /
 
-# Disallow admin and private areas
+# Disallow private/admin areas (these should not be indexed)
 Disallow: /dashboard/
 Disallow: /auth/
 Disallow: /api/
@@ -12,40 +12,46 @@ Disallow: /checkout
 Disallow: /admin/
 Disallow: /_next/
 Disallow: /static/
+Disallow: /health
 
-# Allow important pages and content
+# Internal search and filtered results (avoid duplicate/low-value indexing)
+Disallow: /search
+Disallow: /search/
+
+# Explicitly allow important content areas (redundant but ensures clarity)
 Allow: /blog
 Allow: /blog/
 Allow: /getting-started
 Allow: /tools/
+Allow: /learning-paths
+Allow: /learning-paths/
+Allow: /platform-guides
+Allow: /platform-guides/
+Allow: /learning/
+Allow: /resources/
+Allow: /products/
+Allow: /product/
+Allow: /pillar/
+Allow: /community/
+Allow: /news
 Allow: /privacy-policy
 Allow: /terms-of-service
-Allow: /products/
-Allow: /learning-paths
-Allow: /platform-guides
-Allow: /community/
 
-# Sitemap location (Critical for SEO)
+# Sitemap location (CRITICAL for SEO - must be present)
 Sitemap: https://contentanonymity.com/sitemap.xml
 
-# Crawl delay (optional, for rate limiting)
-Crawl-delay: 1
-
-# Specific rules for major search engines
+# Specific rules for major search engines (ensure full access)
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 0
 
 User-agent: Googlebot-Image
 Allow: /
 
 User-agent: Bingbot
 Allow: /
-Crawl-delay: 0
 
 User-agent: Slurp
 Allow: /
-Crawl-delay: 1
 
 
 

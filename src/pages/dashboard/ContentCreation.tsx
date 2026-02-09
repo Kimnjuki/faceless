@@ -20,6 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import SEO from "@/components/SEO";
 
 export default function ContentCreation() {
   const [selectedTab, setSelectedTab] = useState("generator");
@@ -41,6 +42,13 @@ export default function ContentCreation() {
   ];
 
   return (
+    <>
+      <SEO
+        title="Content Creation Hub - Private Workspace"
+        description="Use your private Content Creation Hub to plan and generate faceless content. This dashboard page is not indexed by search engines."
+        noindex
+        canonical="https://contentanonymity.com/dashboard/content"
+      />
     <DashboardLayout>
       <div className="space-y-8">
         <div className="flex items-center justify-between">
@@ -406,6 +414,7 @@ export default function ContentCreation() {
         </Tabs>
       </div>
     </DashboardLayout>
+    </>
   );
 }
 

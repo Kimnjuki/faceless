@@ -13,6 +13,8 @@ export default function NotFound() {
         title="404 - Page Not Found | ContentAnonymity"
         description="The page you're looking for doesn't exist. Explore our faceless content strategies, tools, and resources to build your anonymous content empire."
         noindex={true}
+        canonical="https://contentanonymity.com/404"
+        url="https://contentanonymity.com/404"
       />
       <Header />
       <main className="min-h-screen flex items-center justify-center py-20 px-4">
@@ -93,6 +95,8 @@ export default function NotFound() {
     </>
   );
 }
+
+
 
 
 

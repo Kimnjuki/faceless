@@ -3,13 +3,14 @@ import { Search, Award, TrendingUp, Loader2, Mail, RefreshCw } from "lucide-reac
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMembers } from "@/hooks/useMembers";
-import { Profile } from "@/lib/supabase";
+import type { Profile } from "@/types";
 
 export default function MemberDirectory() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -54,6 +55,15 @@ export default function MemberDirectory() {
 
   return (
     <>
+      <SEO
+        title="Member Directory - Connect with Faceless Creators | ContentAnonymity"
+        description="Connect with fellow faceless content creators. Browse member profiles, find collaborators, and grow your network."
+        keywords="faceless creator community, member directory, anonymous creator network, faceless content community"
+        url="https://contentanonymity.com/community/members"
+        canonical="https://contentanonymity.com/community/members"
+        type="website"
+        noindex={true}
+      />
       <Header />
       <main className="min-h-screen bg-background py-12">
         <div className="container mx-auto px-4">
@@ -183,9 +193,9 @@ export default function MemberDirectory() {
                             </Badge>
                           )}
                         </div>
-                        {member.lifetime_value > 0 && (
+                        {(member.lifetime_value ?? 0) > 0 && (
                           <div className="text-sm text-muted-foreground">
-                            Lifetime Value: ${member.lifetime_value.toFixed(2)}
+                            Lifetime Value: ${(member.lifetime_value ?? 0).toFixed(2)}
                           </div>
                         )}
                       </CardContent>

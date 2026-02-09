@@ -1,40 +1,24 @@
-import { useState, useCallback } from 'react';
-import { supabase } from '@/lib/supabase';
-import { Lead } from '@/lib/supabase';
-import { toast } from 'sonner';
-import { trackEmailCapture } from '@/utils/analytics';
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { toast } from "sonner";
+import { trackEmailCapture, trackFormSubmit } from "@/utils/analytics";
+import type { Lead } from "@/types";
 
 export function useLeads() {
-  const [loading, setLoading] = useState(false);
+  const createMutation = useMutation(api.leads.create);
 
-  const createLead = useCallback(async (email: string, source?: string) => {
-    setLoading(true);
+  const createLead = async (email: string, source?: string): Promise<Lead | null> => {
     try {
-      const { data, error } = await supabase
-        .from('leads')
-        .insert({ email, source })
-        .select()
-        .single();
-
-      if (error) throw error;
-      
-      // Track email capture for analytics
-      trackEmailCapture(source || 'unknown');
-      
-      return data as Lead;
-    } catch (error: any) {
-      // Handle unique constraint violation (email already exists)
-      if (error.code === '23505') {
-        toast.success('You\'re already subscribed!');
-        return null;
-      }
-      toast.error(error.message || 'Failed to submit email');
-      throw error;
-    } finally {
-      setLoading(false);
+      const id = await createMutation({ email, source: source ?? "website" });
+      const sourceName = source ?? "unknown";
+      trackEmailCapture(sourceName);
+      trackFormSubmit('email_capture', sourceName);
+      return { _id: id, id: String(id), email, source };
+    } catch (e: any) {
+      toast.error(e?.message ?? "Failed to submit email");
+      throw e;
     }
-  }, []);
+  };
 
-  return { createLead, loading };
+  return { createLead, loading: false };
 }
-

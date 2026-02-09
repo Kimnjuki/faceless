@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CreditCard, Lock } from "lucide-react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import SEO from "../../components/SEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +15,14 @@ export default function Checkout() {
 
   return (
     <>
+      <SEO
+        title="Secure Checkout - Complete Your Purchase | ContentAnonymity"
+        description="Complete your purchase securely. 30-day money-back guarantee. Instant access to faceless content business resources, tools, and courses."
+        keywords="checkout, purchase, payment, secure checkout, faceless content products"
+        url="https://contentanonymity.com/checkout"
+        canonical="https://contentanonymity.com/checkout"
+        noindex={true}
+      />
       <Header />
       <main className="py-12">
         <div className="container mx-auto px-4">

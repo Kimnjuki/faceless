@@ -10,8 +10,8 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
 import { signupSchema, type SignupFormData } from "@/lib/validations";
 import { handleError } from "@/lib/error-handler";
-import { supabase } from "@/lib/supabase";
 import { trackSignup, trackFormSubmit } from "@/utils/analytics";
+import SEO from "@/components/SEO";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -72,26 +72,13 @@ export default function Signup() {
           return; // Don't redirect on error
         }
         
-        // Check if user was created
+        // Check if user was created or redirect (Auth0 handles session)
         if (result.user) {
-          // Track successful signup
           trackSignup('email');
-          
-          // Check if we have a session (email confirmation might be disabled)
-          const { data: { session } } = await supabase.auth.getSession();
-          
-          if (session) {
-            // User is immediately signed in (email confirmation disabled)
-            // Redirect to dashboard
-            setTimeout(() => {
-              navigate('/dashboard');
-            }, 500);
-          } else {
-            // Email confirmation required - show message and redirect to login
-            setTimeout(() => {
-              navigate('/auth/login?message=Please check your email to verify your account');
-            }, 2000);
-          }
+          setTimeout(() => navigate('/dashboard'), 500);
+        } else {
+          // Redirect after sign up attempt (Auth0 may redirect)
+          setTimeout(() => navigate('/auth/login?message=Please check your email to verify your account'), 2000);
         }
       }
     } catch (error: any) {
@@ -123,7 +110,14 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
+    <>
+      <SEO
+        title="Create Anonymous Account - ContentAnonymity"
+        description="Create your secure, faceless creator account. This signup page is private and not indexed by search engines."
+        noindex
+        canonical="https://contentanonymity.com/auth/signup"
+      />
+      <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <div className="flex items-center justify-center mb-6">
@@ -316,5 +310,6 @@ export default function Signup() {
         </CardContent>
       </Card>
     </div>
+    </>
   );
 }

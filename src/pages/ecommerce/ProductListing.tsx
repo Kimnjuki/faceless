@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Filter } from "lucide-react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import SEO from "../../components/SEO";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -34,8 +35,27 @@ export default function ProductListing() {
   const { category } = useParams();
   const navigate = useNavigate();
 
+  const categoryName = category?.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase()) || 'All';
+  const pageTitle = category && category !== 'all' 
+    ? `${categoryName} Products - Digital Resources for Faceless Creators | ContentAnonymity`
+    : 'Digital Products - Faceless Content Creator Resources | ContentAnonymity';
+  const pageDescription = category && category !== 'all'
+    ? `Browse premium ${categoryName.toLowerCase()} products for faceless content creators. Templates, courses, and tools to build your anonymous content empire.`
+    : 'Discover premium digital products for faceless content creators. Templates, courses, automation tools, and resources to build your anonymous content business.';
+  const canonicalUrl = category && category !== 'all'
+    ? `https://contentanonymity.com/products/${category}`
+    : 'https://contentanonymity.com/products/all';
+
   return (
     <>
+      <SEO
+        title={pageTitle}
+        description={pageDescription}
+        keywords={`${categoryName.toLowerCase()} products, faceless content products, digital products, anonymous creator resources, faceless business tools`}
+        url={canonicalUrl}
+        canonical={canonicalUrl}
+        type="website"
+      />
       <Header />
       <main className="py-12">
         <div className="container mx-auto px-4">

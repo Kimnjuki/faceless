@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Search, TrendingUp, DollarSign, Users, Calendar, ArrowRight } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const caseStudies = [
   {
@@ -72,6 +73,14 @@ export default function CaseStudies() {
 
   return (
     <>
+      <SEO
+        title="Success Case Studies - Real Faceless Creator Stories | ContentAnonymity"
+        description="Real success stories from faceless creators earning $5K-$15K+ per month. Learn exact strategies and timelines from anonymous creators."
+        keywords="faceless creator success stories, case studies, anonymous creator earnings, faceless content case studies, success stories"
+        url="https://contentanonymity.com/case-studies"
+        canonical="https://contentanonymity.com/learning/case-studies"
+        type="article"
+      />
       <Header />
       <main className="min-h-screen bg-background py-12">
         <div className="container mx-auto px-4">
@@ -173,6 +182,7 @@ export default function CaseStudies() {
     </>
   );
 }
+
 
 
 

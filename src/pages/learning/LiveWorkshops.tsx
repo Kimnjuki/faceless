@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, Users, PlayCircle } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { format } from "date-fns";
 
 const workshops = [
@@ -51,6 +52,14 @@ export default function LiveWorkshops() {
 
   return (
     <>
+      <SEO
+        title="Live Workshops - Interactive Learning Sessions | ContentAnonymity"
+        description="Join live interactive workshops on YouTube automation, TikTok growth, monetization, and more. Recorded replays available."
+        keywords="live workshops, faceless creator workshops, YouTube automation workshop, TikTok growth workshop, monetization masterclass"
+        url="https://contentanonymity.com/workshops"
+        canonical="https://contentanonymity.com/learning/workshops"
+        type="event"
+      />
       <Header />
       <main className="min-h-screen bg-background py-12">
         <div className="container mx-auto px-4">

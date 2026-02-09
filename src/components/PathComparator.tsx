@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { X, CheckCircle2, Clock, BookOpen, Users, Star, DollarSign } from "lucide-react";
-import type { LearningPath } from "@/types";
+import type { LearningPath } from "@/types/index";
 
 interface PathComparatorProps {
   paths: LearningPath[];

@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import SEO from "@/components/SEO";
 
 export default function Dashboard() {
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -23,6 +24,13 @@ export default function Dashboard() {
   ];
 
   return (
+    <>
+      <SEO
+        title="Creator Dashboard - Private Workspace"
+        description="Your private ContentAnonymity creator dashboard. This page is for logged-in users only and is not indexed by search engines."
+        noindex
+        canonical="https://contentanonymity.com/dashboard"
+      />
     <DashboardLayout>
       <OnboardingModal open={showOnboarding} onComplete={() => setShowOnboarding(false)} />
       <QuickStartWizard 
@@ -284,5 +292,6 @@ export default function Dashboard() {
         </Card>
       </div>
     </DashboardLayout>
+    </>
   );
 }

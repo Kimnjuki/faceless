@@ -10,6 +10,9 @@ node_modules/
 /build
 /dist
 
+# Migration export data (may contain PII; do not commit)
+migration-data/
+
 # Environment Variables
 .env
 .env.local

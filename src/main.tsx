@@ -27,26 +27,52 @@ try {
     // Create a client with a valid-looking URL format to prevent parsing errors
     // Use a disabled deployment name format that won't cause fatal errors
     // Components will check VITE_CONVEX_URL before making actual calls
-    convex = new ConvexReactClient("https://disabled-convex-client.convex.cloud");
-    // Suppress connection errors for the disabled client
-    if (convex) {
-      // Override the client's connection to prevent errors
-      const originalOnMessage = (convex as any)._onMessage;
-      if (originalOnMessage) {
-        (convex as any)._onMessage = () => {}; // Suppress messages
-      }
+    convex = new ConvexReactClient("https://disabled-convex-client.convex.cloud", {
+      // Disable WebSocket connection attempts when Convex is not configured
+      // This prevents repeated reconnection attempts
+      unsavedChangesWarning: false,
+    });
+    
+    // Suppress WebSocket connection attempts by intercepting the connection
+    if (convex && typeof window !== 'undefined') {
+      // Override WebSocket creation to prevent connection attempts
+      const originalWebSocket = window.WebSocket;
+      const disabledWebSocket = class extends originalWebSocket {
+        constructor(url: string | URL, protocols?: string | string[]) {
+          // Only block Convex WebSocket connections
+          if (typeof url === 'string' && url.includes('convex.cloud')) {
+            // Create a no-op WebSocket that immediately closes
+            super('ws://localhost', protocols);
+            this.close();
+            return;
+          }
+          super(url, protocols);
+        }
+      };
+      
+      // Temporarily replace WebSocket to prevent Convex connections
+      (window as any).WebSocket = disabledWebSocket;
+      
+      // Restore original WebSocket after a short delay to allow other connections
+      setTimeout(() => {
+        (window as any).WebSocket = originalWebSocket;
+      }, 100);
     }
   }
 } catch (error) {
   console.warn('Failed to initialize Convex client:', error);
   // Fallback: create client with disabled URL and suppress errors
   try {
-    convex = new ConvexReactClient("https://disabled-convex-client.convex.cloud");
+    convex = new ConvexReactClient("https://disabled-convex-client.convex.cloud", {
+      unsavedChangesWarning: false,
+    });
   } catch (fallbackError) {
     // If even the fallback fails, create a minimal client
     // This should not happen, but provides a safety net
     console.error('Failed to create fallback Convex client:', fallbackError);
-    convex = new ConvexReactClient("https://disabled-convex-client.convex.cloud");
+    convex = new ConvexReactClient("https://disabled-convex-client.convex.cloud", {
+      unsavedChangesWarning: false,
+    });
   }
 }
 

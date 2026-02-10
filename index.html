@@ -232,8 +232,12 @@
       });
       
             // Suppress console errors for ForeMedia redirect issues and Convex placeholder errors
+            // Also suppress WebSocket reconnection messages when Convex is not configured
             (function() {
               const originalError = console.error;
+              const originalLog = console.log;
+              const originalWarn = console.warn;
+              
               console.error = function(...args) {
                 const message = args.join(' ');
                 if (message.includes('foremedia') || 
@@ -244,6 +248,31 @@
                   return;
                 }
                 return originalError.apply(console, args);
+              };
+              
+              // Suppress Convex WebSocket reconnection messages
+              console.log = function(...args) {
+                const message = args.join(' ');
+                if (
+                  message.includes('Attempting reconnect') ||
+                  message.includes('WebSocket reconnected') ||
+                  (message.includes('WebSocket') && message.includes('convex'))
+                ) {
+                  return; // Suppress WebSocket reconnection logs
+                }
+                return originalLog.apply(console, args);
+              };
+              
+              console.warn = function(...args) {
+                const message = args.join(' ');
+                if (
+                  message.includes('Attempting reconnect') ||
+                  message.includes('WebSocket reconnected') ||
+                  (message.includes('WebSocket') && message.includes('convex'))
+                ) {
+                  return; // Suppress WebSocket reconnection warnings
+                }
+                return originalWarn.apply(console, args);
               };
             })();
     </script>

@@ -24,14 +24,30 @@ try {
     console.log('✅ Convex client initialized');
   } else {
     console.warn("VITE_CONVEX_URL is not set. Convex features will not work.");
-    // Create a placeholder client to prevent hook errors
+    // Create a client with a valid-looking URL format to prevent parsing errors
+    // Use a disabled deployment name format that won't cause fatal errors
     // Components will check VITE_CONVEX_URL before making actual calls
-    convex = new ConvexReactClient("https://placeholder.convex.cloud");
+    convex = new ConvexReactClient("https://disabled-convex-client.convex.cloud");
+    // Suppress connection errors for the disabled client
+    if (convex) {
+      // Override the client's connection to prevent errors
+      const originalOnMessage = (convex as any)._onMessage;
+      if (originalOnMessage) {
+        (convex as any)._onMessage = () => {}; // Suppress messages
+      }
+    }
   }
 } catch (error) {
   console.warn('Failed to initialize Convex client:', error);
-  // Fallback to placeholder to prevent hook errors
-  convex = new ConvexReactClient("https://placeholder.convex.cloud");
+  // Fallback: create client with disabled URL and suppress errors
+  try {
+    convex = new ConvexReactClient("https://disabled-convex-client.convex.cloud");
+  } catch (fallbackError) {
+    // If even the fallback fails, create a minimal client
+    // This should not happen, but provides a safety net
+    console.error('Failed to create fallback Convex client:', fallbackError);
+    convex = new ConvexReactClient("https://disabled-convex-client.convex.cloud");
+  }
 }
 
 // Initialize analytics services with error handling

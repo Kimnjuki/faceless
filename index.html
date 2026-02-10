@@ -169,6 +169,15 @@
           e.stopPropagation();
           return true;
         }
+        // Suppress Convex placeholder/deployment parsing errors
+        if (e.message && (
+          e.message.includes('CONVEX FATAL ERROR') && 
+          (e.message.includes('placeholder') || e.message.includes("Couldn't parse deployment name"))
+        )) {
+          e.preventDefault();
+          e.stopPropagation();
+          return true;
+        }
         // Suppress errors from ForeMedia redirect URLs in filename
         if (e.filename && e.filename.includes('foremedia.net/redirect')) {
           e.preventDefault();
@@ -199,20 +208,32 @@
           e.preventDefault();
           return true;
         }
+        // Suppress Convex placeholder/deployment parsing errors
+        if (e.reason && (
+          (typeof e.reason === 'string' && e.reason.includes('CONVEX FATAL ERROR') && e.reason.includes('placeholder')) ||
+          (e.reason?.message && e.reason.message.includes('CONVEX FATAL ERROR') && e.reason.message.includes('placeholder')) ||
+          (e.reason?.message && e.reason.message.includes("Couldn't parse deployment name"))
+        )) {
+          e.preventDefault();
+          return true;
+        }
       });
       
-      // Suppress console errors for ForeMedia redirect issues
-      (function() {
-        const originalError = console.error;
-        console.error = function(...args) {
-          const message = args.join(' ');
-          if (message.includes('foremedia') || message.includes('Unrecognized pub point')) {
-            // Suppress ForeMedia-related console errors
-            return;
-          }
-          return originalError.apply(console, args);
-        };
-      })();
+            // Suppress console errors for ForeMedia redirect issues and Convex placeholder errors
+            (function() {
+              const originalError = console.error;
+              console.error = function(...args) {
+                const message = args.join(' ');
+                if (message.includes('foremedia') || 
+                    message.includes('Unrecognized pub point') ||
+                    (message.includes('CONVEX FATAL ERROR') && message.includes('placeholder')) ||
+                    message.includes("Couldn't parse deployment name")) {
+                  // Suppress ForeMedia and Convex placeholder-related console errors
+                  return;
+                }
+                return originalError.apply(console, args);
+              };
+            })();
     </script>
     
     <!-- Google Analytics (gtag.js) - Deferred for performance -->

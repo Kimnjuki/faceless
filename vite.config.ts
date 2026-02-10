@@ -11,6 +11,8 @@ export default defineConfig({
     },
   },
   build: {
+    // Output directory (must match vercel.json distDir)
+    outDir: 'dist',
     // Performance optimizations
     rollupOptions: {
       output: {

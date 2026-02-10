@@ -25,7 +25,11 @@ function toEvent(w: any): Event {
 }
 
 export function useEvents(filters: EventFilters = {}) {
-  const raw = useQuery(api.webinars.list, {});
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const raw = useQuery(
+    api.webinars.list,
+    hasConvex ? {} : "skip"
+  );
 
   const events: Event[] = useMemo(() => {
     let list = (raw ?? []).map(toEvent);

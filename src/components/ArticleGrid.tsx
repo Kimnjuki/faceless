@@ -11,7 +11,11 @@ import ArticleImage from "@/components/ArticleImage";
  * prominent read time and view count badges.
  */
 export default function ArticleGrid() {
-  const articles = useQuery(api.articles.getLatestArticles, { limit: 24 });
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const articles = useQuery(
+    api.articles.getLatestArticles,
+    hasConvex ? { limit: 24 } : "skip"
+  );
 
   if (articles === undefined) {
     return (

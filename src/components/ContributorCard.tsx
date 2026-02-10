@@ -49,9 +49,10 @@ export default function ContributorCard({
   className = "",
   showFullBio = false,
 }: ContributorCardProps) {
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
   const profileDoc = useQuery(
     api.profiles.get,
-    profileId ? { id: profileId as Id<"profiles"> } : "skip"
+    hasConvex && profileId ? { id: profileId as Id<"profiles"> } : "skip"
   );
 
   const profile: ContributorProfile | null = profileDoc

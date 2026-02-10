@@ -8,7 +8,15 @@ import { api } from "../../convex/_generated/api";
 import { APP_CONFIG } from "@/config/app";
 
 export default function ConvexConnectionStatus() {
-  const ping = useQuery(api.health.ping);
+  // Only query if Convex is configured
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const ping = useQuery(
+    api.health.ping,
+    hasConvex ? undefined : "skip"
+  );
+  
+  // Don't show if Convex is not configured
+  if (!hasConvex) return null;
 
   if (!APP_CONFIG.showConnectionStatus) return null;
 

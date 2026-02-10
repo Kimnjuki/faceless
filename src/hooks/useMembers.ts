@@ -32,7 +32,11 @@ function toProfile(p: any): Profile {
 }
 
 export function useMembers(filters: MemberFilters = {}) {
-  const raw = useQuery(api.profiles.list, {});
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const raw = useQuery(
+    api.profiles.list,
+    hasConvex ? {} : "skip"
+  );
 
   const members: Profile[] = useMemo(() => {
     let list = (raw ?? []).map(toProfile);

@@ -22,11 +22,15 @@ function toNiche(n: any): Niche {
 }
 
 export function useNiches(filters: NicheFilters = {}) {
-  const raw = useQuery(api.niches.list, {
-    categoryName: filters.category && filters.category !== "all" ? filters.category : undefined,
-    difficultyLevel: filters.difficulty && filters.difficulty !== "all" ? filters.difficulty : undefined,
-    sortBy: filters.sortBy,
-  });
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const raw = useQuery(
+    api.niches.list,
+    hasConvex ? {
+      categoryName: filters.category && filters.category !== "all" ? filters.category : undefined,
+      difficultyLevel: filters.difficulty && filters.difficulty !== "all" ? filters.difficulty : undefined,
+      sortBy: filters.sortBy,
+    } : "skip"
+  );
 
   const niches: Niche[] = useMemo(() => (raw ?? []).map(toNiche), [raw]);
   const loading = raw === undefined;

@@ -6,10 +6,13 @@ import type { User } from "@/types";
 
 export function useUser() {
   const { user: authUser } = useAuth();
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
   const profile = useQuery(
     api.profiles.getByUserId,
-    authUser?.id ? { userId: authUser.id } : "skip"
+    hasConvex && authUser?.id ? { userId: authUser.id } : "skip"
   );
+  // Always create mutation (ConvexProvider is always present)
+  // But check hasConvex before calling it
   const updateProfileMutation = useMutation(api.profiles.update);
 
   const user: User | null =
@@ -37,6 +40,10 @@ export function useUser() {
 
   const updateUser = async (data: Partial<User>) => {
     if (!authUser) return;
+    if (!hasConvex) {
+      console.warn("Convex not configured. Profile updates will not be saved.");
+      return;
+    }
     await updateProfileMutation({
       userId: authUser.id,
       fullName: data.name ?? data.full_name,

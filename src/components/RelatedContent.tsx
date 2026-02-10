@@ -48,11 +48,15 @@ export default function RelatedContent({
   categoryId,
   title,
 }: RelatedContentProps) {
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
   const relatedArticles = useQuery(
     api.articles.listRelated,
-    type === "article" && slug ? { slug, tags, categoryId: categoryId as Id<"content_categories"> | undefined, limit: 4 } : "skip"
+    hasConvex && type === "article" && slug ? { slug, tags, categoryId: categoryId as Id<"content_categories"> | undefined, limit: 4 } : "skip"
   );
-  const toolsRaw = useQuery(api.tools.list, {});
+  const toolsRaw = useQuery(
+    api.tools.list,
+    hasConvex ? {} : "skip"
+  );
 
   const relatedItems: RelatedItem[] = useMemo(() => {
     const items: RelatedItem[] = [];

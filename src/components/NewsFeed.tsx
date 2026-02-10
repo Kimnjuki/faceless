@@ -24,7 +24,11 @@ function useLiveRecency() {
 }
 
 export default function NewsFeed() {
-  const items = useQuery(api.content.list, { limit: 100 });
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const items = useQuery(
+    api.content.list,
+    hasConvex ? { limit: 100 } : "skip"
+  );
   useLiveRecency();
 
   if (items === undefined) {

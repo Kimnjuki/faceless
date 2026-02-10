@@ -13,18 +13,25 @@ import { initGoogleAdManager, initPrebid } from './utils/adManager'
 import './index.css'
 
 // Initialize Convex client with error handling
-let convex: ConvexReactClient | null = null;
+// Always create a client (even if URL is missing) to prevent hook errors
+// Components will check VITE_CONVEX_URL before using features
+const convexUrl = import.meta.env.VITE_CONVEX_URL;
+let convex: ConvexReactClient;
+
 try {
-  const convexUrl = import.meta.env.VITE_CONVEX_URL;
   if (convexUrl) {
     convex = new ConvexReactClient(convexUrl);
     console.log('✅ Convex client initialized');
   } else {
     console.warn("VITE_CONVEX_URL is not set. Convex features will not work.");
+    // Create a placeholder client to prevent hook errors
+    // Components will check VITE_CONVEX_URL before making actual calls
+    convex = new ConvexReactClient("https://placeholder.convex.cloud");
   }
 } catch (error) {
   console.warn('Failed to initialize Convex client:', error);
-  convex = null;
+  // Fallback to placeholder to prevent hook errors
+  convex = new ConvexReactClient("https://placeholder.convex.cloud");
 }
 
 // Initialize analytics services with error handling
@@ -94,17 +101,15 @@ const auth0Domain = import.meta.env.VITE_AUTH0_DOMAIN ?? '';
 const auth0ClientId = import.meta.env.VITE_AUTH0_CLIENT_ID ?? '';
 const hasAuth0 = Boolean(auth0Domain && auth0ClientId);
 
-const content = convex ? (
+// Always wrap in ConvexProvider to prevent hook errors
+// Components will check VITE_CONVEX_URL before using Convex features
+const content = (
   <ConvexProvider client={convex}>
     <ErrorBoundary>
       <App />
-      <ConvexConnectionStatus />
+      {convexUrl && <ConvexConnectionStatus />}
     </ErrorBoundary>
   </ConvexProvider>
-) : (
-  <ErrorBoundary>
-    <App />
-  </ErrorBoundary>
 );
 
 const app = (

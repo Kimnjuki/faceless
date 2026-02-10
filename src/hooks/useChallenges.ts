@@ -10,7 +10,11 @@ interface ChallengeFilters {
 }
 
 export function useChallenges(_filters: ChallengeFilters = {}) {
-  const raw = useQuery(api.challenges.list, {});
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const raw = useQuery(
+    api.challenges.list,
+    hasConvex ? {} : "skip"
+  );
 
   const challenges: Challenge[] = raw ?? [];
   const loading = raw === undefined;

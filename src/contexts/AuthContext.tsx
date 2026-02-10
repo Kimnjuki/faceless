@@ -56,6 +56,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     logout,
     getAccessTokenSilently,
   } = useAuth0();
+  
+  // Always create mutations (ConvexProvider is always present)
+  // But check hasConvex before calling them
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
   const upsertFromAuth = useMutation(api.profiles.upsertFromAuth);
   const updateProfileMutation = useMutation(api.profiles.update);
 
@@ -74,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const session = user ? { user } : null;
 
   useEffect(() => {
-    if (!isAuthenticated || !auth0User) return;
+    if (!isAuthenticated || !auth0User || !hasConvex) return;
     (async () => {
       try {
         await upsertFromAuth({
@@ -87,7 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.warn("Profile sync to Convex failed:", e);
       }
     })();
-  }, [isAuthenticated, auth0User, upsertFromAuth]);
+  }, [isAuthenticated, auth0User, upsertFromAuth, hasConvex]);
 
   const signIn = async (_email: string, _password: string) => {
     try {
@@ -131,6 +135,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const updateProfile = async (data: { name?: string; niche?: string; goal?: string }) => {
     if (!user) throw new Error("No user logged in");
+    if (!hasConvex) {
+      toast.info("Profile updates require Convex backend. Set VITE_CONVEX_URL to enable.");
+      return;
+    }
     try {
       await updateProfileMutation({
         userId: user.id,

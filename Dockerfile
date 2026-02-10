@@ -1,4 +1,5 @@
 # Multi-stage build for React + Vite app
+# Updated: 2026-02-10 - Fixed nginx redirect loop
 FROM node:20-alpine AS builder
 
 # Set working directory

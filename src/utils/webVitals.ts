@@ -54,9 +54,19 @@ function reportWebVital(metric: WebVitalMetric) {
     metric_id: metric.id,
   });
 
-  // Warn if poor performance
-  if (rating === 'poor') {
-    console.warn(`⚠️ Poor ${metric.name} performance: ${metric.value}ms`);
+  // Warn if poor performance (only in production, suppress in dev to reduce noise)
+  if (rating === 'poor' && import.meta.env.PROD) {
+    const unit = metric.name === 'CLS' ? '' : metric.name === 'FCP' || metric.name === 'LCP' ? 'ms' : 'ms';
+    console.warn(`⚠️ Poor ${metric.name} performance: ${metric.value}${unit}`);
+  }
+  
+  // In development, only log if it's significantly poor (not just slightly over threshold)
+  if (rating === 'poor' && import.meta.env.DEV) {
+    const threshold = THRESHOLDS[metric.name as keyof typeof THRESHOLDS];
+    if (threshold && metric.value > threshold.poor * 1.2) {
+      const unit = metric.name === 'CLS' ? '' : metric.name === 'FCP' || metric.name === 'LCP' ? 'ms' : 'ms';
+      console.warn(`⚠️ Poor ${metric.name} performance: ${metric.value}${unit} (threshold: ${threshold.poor}${unit})`);
+    }
   }
 }
 

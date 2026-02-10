@@ -9,9 +9,17 @@
       }
     }
   ],
+  "routes": [
+    {
+      "src": "/assets/(.*)",
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      }
+    }
+  ],
   "rewrites": [
     {
-      "source": "/((?!(?:ads\\.txt|robots\\.txt|sitemap\\.xml|logo-icon\\.svg|logo\\.svg|site\\.webmanifest|_headers|_redirects|favicon\\.ico|og-image\\.jpg)).*)",
+      "source": "/((?!(?:ads\\.txt|robots\\.txt|sitemap\\.xml|logo-icon\\.svg|logo\\.svg|site\\.webmanifest|_headers|_redirects|favicon\\.ico|og-image\\.jpg|assets|images|static)).*)",
       "destination": "/index.html"
     }
   ],

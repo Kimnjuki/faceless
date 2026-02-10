@@ -46,8 +46,12 @@ if (import.meta.env.PROD) {
 if (typeof window !== 'undefined') {
   // Wait for scripts to load
   window.addEventListener('load', () => {
-    initGoogleAdManager();
-    initPrebid();
+    try {
+      initGoogleAdManager();
+      initPrebid();
+    } catch (error) {
+      console.warn('Failed to initialize ad services:', error);
+    }
   });
 }
 

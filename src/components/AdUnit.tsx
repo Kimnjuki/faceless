@@ -26,58 +26,76 @@ export default function AdUnit({
 
     // Initialize Google Ad Manager
     if (!window.googletag) {
-      window.googletag = window.googletag || {};
-      window.googletag.cmd = window.googletag.cmd || [];
+      // GPT script not loaded, skip ad initialization
+      return;
     }
 
     const googletag = window.googletag;
+    if (!googletag.cmd || !googletag.defineSlot || !googletag.pubads || !googletag.display) {
+      // GPT not fully initialized, skip
+      return;
+    }
 
     // Define ad slot
-    googletag.cmd.push(() => {
-      const slot = googletag.defineSlot(adUnitPath, adSize, adSlot);
-      
-      if (slot) {
-        // Enable services
-        slot.addService(googletag.pubads());
+    googletag.cmd!.push(() => {
+      try {
+        const slot = googletag.defineSlot!(adUnitPath, adSize, adSlot);
+        const pubads = googletag.pubads!();
         
-        // Set targeting if needed
-        // slot.setTargeting('key', 'value');
-        
-        // Enable SRA (Single Request Architecture)
-        googletag.pubads().enableSingleRequest();
-        googletag.pubads().enableAsyncRendering();
-        
-        // Collapse empty divs
-        googletag.pubads().collapseEmptyDivs();
-        
-        // Disable initial load (we'll load manually)
-        googletag.pubads().disableInitialLoad();
-        
-        // Enable lazy loading
-        googletag.pubads().enableLazyLoad({
-          fetchMarginPercent: 100,
-          renderMarginPercent: 50,
-          mobileScaling: 2.0
-        });
-        
-        // Display the ad
-        googletag.display(adSlot);
-        
-        // Refresh the ad
-        googletag.pubads().refresh([slot]);
+        if (slot && pubads) {
+          // Enable services
+          slot.addService(pubads);
+          
+          // Set targeting if needed
+          // slot.setTargeting('key', 'value');
+          
+          // Enable SRA (Single Request Architecture)
+          pubads.enableSingleRequest();
+          pubads.enableAsyncRendering();
+          
+          // Collapse empty divs
+          pubads.collapseEmptyDivs();
+          
+          // Disable initial load (we'll load manually)
+          if (pubads.disableInitialLoad) {
+            pubads.disableInitialLoad();
+          }
+          
+          // Enable lazy loading
+          pubads.enableLazyLoad({
+            fetchMarginPercent: 100,
+            renderMarginPercent: 50,
+            mobileScaling: 2.0
+          });
+          
+          // Display the ad
+          googletag.display!(adSlot);
+          
+          // Refresh the ad
+          pubads.refresh([slot]);
+        }
+      } catch (error) {
+        console.warn('Ad unit initialization error:', error);
       }
     });
 
     // Cleanup
     return () => {
-      if (googletag && googletag.apiReady) {
+      if (googletag && googletag.apiReady && googletag.cmd && googletag.pubads && googletag.destroySlots) {
         googletag.cmd.push(() => {
-          const slots = googletag.pubads().getSlots();
-          slots.forEach((slot: any) => {
-            if (slot.getSlotElementId() === adSlot) {
-              googletag.destroySlots([slot]);
+          try {
+            const pubads = googletag.pubads!();
+            if (pubads && pubads.getSlots) {
+              const slots = pubads.getSlots();
+              slots.forEach((slot: any) => {
+                if (slot.getSlotElementId() === adSlot) {
+                  googletag.destroySlots!([slot]);
+                }
+              });
             }
-          });
+          } catch (error) {
+            console.warn('Ad unit cleanup error:', error);
+          }
         });
       }
     };
@@ -95,14 +113,6 @@ export default function AdUnit({
       aria-label="Advertisement"
     />
   );
-}
-
-// Extend Window interface
-declare global {
-  interface Window {
-    googletag: any;
-    pbjs: any;
-  }
 }
 
 

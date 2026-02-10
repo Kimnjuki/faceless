@@ -13,42 +13,62 @@ const GAM_PUBLISHER_ID = '123456789'; // TODO: Replace with actual publisher ID
 export function initGoogleAdManager() {
   if (typeof window === 'undefined') return;
 
-  // Check if already initialized
-  if (window.googletag && window.googletag.apiReady) {
-    return;
+  try {
+    // Check if GPT script is loaded
+    if (!window.googletag) {
+      // Script not loaded yet, skip initialization
+      return;
+    }
+
+    // Check if already initialized
+    if (window.googletag.apiReady) {
+      return;
+    }
+
+    // Initialize googletag
+    window.googletag.cmd = window.googletag.cmd || [];
+
+    const googletag = window.googletag;
+    const pubads = googletag.pubads?.();
+
+    if (!googletag.cmd || !pubads) {
+      return;
+    }
+
+    googletag.cmd.push(() => {
+      try {
+        if (!pubads) return;
+        
+        // Enable services
+        pubads.enableSingleRequest();
+        pubads.enableAsyncRendering();
+        pubads.collapseEmptyDivs();
+        
+        // Enable lazy loading
+        pubads.enableLazyLoad({
+          fetchMarginPercent: 100,
+          renderMarginPercent: 50,
+          mobileScaling: 2.0
+        });
+
+        // Set privacy settings
+        pubads.setPrivacySettings({
+          restrictDataProcessing: false,
+          childDirectedTreatment: false
+        });
+
+        // Enable SRA (Single Request Architecture)
+        pubads.enableSingleRequest();
+        
+        // Mark as ready
+        googletag.enableServices();
+      } catch (error) {
+        console.warn('Google Ad Manager initialization error:', error);
+      }
+    });
+  } catch (error) {
+    console.warn('Failed to initialize Google Ad Manager:', error);
   }
-
-  // Initialize googletag
-  window.googletag = window.googletag || {};
-  window.googletag.cmd = window.googletag.cmd || [];
-
-  const googletag = window.googletag;
-
-  googletag.cmd.push(() => {
-    // Enable services
-    googletag.pubads().enableSingleRequest();
-    googletag.pubads().enableAsyncRendering();
-    googletag.pubads().collapseEmptyDivs();
-    
-    // Enable lazy loading
-    googletag.pubads().enableLazyLoad({
-      fetchMarginPercent: 100,
-      renderMarginPercent: 50,
-      mobileScaling: 2.0
-    });
-
-    // Set privacy settings
-    googletag.pubads().setPrivacySettings({
-      restrictDataProcessing: false,
-      childDirectedTreatment: false
-    });
-
-    // Enable SRA (Single Request Architecture)
-    googletag.pubads().enableSingleRequest();
-    
-    // Mark as ready
-    googletag.enableServices();
-  });
 }
 
 /**
@@ -57,17 +77,27 @@ export function initGoogleAdManager() {
 export function initPrebid() {
   if (typeof window === 'undefined') return;
 
-  // Check if Prebid.js is loaded
-  if (!window.pbjs) {
-    console.warn('Prebid.js not loaded. Header bidding will not work.');
-    return;
-  }
+  try {
+    // Check if Prebid.js is loaded
+    if (!window.pbjs) {
+      // Prebid.js not loaded, skip initialization (this is expected if script isn't included)
+      return;
+    }
 
-  const pbjs = window.pbjs;
+    const pbjs = window.pbjs;
 
-  // Configure Prebid
-  pbjs.que.push(() => {
-    pbjs.setConfig({
+    // Configure Prebid
+    if (!pbjs.que) {
+      pbjs.que = [];
+    }
+
+    if (!pbjs.setConfig || !pbjs.setBidderSettings) {
+      return;
+    }
+
+    pbjs.que.push(() => {
+      try {
+    pbjs.setConfig!({
       bidderTimeout: 3000,
       enableSendAllBids: true,
       priceGranularity: {
@@ -92,7 +122,7 @@ export function initPrebid() {
     });
 
     // Set bidder settings
-    pbjs.setBidderSettings({
+    pbjs.setBidderSettings!({
       standard: {
         adserverTargeting: [
           {
@@ -122,7 +152,13 @@ export function initPrebid() {
         ]
       }
     });
-  });
+      } catch (error) {
+        console.warn('Prebid.js configuration error:', error);
+      }
+    });
+  } catch (error) {
+    console.warn('Failed to initialize Prebid.js:', error);
+  }
 }
 
 /**
@@ -132,18 +168,24 @@ export function requestBidsAndRefresh(adUnits: any[]) {
   if (typeof window === 'undefined' || !window.pbjs) return;
 
   const pbjs = window.pbjs;
+  if (!pbjs.que || !pbjs.requestBids) return;
 
   pbjs.que.push(() => {
-    pbjs.requestBids({
+    pbjs.requestBids!({
       timeout: 3000,
       adUnits: adUnits,
       bidsBackHandler: function() {
         // Set targeting for GAM
-        if (window.googletag && window.googletag.apiReady) {
+        if (window.googletag && window.googletag.apiReady && pbjs.setTargetingForGPTAsync) {
           pbjs.setTargetingForGPTAsync();
-          window.googletag.cmd.push(() => {
-            window.googletag.pubads().refresh();
-          });
+          if (window.googletag.cmd && window.googletag.pubads) {
+            window.googletag.cmd.push(() => {
+              const pubads = window.googletag!.pubads!();
+              if (pubads) {
+                pubads.refresh();
+              }
+            });
+          }
         }
       }
     });

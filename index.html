@@ -184,12 +184,17 @@
           e.stopPropagation();
           return true;
         }
-        // Suppress other script errors
-        if (e.target && e.target.tagName === 'SCRIPT') {
+        // Suppress Convex placeholder/deployment parsing errors
+        if (e.message && (
+          (e.message.includes('CONVEX FATAL ERROR') && (e.message.includes('placeholder') || e.message.includes("Couldn't parse deployment name"))) ||
+          e.message.includes("Couldn't parse deployment name")
+        )) {
           e.preventDefault();
           e.stopPropagation();
           return true;
         }
+        // Suppress other script errors (but allow legitimate errors through)
+        // Removed blanket suppression to allow real errors to show
       }, true);
       
       window.addEventListener('unhandledrejection', function(e) {
@@ -210,9 +215,16 @@
         }
         // Suppress Convex placeholder/deployment parsing errors
         if (e.reason && (
-          (typeof e.reason === 'string' && e.reason.includes('CONVEX FATAL ERROR') && e.reason.includes('placeholder')) ||
-          (e.reason?.message && e.reason.message.includes('CONVEX FATAL ERROR') && e.reason.message.includes('placeholder')) ||
-          (e.reason?.message && e.reason.message.includes("Couldn't parse deployment name"))
+          (typeof e.reason === 'string' && (
+            (e.reason.includes('CONVEX FATAL ERROR') && (e.reason.includes('placeholder') || e.reason.includes("Couldn't parse deployment name"))) ||
+            e.reason.includes("Couldn't parse deployment name")
+          )) ||
+          (e.reason?.message && (
+            (e.reason.message.includes('CONVEX FATAL ERROR') && (e.reason.message.includes('placeholder') || e.reason.message.includes("Couldn't parse deployment name"))) ||
+            e.reason.message.includes("Couldn't parse deployment name")
+          )) ||
+          (reasonStr.includes('CONVEX FATAL ERROR') && (reasonStr.includes('placeholder') || reasonStr.includes("Couldn't parse deployment name"))) ||
+          reasonStr.includes("Couldn't parse deployment name")
         )) {
           e.preventDefault();
           return true;

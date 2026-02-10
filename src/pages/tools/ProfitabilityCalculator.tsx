@@ -126,9 +126,11 @@ export default function ProfitabilityCalculator() {
                     <Label htmlFor="frequency">Posts Per Week</Label>
                     <Input
                       id="frequency"
+                      name="frequency"
                       type="number"
                       value={inputs.frequency}
                       onChange={(e) => setInputs({ ...inputs, frequency: e.target.value })}
+                      autoComplete="off"
                       min="1"
                       max="14"
                     />
@@ -138,9 +140,11 @@ export default function ProfitabilityCalculator() {
                     <Label htmlFor="cpm">Estimated CPM ($)</Label>
                     <Input
                       id="cpm"
+                      name="cpm"
                       type="number"
                       value={inputs.cpm}
                       onChange={(e) => setInputs({ ...inputs, cpm: e.target.value })}
+                      autoComplete="off"
                       min="1"
                       step="0.5"
                     />
@@ -209,7 +213,7 @@ export default function ProfitabilityCalculator() {
           </div>
 
           {/* Content Depth Section - 200+ words for SEO */}
-          <div className="max-w-4xl mx-auto mt-16 prose prose-lg dark:prose-invert max-w-none">
+          <div className="max-w-4xl mx-auto mt-16 prose prose-lg dark:prose-invert">
             <section className="mb-12">
               <h2 className="text-3xl font-bold mb-6">How to Use the Faceless Content Profitability Calculator</h2>
               <p className="text-lg leading-relaxed mb-4">

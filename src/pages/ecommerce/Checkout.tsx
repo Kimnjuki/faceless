@@ -37,7 +37,7 @@ export default function Checkout() {
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="you@example.com" />
+                    <Input id="email" name="email" type="email" placeholder="you@example.com" autoComplete="email" />
                   </div>
                 </CardContent>
               </Card>
@@ -90,9 +90,12 @@ export default function Checkout() {
                     <div className="flex gap-2">
                       <Input
                         id="discount"
+                        name="discount"
+                        type="text"
                         placeholder="Enter code"
                         value={discount}
                         onChange={(e) => setDiscount(e.target.value)}
+                        autoComplete="off"
                       />
                       <Button variant="outline">Apply</Button>
                     </div>

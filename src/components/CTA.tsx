@@ -39,11 +39,14 @@ export default function CTA() {
           
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <Input
+              id="cta-email"
+              name="email"
               type="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="bg-white text-foreground flex-1"
+              autoComplete="email"
               required
             />
             <Button type="submit" variant="secondary" className="whitespace-nowrap" disabled={loading}>

@@ -55,7 +55,7 @@ export default function ChallengeFunnel() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">Email Address</Label>
-                      <Input id="email" type="email" placeholder="you@example.com" />
+                      <Input id="email" name="email" type="email" placeholder="you@example.com" autoComplete="email" />
                     </div>
                     <Button size="lg" className="w-full">Start Free Challenge</Button>
                     <p className="text-xs text-center text-muted-foreground">

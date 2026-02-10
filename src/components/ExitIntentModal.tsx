@@ -52,10 +52,13 @@ export default function ExitIntentModal() {
           
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
+              id="exit-intent-email"
+              name="email"
               type="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
               required
             />
             <Button type="submit" size="lg" className="w-full">

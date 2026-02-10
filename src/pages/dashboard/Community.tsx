@@ -111,9 +111,12 @@ export default function Community() {
                   <Label htmlFor="title">Title</Label>
                   <Input
                     id="title"
+                    name="title"
+                    type="text"
                     placeholder="What's your question or story?"
                     value={newPost.title}
                     onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+                    autoComplete="off"
                   />
                 </div>
                 <div className="space-y-2">
@@ -135,10 +138,12 @@ export default function Community() {
                   <Label htmlFor="content">Content</Label>
                   <Textarea
                     id="content"
+                    name="content"
                     placeholder="Share your thoughts..."
                     rows={5}
                     value={newPost.content}
                     onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
+                    autoComplete="off"
                   />
                 </div>
                 <Button onClick={handleCreatePost} className="w-full">Post to Community</Button>
@@ -150,9 +155,13 @@ export default function Community() {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
+            id="search-query"
+            name="search"
+            type="search"
             placeholder="Search discussions..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            autoComplete="off"
             className="pl-10"
           />
         </div>

@@ -50,13 +50,24 @@ export function initClarity() {
       const t = l.createElement(r);
       t.async = 1;
       t.src = "https://www.clarity.ms/tag/" + i;
+      
+      // Add error handling for network failures
+      t.onerror = () => {
+        // Suppress network errors silently - they're not critical
+        // Clarity will retry automatically on next page load
+      };
+      
       const y = l.getElementsByTagName(r)[0];
       y.parentNode.insertBefore(t, y);
     })(window, document, "clarity", "script", clarityId);
 
     console.log('[Clarity] Initialized successfully with Project ID:', clarityId);
   } catch (error) {
-    console.error('[Clarity] Failed to initialize:', error);
+    // Suppress initialization errors - Clarity is non-critical
+    // Network errors are handled by script onerror handler
+    if (import.meta.env.DEV) {
+      console.warn('[Clarity] Failed to initialize (non-critical):', error);
+    }
   }
 }
 

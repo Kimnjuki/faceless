@@ -172,10 +172,12 @@ export default function Signup() {
                   <Label htmlFor="password">Password</Label>
                   <Input
                     id="password"
+                    name="password"
                     type="password"
                     placeholder="••••••••"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    autoComplete="new-password"
                     required
                     aria-required="true"
                     aria-invalid={!!errors.password}
@@ -197,9 +199,12 @@ export default function Signup() {
                   <Label htmlFor="name">Creator Name / Pseudonym <span className="text-primary font-semibold">(This is your public identity)</span></Label>
                   <Input
                     id="name"
+                    name="name"
+                    type="text"
                     placeholder="Anonymous Creator, Mystic Writer, etc."
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    autoComplete="name"
                     className={errors.name ? "border-destructive" : ""}
                   />
                   {errors.name && (

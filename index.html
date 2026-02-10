@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -154,6 +154,15 @@
       })();
 
       window.addEventListener('error', function(e) {
+        // Suppress Clarity network errors (ERR_NETWORK_CHANGED, etc.)
+        if (e.target && (
+          (e.target.tagName === 'SCRIPT' && e.target.src && e.target.src.includes('clarity.ms')) ||
+          (e.message && e.message.includes('clarity'))
+        )) {
+          e.preventDefault();
+          e.stopPropagation();
+          return true;
+        }
         // Suppress ForeMedia redirect/tracking errors (400 Bad Request, "Unrecognized pub point")
         if (e.target && (
           (e.target.tagName === 'SCRIPT' && e.target.src && e.target.src.includes('foremedia')) ||

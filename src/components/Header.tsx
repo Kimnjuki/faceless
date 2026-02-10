@@ -185,10 +185,12 @@ export default function Header() {
             </label>
             <Input
               id="header-email"
+              name="email"
               type="email"
               placeholder="Your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
               className="w-48"
               required
               aria-required="true"
@@ -291,10 +293,13 @@ export default function Header() {
             </Link>
             <form onSubmit={handleEmailSubmit} className="flex gap-2 pt-2">
               <Input
+                id="mobile-email"
+                name="email"
                 type="email"
                 placeholder="Your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
                 required
               />
               <Button type="submit" size="sm" disabled={loading}>

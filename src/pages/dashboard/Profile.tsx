@@ -64,17 +64,22 @@ export default function Profile() {
                 <Label htmlFor="name">Full Name</Label>
                 <Input
                   id="name"
+                  name="name"
+                  type="text"
                   value={profile.name}
                   onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                  autoComplete="name"
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   value={profile.email}
                   onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                  autoComplete="email"
                 />
               </div>
               <div className="grid md:grid-cols-2 gap-4">
@@ -90,8 +95,11 @@ export default function Profile() {
                   <Label htmlFor="goal">Your Goal</Label>
                   <Input
                     id="goal"
+                    name="goal"
+                    type="text"
                     value={profile.goal}
                     onChange={(e) => setProfile({ ...profile, goal: e.target.value })}
+                    autoComplete="off"
                   />
                 </div>
               </div>

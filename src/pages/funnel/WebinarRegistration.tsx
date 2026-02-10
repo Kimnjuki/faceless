@@ -73,11 +73,11 @@ export default function WebinarRegistration() {
                 <form className="space-y-4 max-w-md mx-auto">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
-                    <Input id="name" placeholder="John Doe" />
+                    <Input id="name" name="name" type="text" placeholder="John Doe" autoComplete="name" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email Address</Label>
-                    <Input id="email" type="email" placeholder="you@example.com" />
+                    <Input id="email" name="email" type="email" placeholder="you@example.com" autoComplete="email" />
                   </div>
                   <Button size="lg" className="w-full">Save My Seat (FREE)</Button>
                 </form>

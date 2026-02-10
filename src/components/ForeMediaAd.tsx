@@ -28,14 +28,27 @@ interface ForeMediaAdProps {
 }
 
 /**
- * ForeMedia ad unit. Renders the placeholder div and loads the ForeMedia script for the given slot.
- * Standard slots: div + async script. Custom slots: script only.
+ * ForeMedia Ad Component
+ * 
+ * TEMPORARILY DISABLED: ForeMedia is causing redirects and breaking article display.
+ * The ads.txt content is being displayed instead of articles, indicating ForeMedia redirects.
+ * 
+ * To re-enable:
+ * 1. Fix ForeMedia configuration in their dashboard (site ID 60934)
+ * 2. Verify domain is properly configured
+ * 3. Test that redirects no longer occur
+ * 4. Uncomment the code below and remove this early return
  */
 export default function ForeMediaAd({
   slot,
   className = "",
   wrapperClassName = "",
 }: ForeMediaAdProps) {
+  // TEMPORARILY DISABLED: ForeMedia is causing redirects and breaking article display
+  // Re-enable after fixing ForeMedia configuration in their dashboard
+  return null;
+  
+  /* DISABLED CODE - Re-enable when ForeMedia is fixed
   const scriptRef = useRef<HTMLScriptElement | null>(null);
 
   useEffect(() => {
@@ -53,32 +66,16 @@ export default function ForeMediaAd({
     script.async = !isCustom;
     script.src = src;
     
-    // Suppress errors from ForeMedia redirect/tracking endpoints
     script.onerror = () => {
-      // Silently handle script load errors (ForeMedia may return 400/404 for tracking)
       console.debug(`ForeMedia script failed to load for slot: ${slot}`);
     };
     
-    // Suppress network errors from ForeMedia redirect endpoints
-    const originalFetch = window.fetch;
-    const errorHandler = (event: ErrorEvent) => {
-      if (event.message?.includes('foremedia') || 
-          event.filename?.includes('foremedia') ||
-          event.target instanceof HTMLScriptElement && event.target.src?.includes('foremedia')) {
-        event.preventDefault();
-        return true;
-      }
-      return false;
-    };
-    
-    // Add global error handler for ForeMedia redirect errors
     const handleError = (event: ErrorEvent) => {
       const target = event.target as HTMLElement | null;
       if (target && (
         (target instanceof HTMLScriptElement && target.src?.includes('foremedia')) ||
         (target instanceof HTMLImageElement && target.src?.includes('foremedia'))
       )) {
-        // Suppress ForeMedia-related errors
         event.preventDefault();
         event.stopPropagation();
         return true;
@@ -119,4 +116,5 @@ export default function ForeMediaAd({
       />
     </div>
   );
+  */
 }

@@ -24,7 +24,11 @@ import ArticleImage from "@/components/ArticleImage";
 
 export default function ArticleDetail() {
   const { slug } = useParams();
-  const raw = useQuery(api.articles.getBySlug, slug?.trim() ? { slug: slug.trim() } : "skip");
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const raw = useQuery(
+    api.articles.getBySlug,
+    hasConvex && slug?.trim() ? { slug: slug.trim() } : "skip"
+  );
   const incrementViews = useMutation(api.articles.incrementViews);
 
   const article = useMemo((): Article | null => {
@@ -48,8 +52,12 @@ export default function ArticleDetail() {
     } as Article;
   }, [raw, slug]);
 
-  const loading = slug != null && raw === undefined;
-  const error = slug != null && raw === null ? "Article not found. Please check the URL or ensure the article is published." : null;
+  const loading = hasConvex && slug != null && raw === undefined;
+  const error = hasConvex && slug != null && raw === null 
+    ? "Article not found. Please check the URL or ensure the article is published." 
+    : !hasConvex && slug != null
+    ? "Convex backend is not configured. Articles require VITE_CONVEX_URL to be set."
+    : null;
 
   useEffect(() => {
     if (!article) return;
@@ -57,9 +65,9 @@ export default function ArticleDetail() {
   }, [article, slug]);
 
   useEffect(() => {
-    if (!article?.slug) return;
+    if (!article?.slug || !hasConvex) return;
     incrementViews({ slug: article.slug }).catch(() => {});
-  }, [article?.slug, incrementViews]);
+  }, [article?.slug, incrementViews, hasConvex]);
 
   // Reading progress indicator
   useEffect(() => {

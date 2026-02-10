@@ -66,8 +66,8 @@ function PageViewTracker() {
   return null;
 }
 
-// Initialize Web Vitals monitoring (production only)
-if (import.meta.env.PROD) {
+// Initialize Web Vitals monitoring (production only, or dev with reduced logging)
+if (import.meta.env.PROD || import.meta.env.DEV) {
   initWebVitals();
 }
 

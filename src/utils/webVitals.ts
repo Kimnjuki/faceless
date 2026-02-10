@@ -106,7 +106,7 @@ export function initWebVitals() {
 
         reportWebVital({
           name: 'CLS',
-          value: Math.round(clsValue * 1000) / 1000, // Round to 3 decimals
+          value: Math.round(clsValue * 1000) / 1000, // Round to 3 decimals (keep as decimal, not ms)
           id: 'cumulative',
           delta: clsValue,
           rating: getRating('CLS', clsValue),

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -41,18 +41,14 @@ export default function ExitIntentModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-md">
-        <button
-          onClick={() => setOpen(false)}
-          className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100"
-        >
-          <X className="h-4 w-4" />
-        </button>
+        <DialogHeader>
+          <DialogTitle>Wait! Don't Miss Out</DialogTitle>
+          <DialogDescription>
+            Get 40% off your first purchase + our free Niche Finder Checklist
+          </DialogDescription>
+        </DialogHeader>
         
         <div className="text-center py-6">
-          <h2 className="text-2xl font-bold mb-2">Wait! Don't Miss Out</h2>
-          <p className="text-muted-foreground mb-6">
-            Get 40% off your first purchase + our free Niche Finder Checklist
-          </p>
           
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input

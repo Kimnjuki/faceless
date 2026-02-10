@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { X, CheckCircle2, ArrowRight, FileText, Image as ImageIcon, Zap, Rocket, Clock, Sparkles } from "lucide-react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -113,9 +113,8 @@ export default function QuickStartWizard({ open, onComplete }: { open: boolean; 
   return (
     <Dialog open={open} onOpenChange={() => {}}>
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="py-6">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6">
+        <DialogHeader>
+          <div className="flex items-center justify-between mb-2">
             <div>
               <Badge variant="secondary" className="mb-2">
                 Quick Start: Step {currentStep + 1} of {steps.length}
@@ -133,9 +132,9 @@ export default function QuickStartWizard({ open, onComplete }: { open: boolean; 
               <X className="h-5 w-5" />
             </button>
           </div>
-
+          
           {/* Progress Bar */}
-          <div className="mb-6">
+          <div className="mb-4">
             <Progress value={progress} className="h-2" />
             <div className="flex justify-between text-xs text-muted-foreground mt-2">
               <span>{completedCount} of {steps.length} completed</span>
@@ -144,19 +143,24 @@ export default function QuickStartWizard({ open, onComplete }: { open: boolean; 
           </div>
 
           {/* Current Step */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-4">
             <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl gradient-primary mb-4 shadow-glow animate-scale-in">
               <Icon className="h-8 w-8 text-white" />
             </div>
-            <h2 className="text-2xl md:text-3xl font-bold mb-2 gradient-text">
+            <DialogTitle className="text-2xl md:text-3xl font-bold mb-2 gradient-text">
               {currentStepData.title}
-            </h2>
-            <p className="text-muted-foreground mb-4">{currentStepData.description}</p>
+            </DialogTitle>
+            <DialogDescription className="mb-4">
+              {currentStepData.description}
+            </DialogDescription>
             <Badge variant="outline" className="gap-1">
               <Clock className="h-3 w-3" />
               {currentStepData.estimatedTime}
             </Badge>
           </div>
+        </DialogHeader>
+        
+        <div className="py-6">
 
           {/* Step Content */}
           <Card className="mb-6">

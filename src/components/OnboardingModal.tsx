@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { X, CheckCircle2, Rocket, Target, Zap } from "lucide-react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -45,23 +45,25 @@ export default function OnboardingModal({ open, onComplete }: { open: boolean; o
   return (
     <Dialog open={open} onOpenChange={() => {}}>
       <DialogContent className="sm:max-w-2xl">
-        <div className="py-6">
-          <div className="flex items-center justify-between mb-6">
+        <DialogHeader>
+          <div className="flex items-center justify-between mb-2">
             <Badge variant="secondary">Step {currentStep + 1} of {steps.length}</Badge>
             {currentStep === steps.length - 1 && (
-              <button onClick={onComplete} className="text-muted-foreground hover:text-foreground">
+              <button onClick={onComplete} className="text-muted-foreground hover:text-foreground" aria-label="Close">
                 <X className="h-4 w-4" />
               </button>
             )}
           </div>
-
-          <div className="text-center mb-8">
+          <div className="text-center mb-4">
             <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-4">
               <Icon className="h-8 w-8 text-primary" />
             </div>
-            <h2 className="text-2xl font-bold mb-2">{step.title}</h2>
-            <p className="text-muted-foreground">{step.description}</p>
+            <DialogTitle>{step.title}</DialogTitle>
+            <DialogDescription>{step.description}</DialogDescription>
           </div>
+        </DialogHeader>
+        
+        <div className="py-6">
 
           {currentStep < steps.length - 1 ? (
             <div className="grid grid-cols-2 gap-3">

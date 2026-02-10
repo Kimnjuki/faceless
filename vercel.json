@@ -19,7 +19,7 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!(?:ads\\.txt|robots\\.txt|sitemap\\.xml|logo-icon\\.svg|logo\\.svg|site\\.webmanifest|_headers|_redirects|favicon\\.ico|og-image\\.jpg|assets|images|static)).*)",
+      "source": "/((?!assets|images|static|_next|.*\\..*|ads\\.txt|robots\\.txt|sitemap\\.xml|logo-icon\\.svg|logo\\.svg|site\\.webmanifest|favicon\\.ico|og-image\\.jpg|index\\.html).*)",
       "destination": "/index.html"
     }
   ],
@@ -62,11 +62,5 @@
       ]
     }
   ],
-  "redirects": [
-    {
-      "source": "/www/(.*)",
-      "destination": "https://contentanonymity.com/:splat",
-      "permanent": true
-    }
-  ]
+  "redirects": []
 }

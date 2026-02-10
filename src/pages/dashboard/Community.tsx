@@ -24,7 +24,11 @@ export default function Community() {
   const [newPost, setNewPost] = useState({ title: "", category: "", content: "" });
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const categoriesRaw = useQuery(api.community.listCategories);
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const categoriesRaw = useQuery(
+    api.community.listCategories,
+    hasConvex ? {} : "skip"
+  );
   const categories = useMemo(
     () => (categoriesRaw ?? []).map((c: any) => ({ id: c._id ?? c.id, name: c.name })),
     [categoriesRaw]

@@ -11,7 +11,7 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!assets|images|_next|.*\\..*|robots\\.txt|sitemap\\.xml|ads\\.txt|favicon\\.ico|logo.*\\.svg|site\\.webmanifest).*)",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ],

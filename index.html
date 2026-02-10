@@ -100,32 +100,61 @@
         XMLHttpRequest.prototype.open = function(method, url, ...rest) {
           this._url = url;
           if (typeof url === 'string' && url.includes('foremedia.net') && url.includes('/redirect')) {
-            // Mark for suppression
+            // Completely prevent ForeMedia redirect requests
             this._suppressForeMedia = true;
+            // Override send to prevent actual request
+            this.send = function() {
+              // Immediately fake success without making request
+              setTimeout(() => {
+                this.readyState = 4;
+                this.status = 200;
+                this.statusText = 'OK';
+                this.responseText = '';
+                this.response = '';
+                if (this.onload) this.onload();
+                if (this.onreadystatechange) this.onreadystatechange();
+              }, 0);
+            };
+            return;
           }
           return originalOpen.apply(this, [method, url, ...rest]);
         };
         
         XMLHttpRequest.prototype.send = function(...args) {
           if (this._suppressForeMedia) {
-            // Suppress ForeMedia redirect requests
-            this.onerror = null;
-            this.onload = function() {
-              // Fake success to prevent errors
-              if (this.onreadystatechange) {
-                this.readyState = 4;
-                this.status = 200;
-                this.statusText = 'OK';
-                this.onreadystatechange();
-              }
-            };
+            // Already handled in open() override
+            return;
           }
+          // Suppress ForeMedia redirect errors if they occur
+          const originalOnError = this.onerror;
+          const originalOnLoad = this.onload;
+          
+          this.onerror = function(e) {
+            if (this._url && this._url.includes('foremedia.net')) {
+              // Suppress ForeMedia errors
+              e.preventDefault();
+              e.stopPropagation();
+              return false;
+            }
+            if (originalOnError) return originalOnError.call(this, e);
+          };
+          
+          this.onload = function() {
+            // Suppress 400 errors from ForeMedia redirect
+            if (this._url && this._url.includes('foremedia.net') && this.status === 400) {
+              // Fake success to prevent error display
+              this.status = 200;
+              this.statusText = 'OK';
+            }
+            if (originalOnLoad) return originalOnLoad.call(this);
+          };
+          
           return originalSend.apply(this, args);
         };
       })();
 
       window.addEventListener('error', function(e) {
-        // Suppress ForeMedia redirect/tracking errors (400 Bad Request)
+        // Suppress ForeMedia redirect/tracking errors (400 Bad Request, "Unrecognized pub point")
         if (e.target && (
           (e.target.tagName === 'SCRIPT' && e.target.src && e.target.src.includes('foremedia')) ||
           (e.target.tagName === 'IMG' && e.target.src && e.target.src.includes('foremedia'))
@@ -135,7 +164,13 @@
           return true;
         }
         // Suppress network errors from ForeMedia redirect endpoints
-        if (e.message && e.message.includes('foremedia')) {
+        if (e.message && (e.message.includes('foremedia') || e.message.includes('Unrecognized pub point'))) {
+          e.preventDefault();
+          e.stopPropagation();
+          return true;
+        }
+        // Suppress errors from ForeMedia redirect URLs in filename
+        if (e.filename && e.filename.includes('foremedia.net/redirect')) {
           e.preventDefault();
           e.stopPropagation();
           return true;
@@ -153,12 +188,31 @@
           e.preventDefault();
           window.location.reload();
         }
-        // Suppress ForeMedia-related promise rejections
-        if (e.reason && (String(e.reason).includes('foremedia') || e.reason?.message?.includes('foremedia'))) {
+        // Suppress ForeMedia-related promise rejections (including "Unrecognized pub point")
+        const reasonStr = String(e.reason);
+        if (e.reason && (
+          reasonStr.includes('foremedia') || 
+          reasonStr.includes('Unrecognized pub point') ||
+          e.reason?.message?.includes('foremedia') ||
+          e.reason?.message?.includes('Unrecognized pub point')
+        )) {
           e.preventDefault();
           return true;
         }
       });
+      
+      // Suppress console errors for ForeMedia redirect issues
+      (function() {
+        const originalError = console.error;
+        console.error = function(...args) {
+          const message = args.join(' ');
+          if (message.includes('foremedia') || message.includes('Unrecognized pub point')) {
+            // Suppress ForeMedia-related console errors
+            return;
+          }
+          return originalError.apply(console, args);
+        };
+      })();
     </script>
     
     <!-- Google Analytics (gtag.js) - Deferred for performance -->

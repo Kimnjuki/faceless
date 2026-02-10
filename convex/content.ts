@@ -20,7 +20,7 @@ const upsertItemValidator = v.object({
   title: v.string(),
   description: v.optional(v.string()),
   url: v.optional(v.string()),
-  publishedAt: v.number(),
+  publishedAt: v.float64(),
   agencyCategory: v.optional(v.string()),
 });
 

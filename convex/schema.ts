@@ -132,7 +132,7 @@ export default defineSchema({
     ipAddress: v.optional(v.string()), // was inet
     userAgent: v.optional(v.string()),
     referralSource: v.optional(v.string()),
-    clickedAt: v.number(),
+    clickedAt: v.float64(),
   }),
 
   affiliate_commissions: defineTable({
@@ -140,10 +140,10 @@ export default defineSchema({
     affiliateLinkId: v.optional(v.id("affiliate_links")),
     orderId: v.optional(v.id("orders")),
     userId: v.optional(v.id("profiles")),
-    commissionAmount: v.number(),
+    commissionAmount: v.float64(),
     status: affiliateCommissionStatus,
-    paidAt: v.optional(v.number()),
-    createdAt: v.number(),
+    paidAt: v.optional(v.float64()),
+    createdAt: v.float64(),
   }),
 
   affiliate_links: defineTable({
@@ -154,7 +154,7 @@ export default defineSchema({
     slug: v.string(),
     campaignSource: v.optional(v.string()),
     medium: v.optional(v.string()),
-    createdAt: v.number(),
+    createdAt: v.float64(),
     ctaText: v.optional(v.string()),
   })
     .index("by_slug", ["slug"]),
@@ -163,15 +163,15 @@ export default defineSchema({
     legacyId: v.optional(v.string()),
     name: v.string(),
     company: v.optional(v.string()),
-    commissionRate: v.optional(v.number()),
-    cookieDuration: v.optional(v.number()),
+    commissionRate: v.optional(v.float64()),
+    cookieDuration: v.optional(v.float64()),
     status: v.optional(v.string()), // default 'active'
     termsUrl: v.optional(v.string()),
-    createdAt: v.number(),
+    createdAt: v.float64(),
     productCategory: v.optional(v.string()),
     isRecurring: v.optional(v.boolean()),
-    qualityScore: v.optional(v.number()),
-    updatedAt: v.number(),
+    qualityScore: v.optional(v.float64()),
+    updatedAt: v.float64(),
   }),
 
   // ---------------------------------------------------------------------------
@@ -180,14 +180,14 @@ export default defineSchema({
   article_related: defineTable({
     articleId: v.id("articles"),
     relatedArticleId: v.id("articles"),
-    manualRank: v.optional(v.number()),
+    manualRank: v.optional(v.float64()),
   }).index("by_article", ["articleId"]).index("by_article_related", ["articleId", "relatedArticleId"]),
 
   article_tags: defineTable({
     legacyId: v.optional(v.string()),
     articleId: v.optional(v.id("articles")),
     tag: v.string(),
-    createdAt: v.number(),
+    createdAt: v.float64(),
   })
     .index("by_article", ["articleId"])
     .index("by_tag", ["tag"]),
@@ -202,19 +202,19 @@ export default defineSchema({
     authorId: v.optional(v.id("profiles")),
     status: articleStatus,
     featuredImage: v.optional(v.string()),
-    readTime: v.optional(v.number()),
-    wordCount: v.optional(v.number()),
+    readTime: v.optional(v.float64()),
+    wordCount: v.optional(v.float64()),
     seoTitle: v.optional(v.string()),
     metaDescription: v.optional(v.string()),
     canonicalUrl: v.optional(v.string()),
     schemaMarkup: v.optional(v.any()),
     internalLinks: v.optional(v.any()),
     contentUpgrades: v.optional(v.any()),
-    publishedAt: v.optional(v.number()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
-    viewCount: v.optional(v.number()),
-    shareCount: v.optional(v.number()),
+    publishedAt: v.optional(v.float64()),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+    viewCount: v.optional(v.float64()),
+    shareCount: v.optional(v.float64()),
     targetPlatforms: v.optional(v.array(v.string())),
   })
     .index("by_slug", ["slug"])
@@ -231,8 +231,8 @@ export default defineSchema({
     name: v.string(),
     description: v.optional(v.string()),
     accessTier: accessTier,
-    sortOrder: v.optional(v.number()),
-    createdAt: v.number(),
+    sortOrder: v.optional(v.float64()),
+    createdAt: v.float64(),
   }),
 
   content_categories: defineTable({
@@ -243,8 +243,8 @@ export default defineSchema({
     parentId: v.optional(v.id("content_categories")),
     pillarPage: v.optional(v.boolean()),
     seoKeywords: v.optional(v.array(v.string())),
-    sortOrder: v.optional(v.number()),
-    createdAt: v.number(),
+    sortOrder: v.optional(v.float64()),
+    createdAt: v.float64(),
   })
     .index("by_slug", ["slug"])
     .index("by_parent", ["parentId"]),
@@ -255,7 +255,7 @@ export default defineSchema({
     category: v.string(),
     description: v.string(),
     keyFeatures: v.optional(v.array(v.string())),
-    orderIndex: v.number(),
+    orderIndex: v.float64(),
   }).index("by_name", ["name"]),
 
   conversions: defineTable({
@@ -265,8 +265,8 @@ export default defineSchema({
     source: v.optional(v.string()),
     campaign: v.optional(v.string()),
     medium: v.optional(v.string()),
-    revenue: v.optional(v.number()),
-    convertedAt: v.number(),
+    revenue: v.optional(v.float64()),
+    convertedAt: v.float64(),
   }),
 
   // ---------------------------------------------------------------------------
@@ -278,11 +278,11 @@ export default defineSchema({
     title: v.string(),
     content: v.optional(v.any()),
     lessonType: v.optional(lessonType),
-    duration: v.optional(v.number()),
+    duration: v.optional(v.float64()),
     videoUrl: v.optional(v.string()),
     downloadableResources: v.optional(v.array(v.string())),
-    sortOrder: v.number(),
-    createdAt: v.number(),
+    sortOrder: v.float64(),
+    createdAt: v.float64(),
   }).index("by_module", ["moduleId"]),
 
   course_modules: defineTable({
@@ -290,9 +290,9 @@ export default defineSchema({
     courseId: v.optional(v.id("courses")),
     title: v.string(),
     description: v.optional(v.string()),
-    sortOrder: v.number(),
-    dripDelay: v.optional(v.number()),
-    createdAt: v.number(),
+    sortOrder: v.float64(),
+    dripDelay: v.optional(v.float64()),
+    createdAt: v.float64(),
   }).index("by_course", ["courseId"]),
 
   courses: defineTable({
@@ -300,10 +300,10 @@ export default defineSchema({
     productId: v.optional(v.id("products")),
     instructorId: v.optional(v.id("profiles")),
     level: v.optional(courseLevel),
-    estimatedDuration: v.optional(v.number()),
+    estimatedDuration: v.optional(v.float64()),
     certificateAvailable: v.optional(v.boolean()),
     completionCriteria: v.optional(v.any()),
-    createdAt: v.number(),
+    createdAt: v.float64(),
   })
     .index("by_product", ["productId"])
     .index("by_instructor", ["instructorId"]),
@@ -313,12 +313,12 @@ export default defineSchema({
     productId: v.optional(v.id("products")),
     fileName: v.string(),
     fileUrl: v.string(),
-    fileSize: v.optional(v.number()),
+    fileSize: v.optional(v.float64()),
     version: v.optional(v.string()),
     accessUrl: v.optional(v.string()),
-    accessExpires: v.optional(v.number()),
+    accessExpires: v.optional(v.float64()),
     watermarkData: v.optional(v.any()),
-    createdAt: v.number(),
+    createdAt: v.float64(),
   }).index("by_product", ["productId"]),
 
   // ---------------------------------------------------------------------------
@@ -329,9 +329,9 @@ export default defineSchema({
     sequenceId: v.optional(v.id("email_sequences")),
     subject: v.string(),
     content: v.string(),
-    sortOrder: v.optional(v.number()),
+    sortOrder: v.optional(v.float64()),
     conditions: v.optional(v.any()),
-    createdAt: v.number(),
+    createdAt: v.float64(),
   }).index("by_sequence", ["sequenceId"]),
 
   email_sequences: defineTable({
@@ -339,9 +339,9 @@ export default defineSchema({
     name: v.string(),
     type: v.optional(emailSequenceType),
     triggerEvent: v.optional(v.string()),
-    waitTime: v.optional(v.number()),
+    waitTime: v.optional(v.float64()),
     active: v.optional(v.boolean()),
-    createdAt: v.number(),
+    createdAt: v.float64(),
   }),
 
   email_subscribers: defineTable({
@@ -353,9 +353,9 @@ export default defineSchema({
     status: emailSubscriberStatus,
     segments: v.optional(v.any()),
     customFields: v.optional(v.any()),
-    subscribedAt: v.number(),
-    unsubscribedAt: v.optional(v.number()),
-    lastEngaged: v.optional(v.number()),
+    subscribedAt: v.float64(),
+    unsubscribedAt: v.optional(v.float64()),
+    lastEngaged: v.optional(v.float64()),
   })
     .index("by_email", ["email"])
     .index("by_status", ["status"]),
@@ -372,11 +372,11 @@ export default defineSchema({
     postType: forumPostType,
     pinned: v.optional(v.boolean()),
     status: forumPostStatus,
-    viewCount: v.optional(v.number()),
-    replyCount: v.optional(v.number()),
-    lastReplyAt: v.optional(v.number()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    viewCount: v.optional(v.float64()),
+    replyCount: v.optional(v.float64()),
+    lastReplyAt: v.optional(v.float64()),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
   })
     .index("by_category", ["categoryId"])
     .index("by_author", ["authorId"])
@@ -392,8 +392,8 @@ export default defineSchema({
     deliverySequence: v.optional(v.any()),
     conversionGoal: v.optional(v.string()),
     optinFormCopy: v.optional(v.string()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
   }),
 
   // ---------------------------------------------------------------------------
@@ -406,19 +406,19 @@ export default defineSchema({
     description: v.optional(v.string()),
     contentType: v.optional(v.string()),
     contentUrl: v.optional(v.string()),
-    durationMinutes: v.optional(v.number()),
-    orderIndex: v.optional(v.number()),
+    durationMinutes: v.optional(v.float64()),
+    orderIndex: v.optional(v.float64()),
     prerequisites: v.optional(v.array(v.string())),
-    createdAt: v.number(),
+    createdAt: v.float64(),
     moduleGroup: v.optional(v.string()),
     learningObjectives: v.optional(v.array(v.string())),
   }).index("by_learning_path", ["learningPathId"]),
 
   learning_path_modules: defineTable({
     legacyId: v.optional(v.string()),
-    levelOrder: v.number(),
+    levelOrder: v.float64(),
     levelTitle: v.string(),
-    moduleOrder: v.number(),
+    moduleOrder: v.float64(),
     moduleTitle: v.string(),
     coreGoal: v.optional(v.string()),
     keyConcepts: v.optional(v.array(v.string())),
@@ -431,8 +431,8 @@ export default defineSchema({
     description: v.optional(v.string()),
     estimatedDuration: v.optional(v.string()),
     difficultyLevel: v.optional(v.string()),
-    orderIndex: v.optional(v.number()),
-    createdAt: v.number(),
+    orderIndex: v.optional(v.float64()),
+    createdAt: v.float64(),
   }),
 
   // ---------------------------------------------------------------------------
@@ -442,37 +442,37 @@ export default defineSchema({
     legacyId: v.optional(v.string()),
     nicheName: v.string(),
     category: v.string(),
-    avgRpm: v.optional(v.number()),
+    avgRpm: v.optional(v.float64()),
     startupCost: v.optional(v.string()),
     productionDifficulty: v.optional(v.string()),
     timeToMonetization: v.optional(v.string()),
-    evergreenScore: v.optional(v.number()),
+    evergreenScore: v.optional(v.float64()),
     competitionLevel: v.optional(v.string()),
     estimatedEarningsRange: v.optional(v.string()),
     bestAiTools: v.optional(v.array(v.string())),
     risks: v.optional(v.array(v.string())),
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
   }),
 
   niche_case_studies: defineTable({
     legacyId: v.optional(v.string()),
     nicheId: v.optional(v.id("niches")),
     channelName: v.string(),
-    subscribersCount: v.optional(v.number()),
-    monthlyViews: v.optional(v.number()),
-    estimatedEarnings: v.optional(v.number()),
+    subscribersCount: v.optional(v.float64()),
+    monthlyViews: v.optional(v.float64()),
+    estimatedEarnings: v.optional(v.float64()),
     contentStyle: v.optional(v.string()),
     keySuccessFactors: v.optional(v.array(v.string())),
     toolsUsed: v.optional(v.array(v.string())),
-    createdAt: v.number(),
+    createdAt: v.float64(),
   }).index("by_niche", ["nicheId"]),
 
   niche_categories: defineTable({
     legacyId: v.optional(v.string()),
     name: v.string(),
     description: v.optional(v.string()),
-    createdAt: v.number(),
+    createdAt: v.float64(),
   }).index("by_name", ["name"]),
 
   niche_content_ideas: defineTable({
@@ -483,28 +483,28 @@ export default defineSchema({
     estimatedProductionTime: v.optional(v.string()),
     requiredTools: v.optional(v.array(v.string())),
     seoPotential: v.optional(v.string()),
-    createdAt: v.number(),
+    createdAt: v.float64(),
   }).index("by_niche", ["nicheId"]),
 
   niches: defineTable({
     legacyId: v.optional(v.string()),
     nicheName: v.string(),
     categoryId: v.optional(v.id("niche_categories")),
-    profitabilityScore: v.optional(v.number()),
-    avgRpm: v.optional(v.number()),
+    profitabilityScore: v.optional(v.float64()),
+    avgRpm: v.optional(v.float64()),
     difficultyLevel: v.optional(v.string()),
     competitionLevel: v.optional(v.string()),
     startupCost: v.optional(v.string()),
     timeToMonetization: v.optional(v.string()),
-    evergreenScore: v.optional(v.number()),
+    evergreenScore: v.optional(v.float64()),
     estimatedEarningsRange: v.optional(v.string()),
     requiredTools: v.optional(v.array(v.string())),
     bestAiTools: v.optional(v.array(v.string())),
     risks: v.optional(v.array(v.string())),
     trendStatus: v.optional(v.string()),
     description: v.optional(v.string()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
     targetAudience: v.optional(v.string()),
     primaryContentFocus: v.optional(v.string()),
     monetizationStrategies: v.optional(v.any()),
@@ -520,10 +520,10 @@ export default defineSchema({
     orderId: v.optional(v.id("orders")),
     productId: v.optional(v.id("products")),
     variantId: v.optional(v.id("product_variants")),
-    quantity: v.optional(v.number()),
-    unitPrice: v.number(),
-    totalPrice: v.number(),
-    createdAt: v.number(),
+    quantity: v.optional(v.float64()),
+    unitPrice: v.float64(),
+    totalPrice: v.float64(),
+    createdAt: v.float64(),
   })
     .index("by_order", ["orderId"])
     .index("by_product", ["productId"]),
@@ -532,17 +532,17 @@ export default defineSchema({
     legacyId: v.optional(v.string()),
     orderNumber: v.string(),
     userId: v.optional(v.id("profiles")),
-    totalAmount: v.number(),
+    totalAmount: v.float64(),
     currency: v.optional(v.string()),
     status: orderStatus,
     paymentGateway: v.optional(v.string()),
     paymentIntentId: v.optional(v.string()),
     billingEmail: v.optional(v.string()),
     billingAddress: v.optional(v.any()),
-    taxAmount: v.optional(v.number()),
-    discountAmount: v.optional(v.number()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    taxAmount: v.optional(v.float64()),
+    discountAmount: v.optional(v.float64()),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
   })
     .index("by_order_number", ["orderNumber"])
     .index("by_user", ["userId"])
@@ -557,8 +557,8 @@ export default defineSchema({
     sessionId: v.optional(v.string()),
     deviceType: v.optional(v.string()),
     country: v.optional(v.string()),
-    timeOnPage: v.optional(v.number()),
-    viewedAt: v.number(),
+    timeOnPage: v.optional(v.float64()),
+    viewedAt: v.float64(),
   }).index("by_user", ["userId"]),
 
   platform_content_templates: defineTable({
@@ -571,8 +571,8 @@ export default defineSchema({
     audioNotes: v.optional(v.string()),
     exampleApplications: v.optional(v.any()),
     status: platformTemplateStatus,
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
   }).index("by_status", ["status"]),
 
   platform_guides: defineTable({
@@ -586,12 +586,12 @@ export default defineSchema({
     featuredImage: v.optional(v.string()),
     authorId: v.optional(v.id("profiles")),
     difficultyLevel: v.optional(v.string()),
-    readTime: v.optional(v.number()),
-    viewCount: v.optional(v.number()),
+    readTime: v.optional(v.float64()),
+    viewCount: v.optional(v.float64()),
     published: v.optional(v.boolean()),
-    publishedAt: v.optional(v.number()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    publishedAt: v.optional(v.float64()),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
     toolTags: v.optional(v.array(v.string())),
     exampleApplications: v.optional(v.any()),
   })
@@ -605,10 +605,10 @@ export default defineSchema({
     authorId: v.optional(v.id("profiles")),
     content: v.string(),
     parentReplyId: v.optional(v.id("post_replies")),
-    upvoteCount: v.optional(v.number()),
+    upvoteCount: v.optional(v.float64()),
     isSolution: v.optional(v.boolean()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
   })
     .index("by_post", ["postId"])
     .index("by_author", ["authorId"]),
@@ -618,7 +618,7 @@ export default defineSchema({
     userId: v.optional(v.id("profiles")),
     postId: v.optional(v.id("forum_posts")),
     replyId: v.optional(v.id("post_replies")),
-    createdAt: v.number(),
+    createdAt: v.float64(),
   })
     .index("by_user", ["userId"])
     .index("by_post", ["postId"]),
@@ -628,17 +628,17 @@ export default defineSchema({
     name: v.string(),
     slug: v.string(),
     description: v.optional(v.string()),
-    sortOrder: v.optional(v.number()),
-    createdAt: v.number(),
+    sortOrder: v.optional(v.float64()),
+    createdAt: v.float64(),
   }).index("by_slug", ["slug"]),
 
   product_variants: defineTable({
     legacyId: v.optional(v.string()),
     productId: v.optional(v.id("products")),
     name: v.string(),
-    price: v.number(),
+    price: v.float64(),
     sku: v.optional(v.string()),
-    createdAt: v.number(),
+    createdAt: v.float64(),
   })
     .index("by_product", ["productId"])
     .index("by_sku", ["sku"]),
@@ -651,19 +651,19 @@ export default defineSchema({
     shortDescription: v.optional(v.string()),
     type: v.optional(productType),
     categoryId: v.optional(v.id("product_categories")),
-    price: v.optional(v.number()),
-    compareAtPrice: v.optional(v.number()),
+    price: v.optional(v.float64()),
+    compareAtPrice: v.optional(v.float64()),
     subscriptionInterval: v.optional(v.string()),
-    trialPeriodDays: v.optional(v.number()),
+    trialPeriodDays: v.optional(v.float64()),
     featuredImage: v.optional(v.string()),
     galleryImages: v.optional(v.array(v.string())),
     features: v.optional(v.any()),
     requirements: v.optional(v.any()),
     targetAudience: v.optional(v.string()),
-    profitMargin: v.optional(v.number()),
+    profitMargin: v.optional(v.float64()),
     status: productStatus,
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
   })
     .index("by_slug", ["slug"])
     .index("by_category", ["categoryId"])
@@ -684,11 +684,11 @@ export default defineSchema({
     subscriptionTier: accessTier,
     emailVerified: v.optional(v.boolean()),
     marketingConsent: v.optional(v.boolean()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
-    lastLogin: v.optional(v.number()),
-    lifetimeValue: v.optional(v.number()),
-    totalPurchases: v.optional(v.number()),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+    lastLogin: v.optional(v.float64()),
+    lifetimeValue: v.optional(v.float64()),
+    totalPurchases: v.optional(v.float64()),
     websiteUrl: v.optional(v.string()),
     jobTitle: v.optional(v.string()),
     companyName: v.optional(v.string()),
@@ -706,11 +706,11 @@ export default defineSchema({
     courseId: v.optional(v.id("courses")),
     lessonId: v.optional(v.id("course_lessons")),
     completed: v.optional(v.boolean()),
-    progressPercentage: v.optional(v.number()),
-    lastAccessed: v.number(),
-    timeSpent: v.optional(v.number()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    progressPercentage: v.optional(v.float64()),
+    lastAccessed: v.float64(),
+    timeSpent: v.optional(v.float64()),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
   })
     .index("by_user", ["userId"])
     .index("by_course", ["courseId"]),
@@ -721,11 +721,11 @@ export default defineSchema({
     productId: v.optional(v.id("products")),
     status: subscriptionStatus,
     stripeSubscriptionId: v.optional(v.string()),
-    currentPeriodStart: v.optional(v.number()),
-    currentPeriodEnd: v.optional(v.number()),
+    currentPeriodStart: v.optional(v.float64()),
+    currentPeriodEnd: v.optional(v.float64()),
     cancelAtPeriodEnd: v.optional(v.boolean()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
   })
     .index("by_user", ["userId"])
     .index("by_product", ["productId"]),
@@ -739,8 +739,8 @@ export default defineSchema({
     status: ticketStatus,
     assignedTo: v.optional(v.id("profiles")),
     productId: v.optional(v.id("products")),
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
   })
     .index("by_user", ["userId"])
     .index("by_status", ["status"]),
@@ -750,7 +750,7 @@ export default defineSchema({
     templateId: v.id("platform_content_templates"),
     toolId: v.id("tools"),
     toolPurpose: v.optional(v.string()),
-    createdAt: v.number(),
+    createdAt: v.float64(),
   })
     .index("by_template", ["templateId"])
     .index("by_tool", ["toolId"]),
@@ -767,11 +767,11 @@ export default defineSchema({
     fileFormat: v.optional(v.string()),
     description: v.optional(v.string()),
     tags: v.optional(v.array(v.string())),
-    downloadCount: v.optional(v.number()),
-    rating: v.optional(v.number()),
-    ratingCount: v.optional(v.number()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    downloadCount: v.optional(v.float64()),
+    rating: v.optional(v.float64()),
+    ratingCount: v.optional(v.float64()),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
   }),
 
   ticket_replies: defineTable({
@@ -780,7 +780,7 @@ export default defineSchema({
     authorId: v.optional(v.id("profiles")),
     content: v.string(),
     internalNote: v.optional(v.boolean()),
-    createdAt: v.number(),
+    createdAt: v.float64(),
   })
     .index("by_ticket", ["ticketId"]),
 
@@ -788,7 +788,7 @@ export default defineSchema({
     legacyId: v.optional(v.string()),
     name: v.string(),
     description: v.optional(v.string()),
-    createdAt: v.number(),
+    createdAt: v.float64(),
   }).index("by_name", ["name"]),
 
   tools: defineTable({
@@ -802,12 +802,12 @@ export default defineSchema({
     pros: v.optional(v.array(v.string())),
     cons: v.optional(v.array(v.string())),
     bestFor: v.optional(v.string()),
-    rating: v.optional(v.number()),
-    ratingCount: v.optional(v.number()),
+    rating: v.optional(v.float64()),
+    ratingCount: v.optional(v.float64()),
     tutorialUrl: v.optional(v.string()),
     status: v.optional(v.string()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
   })
     .index("by_name", ["name"])
     .index("by_category", ["categoryId"]),
@@ -816,9 +816,9 @@ export default defineSchema({
     legacyId: v.optional(v.string()),
     userId: v.optional(v.id("profiles")),
     affiliateLinkId: v.optional(v.id("affiliate_links")),
-    clickedAt: v.number(),
+    clickedAt: v.float64(),
     converted: v.optional(v.boolean()),
-    conversionValue: v.optional(v.number()),
+    conversionValue: v.optional(v.float64()),
   })
     .index("by_user", ["userId"])
     .index("by_affiliate_link", ["affiliateLinkId"]),
@@ -829,7 +829,7 @@ export default defineSchema({
     eventType: v.string(),
     eventData: v.optional(v.any()),
     sessionId: v.optional(v.string()),
-    createdAt: v.number(),
+    createdAt: v.float64(),
   }).index("by_user", ["userId"]),
 
   user_learning_progress: defineTable({
@@ -840,11 +840,11 @@ export default defineSchema({
     learningPathId: v.optional(v.id("learning_paths")),
     moduleId: v.optional(v.id("learning_modules")),
     completed: v.optional(v.boolean()),
-    progressPercentage: v.optional(v.number()),
-    lastAccessed: v.number(),
-    timeSpent: v.optional(v.number()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    progressPercentage: v.optional(v.float64()),
+    lastAccessed: v.float64(),
+    timeSpent: v.optional(v.float64()),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
   })
     .index("by_user", ["userId"])
     .index("by_course", ["courseId"])
@@ -855,8 +855,8 @@ export default defineSchema({
     webinarId: v.optional(v.id("webinars")),
     userId: v.optional(v.id("profiles")),
     status: webinarRegistrationStatus,
-    registeredAt: v.number(),
-    attendedAt: v.optional(v.number()),
+    registeredAt: v.float64(),
+    attendedAt: v.optional(v.float64()),
   })
     .index("by_webinar", ["webinarId"])
     .index("by_user", ["userId"]),
@@ -866,14 +866,14 @@ export default defineSchema({
     title: v.string(),
     description: v.optional(v.string()),
     hostId: v.optional(v.id("profiles")),
-    scheduledAt: v.number(),
-    duration: v.optional(v.number()),
-    maxAttendees: v.optional(v.number()),
+    scheduledAt: v.float64(),
+    duration: v.optional(v.float64()),
+    maxAttendees: v.optional(v.float64()),
     platform: v.optional(v.string()),
     joinUrl: v.optional(v.string()),
     recordingUrl: v.optional(v.string()),
     status: webinarStatus,
-    createdAt: v.number(),
+    createdAt: v.float64(),
   })
     .index("by_host", ["hostId"])
     .index("by_status", ["status"]),
@@ -889,11 +889,11 @@ export default defineSchema({
     title: v.string(),
     description: v.optional(v.string()),
     url: v.optional(v.string()),
-    publishedAt: v.number(),
+    publishedAt: v.float64(),
     niche: v.optional(v.string()),
     agencyCategory: v.optional(v.string()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
   })
     .index("by_externalId", ["externalId"])
     .index("by_publishedAt", ["publishedAt"]),

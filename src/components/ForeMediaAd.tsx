@@ -52,11 +52,48 @@ export default function ForeMediaAd({
     script.type = "text/javascript";
     script.async = !isCustom;
     script.src = src;
+    
+    // Suppress errors from ForeMedia redirect/tracking endpoints
+    script.onerror = () => {
+      // Silently handle script load errors (ForeMedia may return 400/404 for tracking)
+      console.debug(`ForeMedia script failed to load for slot: ${slot}`);
+    };
+    
+    // Suppress network errors from ForeMedia redirect endpoints
+    const originalFetch = window.fetch;
+    const errorHandler = (event: ErrorEvent) => {
+      if (event.message?.includes('foremedia') || 
+          event.filename?.includes('foremedia') ||
+          event.target instanceof HTMLScriptElement && event.target.src?.includes('foremedia')) {
+        event.preventDefault();
+        return true;
+      }
+      return false;
+    };
+    
+    // Add global error handler for ForeMedia redirect errors
+    const handleError = (event: ErrorEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target && (
+        (target instanceof HTMLScriptElement && target.src?.includes('foremedia')) ||
+        (target instanceof HTMLImageElement && target.src?.includes('foremedia'))
+      )) {
+        // Suppress ForeMedia-related errors
+        event.preventDefault();
+        event.stopPropagation();
+        return true;
+      }
+      return false;
+    };
+    
+    window.addEventListener('error', handleError, true);
+    
     scriptRef.current = script;
     document.body.appendChild(script);
     loadedSlots.add(scriptId);
 
     return () => {
+      window.removeEventListener('error', handleError, true);
       script.remove();
       scriptRef.current = null;
       loadedSlots.delete(scriptId);

@@ -68,8 +68,19 @@
     <!-- Fonts will load via CSS @import or link tag if needed -->
     
     <!-- Error Handler for External Scripts (Ahrefs: reduces "Page has broken JavaScript") -->
+    <!-- Also suppresses ForeMedia redirect/tracking errors -->
     <script>
       window.addEventListener('error', function(e) {
+        // Suppress ForeMedia redirect/tracking errors (400 Bad Request)
+        if (e.target && (
+          (e.target.tagName === 'SCRIPT' && e.target.src && e.target.src.includes('foremedia')) ||
+          (e.target.tagName === 'IMG' && e.target.src && e.target.src.includes('foremedia'))
+        )) {
+          e.preventDefault();
+          e.stopPropagation();
+          return true;
+        }
+        // Suppress other script errors
         if (e.target && e.target.tagName === 'SCRIPT') {
           e.preventDefault();
           e.stopPropagation();

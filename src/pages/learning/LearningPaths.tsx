@@ -26,6 +26,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import { getRandomImage, getLearningPathImages } from "@/utils/contentImages";
 import { useLearningPaths } from "@/hooks/useLearningPaths";
 import { useAuth } from "@/contexts/AuthContext";
 import PathComparator from "@/components/PathComparator";
@@ -55,6 +56,9 @@ export default function LearningPaths() {
     trackType: trackType !== 'all' ? trackType : undefined,
     difficulty: difficulty !== 'all' ? difficulty : undefined,
   });
+
+  // Get diverse images for learning paths
+  const learningPathImages = getLearningPathImages(paths.length);
 
   // Get quiz results for recommendations
   const quizResults = useMemo(() => {
@@ -280,15 +284,17 @@ export default function LearningPaths() {
             {/* Learning Paths Grid */}
             {!loading && !error && sortedPaths.length > 0 && (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {sortedPaths.map((path) => {
+                {sortedPaths.map((path: any, index: number) => {
                     const IconComponent = iconMap[path.icon_name || 'BookOpen'] || BookOpen;
                     const progress = calculatePathProgress(path);
                     const totalModules = path.modules?.length || 0;
                     const completedModules = path.modules?.filter((m: any) => m.progress?.completed).length || 0;
                     const pathId = path.id || path._id || '';
-                    const isRecommended = recommendedPaths.some(rp => (rp.id || rp._id) === pathId);
+                    const isRecommended = recommendedPaths.some((rp: any) => (rp.id || rp._id) === pathId);
                     const isSelectedForComparison = pathId ? selectedForComparison.includes(pathId) : false;
                     const isExpanded = expandedPath === pathId;
+                    // Use diverse image for this learning path
+                    const pathImage = learningPathImages[index] || getRandomImage('workspace');
 
                     return (
                       <Card 
@@ -299,8 +305,16 @@ export default function LearningPaths() {
                       >
                         <CardHeader>
                           <div className="flex items-start justify-between mb-2">
-                            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                              <IconComponent className="h-6 w-6 text-primary" />
+                            <div className="relative h-12 w-12 rounded-lg overflow-hidden">
+                              <img 
+                                src={pathImage}
+                                alt={`${path.name} learning path visual`}
+                                className="w-full h-full object-cover"
+                                loading="eager"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/40 flex items-center justify-center">
+                                <IconComponent className="h-6 w-6 text-primary" />
+                              </div>
                             </div>
                             <div className="flex items-center gap-2">
                               {isRecommended && (

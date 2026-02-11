@@ -54,43 +54,71 @@ export default function Header() {
             </span>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-8" aria-label="Main navigation">
-            <Link to="/" className="text-sm font-semibold hover:text-primary transition-colors relative group">
+          <nav className="hidden lg:flex items-center gap-6" role="navigation" aria-label="Main navigation">
+            <Link 
+              to="/" 
+              className="text-sm font-semibold hover:text-primary transition-colors relative group px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to homepage"
+            >
               Home
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-purple-600 group-hover:w-full transition-all duration-300" aria-hidden="true"></span>
+              <span className="absolute -bottom-1 left-3 w-0 h-0.5 bg-gradient-to-r from-primary to-purple-600 group-hover:w-full transition-all duration-300" aria-hidden="true"></span>
             </Link>
-            <Link to="/getting-started" className="text-sm font-semibold hover:text-primary transition-colors relative group">
+            <Link 
+              to="/getting-started" 
+              className="text-sm font-semibold hover:text-primary transition-colors relative group px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to getting started guide"
+            >
               Getting Started
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-purple-600 group-hover:w-full transition-all duration-300" aria-hidden="true"></span>
+              <span className="absolute -bottom-1 left-3 w-0 h-0.5 bg-gradient-to-r from-primary to-purple-600 group-hover:w-full transition-all duration-300" aria-hidden="true"></span>
             </Link>
             
             <ResourcesMegaMenu
               trigger={
-                <button className="flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors">
+                <button 
+                  className="flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+                  aria-label="Content strategies menu"
+                  aria-expanded="false"
+                >
                   Content Strategies <ChevronDown className="h-3 w-3" />
                 </button>
               }
             />
 
-            <Link to="/products/all" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link 
+              to="/products/all" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to monetization products"
+            >
               Monetization
             </Link>
 
             <ToolsMegaMenu
               trigger={
-                <button className="flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors">
+                <button 
+                  className="flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+                  aria-label="Tools and AI menu"
+                  aria-expanded="false"
+                >
                   Tools & AI <ChevronDown className="h-3 w-3" />
                 </button>
               }
             />
 
-            <Link to="/dashboard/community" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link 
+              to="/dashboard/community" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to community"
+            >
               Community
             </Link>
             
             <LearnMegaMenu
               trigger={
-                <button className="flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors">
+                <button 
+                  className="flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+                  aria-label="Learning paths menu"
+                  aria-expanded="false"
+                >
                   Learning <ChevronDown className="h-3 w-3" />
                 </button>
               }
@@ -167,50 +195,110 @@ export default function Header() {
           role="dialog"
           aria-label="Mobile navigation menu"
         >
-          <nav className="flex flex-col gap-4" aria-label="Main navigation">
-            <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">
+          <nav className="flex flex-col gap-4" role="navigation" aria-label="Mobile navigation menu">
+            <Link 
+              to="/" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to homepage"
+            >
               Home
             </Link>
-            <Link to="/getting-started" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link 
+              to="/getting-started" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to getting started guide"
+            >
               Getting Started
             </Link>
-            <Link to="/blog" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link 
+              to="/blog" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to content strategies blog"
+            >
               Content Strategies
             </Link>
-            <Link to="/products/all" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link 
+              to="/products/all" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to monetization products"
+            >
               Monetization
             </Link>
-            <Link to="/tools/all" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link 
+              to="/tools/all" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to tools and AI"
+            >
               Tools & AI
             </Link>
-            <Link to="/dashboard/community" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link 
+              to="/dashboard/community" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to community"
+            >
               Community
             </Link>
-            <Link to="/blog" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link 
+              to="/blog" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to blog and articles"
+            >
               Blog & Articles
             </Link>
-            <Link to="/learning-paths" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link 
+              to="/learning-paths" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to learning paths"
+            >
               Learning Paths
             </Link>
-            <Link to="/platform-guides" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link 
+              to="/platform-guides" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to platform guides"
+            >
               Platform Guides
             </Link>
-            <Link to="/learning/case-studies" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link 
+              to="/learning/case-studies" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to case studies"
+            >
               Case Studies
             </Link>
-            <Link to="/community/members" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link 
+              to="/community/members" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to member directory"
+            >
               Member Directory
             </Link>
-            <Link to="/community/events" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link 
+              to="/community/events" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to community events"
+            >
               Community Events
             </Link>
-            <Link to="/news" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link 
+              to="/news" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to live news"
+            >
               LiveWire News
             </Link>
-            <Link to="/resources/templates" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link 
+              to="/resources/templates" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to templates library"
+            >
               Templates Library
             </Link>
-            <Link to="/resources/niches" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link 
+              to="/resources/niches" 
+              className="text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10"
+              aria-label="Navigate to niche database"
+            >
               Niche Database
             </Link>
             <form onSubmit={handleEmailSubmit} className="flex gap-2 pt-2">

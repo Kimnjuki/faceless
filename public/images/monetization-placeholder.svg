@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#grad3)"/>
+  <g fill="#ffffff" opacity="0.9">
+    <rect x="240" y="120" width="160" height="80" rx="8"/>
+    <rect x="200" y="220" width="240" height="4" rx="2"/>
+    <rect x="200" y="230" width="180" height="4" rx="2"/>
+    <rect x="200" y="240" width="200" height="4" rx="2"/>
+    <circle cx="320" cy="280" r="20"/>
+    <path d="M280 160 L320 160 L360 160 M320 140 L320 180" stroke="#f59e0b" stroke-width="4"/>
+  </g>
+  <text x="320" y="180" font-family="Arial, sans-serif" font-size="16" fill="#ffffff" text-anchor="middle" font-weight="bold">Monetization</text>
+</svg>

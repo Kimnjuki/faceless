@@ -304,8 +304,12 @@ export default function ContentCreation() {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {stockFootage.map((item) => (
                 <Card key={item.id} className="overflow-hidden">
-                  <div className="aspect-video bg-muted flex items-center justify-center">
-                    <Video className="h-12 w-12 text-muted-foreground" />
+                  <div className="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center relative overflow-hidden">
+                    <div className="absolute inset-0 bg-black/10"></div>
+                    <div className="relative z-10 text-white text-center p-4">
+                      <Video className="h-8 w-8 mx-auto mb-2" />
+                      <p className="text-xs font-medium">Stock Footage</p>
+                    </div>
                   </div>
                   <CardHeader>
                     <CardTitle className="text-base">{item.title}</CardTitle>

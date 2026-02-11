@@ -26,7 +26,7 @@ export default function LatestArticles() {
           {articles.map((article) => (
             <Link key={article.id} to={`/blog/${article.slug}`}>
               <Card className="group h-full overflow-hidden hover:border-primary/50 transition-colors">
-                {article.featured_image && (
+                {article.featured_image ? (
                   <div className="aspect-video w-full overflow-hidden rounded-t-lg bg-muted" style={{ minHeight: '180px' }}>
                     <img
                       src={article.featured_image}
@@ -35,12 +35,17 @@ export default function LatestArticles() {
                       width="640"
                       height="360"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      style={{ aspectRatio: '16/9' }}
                     />
                   </div>
-                )}
-                {!article.featured_image && (
-                  <div className="aspect-video w-full flex items-center justify-center rounded-t-lg bg-primary/5">
-                    <FileText className="h-12 w-12 text-primary/40" aria-hidden />
+                ) : (
+                  <div className="aspect-video w-full overflow-hidden rounded-t-lg bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center" style={{ minHeight: '180px' }}>
+                    <div className="text-white text-center p-4">
+                      <svg className="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                      </svg>
+                      <p className="text-sm font-medium">Article</p>
+                    </div>
                   </div>
                 )}
                 <CardHeader>

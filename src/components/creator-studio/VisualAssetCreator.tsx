@@ -124,8 +124,12 @@ export default function VisualAssetCreator() {
 
               {generatedImage && (
                 <div className="border rounded-lg p-4">
-                  <div className="aspect-video bg-muted rounded-lg flex items-center justify-center mb-4">
-                    <Image className="h-16 w-16 text-muted-foreground" />
+                  <div className="aspect-video bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center mb-4 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-black/10"></div>
+                    <div className="relative z-10 text-white text-center p-4">
+                      <Image className="h-12 w-12 mx-auto mb-2" />
+                      <p className="text-sm font-medium">Generated Asset</p>
+                    </div>
                   </div>
                   <div className="flex gap-2">
                     <Button variant="outline" className="flex-1">

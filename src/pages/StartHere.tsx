@@ -199,8 +199,17 @@ export default function StartHere() {
                   ×
                 </Button>
               </div>
-              <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
-                <p className="text-muted-foreground">Video embed placeholder - Add your overview video URL here</p>
+              <div className="aspect-video bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-black/20"></div>
+                <div className="relative z-10 text-center text-white p-8">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">
+                    <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Welcome to ContentAnonymity</h3>
+                  <p className="text-white/90 max-w-md">Discover how to build profitable faceless content businesses without showing your face</p>
+                </div>
               </div>
             </div>
           </div>

@@ -63,23 +63,61 @@ export default function AdSense({
 }: AdSenseProps) {
   const adRef = useRef<HTMLDivElement>(null);
   const adClient = 'ca-pub-9278124025449370';
+  const isInitializedRef = useRef(false);
 
   useEffect(() => {
-    if (!adRef.current || typeof window === 'undefined') return;
+    if (!adRef.current || typeof window === 'undefined' || isInitializedRef.current) return;
 
     // Check if adsbygoogle is loaded
     if (!window.adsbygoogle) {
-      console.warn('AdSense script not loaded. Make sure the AdSense script is included in index.html');
+      console.warn('AdSense script not loaded. Make sure AdSense script is included in index.html');
       return;
     }
 
-    try {
-      // Push ad configuration to adsbygoogle
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (error) {
-      console.error('Error initializing AdSense:', error);
-    }
-  }, []);
+    // Small delay to ensure DOM is fully rendered
+    const timer = setTimeout(() => {
+      if (!adRef.current) return;
+
+      // Check if this specific ad element has already been processed
+      const adElement = adRef.current.querySelector('ins.adsbygoogle');
+      if (adElement && adElement.getAttribute('data-ads-initialized')) {
+        console.log('AdSense element already initialized, skipping');
+        return;
+      }
+
+      // Check if the ad container has valid dimensions
+      const rect = adRef.current.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) {
+        console.warn('AdSense container has zero dimensions, skipping ad initialization');
+        return;
+      }
+
+      try {
+        // Mark as initialized to prevent duplicate pushes
+        isInitializedRef.current = true;
+        
+        // Mark the ad element as initialized
+        if (adElement) {
+          adElement.setAttribute('data-ads-initialized', 'true');
+        }
+        
+        // Push ad configuration to adsbygoogle
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (error) {
+        console.error('Error initializing AdSense:', error);
+        isInitializedRef.current = false;
+        if (adElement) {
+          adElement.removeAttribute('data-ads-initialized');
+        }
+      }
+    }, 100); // 100ms delay
+
+    // Cleanup function
+    return () => {
+      clearTimeout(timer);
+      isInitializedRef.current = false;
+    };
+  }, [adSlot, format]);
 
   // Generate ad slot if not provided (for auto ads)
   const getAdSlot = () => {
@@ -125,8 +163,12 @@ export default function AdSense({
     return undefined;
   };
 
+  // Generate unique ID for this ad instance
+  const adId = `adsense-${adSlot || 'auto'}-${format}-${adSize || 'responsive'}-${name || 'default'}`;
+
   return (
     <div
+      key={adId}
       ref={adRef}
       className={`adsense-container ${className}`}
       style={{
@@ -136,6 +178,7 @@ export default function AdSense({
       }}
     >
       <ins
+        key={`${adId}-ins`}
         className="adsbygoogle"
         style={{
           display: 'block',

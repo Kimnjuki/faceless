@@ -13,10 +13,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useLeads } from "@/hooks/useLeads";
 import { trackButtonClick } from "@/utils/analytics";
+import { LearnMegaMenu, ResourcesMegaMenu, ToolsMegaMenu } from "@/components/MegaMenu";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [email, setEmail] = useState("");
+  const { user } = useAuth();
 
   const { createLead, loading } = useLeads();
 
@@ -43,7 +46,6 @@ export default function Header() {
                 alt="" 
                 className="h-8 w-8 object-contain"
                 loading="eager"
-                fetchPriority="high"
                 aria-hidden="true"
               />
             </div>
@@ -62,117 +64,37 @@ export default function Header() {
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-purple-600 group-hover:w-full transition-all duration-300" aria-hidden="true"></span>
             </Link>
             
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors">
-                Content Strategies <ChevronDown className="h-3 w-3" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem asChild>
-                  <Link to="/blog">All Strategies</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/pillar/youtube">YouTube Automation</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/pillar/tiktok">TikTok Growth</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/pillar/instagram">Instagram Reels</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <ResourcesMegaMenu
+              trigger={
+                <button className="flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors">
+                  Content Strategies <ChevronDown className="h-3 w-3" />
+                </button>
+              }
+            />
 
             <Link to="/products/all" className="text-sm font-medium hover:text-primary transition-colors">
               Monetization
             </Link>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors">
-                Tools & AI <ChevronDown className="h-3 w-3" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem asChild>
-                  <Link to="/tools/all">Tool Comparison</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/tools/calculator">Profitability Calculator</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/tools/niche-quiz">Niche Finder Quiz</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/tools/seo-audit">SEO Audit Tool</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/tools/keyword-research">Keyword Research</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/tools/backlink-checker">Backlink Checker</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/tools/performance">Performance Monitor</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <ToolsMegaMenu
+              trigger={
+                <button className="flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors">
+                  Tools & AI <ChevronDown className="h-3 w-3" />
+                </button>
+              }
+            />
 
             <Link to="/dashboard/community" className="text-sm font-medium hover:text-primary transition-colors">
               Community
             </Link>
             
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors">
-                Learning <ChevronDown className="h-3 w-3" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem asChild>
-                  <Link to="/learning-paths">Learning Paths</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/platform-guides">Platform Guides</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/learning/case-studies">Case Studies</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/learning/workshops">Live Workshops</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/learning/resources">Resource Downloads</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/getting-started">Start Here</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors">
-                Resources <ChevronDown className="h-3 w-3" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem asChild>
-                  <Link to="/news">LiveWire News</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/resources/templates">Templates Library</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/resources/niches">Niche Database</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/community/members">Member Directory</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/community/events">Community Events</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/community/challenges">Challenges</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/tools/all">Tool Comparison</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <LearnMegaMenu
+              trigger={
+                <button className="flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors">
+                  Learning <ChevronDown className="h-3 w-3" />
+                </button>
+              }
+            />
           </nav>
 
           <form 

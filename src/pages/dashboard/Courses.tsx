@@ -6,12 +6,19 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useLearningPaths } from "@/hooks/useLearningPaths";
+import { useCourses } from "@/hooks/useCourses";
 import { useAuth } from "@/contexts/AuthContext";
 import SEO from "@/components/SEO";
 
 export default function Courses() {
   const { user } = useAuth();
-  const { paths, loading, refetch } = useLearningPaths({});
+  const { paths, loading: pathsLoading, refetch: refetchPaths } = useLearningPaths({});
+  const { courses, loading: coursesLoading } = useCourses();
+  
+  const loading = Boolean(pathsLoading || coursesLoading);
+  const refetch = () => {
+    refetchPaths();
+  };
 
   const calculatePathProgress = (path: any) => {
     if (!user || !path.modules || path.modules.length === 0) return 0;
@@ -54,66 +61,138 @@ export default function Courses() {
           <div className="flex items-center justify-center py-12">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
-        ) : userPaths.length > 0 ? (
-          <div className="grid gap-6">
-            {userPaths.map((path) => {
-              const progress = calculatePathProgress(path);
-              const totalModules = path.modules?.length || 0;
-              const completedModules = path.modules?.filter((m: any) => m.progress?.completed).length || 0;
-              const isCompleted = progress === 100;
+        ) : (userPaths.length > 0 || courses.length > 0) ? (
+          <>
+            {/* Convex Courses */}
+            {courses.length > 0 && (
+              <div className="space-y-4 mb-8">
+                <h2 className="text-2xl font-bold">My Enrolled Courses</h2>
+                <div className="grid gap-6">
+                  {courses.map((course: any) => {
+                    const progress = course.progressPercentage ?? 0;
+                    const isCompleted = progress >= 100;
 
-              return (
-                <Card key={path.id}>
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <CardTitle>{path.name}</CardTitle>
-                        <CardDescription className="flex items-center gap-4 mt-2">
-                          <span className="flex items-center gap-1">
-                            <BookOpen className="h-3 w-3" />
-                            {totalModules} modules
-                          </span>
-                          {path.estimated_duration && (
-                            <span className="flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              {path.estimated_duration}
-                            </span>
-                          )}
-                        </CardDescription>
-                      </div>
-                      {isCompleted ? (
-                        <Badge className="bg-green-500">
-                          <CheckCircle2 className="h-3 w-3 mr-1" />
-                          Completed
-                        </Badge>
-                      ) : (
-                        <Badge variant="secondary">In Progress</Badge>
-                      )}
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div>
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm text-muted-foreground">
-                            {completedModules} of {totalModules} modules completed
-                          </span>
-                          <span className="text-sm font-medium">{progress}%</span>
-                        </div>
-                        <Progress value={progress} />
-                      </div>
-                      <Button className="w-full" asChild>
-                        <Link to={`/learning-paths/${path.id}`}>
-                          {isCompleted ? "Review Course" : "Continue Learning"}
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Link>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+                    return (
+                      <Card key={course._id}>
+                        <CardHeader>
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <CardTitle>{course.product?.name || `Course ${course._id}`}</CardTitle>
+                              <CardDescription className="flex items-center gap-4 mt-2">
+                                <span className="flex items-center gap-1">
+                                  <BookOpen className="h-3 w-3" />
+                                  {course.modules?.length || 0} modules
+                                </span>
+                                {course.estimatedDuration && (
+                                  <span className="flex items-center gap-1">
+                                    <Clock className="h-3 w-3" />
+                                    {Math.round(course.estimatedDuration / 60)} hours
+                                  </span>
+                                )}
+                              </CardDescription>
+                            </div>
+                            {isCompleted ? (
+                              <Badge className="bg-green-500">
+                                <CheckCircle2 className="h-3 w-3 mr-1" />
+                                Completed
+                              </Badge>
+                            ) : (
+                              <Badge variant="secondary">In Progress</Badge>
+                            )}
+                          </div>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-4">
+                            <div>
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-sm text-muted-foreground">
+                                  {course.completedLessons} of {course.totalLessons} lessons completed
+                                </span>
+                                <span className="text-sm font-medium">{progress}%</span>
+                              </div>
+                              <Progress value={progress} />
+                            </div>
+                            <Button className="w-full" asChild>
+                              <Link to={`/courses/${course._id}/learn`}>
+                                {isCompleted ? "Review Course" : "Continue Learning"}
+                                <ArrowRight className="ml-2 h-4 w-4" />
+                              </Link>
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Learning Paths */}
+            {userPaths.length > 0 && (
+              <div className="space-y-4">
+                {courses.length > 0 && <h2 className="text-2xl font-bold">Learning Paths</h2>}
+                <div className="grid gap-6">
+                  {userPaths.map((path) => {
+                    const progress = calculatePathProgress(path);
+                    const totalModules = path.modules?.length || 0;
+                    const completedModules = path.modules?.filter((m: any) => m.progress?.completed).length || 0;
+                    const isCompleted = progress === 100;
+
+                    return (
+                      <Card key={path.id}>
+                        <CardHeader>
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <CardTitle>{path.name}</CardTitle>
+                              <CardDescription className="flex items-center gap-4 mt-2">
+                                <span className="flex items-center gap-1">
+                                  <BookOpen className="h-3 w-3" />
+                                  {totalModules} modules
+                                </span>
+                                {path.estimated_duration && (
+                                  <span className="flex items-center gap-1">
+                                    <Clock className="h-3 w-3" />
+                                    {path.estimated_duration}
+                                  </span>
+                                )}
+                              </CardDescription>
+                            </div>
+                            {isCompleted ? (
+                              <Badge className="bg-green-500">
+                                <CheckCircle2 className="h-3 w-3 mr-1" />
+                                Completed
+                              </Badge>
+                            ) : (
+                              <Badge variant="secondary">In Progress</Badge>
+                            )}
+                          </div>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-4">
+                            <div>
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-sm text-muted-foreground">
+                                  {completedModules} of {totalModules} modules completed
+                                </span>
+                                <span className="text-sm font-medium">{progress}%</span>
+                              </div>
+                              <Progress value={progress} />
+                            </div>
+                            <Button className="w-full" asChild>
+                              <Link to={`/learning-paths/${path.id}`}>
+                                {isCompleted ? "Review Course" : "Continue Learning"}
+                                <ArrowRight className="ml-2 h-4 w-4" />
+                              </Link>
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </>
         ) : (
           <Card>
             <CardContent className="py-12 text-center">

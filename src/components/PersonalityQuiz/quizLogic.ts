@@ -100,7 +100,7 @@ const ARCHETYPES: CreatorArchetype[] = [
  * Calculate quiz results based on answers
  */
 export function calculateQuizResults(answers: QuizAnswers): CreatorArchetype {
-  let scores: { [key: string]: number } = {
+  const scores: { [key: string]: number } = {
     "The Strategic Educator": 0,
     "The Visual Storyteller": 0,
     "The Productivity Automator": 0,

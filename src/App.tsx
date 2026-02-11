@@ -23,6 +23,7 @@ import Login from "./pages/auth/Login";
 import OAuthCallback from "./pages/auth/OAuthCallback";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Courses from "./pages/dashboard/Courses";
+import CoursePlayer from "./pages/courses/CoursePlayer";
 import Community from "./pages/dashboard/Community";
 import Profile from "./pages/dashboard/Profile";
 import ContentCreation from "./pages/dashboard/ContentCreation";
@@ -36,6 +37,7 @@ import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
 import TermsOfService from "./pages/legal/TermsOfService";
 import TemplatesLibrary from "./pages/resources/TemplatesLibrary";
 import NicheDatabase from "./pages/resources/NicheDatabase";
+import NicheDetail from "./pages/niches/NicheDetail";
 import LearningPaths from "./pages/learning/LearningPaths";
 import LearningPathDetail from "./pages/learning/LearningPathDetail";
 import CreatorStudio from "./pages/creator-studio/CreatorStudio";
@@ -77,7 +79,7 @@ export default function App() {
   const AuthWrapper = hasAuth0 ? AuthProvider : AuthProviderFallback;
   return (
     <AuthWrapper>
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <PerformanceOptimizer />
         <PageViewTracker />
         <AnalyticsConsent />
@@ -102,6 +104,7 @@ export default function App() {
         <Route path="/auth/callback" element={<OAuthCallback />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/dashboard/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
+        <Route path="/courses/:courseId/learn" element={<ProtectedRoute><CoursePlayer /></ProtectedRoute>} />
         <Route path="/dashboard/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
         <Route path="/dashboard/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/dashboard/content" element={<ProtectedRoute><ContentCreation /></ProtectedRoute>} />
@@ -115,6 +118,7 @@ export default function App() {
         <Route path="/terms-of-service" element={<TermsOfService />} />
         <Route path="/resources/templates" element={<TemplatesLibrary />} />
         <Route path="/resources/niches" element={<NicheDatabase />} />
+        <Route path="/niches/:nicheId" element={<NicheDetail />} />
         <Route path="/learning-paths" element={<LearningPaths />} />
         <Route path="/learning-paths/:pathId" element={<LearningPathDetail />} />
         <Route path="/platform-guides" element={<PlatformGuides />} />

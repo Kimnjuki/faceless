@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -205,8 +206,10 @@ export default function NicheDatabase() {
                                     </div>
                                   )}
 
-                      <Button className="w-full" size="sm">
-                        View Details
+                      <Button className="w-full" size="sm" asChild>
+                        <Link to={`/niches/${niche.id}`}>
+                          View Details
+                        </Link>
                       </Button>
                     </div>
                   </CardContent>

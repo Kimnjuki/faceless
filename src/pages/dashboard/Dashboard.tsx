@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { BookOpen, Users, TrendingUp, Award, Play, Calendar, DollarSign, Eye, Heart, ArrowUpRight, ArrowDownRight, FileText, Target } from "lucide-react";
+import { BookOpen, Users, TrendingUp, Award, Play, Calendar, DollarSign, Eye, Heart, ArrowUpRight, ArrowDownRight, FileText, Target, Loader2 } from "lucide-react";
 import DashboardLayout from "../../components/DashboardLayout";
 import OnboardingModal from "../../components/OnboardingModal";
 import QuickStartWizard from "../../components/QuickStartWizard";
@@ -9,6 +9,8 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import SEO from "@/components/SEO";
+import { useDashboard } from "@/hooks/useDashboard";
+import { formatDistanceToNow } from "date-fns";
 
 export default function Dashboard() {
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -18,10 +20,16 @@ export default function Dashboard() {
     return !completed;
   });
 
+  const { stats, courses, progress, communityActivity, loading } = useDashboard();
+
   const upcomingEvents = [
     { title: "Live Q&A Session", date: "Jan 25, 2025", time: "2:00 PM EST" },
     { title: "Niche Research Workshop", date: "Jan 28, 2025", time: "3:00 PM EST" }
   ];
+
+  // Get active courses (in progress)
+  const activeCourses = courses.filter((c: any) => c.progressPercentage > 0 && c.progressPercentage < 100);
+  const completedCourses = courses.filter((c: any) => c.progressPercentage >= 100);
 
   return (
     <>
@@ -120,8 +128,16 @@ export default function Dashboard() {
               <BookOpen className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">3</div>
-              <p className="text-xs text-muted-foreground">2 in progress</p>
+              {loading ? (
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              ) : (
+                <>
+                  <div className="text-2xl font-bold">{stats.coursesEnrolled}</div>
+                  <p className="text-xs text-muted-foreground">
+                    {progress.inProgressCourses} in progress
+                  </p>
+                </>
+              )}
             </CardContent>
           </Card>
 
@@ -131,8 +147,16 @@ export default function Dashboard() {
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">67%</div>
-              <p className="text-xs text-muted-foreground">+12% from last month</p>
+              {loading ? (
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              ) : (
+                <>
+                  <div className="text-2xl font-bold">{stats.completionRate}%</div>
+                  <p className="text-xs text-muted-foreground">
+                    {progress.completedCourses} completed
+                  </p>
+                </>
+              )}
             </CardContent>
           </Card>
 
@@ -142,8 +166,16 @@ export default function Dashboard() {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">24</div>
-              <p className="text-xs text-muted-foreground">8 this week</p>
+              {loading ? (
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              ) : (
+                <>
+                  <div className="text-2xl font-bold">{stats.communityPosts}</div>
+                  <p className="text-xs text-muted-foreground">
+                    {communityActivity.length} recent activities
+                  </p>
+                </>
+              )}
             </CardContent>
           </Card>
 
@@ -153,8 +185,14 @@ export default function Dashboard() {
               <Award className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">7</div>
-              <p className="text-xs text-muted-foreground">3 unlocked recently</p>
+              {loading ? (
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              ) : (
+                <>
+                  <div className="text-2xl font-bold">{stats.achievements}</div>
+                  <p className="text-xs text-muted-foreground">Keep learning to unlock more</p>
+                </>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -165,32 +203,39 @@ export default function Dashboard() {
               <CardTitle>Current Course Progress</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium">Faceless Automation Blueprint</span>
-                  <span className="text-sm text-muted-foreground">75%</span>
+              {loading ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                 </div>
-                <Progress value={75} />
-                <Button variant="link" size="sm" className="mt-2 p-0" asChild>
-                  <Link to="/dashboard/courses">
-                    <Play className="h-3 w-3 mr-1" />
-                    Continue Learning
-                  </Link>
-                </Button>
-              </div>
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium">Content Calendar System</span>
-                  <span className="text-sm text-muted-foreground">45%</span>
+              ) : activeCourses.length > 0 ? (
+                activeCourses.slice(0, 3).map((course: any) => (
+                  <div key={course._id}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium">
+                        {course.product?.name || `Course ${course._id}`}
+                      </span>
+                      <span className="text-sm text-muted-foreground">
+                        {Math.round(course.progressPercentage)}%
+                      </span>
+                    </div>
+                    <Progress value={course.progressPercentage} />
+                    <Button variant="link" size="sm" className="mt-2 p-0" asChild>
+                      <Link to={`/dashboard/courses`}>
+                        <Play className="h-3 w-3 mr-1" />
+                        Continue Learning
+                      </Link>
+                    </Button>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  <BookOpen className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  <p className="text-sm">No active courses</p>
+                  <Button variant="outline" size="sm" className="mt-4" asChild>
+                    <Link to="/dashboard/courses">Browse Courses</Link>
+                  </Button>
                 </div>
-                <Progress value={45} />
-                <Button variant="link" size="sm" className="mt-2 p-0" asChild>
-                  <Link to="/dashboard/courses">
-                    <Play className="h-3 w-3 mr-1" />
-                    Resume Course
-                  </Link>
-                </Button>
-              </div>
+              )}
             </CardContent>
           </Card>
 
@@ -274,20 +319,33 @@ export default function Dashboard() {
             <CardTitle>Recent Activity</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3 text-sm">
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-primary" />
-                <span className="text-muted-foreground">Completed lesson: AI Tools Overview</span>
+            {loading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
               </div>
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-primary" />
-                <span className="text-muted-foreground">Posted in Community forum</span>
+            ) : communityActivity.length > 0 ? (
+              <div className="space-y-3 text-sm">
+                {communityActivity.map((activity: any) => (
+                  <div key={activity.id} className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-primary" />
+                    <span className="text-muted-foreground">
+                      {activity.type === "post" ? "Posted: " : "Replied: "}
+                      {activity.title}
+                      {" • "}
+                      {formatDistanceToNow(new Date(activity.createdAt || Date.now()), { addSuffix: true })}
+                    </span>
+                  </div>
+                ))}
               </div>
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-primary" />
-                <span className="text-muted-foreground">Earned "Fast Learner" badge</span>
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <Users className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">No recent activity</p>
+                <Button variant="outline" size="sm" className="mt-4" asChild>
+                  <Link to="/dashboard/community">Join Community</Link>
+                </Button>
               </div>
-            </div>
+            )}
           </CardContent>
         </Card>
       </div>

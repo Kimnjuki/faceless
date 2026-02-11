@@ -425,6 +425,19 @@ export const incrementViews = mutation({
 /**
  * Get related articles/tools for a given article (by tags, category). For RelatedContent component.
  */
+export const clear = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const articles = await ctx.db.query("articles").collect();
+    let deleted = 0;
+    for (const article of articles) {
+      await ctx.db.delete(article._id);
+      deleted++;
+    }
+    return { deleted };
+  },
+});
+
 export const listRelated = query({
   args: {
     slug: v.string(),

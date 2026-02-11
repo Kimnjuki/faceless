@@ -46,7 +46,7 @@ export function initClarity() {
     // Microsoft Clarity tracking code (official implementation)
     // Note: t and y are declared inside the function, not passed as parameters
     (function(c: any, l: any, a: any, r: any, i: any) {
-      c[a] = c[a] || function() { (c[a].q = c[a].q || []).push(arguments) };
+      c[a] = c[a] || function(...args: any[]) { (c[a].q = c[a].q || []).push(args) };
       const t = l.createElement(r);
       t.async = 1;
       t.src = "https://www.clarity.ms/tag/" + i;

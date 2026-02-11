@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,8 +19,11 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { useLearningPaths } from "@/hooks/useLearningPaths";
+import { useLearningPathProgress } from "@/hooks/useLearningPathProgress";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import LearningPathRoadmap from "@/components/LearningPathRoadmap";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const contentTypeIcons: Record<string, any> = {
   video: PlayCircle,
@@ -32,9 +35,12 @@ const contentTypeIcons: Record<string, any> = {
 export default function LearningPathDetail() {
   const { pathId } = useParams();
   const { user } = useAuth();
-  // Removed unused expandedModule state
+  const [viewMode, setViewMode] = useState<"roadmap" | "list">("roadmap");
 
   const { paths, loading, error, refetch, updateProgress } = useLearningPaths({});
+  const pathProgress = useLearningPathProgress(
+    pathId as any
+  );
 
   const path = paths.find((p) => p.id === pathId);
   const modules = path?.modules || [];
@@ -122,6 +128,150 @@ export default function LearningPathDetail() {
     if (!modules.length) return 0;
     const completed = modules.filter((m: any) => m.progress?.completed).length;
     return Math.round((completed / modules.length) * 100);
+  };
+
+  const renderModuleList = () => {
+    // Group modules by level if level information exists
+    const modulesWithLevels = modules.filter((m: any) => m.level_order);
+    const modulesWithoutLevels = modules.filter((m: any) => !m.level_order);
+    
+    const renderModule = (module: any, index: number) => {
+      const IconComponent = contentTypeIcons[module.content_type || 'article'] || FileText;
+      const isCompleted = module.progress?.completed;
+      const isLocked = !module.is_free && !user;
+
+      return (
+        <Card 
+          key={module.id} 
+          className={`transition-all ${
+            isCompleted ? 'border-green-500' : ''
+          } ${isLocked ? 'opacity-60' : 'hover:shadow-md'}`}
+        >
+          <CardHeader>
+            <div className="flex items-start justify-between">
+              <div className="flex items-start gap-4 flex-1">
+                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                  <span className="text-lg font-bold text-primary">{module.order_index || index + 1}</span>
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <IconComponent className="h-4 w-4 text-muted-foreground" />
+                    <Badge variant="outline" className="capitalize text-xs">
+                      {module.content_type || 'article'}
+                    </Badge>
+                    {isLocked && (
+                      <Badge variant="secondary" className="text-xs">
+                        <Lock className="h-3 w-3 mr-1" />
+                        Premium
+                      </Badge>
+                    )}
+                    {isCompleted && (
+                      <Badge className="bg-green-500 text-xs">
+                        <CheckCircle2 className="h-3 w-3 mr-1" />
+                        Completed
+                      </Badge>
+                    )}
+                  </div>
+                  <CardTitle className="text-lg">{module.title}</CardTitle>
+                  {module.description && (
+                    <CardDescription className="mt-1">
+                      {module.description}
+                    </CardDescription>
+                  )}
+                  {module.key_concepts && module.key_concepts.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {module.key_concepts.map((concept: string, i: number) => (
+                        <Badge key={i} variant="secondary" className="text-xs">
+                          {concept}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                {module.duration_minutes && (
+                  <span className="flex items-center gap-1">
+                    <Clock className="h-4 w-4" />
+                    {module.duration_minutes} min
+                  </span>
+                )}
+              </div>
+              <div className="flex gap-2">
+                {!isLocked && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleModuleClick(module);
+                    }}
+                  >
+                    {module.content_url ? 'Open Content' : 'View Module'}
+                  </Button>
+                )}
+                {user && !isCompleted && !isLocked && (
+                  <Button
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleModuleComplete(module);
+                    }}
+                  >
+                    Mark Complete
+                  </Button>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      );
+    };
+    
+    if (modulesWithLevels.length > 0) {
+      // Group by level
+      const levels = Array.from(new Set(modulesWithLevels.map((m: any) => m.level_order))).sort();
+      return (
+        <>
+          {levels.map((levelOrder: number) => {
+            const levelModules = modulesWithLevels.filter((m: any) => m.level_order === levelOrder);
+            const firstModule = levelModules[0];
+            
+            return (
+              <div key={levelOrder} className="space-y-4">
+                <div className="border-l-4 border-l-primary pl-4 py-2 bg-primary/5 rounded-r">
+                  <h3 className="text-xl font-semibold">{firstModule.level_title}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {levelModules.length} module{levelModules.length !== 1 ? 's' : ''}
+                  </p>
+                </div>
+                <div className="space-y-3 pl-4">
+                  {levelModules.map((module: any) => {
+                    const globalIndex = modules.indexOf(module);
+                    return renderModule(module, globalIndex);
+                  })}
+                </div>
+              </div>
+            );
+          })}
+          {modulesWithoutLevels.map((module: any) => {
+            const globalIndex = modules.indexOf(module);
+            return renderModule(module, globalIndex);
+          })}
+        </>
+      );
+    } else {
+      // No level grouping, render all modules
+      return (
+        <>
+          {modules.map((module: any, index: number) => renderModule(module, index))}
+        </>
+      );
+    }
   };
 
   if (loading) {
@@ -253,146 +403,43 @@ export default function LearningPathDetail() {
               )}
             </Card>
 
-            {/* Modules List */}
+            {/* Modules - Roadmap or List View */}
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold mb-4">Modules</h2>
-              {modules.length > 0 ? (
-                (() => {
-                  // Group modules by level if level information exists
-                  const modulesWithLevels = modules.filter((m: any) => m.level_order);
-                  const modulesWithoutLevels = modules.filter((m: any) => !m.level_order);
-                  
-                  const renderModule = (module: any, index: number) => {
-                    const IconComponent = contentTypeIcons[module.content_type || 'article'] || FileText;
-                    const isCompleted = module.progress?.completed;
-                    const isLocked = !module.is_free && !user;
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold">Course Content</h2>
+                <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as "roadmap" | "list")}>
+                  <TabsList>
+                    <TabsTrigger value="roadmap">Roadmap</TabsTrigger>
+                    <TabsTrigger value="list">List</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
 
-                    return (
-                      <Card 
-                        key={module.id} 
-                        className={`transition-all ${
-                          isCompleted ? 'border-green-500' : ''
-                        } ${isLocked ? 'opacity-60' : 'hover:shadow-md'}`}
-                      >
-                        <CardHeader>
-                          <div className="flex items-start justify-between">
-                            <div className="flex items-start gap-4 flex-1">
-                              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                                <span className="text-lg font-bold text-primary">{module.order_index || index + 1}</span>
-                              </div>
-                              <div className="flex-1">
-                                <div className="flex items-center gap-2 mb-2">
-                                  <IconComponent className="h-4 w-4 text-muted-foreground" />
-                                  <Badge variant="outline" className="capitalize text-xs">
-                                    {module.content_type || 'article'}
-                                  </Badge>
-                                  {isLocked && (
-                                    <Badge variant="secondary" className="text-xs">
-                                      <Lock className="h-3 w-3 mr-1" />
-                                      Premium
-                                    </Badge>
-                                  )}
-                                  {isCompleted && (
-                                    <Badge className="bg-green-500 text-xs">
-                                      <CheckCircle2 className="h-3 w-3 mr-1" />
-                                      Completed
-                                    </Badge>
-                                  )}
-                                </div>
-                                <CardTitle className="text-lg">{module.title}</CardTitle>
-                                {module.description && (
-                                  <CardDescription className="mt-1">
-                                    {module.description}
-                                  </CardDescription>
-                                )}
-                                {module.key_concepts && module.key_concepts.length > 0 && (
-                                  <div className="mt-3 flex flex-wrap gap-2">
-                                    {module.key_concepts.map((concept: string, i: number) => (
-                                      <Badge key={i} variant="secondary" className="text-xs">
-                                        {concept}
-                                      </Badge>
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              {module.duration_minutes && (
-                                <span className="flex items-center gap-1">
-                                  <Clock className="h-4 w-4" />
-                                  {module.duration_minutes} min
-                                </span>
-                              )}
-                            </div>
-                            <div className="flex gap-2">
-                              {!isLocked && (
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleModuleClick(module);
-                                  }}
-                                >
-                                  {module.content_url ? 'Open Content' : 'View Module'}
-                                </Button>
-                              )}
-                              {user && !isCompleted && !isLocked && (
-                                <Button
-                                  size="sm"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleModuleComplete(module);
-                                  }}
-                                >
-                                  Mark Complete
-                                </Button>
-                              )}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    );
-                  };
-                  
-                  if (modulesWithLevels.length > 0) {
-                    // Group by level
-                    const levels = Array.from(new Set(modulesWithLevels.map((m: any) => m.level_order))).sort();
-                    return levels.map((levelOrder: number) => {
-                      const levelModules = modulesWithLevels.filter((m: any) => m.level_order === levelOrder);
-                      const firstModule = levelModules[0];
-                      
-                      return (
-                        <div key={levelOrder} className="space-y-4">
-                          <div className="border-l-4 border-l-primary pl-4 py-2 bg-primary/5 rounded-r">
-                            <h3 className="text-xl font-semibold">{firstModule.level_title}</h3>
-                            <p className="text-sm text-muted-foreground">
-                              {levelModules.length} module{levelModules.length !== 1 ? 's' : ''}
-                            </p>
-                          </div>
-                          <div className="space-y-3 pl-4">
-                            {levelModules.map((module: any) => {
-                              const globalIndex = modules.indexOf(module);
-                              return renderModule(module, globalIndex);
-                            })}
-                          </div>
-                        </div>
-                      );
-                    }).concat(
-                      modulesWithoutLevels.map((module: any) => {
-                        const globalIndex = modules.indexOf(module);
-                        return renderModule(module, globalIndex);
-                      })
-                    );
-                  } else {
-                    // No level grouping, render all modules
-                    return modules.map((module: any, index: number) => renderModule(module, index));
-                  }
-                })()
+              {modules.length > 0 ? (
+                <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as "roadmap" | "list")}>
+                  <TabsContent value="roadmap" className="mt-6">
+                    <LearningPathRoadmap
+                      modules={modules.map((m: any) => ({
+                        ...m,
+                        _id: m._id || m.id || "",
+                        orderIndex: m.order_index ?? m.orderIndex ?? 0,
+                        contentType: m.content_type ?? m.contentType,
+                        durationMinutes: m.duration_minutes ?? m.durationMinutes,
+                        isFree: m.is_free ?? true,
+                      }))}
+                      progress={pathProgress.progress ? {
+                        overallProgress: pathProgress.progress.overallProgress,
+                        modules: pathProgress.progress.modules,
+                      } : undefined}
+                      isLocked={(module) => !module.isFree && !user}
+                    />
+                  </TabsContent>
+                  <TabsContent value="list" className="mt-6">
+                    <div className="space-y-4">
+                      {renderModuleList()}
+                    </div>
+                  </TabsContent>
+                </Tabs>
               ) : (
                 <Card>
                   <CardContent className="py-8 text-center text-muted-foreground">

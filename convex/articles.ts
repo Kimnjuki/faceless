@@ -147,8 +147,20 @@ export const list = query({
           .withIndex("by_article", (q) => q.eq("articleId", article._id))
           .collect();
         
+        // Parse JSON content if it's a string
+        let parsedContent = article.content;
+        if (typeof article.content === 'string') {
+          try {
+            parsedContent = JSON.parse(article.content);
+          } catch (e) {
+            console.warn('Failed to parse article content as JSON:', article._id, e);
+            // Keep original content if parsing fails
+          }
+        }
+        
         return {
           ...article,
+          content: parsedContent,
           category: category ? { id: category._id, name: category.name, slug: category.slug, description: category.description } : null,
           author: author ? { id: author._id, user_id: author.userId, full_name: author.fullName, avatar_url: author.avatarUrl } : null,
           tags: tags.map((t) => t.tag),
@@ -341,8 +353,20 @@ export const getBySlug = query({
               .query("article_tags")
               .withIndex("by_article", (q) => q.eq("articleId", article._id))
               .collect();
+            // Parse JSON content if it's a string
+            let parsedContent = article.content;
+            if (typeof article.content === 'string') {
+              try {
+                parsedContent = JSON.parse(article.content);
+              } catch (e) {
+                console.warn('Failed to parse article content as JSON:', article._id, e);
+                // Keep original content if parsing fails
+              }
+            }
+            
             return {
               ...article,
+              content: parsedContent,
               category: category ? { id: category._id, name: category.name, slug: category.slug, description: category.description } : null,
               author: author ? { id: author._id, user_id: author.userId, full_name: author.fullName, avatar_url: author.avatarUrl } : null,
               tags: tags.map((t) => t.tag),
@@ -394,8 +418,20 @@ export const getBySlug = query({
       .withIndex("by_article", (q) => q.eq("articleId", article._id))
       .collect();
     
+    // Parse JSON content if it's a string
+    let parsedContent = article.content;
+    if (typeof article.content === 'string') {
+      try {
+        parsedContent = JSON.parse(article.content);
+      } catch (e) {
+        console.warn('Failed to parse article content as JSON:', article._id, e);
+        // Keep original content if parsing fails
+      }
+    }
+    
     return {
       ...article,
+      content: parsedContent,
       category: category ? { id: category._id, name: category.name, slug: category.slug, description: category.description } : null,
       author: author ? { id: author._id, user_id: author.userId, full_name: author.fullName, avatar_url: author.avatarUrl } : null,
       tags: tags.map((t) => t.tag),

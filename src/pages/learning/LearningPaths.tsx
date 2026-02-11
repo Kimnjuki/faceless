@@ -385,7 +385,7 @@ export default function LearningPaths() {
                                 {isExpanded && path.modules && (
                                   <div className="mt-2 p-3 bg-muted/50 rounded-lg max-h-48 overflow-y-auto">
                                     <ul className="space-y-1 text-xs">
-                                      {path.modules.slice(0, 5).map((module, idx) => (
+                                      {path.modules.slice(0, 5).map((module: any, idx: number) => (
                                         <li key={module.id || module._id || idx} className="flex items-center gap-2">
                                           <CheckCircle2 className="h-3 w-3 text-muted-foreground" />
                                           <span>{module.title || `Module ${idx + 1}`}</span>

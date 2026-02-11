@@ -10,6 +10,18 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  // Fallback environment variables for Coolify deployment
+  // These will be used if environment variables are not available at build time
+  define: {
+    // Fallback Convex URL for production
+    'import.meta.env.VITE_CONVEX_URL': JSON.stringify(
+      process.env.VITE_CONVEX_URL || 'https://fabulous-roadrunner-783.convex.cloud'
+    ),
+    // Fallback Clarity Project ID
+    'import.meta.env.VITE_CLARITY_PROJECT_ID': JSON.stringify(
+      process.env.VITE_CLARITY_PROJECT_ID || 'vd7rgy7tu7'
+    ),
+  },
   build: {
     // Output directory (must match vercel.json distDir)
     outDir: 'dist',

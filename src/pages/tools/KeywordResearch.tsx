@@ -118,6 +118,8 @@ export default function KeywordResearch() {
               
               <div className="flex gap-4 max-w-2xl mx-auto mb-8">
                 <Input
+                  id="keyword-query"
+                  name="query"
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}

@@ -103,6 +103,8 @@ export default function BacklinkChecker() {
               
               <div className="flex gap-4 max-w-2xl mx-auto mb-8">
                 <Input
+                  id="backlink-url"
+                  name="url"
                   type="text"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}

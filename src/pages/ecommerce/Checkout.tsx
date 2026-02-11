@@ -52,16 +52,16 @@ export default function Checkout() {
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="card">Card Number</Label>
-                    <Input id="card" placeholder="1234 5678 9012 3456" />
+                    <Input id="card" name="card" placeholder="1234 5678 9012 3456" autoComplete="cc-number" />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="expiry">Expiry</Label>
-                      <Input id="expiry" placeholder="MM/YY" />
+                      <Input id="expiry" name="expiry" placeholder="MM/YY" autoComplete="cc-exp" />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="cvc">CVC</Label>
-                      <Input id="cvc" placeholder="123" />
+                      <Input id="cvc" name="cvc" placeholder="123" autoComplete="cc-csc" />
                     </div>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">

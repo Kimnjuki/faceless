@@ -123,6 +123,8 @@ export default function SEOAudit() {
               
               <div className="flex gap-4 max-w-2xl mx-auto">
                 <input
+                  id="seo-url"
+                  name="url"
                   type="text"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}

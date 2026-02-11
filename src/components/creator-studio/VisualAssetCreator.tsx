@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Image, Download, Search, Sparkles, Palette } from "lucide-react";
+import { Download, Upload, Wand2, Image as ImageIcon, Sparkles, Palette, RefreshCw, Settings, Loader2, Search } from "lucide-react";
+import { getRandomImage } from "@/utils/contentImages";
 import { toast } from "sonner";
 
 export default function VisualAssetCreator() {
@@ -124,10 +126,16 @@ export default function VisualAssetCreator() {
 
               {generatedImage && (
                 <div className="border rounded-lg p-4">
-                  <div className="aspect-video bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center mb-4 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-black/10"></div>
-                    <div className="relative z-10 text-white text-center p-4">
-                      <Image className="h-12 w-12 mx-auto mb-2" />
+                  <div className="aspect-video relative overflow-hidden">
+                    <img 
+                      src={getRandomImage('technology')}
+                      alt="Generated AI visual asset"
+                      className="w-full h-full object-cover"
+                      style={{ aspectRatio: '16/9' }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                    <div className="absolute bottom-4 left-4 text-white">
+                      <ImageIcon className="h-8 w-8 mb-1" />
                       <p className="text-sm font-medium">Generated Asset</p>
                     </div>
                   </div>

@@ -1,14 +1,7 @@
 import { useState } from "react";
+import { getRandomImage } from "../utils/contentImages";
 
 const DEFAULT_PLACEHOLDER = "/images/default-article-placeholder.svg";
-
-// Content creation themed placeholders
-const CONTENT_PLACEHOLDERS = [
-  "/images/content-creation-placeholder.svg",
-  "/images/faceless-strategy-placeholder.svg", 
-  "/images/monetization-placeholder.svg",
-  "/images/default-article-placeholder.svg"
-];
 
 interface ArticleImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src"> {
   src?: string | null;
@@ -20,13 +13,13 @@ interface ArticleImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElemen
 
 /**
  * Article featured image with fallback for broken URLs.
- * Uses lazy loading by default. Falls back to placeholder on error.
+ * Uses real content creation images as fallbacks.
  * Prevents CLS by setting explicit dimensions.
  */
 export default function ArticleImage({
   src,
   alt,
-  fallback = DEFAULT_PLACEHOLDER,
+  fallback,
   loading = "lazy",
   className = "",
   ...props
@@ -34,8 +27,8 @@ export default function ArticleImage({
   const [error, setError] = useState(false);
   const [loaded, setLoaded] = useState(false);
   
-  // Use random themed placeholder for better visual variety
-  const effectiveFallback = CONTENT_PLACEHOLDERS[Math.floor(Math.random() * CONTENT_PLACEHOLDERS.length)];
+  // Use real content creation images as fallbacks
+  const effectiveFallback = fallback || getRandomImage('workspace');
   const effectiveSrc = error || !src ? effectiveFallback : src;
 
   return (

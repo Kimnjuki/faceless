@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import PersonalityQuiz from "@/components/PersonalityQuiz";
 import InteractiveJourneyMap from "@/components/InteractiveJourneyMap";
+import { getRandomImage } from "@/utils/contentImages";
 
 export default function StartHere() {
   const [showQuiz, setShowQuiz] = useState(false);
@@ -199,15 +200,16 @@ export default function StartHere() {
                   ×
                 </Button>
               </div>
-              <div className="aspect-video bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-black/20"></div>
-                <div className="relative z-10 text-center text-white p-8">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">
-                    <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z"/>
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold mb-2">Welcome to ContentAnonymity</h3>
+              <div className="aspect-video relative overflow-hidden rounded-lg">
+                <img 
+                  src={getRandomImage('contentCreator')}
+                  alt="Content creation workspace with laptop and setup"
+                  className="w-full h-full object-cover"
+                  style={{ aspectRatio: '16/9' }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-center">
+                  <h3 className="text-xl font-bold mb-2 text-white">Welcome to ContentAnonymity</h3>
                   <p className="text-white/90 max-w-md">Discover how to build profitable faceless content businesses without showing your face</p>
                 </div>
               </div>

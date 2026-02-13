@@ -1,10 +1,27 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { getImage, IMAGES } from '@/config/images';
 
+// Define allowed keys for IMAGES object
+type ImageCategoryKey = 
+  | 'hero' 
+  | 'aiTools' 
+  | 'privacy' 
+  | 'contentCreation' 
+  | 'monetization' 
+  | 'learning' 
+  | 'tools' 
+  | 'community' 
+  | 'learningPaths' 
+  | 'backgrounds' 
+  | 'fallbacks';
+
+// Define allowed keys for fallbacks
+type FallbackKey = 'default' | 'error' | 'loading';
+
 interface OptimizedImageProps {
   src: string;
   alt: string;
-  category?: string;
+  category?: ImageCategoryKey;
   key?: string;
   width?: number;
   height?: number;
@@ -12,8 +29,8 @@ interface OptimizedImageProps {
   loading?: 'lazy' | 'eager';
   sizes?: string;
   priority?: boolean;
-  fallbackCategory?: string;
-  fallbackKey?: string;
+  fallbackCategory?: ImageCategoryKey;
+  fallbackKey?: FallbackKey;
   onError?: (error: React.SyntheticEvent<HTMLImageElement, Event>) => void;
   onLoad?: (event: React.SyntheticEvent<HTMLImageElement, Event>) => void;
 }
@@ -51,7 +68,7 @@ export default function OptimizedImage({
 
   // Get fallback image if category and key are provided
   const fallbackSrc = category && imageKey 
-    ? (IMAGES as any)[category]?.[imageKey] || IMAGES.fallbacks[fallbackKey]
+    ? IMAGES[category]?.[imageKey as keyof typeof IMAGES[typeof category]] || IMAGES.fallbacks[fallbackKey]
     : IMAGES.fallbacks[fallbackKey];
 
   // Handle image error

@@ -4,7 +4,7 @@ import { getImage, IMAGES } from '@/config/images';
 interface OptimizedImageProps {
   src: string;
   alt: string;
-  category?: string;
+  category?: keyof typeof IMAGES;
   key?: string;
   width?: number;
   height?: number;
@@ -12,11 +12,16 @@ interface OptimizedImageProps {
   loading?: 'lazy' | 'eager';
   sizes?: string;
   priority?: boolean;
-  fallbackCategory?: string;
+  fallbackCategory?: keyof typeof IMAGES;
   fallbackKey?: string;
   onError?: (error: React.SyntheticEvent<HTMLImageElement, Event>) => void;
   onLoad?: (event: React.SyntheticEvent<HTMLImageElement, Event>) => void;
 }
+
+// Helper type for nested image objects
+type ImageCategory = {
+  [key: string]: string;
+};
 
 /**
  * OptimizedImage Component
@@ -51,7 +56,7 @@ export default function OptimizedImage({
 
   // Get fallback image if category and key are provided
   const fallbackSrc = category && imageKey 
-    ? getImage(category, imageKey) 
+    ? (IMAGES[category] as ImageCategory)?.[imageKey] || IMAGES.fallbacks[fallbackKey]
     : IMAGES.fallbacks[fallbackKey];
 
   // Handle image error

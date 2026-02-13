@@ -10,6 +10,7 @@ import { initGoogleAnalytics } from './utils/analytics'
 import { initGA4 } from './utils/ga4'
 import { initClarity } from './utils/clarity'
 import { initGoogleAdManager, initPrebid } from './utils/adManager'
+import { setupPageVisibilityTracking, setupCoreWebVitalsTracking } from './utils/performanceOptimization'
 import './index.css'
 
 // Initialize Convex client with error handling
@@ -98,16 +99,39 @@ try {
 }
 
 try {
-  // Initialize Microsoft Clarity (heatmaps and session recordings)
   initClarity();
 } catch (error) {
-  console.warn('Failed to initialize Clarity:', error);
+  console.warn('Failed to initialize Microsoft Clarity:', error);
 }
 
-// Initialize Web Vitals monitoring (only in production)
-if (import.meta.env.PROD) {
-  // This will be called when App mounts
-  // We'll initialize it in App.tsx component
+// Initialize performance tracking
+try {
+  if (typeof window !== 'undefined') {
+    // Setup page visibility tracking
+    const cleanupVisibilityTracking = setupPageVisibilityTracking(window.location.pathname);
+    
+    // Setup Core Web Vitals tracking
+    const cleanupCoreWebVitals = setupCoreWebVitalsTracking();
+    
+    // Track initial page performance after load
+    if (document.readyState === 'complete') {
+      const { trackPagePerformance } = require('./utils/performanceOptimization');
+      trackPagePerformance(window.location.pathname);
+    } else {
+      window.addEventListener('load', () => {
+        const { trackPagePerformance } = require('./utils/performanceOptimization');
+        trackPagePerformance(window.location.pathname);
+      });
+    }
+    
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      cleanupVisibilityTracking?.();
+      cleanupCoreWebVitals?.();
+    });
+  }
+} catch (error) {
+  console.warn('Failed to initialize performance tracking:', error);
 }
 
 // Initialize Ad Manager and Prebid.js

@@ -10,6 +10,8 @@ import {
   trackContentInteraction
 } from '@/utils/contentRecommendations';
 import { trackEvent } from '@/utils/analytics';
+import OptimizedImage from '@/components/OptimizedImage';
+import { IMAGES } from '@/config/images';
 
 // Content item interface (matching the one in contentRecommendations.ts)
 interface ContentItem {

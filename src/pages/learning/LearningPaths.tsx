@@ -28,6 +28,7 @@ import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { getRandomImage, getLearningPathImages } from "@/utils/contentImages";
 import { useLearningPaths } from "@/hooks/useLearningPaths";
+import { IMAGES } from "@/config/images";
 import { useAuth } from "@/contexts/AuthContext";
 import PathComparator from "@/components/PathComparator";
 import DataStateMessage from "@/components/DataStateMessage";
@@ -294,7 +295,7 @@ export default function LearningPaths() {
                     const isSelectedForComparison = pathId ? selectedForComparison.includes(pathId) : false;
                     const isExpanded = expandedPath === pathId;
                     // Use diverse image for this learning path
-                    const pathImage = learningPathImages[index] || getRandomImage('workspace');
+                    const pathImage = learningPathImages[index] || getRandomImage('learningPaths');
 
                     return (
                       <Card 

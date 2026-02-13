@@ -2,13 +2,25 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Play, Shield, Zap, Users, TrendingUp, CheckCircle2 } from "lucide-react";
 import { trackButtonClick } from "@/utils/analytics";
+import OptimizedImage from "@/components/OptimizedImage";
+import { IMAGES } from "@/config/images";
 
 export default function Hero() {
   return (
     <section className="relative py-20 md:py-32 overflow-hidden min-h-[600px] md:min-h-[700px]" style={{ containIntrinsicSize: '600px 700px' }}>
-      {/* Modern gradient background with animated blur */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-purple-500/5 via-background to-background" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(139,92,246,0.1),transparent_50%)] animate-pulse-slow" />
+      {/* Hero Background Image */}
+      <div className="absolute inset-0">
+        <OptimizedImage
+          src={IMAGES.hero.facelessEmpire}
+          alt="Faceless content creator workspace with modern laptop setup"
+          category="hero"
+          key="facelessEmpire"
+          className="w-full h-full object-cover"
+          loading="eager"
+          priority={true}
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/80 via-purple-500/60 to-background" />
+      </div>
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-5xl mx-auto">
@@ -98,7 +110,7 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Key Selling Points - Modern Cards */}
+          {/* Key Selling Points - Modern Cards with Images */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-20">
             <div className="flex flex-col items-center text-center p-8 rounded-2xl glass border border-primary/10 hover-lift transition-all duration-300 group">
               <div className="h-14 w-14 rounded-2xl gradient-primary flex items-center justify-center mb-5 shadow-glow group-hover:scale-110 transition-transform duration-300">
@@ -109,24 +121,54 @@ export default function Hero() {
             </div>
 
             <div className="flex flex-col items-center text-center p-8 rounded-2xl glass border border-primary/10 hover-lift transition-all duration-300 group">
-              <div className="h-14 w-14 rounded-2xl gradient-primary flex items-center justify-center mb-5 shadow-glow group-hover:scale-110 transition-transform duration-300">
-                <Zap className="h-7 w-7 text-white" />
+              <div className="relative h-14 w-14 rounded-2xl overflow-hidden mb-5 shadow-glow group-hover:scale-110 transition-transform duration-300">
+                <OptimizedImage
+                  src={IMAGES.aiTools.automation}
+                  alt="AI automation tools for content creation"
+                  category="aiTools"
+                  key="automation"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/40 flex items-center justify-center">
+                  <Zap className="h-7 w-7 text-white" />
+                </div>
               </div>
               <h3 className="font-bold text-lg mb-3 gradient-text">Create 30 Days of Content in 2 Hours</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">AI-powered automation for faceless videos and posts</p>
             </div>
 
             <div className="flex flex-col items-center text-center p-8 rounded-2xl glass border border-primary/10 hover-lift transition-all duration-300 group">
-              <div className="h-14 w-14 rounded-2xl gradient-primary flex items-center justify-center mb-5 shadow-glow group-hover:scale-110 transition-transform duration-300">
-                <TrendingUp className="h-7 w-7 text-white" />
+              <div className="relative h-14 w-14 rounded-2xl overflow-hidden mb-5 shadow-glow group-hover:scale-110 transition-transform duration-300">
+                <OptimizedImage
+                  src={IMAGES.monetization.finance}
+                  alt="Monetization strategies for faceless creators"
+                  category="monetization"
+                  key="finance"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/40 flex items-center justify-center">
+                  <TrendingUp className="h-7 w-7 text-white" />
+                </div>
               </div>
               <h3 className="font-bold text-lg mb-3 gradient-text">$5K–$15K/Month Within 6–12 Months</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">Proven monetization strategies that actually work</p>
             </div>
 
             <div className="flex flex-col items-center text-center p-8 rounded-2xl glass border border-primary/10 hover-lift transition-all duration-300 group">
-              <div className="h-14 w-14 rounded-2xl gradient-primary flex items-center justify-center mb-5 shadow-glow group-hover:scale-110 transition-transform duration-300">
-                <Users className="h-7 w-7 text-white" />
+              <div className="relative h-14 w-14 rounded-2xl overflow-hidden mb-5 shadow-glow group-hover:scale-110 transition-transform duration-300">
+                <OptimizedImage
+                  src={IMAGES.community.networking}
+                  alt="Creator community networking and support"
+                  category="community"
+                  key="networking"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/40 flex items-center justify-center">
+                  <Users className="h-7 w-7 text-white" />
+                </div>
               </div>
               <h3 className="font-bold text-lg mb-3 gradient-text">10,000+ Creator Community</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">Learn from successful faceless creators</p>

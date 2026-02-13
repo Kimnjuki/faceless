@@ -98,8 +98,10 @@ export default function OptimizedImage({
       community: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)'
     };
     
+    const gradient = category && gradients[category] ? gradients[category] : gradients.hero;
+    
     return {
-      background: gradients[category] || gradients.hero,
+      background: gradient,
       minHeight: height || 200,
       display: 'flex',
       alignItems: 'center',

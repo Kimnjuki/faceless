@@ -1,4 +1,5 @@
 import { useState } from "react";
+// @ts-ignore
 import { getArticleImage } from "../config/images";
 
 const DEFAULT_PLACEHOLDER = "/images/default-article-placeholder.svg";

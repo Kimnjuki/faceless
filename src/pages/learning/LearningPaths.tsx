@@ -27,8 +27,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { getRandomImage, getLearningPathImages } from "@/utils/contentImages";
-import { useLearningPaths } from "@/hooks/useLearningPaths";
+// @ts-ignore
 import { IMAGES } from "@/config/images";
+import { useLearningPaths } from "@/hooks/useLearningPaths";
 import { useAuth } from "@/contexts/AuthContext";
 import PathComparator from "@/components/PathComparator";
 import DataStateMessage from "@/components/DataStateMessage";

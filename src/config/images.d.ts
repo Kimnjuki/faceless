@@ -70,5 +70,8 @@ declare module '@/config/images' {
   export function getImage(category: string, key: string): string;
   export function getRandomImage(category: string): string;
   export function getLearningPathImages(pathCount: number): string[];
+  export declare const getArticleImage: (category?: string) => string;
+  export declare const getSpecificArticleImage: (key: string) => string;
+  export declare const getArticleImagesArray: (count?: number, category?: string | null) => string[];
   export default IMAGES;
 }

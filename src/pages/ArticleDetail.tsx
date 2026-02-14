@@ -97,6 +97,32 @@ export default function ArticleDetail() {
     );
   }
 
+  // Map article category to image category for better visual diversity
+  const getImageCategory = (articleCategory?: string): 'writing' | 'faceless' | 'ai' | 'monetization' | 'social' | 'productivity' | 'privacy' | 'blogging' | 'multimedia' => {
+    if (!articleCategory) return 'writing';
+    
+    const categoryMap: Record<string, 'writing' | 'faceless' | 'ai' | 'monetization' | 'social' | 'productivity' | 'privacy' | 'blogging' | 'multimedia'> = {
+      'content-creation': 'writing',
+      'faceless-content': 'faceless',
+      'ai-automation': 'ai',
+      'monetization': 'monetization',
+      'social-media': 'social',
+      'productivity': 'productivity',
+      'privacy': 'privacy',
+      'blogging': 'blogging',
+      'multimedia': 'multimedia',
+      'writing': 'writing',
+      'anonymous': 'faceless',
+      'automation': 'ai',
+      'marketing': 'monetization',
+      'community': 'social',
+      'tools': 'productivity',
+      'security': 'privacy'
+    };
+    
+    return categoryMap[articleCategory.toLowerCase()] || 'writing';
+  };
+
   if (error || !article) {
     return (
       <>
@@ -117,6 +143,7 @@ export default function ArticleDetail() {
   const canonicalUrl = article.canonical_url || `https://contentanonymity.com/blog/${article.slug}`;
   const authorName = article.author?.full_name ?? article.author?.fullName ?? 'ContentAnonymity Team';
   const uniqueTitle = article.seo_title || article.title || `${article.slug} - Article | ContentAnonymity`;
+  const imageCategory = getImageCategory(article.category?.name);
 
   return (
     <>
@@ -165,7 +192,9 @@ export default function ArticleDetail() {
           <ArticleImage
             src={article.featured_image}
             alt={`${article.title} - Featured image`}
+            category={imageCategory}
             loading="eager"
+            priority={true}
             className="w-full h-full object-cover"
           />
             <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/50 to-transparent" />

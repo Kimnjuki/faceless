@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getRandomImage } from "../utils/contentImages";
+import { getArticleImage } from "../config/images";
 
 const DEFAULT_PLACEHOLDER = "/images/default-article-placeholder.svg";
 
@@ -7,28 +7,33 @@ interface ArticleImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElemen
   src?: string | null;
   alt: string;
   fallback?: string;
+  category?: 'writing' | 'faceless' | 'ai' | 'monetization' | 'social' | 'productivity' | 'privacy' | 'blogging' | 'multimedia';
   loading?: "lazy" | "eager";
   className?: string;
+  priority?: boolean;
 }
 
 /**
  * Article featured image with fallback for broken URLs.
  * Uses real content creation images as fallbacks.
  * Prevents CLS by setting explicit dimensions.
+ * Enhanced with free live content creation themed photos.
  */
 export default function ArticleImage({
   src,
   alt,
   fallback,
+  category = 'writing',
   loading = "lazy",
   className = "",
+  priority = false,
   ...props
 }: ArticleImageProps) {
   const [error, setError] = useState(false);
   const [loaded, setLoaded] = useState(false);
   
   // Use real content creation images as fallbacks
-  const effectiveFallback = fallback || getRandomImage('workspace');
+  const effectiveFallback = fallback || getArticleImage(category);
   const effectiveSrc = error || !src ? effectiveFallback : src;
 
   return (
@@ -36,7 +41,7 @@ export default function ArticleImage({
       <img
         src={effectiveSrc}
         alt={alt}
-        loading={loading}
+        loading={priority ? 'eager' : loading}
         decoding="async"
         onError={() => setError(true)}
         onLoad={() => setLoaded(true)}

@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import ArticleImage from "@/components/ArticleImage";
 
 /**
- * ArticleGrid – Shadow-Identity / Faceless Cyber-Minimalism design.
+ * ArticleGrid – Enhanced with free live content creation themed images.
  * Bento-box grid, anonymized avatars (geometric shapes), scan-line texture on images,
- * prominent read time and view count badges.
+ * prominent read time and view count badges, and diverse content creation imagery.
  */
 export default function ArticleGrid() {
   const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
@@ -16,6 +16,32 @@ export default function ArticleGrid() {
     api.articles.getLatestArticles,
     hasConvex ? { limit: 24 } : "skip"
   );
+
+  // Map article categories to image categories for better visual diversity
+  const getImageCategory = (articleCategory?: string): 'writing' | 'faceless' | 'ai' | 'monetization' | 'social' | 'productivity' | 'privacy' | 'blogging' | 'multimedia' => {
+    if (!articleCategory) return 'writing';
+    
+    const categoryMap: Record<string, 'writing' | 'faceless' | 'ai' | 'monetization' | 'social' | 'productivity' | 'privacy' | 'blogging' | 'multimedia'> = {
+      'content-creation': 'writing',
+      'faceless-content': 'faceless',
+      'ai-automation': 'ai',
+      'monetization': 'monetization',
+      'social-media': 'social',
+      'productivity': 'productivity',
+      'privacy': 'privacy',
+      'blogging': 'blogging',
+      'multimedia': 'multimedia',
+      'writing': 'writing',
+      'anonymous': 'faceless',
+      'automation': 'ai',
+      'marketing': 'monetization',
+      'community': 'social',
+      'tools': 'productivity',
+      'security': 'privacy'
+    };
+    
+    return categoryMap[articleCategory.toLowerCase()] || 'writing';
+  };
 
   if (articles === undefined) {
     return (
@@ -55,6 +81,8 @@ export default function ArticleGrid() {
             const gridClass = isFeatured
               ? "md:col-span-2 md:row-span-2"
               : "md:col-span-1 md:row-span-1";
+            
+            const imageCategory = getImageCategory(article.category?.name);
 
             return (
               <Link
@@ -66,29 +94,31 @@ export default function ArticleGrid() {
                   className="h-full rounded-lg border border-cyber-neon/20 bg-[#0a0a0a] overflow-hidden hover:border-cyber-neon/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,255,65,0.15)]"
                   style={{ fontFamily: "Inter, system-ui, sans-serif" }}
                 >
-                  {/* Image with scan-line overlay */}
+                  {/* Enhanced Image with scan-line overlay and themed content creation photos */}
                   <div className="relative aspect-video overflow-hidden bg-[#0d0d0d]">
                     <ArticleImage
-                          src={article.featuredImage}
-                          alt=""
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading={index < 4 ? "eager" : "lazy"}
-                        />
-                        {/* Scan-line texture overlay */}
-                        <div
-                          className="absolute inset-0 pointer-events-none opacity-[0.03]"
-                          style={{
-                            backgroundImage:
-                              "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,65,0.1) 2px, rgba(0,255,65,0.1) 4px)",
-                          }}
-                        />
-                        {/* Noise overlay */}
-                        <div
-                          className="absolute inset-0 pointer-events-none opacity-30 mix-blend-overlay"
-                          style={{
-                            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-                          }}
-                        />
+                      src={article.featuredImage}
+                      alt={article.title || "Article featured image"}
+                      category={imageCategory}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading={index < 4 ? "eager" : "lazy"}
+                      priority={index < 2}
+                    />
+                    {/* Scan-line texture overlay */}
+                    <div
+                      className="absolute inset-0 pointer-events-none opacity-[0.03]"
+                      style={{
+                        backgroundImage:
+                          "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,65,0.1) 2px, rgba(0,255,65,0.1) 4px)",
+                      }}
+                    />
+                    {/* Noise overlay */}
+                    <div
+                      className="absolute inset-0 pointer-events-none opacity-30 mix-blend-overlay"
+                      style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+                      }}
+                    />
                     {/* Read time & view count badges */}
                     <div className="absolute bottom-2 left-2 right-2 flex flex-wrap gap-2">
                       {article.readTime != null && (

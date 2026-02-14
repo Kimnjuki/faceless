@@ -3,7 +3,6 @@ import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Clock, Eye, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-// @ts-ignore
 import ArticleImage from "@/components/ArticleImage";
 
 /**

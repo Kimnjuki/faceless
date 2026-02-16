@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sparkles, ArrowRight, Check } from "lucide-react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { trackToolUsage } from "@/utils/analytics";
 
 const questions = [
   {
@@ -36,6 +37,10 @@ const recommendations = {
 
 export default function NicheQuiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
+
+  useEffect(() => {
+    trackToolUsage('Niche Quiz', 'tools');
+  }, []);
   const [answers, setAnswers] = useState<string[]>([]);
   const [showResults, setShowResults] = useState(false);
 

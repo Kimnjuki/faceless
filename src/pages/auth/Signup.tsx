@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,14 +10,22 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
 import { signupSchema, type SignupFormData } from "@/lib/validations";
 import { handleError } from "@/lib/error-handler";
-import { trackSignup, trackFormSubmit } from "@/utils/analytics";
+import { trackSignup, trackSignupStart, trackFormSubmit } from "@/utils/analytics";
 import SEO from "@/components/SEO";
 
 export default function Signup() {
   const navigate = useNavigate();
   const { signUp, signInWithGoogle } = useAuth();
   const [step, setStep] = useState(1);
+  const [signupStartTracked, setSignupStartTracked] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!signupStartTracked) {
+      trackSignupStart('signup-page');
+      setSignupStartTracked(true);
+    }
+  }, [signupStartTracked]);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",

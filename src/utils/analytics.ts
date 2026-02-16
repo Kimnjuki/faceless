@@ -1,14 +1,14 @@
 /**
- * Google Analytics and Event Tracking
- * Privacy-compliant analytics implementation with advanced GA4 features
- * Integrates with Microsoft Clarity for enhanced user behavior tracking
- * Includes scroll depth, engagement tracking, and traffic acquisition analysis
+ * Google Analytics 4 - Event Tracking & Key Events (Conversions)
+ * Privacy-compliant analytics with GA4 recommended event names.
+ * Mark events as "Key events" in GA4 Admin → Data display → Events to track conversions.
+ * Integrates with Microsoft Clarity for enhanced user behavior tracking.
  */
 
 import { trackClarityEvent, upgradeClaritySession, setClarityMetadata } from './clarity';
 
-// Google Analytics ID
-const GA_MEASUREMENT_ID = 'G-VGB9R02TVY';
+// GA4 Measurement ID - from env (VITE_GA_MEASUREMENT_ID) or fallback
+const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-VGB9R02TVY';
 
 // Engagement tracking state
 let scrollDepthTracked = { 25: false, 50: false, 75: false, 90: false };
@@ -23,6 +23,19 @@ export function isAnalyticsEnabled(): boolean {
   return consent === 'true';
 }
 
+// Load gtag script dynamically (uses env ID, only when consent given)
+function loadGtagScript() {
+  if (typeof window === 'undefined' || document.querySelector(`script[src*="gtag/js?id=${GA_MEASUREMENT_ID}"]`)) return;
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+  script.onerror = () => console.warn('GA4 script failed to load');
+  document.head.appendChild(script);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function gtag(...args: unknown[]) { window.dataLayer!.push(args); };
+  window.gtag('js', new Date());
+}
+
 // Initialize Google Analytics with enhanced configuration
 export function initGoogleAnalytics() {
   if (typeof window === 'undefined') return;
@@ -32,8 +45,8 @@ export function initGoogleAnalytics() {
     return;
   }
 
-  // gtag.js is already loaded in index.html
-  // Configure with enhanced measurement and privacy settings
+  loadGtagScript();
+  // Config runs after script loads (gtag queues commands if script not ready)
   if (typeof window !== 'undefined' && window.gtag) {
     const gtag = window.gtag;
     gtag('config', GA_MEASUREMENT_ID, {
@@ -405,17 +418,23 @@ export function trackConversion(
   });
 }
 
-// Track user signups with enhanced attribution
+// Track user signups - GA4 recommended 'sign_up' (mark as Key event in GA4 Admin → Events)
 export function trackSignup(method: 'email' | 'google' = 'email', source?: string) {
   trackEvent('sign_up', 'engagement', method, undefined, {
     signup_method: method,
     signup_source: source || 'direct',
     session_duration: Date.now() - sessionStartTime,
   });
-  
-  // Track in Clarity
   trackClarityEvent('signup', { method, source });
   upgradeClaritySession('signup_completed');
+}
+
+// Track signup start - GA4 conversion funnel (mark as Key event for funnel analysis)
+export function trackSignupStart(source?: string) {
+  if (isAnalyticsEnabled() && typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', 'sign_up', { method: 'start', signup_source: source || 'direct' });
+  }
+  trackEvent('signup_start', 'conversion', source || 'direct');
 }
 
 // Track content views with enhanced metrics
@@ -436,16 +455,29 @@ export function trackContentView(contentType: string, contentId: string, content
   }
 }
 
-// Track button clicks with enhanced context
+// Track button clicks - use 'cta_click' for key CTAs (mark as Key event for conversion tracking)
 export function trackButtonClick(buttonName: string, location: string, context?: Record<string, any>) {
-  trackEvent('click', 'button', `${buttonName}_${location}`, undefined, {
+  const isKeyCTA = ['start-journey', 'get-free-tips', 'complete-purchase', 'signup'].some(
+    (k) => buttonName.toLowerCase().includes(k) || location.toLowerCase().includes('hero')
+  );
+  const eventName = isKeyCTA ? 'cta_click' : 'click';
+  trackEvent(eventName, 'button', `${buttonName}_${location}`, undefined, {
     button_name: buttonName,
     button_location: location,
+    cta_location: location,
+    cta_text: buttonName,
     ...context,
   });
-  
-  // Track in Clarity
   trackClarityEvent('button_click', { button_name: buttonName, location, ...context });
+}
+
+// Track tool usage - GA4 key event for engagement (mark in GA4 Admin → Events → Key events)
+export function trackToolUsage(toolName: string, toolCategory: string, action?: string) {
+  trackEvent('tool_usage', 'tools', `${toolName}_${toolCategory}`, undefined, {
+    tool_name: toolName,
+    tool_category: toolCategory,
+    tool_action: action || 'viewed',
+  });
 }
 
 // Track form submissions with enhanced data
@@ -460,14 +492,12 @@ export function trackFormSubmit(formName: string, formLocation: string, formData
   trackClarityEvent('form_submit', { form_name: formName, location: formLocation });
 }
 
-// Track email captures with source attribution
+// Track email captures - GA4 recommended 'generate_lead' (mark as Key event in GA4 Admin)
 export function trackEmailCapture(source: string, context?: Record<string, any>) {
-  trackEvent('email_capture', 'lead_generation', source, undefined, {
+  trackEvent('generate_lead', 'lead_generation', source, undefined, {
     capture_source: source,
     ...context,
   });
-  
-  // Track in Clarity
   trackClarityEvent('email_capture', { source, ...context });
   upgradeClaritySession('email_captured');
 }

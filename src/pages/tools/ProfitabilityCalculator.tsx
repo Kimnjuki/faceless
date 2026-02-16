@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calculator, TrendingUp, DollarSign } from "lucide-react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { trackToolUsage } from "@/utils/analytics";
 import { Separator } from "@/components/ui/separator";
 
 export default function ProfitabilityCalculator() {
@@ -24,7 +25,12 @@ export default function ProfitabilityCalculator() {
     breakeven: number;
   } | null>(null);
 
+  useEffect(() => {
+    trackToolUsage('Profitability Calculator', 'tools');
+  }, []);
+
   const calculateProfitability = () => {
+    trackToolUsage('Profitability Calculator', 'tools', 'calculate');
     const postsPerWeek = parseInt(inputs.frequency);
     const cpmRate = parseFloat(inputs.cpm);
     const avgViews = inputs.platform === "youtube" ? 10000 : inputs.platform === "tiktok" ? 50000 : 5000;

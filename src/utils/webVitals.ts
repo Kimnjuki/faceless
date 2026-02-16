@@ -5,7 +5,7 @@
  * Sends data to GA4 and console for analysis
  */
 
-import { trackEvent } from '@/utils/ga4';
+import { trackEvent } from '@/utils/analytics';
 
 interface WebVitalMetric {
   name: string;
@@ -46,7 +46,7 @@ function reportWebVital(metric: WebVitalMetric) {
   }
 
   // Send to GA4
-  trackEvent('web_vital', {
+  trackEvent('web_vital', 'performance', metric.name, metric.value, {
     metric_name: metric.name,
     metric_value: metric.value,
     metric_rating: rating,

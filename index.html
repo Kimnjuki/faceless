@@ -286,15 +286,7 @@
             })();
     </script>
     
-    <!-- Google Analytics (gtag.js) - Deferred for performance -->
-    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-VGB9R02TVY" onerror="this.onerror=null;console.warn('GA4 script failed to load');"></script>
-    <script defer>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      // Initialization will be controlled by analytics.ts based on user consent
-      // gtag('config', 'G-VGB9R02TVY');
-    </script>
+    <!-- Google Analytics 4 - Loaded dynamically by analytics.ts when user consents (uses VITE_GA_MEASUREMENT_ID) -->
     
     <!-- Prebid.js for Header Bidding - Deferred -->
     <!-- Removed Prebid.js as it may cause JavaScript errors - can be re-enabled if needed -->

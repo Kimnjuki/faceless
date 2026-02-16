@@ -21,6 +21,10 @@ export default defineConfig({
     'import.meta.env.VITE_CLARITY_PROJECT_ID': JSON.stringify(
       process.env.VITE_CLARITY_PROJECT_ID || 'vd7rgy7tu7'
     ),
+    // Fallback GA4 Measurement ID (for key events/conversions)
+    'import.meta.env.VITE_GA_MEASUREMENT_ID': JSON.stringify(
+      process.env.VITE_GA_MEASUREMENT_ID || 'G-VGB9R02TVY'
+    ),
   },
   build: {
     // Output directory (must match vercel.json distDir)

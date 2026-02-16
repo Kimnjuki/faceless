@@ -7,7 +7,6 @@ import App from './App.tsx'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import ConvexConnectionStatus from './components/ConvexConnectionStatus'
 import { initGoogleAnalytics } from './utils/analytics'
-import { initGA4 } from './utils/ga4'
 import { initClarity } from './utils/clarity'
 import { initGoogleAdManager, initPrebid } from './utils/adManager'
 import { setupPageVisibilityTracking, setupCoreWebVitalsTracking } from './utils/performanceOptimization'
@@ -82,20 +81,6 @@ try {
   initGoogleAnalytics();
 } catch (error) {
   console.warn('Failed to initialize Google Analytics:', error);
-}
-
-try {
-  // Initialize GA4 (only in production to avoid polluting data with dev clicks)
-  const GA4_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID;
-  if (GA4_ID && import.meta.env.PROD) {
-    // Prevent double initialization in React Strict Mode
-    if (!window.__GA4_INITIALIZED__) {
-      initGA4();
-      window.__GA4_INITIALIZED__ = true;
-    }
-  }
-} catch (error) {
-  console.warn('Failed to initialize GA4:', error);
 }
 
 try {

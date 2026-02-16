@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { trackContentView } from "@/utils/analytics";
 import AdSenseInArticle from "@/components/AdSenseInArticle";
 import AdSenseDisplay from "@/components/AdSenseDisplay";
+import ShareButtons from "@/components/ShareButtons";
 import ForeMediaAd from "@/components/ForeMediaAd";
 import ArticleImage from "@/components/ArticleImage";
 
@@ -314,6 +315,16 @@ export default function ArticleDetail() {
 
               {/* Article Footer */}
               <div className="mt-16 pt-8 border-t">
+                <div className="mb-6">
+                  <ShareButtons
+                    url={typeof window !== "undefined" ? window.location.href : ""}
+                    title={article.title}
+                    description={article.excerpt || article.title}
+                    contentType="article"
+                    contentId={article.id}
+                    variant="compact"
+                  />
+                </div>
                 <div className="flex items-center justify-between flex-wrap gap-4">
                   <div className="flex items-center gap-4">
                     {article.category && article.category.name && (

@@ -59,9 +59,12 @@ export default function Hero() {
                 size="lg" 
                 variant="outline" 
                 className="text-base glass border-primary/20 hover:border-primary/40 hover:bg-primary/5 transition-all duration-300"
-                onClick={() => trackButtonClick('watch-demo', 'hero')}
+                asChild
+                onClick={() => trackButtonClick('try-ai-tools', 'hero')}
               >
-                <Play className="mr-2 h-4 w-4" /> Watch How It Works
+                <Link to="/creator-studio">
+                  <Play className="mr-2 h-4 w-4" /> Try AI Tools Free
+                </Link>
               </Button>
             </div>
 

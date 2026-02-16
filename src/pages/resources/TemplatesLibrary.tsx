@@ -9,6 +9,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { useTemplates } from "@/hooks/useTemplates";
+import { trackDownload } from "@/utils/analytics";
 import type { Template } from "@/types";
 
 const formatIcons = {
@@ -31,8 +32,8 @@ export default function TemplatesLibrary() {
   });
 
   const handleDownload = async (template: Template) => {
+    trackDownload(template.title || "Template", template.type || "template", "templates-library");
     await incrementDownload(template.id ?? template._id ?? '');
-    // Open download URL
     if (template.download_url) {
       window.open(template.download_url, '_blank');
     }

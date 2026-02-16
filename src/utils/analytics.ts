@@ -480,6 +480,25 @@ export function trackToolUsage(toolName: string, toolCategory: string, action?: 
   });
 }
 
+// Track resource downloads - GA4 recommended 'file_download' (mark as Key event in GA4 Admin)
+export function trackDownload(resourceName: string, resourceType: string, source?: string) {
+  trackEvent('file_download', 'resources', resourceName, undefined, {
+    resource_name: resourceName,
+    resource_type: resourceType,
+    download_source: source || 'resource-downloads',
+  });
+  trackClarityEvent('download', { resource_name: resourceName, resource_type: resourceType });
+}
+
+// Track social share - GA4 engagement for share events
+export function trackShare(platform: string, contentType: string, contentId?: string) {
+  trackEvent('share', 'engagement', platform, undefined, {
+    method: platform,
+    content_type: contentType,
+    content_id: contentId,
+  });
+}
+
 // Track form submissions with enhanced data
 export function trackFormSubmit(formName: string, formLocation: string, formData?: Record<string, any>) {
   trackEvent('form_submit', 'engagement', `${formName}_${formLocation}`, undefined, {

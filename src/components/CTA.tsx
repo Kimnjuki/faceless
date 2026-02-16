@@ -4,6 +4,7 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useLeads } from "@/hooks/useLeads";
+import { trackButtonClick } from "@/utils/analytics";
 
 export default function CTA() {
   const [email, setEmail] = useState("");
@@ -49,7 +50,13 @@ export default function CTA() {
               autoComplete="email"
               required
             />
-            <Button type="submit" variant="secondary" className="whitespace-nowrap" disabled={loading}>
+            <Button
+              type="submit"
+              variant="secondary"
+              className="whitespace-nowrap"
+              disabled={loading}
+              onClick={() => trackButtonClick('get-started', 'cta-section')}
+            >
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

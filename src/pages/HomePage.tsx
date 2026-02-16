@@ -13,6 +13,8 @@ import CTA from "../components/CTA";
 import TrustIndicators from "../components/TrustIndicators";
 import ArticleGrid from "../components/ArticleGrid";
 import ExploreSection from "../components/ExploreSection";
+import NewsletterSection from "../components/NewsletterSection";
+import ShareButtons from "../components/ShareButtons";
 import Footer from "../components/Footer";
 import ExitIntentModal from "../components/ExitIntentModal";
 import SEO from "../components/SEO";
@@ -202,8 +204,12 @@ export default function HomePage() {
         <Testimonials />
         <ProductLadder />
         <ExploreSection />
+        <NewsletterSection />
         <FAQ />
         <CTA />
+        <div className="container mx-auto px-4 py-8 border-t border-primary/10">
+          <ShareButtons contentType="homepage" variant="compact" />
+        </div>
       </main>
       <Footer />
     </>

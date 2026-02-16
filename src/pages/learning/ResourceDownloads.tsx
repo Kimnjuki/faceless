@@ -7,6 +7,7 @@ import { Search, Download, FileText, Calendar, CheckSquare, TrendingUp, Users } 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import { trackDownload } from "@/utils/analytics";
 
 const resources = [
   {
@@ -155,7 +156,10 @@ export default function ResourceDownloads() {
                           {resource.downloads.toLocaleString()} downloads
                         </span>
                       </div>
-                      <Button className="w-full">
+                      <Button
+                        className="w-full"
+                        onClick={() => trackDownload(resource.title, resource.type, 'resource-downloads')}
+                      >
                         <Download className="mr-2 h-4 w-4" />
                         Download Resource
                       </Button>

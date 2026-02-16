@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,9 +12,23 @@ import VoiceStudio from "@/components/creator-studio/VoiceStudio";
 import VisualAssetCreator from "@/components/creator-studio/VisualAssetCreator";
 import ContentCalendar from "@/components/creator-studio/ContentCalendar";
 import IdeaGenerator from "@/components/creator-studio/IdeaGenerator";
+import { trackToolUsage } from "@/utils/analytics";
+
+const TOOL_NAMES: Record<string, string> = {
+  script: "Script Generator",
+  voice: "Voice Studio",
+  visual: "Visual Asset Creator",
+  video: "Video Editor",
+  calendar: "Content Calendar",
+  ideas: "Idea Generator",
+};
 
 export default function CreatorStudio() {
   const [activeTab, setActiveTab] = useState("script");
+
+  useEffect(() => {
+    trackToolUsage(TOOL_NAMES[activeTab] || activeTab, "creator-studio", "viewed");
+  }, [activeTab]);
 
   return (
     <>

@@ -34,10 +34,10 @@ export default function Hero() {
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
-              Join 10,000+ Anonymous Creators Earning $1,000+ Monthly (Without Showing Your Face)
+              Build a Faceless Content Empire in 2026
             </h1>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-muted-foreground mb-6">
-              The All-In-One Platform with AI Tools, Templates, and Community to Build Your Faceless Empire in 30 Days
+              Join 10,000+ Anonymous Creators Earning $1,000+ Monthly — AI Tools, Templates & Community
             </h2>
 
             <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
@@ -65,6 +65,14 @@ export default function Hero() {
               </Button>
             </div>
 
+            <div className="flex flex-wrap justify-center gap-4 text-sm mb-6">
+              <Link to="/getting-started" className="text-primary hover:underline font-medium">Getting Started</Link>
+              <Link to="/blog" className="text-primary hover:underline font-medium">Blog</Link>
+              <Link to="/tools/calculator" className="text-primary hover:underline font-medium">Calculator</Link>
+              <Link to="/tools/niche-quiz" className="text-primary hover:underline font-medium">Niche Quiz</Link>
+              <Link to="/learning-paths" className="text-primary hover:underline font-medium">Learning Paths</Link>
+              <Link to="/platform-guides" className="text-primary hover:underline font-medium">Platform Guides</Link>
+            </div>
             <div className="flex flex-wrap justify-center gap-6 text-sm mb-8">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <CheckCircle2 className="h-5 w-5 text-green-500" />

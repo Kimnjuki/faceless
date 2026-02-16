@@ -54,5 +54,5 @@
       ]
     }
   ],
-  "redirects": []
+  "redirects": [{"source": "/:path*", "has": [{"type": "host", "value": "www.contentanonymity.com"}], "destination": "https://contentanonymity.com/:path*", "permanent": true}]
 }

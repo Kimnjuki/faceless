@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,13 +14,15 @@ import {
   Youtube,
   Video,
   Instagram,
-  RefreshCw
+  RefreshCw,
+  ArrowRight
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { usePlatformGuides } from "@/hooks/usePlatformGuides";
 import DataStateMessage from "@/components/DataStateMessage";
+import { PLATFORM_GUIDES_FALLBACK } from "@/config/platformGuidesFallback";
 
 const platformIcons: Record<string, any> = {
   youtube: Youtube,
@@ -37,15 +39,26 @@ export default function PlatformGuides() {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [difficultyFilter, setDifficultyFilter] = useState("all");
 
-  const { guides, loading, error, refetch, incrementViewCount } = usePlatformGuides({
+  const { guides: convexGuides, loading, error, refetch, incrementViewCount } = usePlatformGuides({
     platform: platformFilter !== 'all' ? platformFilter : undefined,
     category: categoryFilter !== 'all' ? categoryFilter : undefined,
     difficulty: difficultyFilter !== 'all' ? difficultyFilter : undefined,
     searchQuery: searchQuery,
   });
 
+  const guides = useMemo(() => {
+    const bySlug = new Map<string, any>();
+    PLATFORM_GUIDES_FALLBACK.forEach((g) =>
+      bySlug.set(g.slug, { ...g, id: `fallback-${g.slug}`, read_time: g.readTime, tool_tags: g.toolTags, difficulty_level: g.difficultyLevel })
+    );
+    convexGuides.forEach((g) => bySlug.set(g.slug, g));
+    return Array.from(bySlug.values());
+  }, [convexGuides]);
+
   const handleGuideClick = async (guide: any) => {
-    await incrementViewCount(guide.id ?? guide._id ?? '');
+    if (guide.id && !String(guide.id).startsWith("fallback-")) {
+      await incrementViewCount(guide.id);
+    }
     navigate(`/platform-guides/${guide.slug}`);
   };
 
@@ -173,82 +186,88 @@ export default function PlatformGuides() {
               />
             )}
 
-            {/* Guides Grid */}
+            {/* Guides — separated by platform for easy reading */}
             {!loading && !error && guides.length > 0 && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {guides.map((guide) => {
-                    const PlatformIcon = platformIcons[guide.platform] || BookOpen;
-
-                    return (
-                      <Card 
-                        key={guide.id} 
-                        className="hover:shadow-lg transition-shadow flex flex-col cursor-pointer"
-                        onClick={() => handleGuideClick(guide)}
-                      >
-                        <CardHeader>
-                          <div className="flex items-start justify-between mb-2">
-                            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                              <PlatformIcon className="h-5 w-5 text-primary" />
-                            </div>
-                            {guide.difficulty_level && (
-                              <Badge 
-                                variant="outline" 
-                                className={`${getDifficultyColor(guide.difficulty_level)} text-white border-0`}
-                              >
-                                {guide.difficulty_level}
-                              </Badge>
-                            )}
-                          </div>
-                          <CardTitle className="text-xl">{guide.title}</CardTitle>
-                          {guide.excerpt && (
-                            <CardDescription className="mt-2 line-clamp-2">
-                              {guide.excerpt}
-                            </CardDescription>
-                          )}
-                        </CardHeader>
-                        <CardContent className="flex-1 flex flex-col justify-end">
-                          <div className="space-y-4">
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              {guide.read_time && (
-                                <span className="flex items-center gap-1">
-                                  <Clock className="h-4 w-4" />
-                                  {guide.read_time} min read
-                                </span>
-                              )}
-                              {guide.view_count !== undefined && (
-                                <span className="flex items-center gap-1">
-                                  <Eye className="h-4 w-4" />
-                                  {guide.view_count} views
-                                </span>
-                              )}
-                            </div>
-                            {guide.category && (
-                              <Badge variant="secondary" className="capitalize">
-                                {guide.category}
-                              </Badge>
-                            )}
-                            {guide.tool_tags && guide.tool_tags.length > 0 && (
-                              <div className="flex flex-wrap gap-1">
-                                {guide.tool_tags.slice(0, 3).map((tool, idx) => (
-                                  <Badge key={idx} variant="outline" className="text-xs">
-                                    {tool}
-                                  </Badge>
-                                ))}
-                                {guide.tool_tags.length > 3 && (
-                                  <Badge variant="outline" className="text-xs">
-                                    +{guide.tool_tags.length - 3}
-                                  </Badge>
+              <div className="space-y-12">
+                {(["youtube", "tiktok", "instagram", "all"] as const).map((platform) => {
+                  const platformGuides = guides.filter((g) => g.platform === platform);
+                  if (platformGuides.length === 0) return null;
+                  const PlatformIcon = platformIcons[platform] || BookOpen;
+                  const platformLabel = platform === "all" ? "Cross-Platform" : platform.charAt(0).toUpperCase() + platform.slice(1);
+                  return (
+                    <section key={platform} className="space-y-4">
+                      <div className="flex items-center gap-3">
+                        <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                          <PlatformIcon className="h-6 w-6 text-primary" />
+                        </div>
+                        <h2 className="text-2xl font-bold">{platformLabel} Guides</h2>
+                      </div>
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {platformGuides.map((guide) => {
+                          const Icon = platformIcons[guide.platform] || BookOpen;
+                          return (
+                            <Card
+                              key={guide.id ?? guide.slug}
+                              className="hover:shadow-lg transition-shadow flex flex-col cursor-pointer"
+                              onClick={() => handleGuideClick(guide)}
+                            >
+                              <CardHeader>
+                                <div className="flex items-start justify-between mb-2">
+                                  <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                                    <Icon className="h-5 w-5 text-primary" />
+                                  </div>
+                                  {guide.difficulty_level && (
+                                    <Badge variant="outline" className={`${getDifficultyColor(guide.difficulty_level)} text-white border-0`}>
+                                      {guide.difficulty_level}
+                                    </Badge>
+                                  )}
+                                </div>
+                                <CardTitle className="text-xl">{guide.title}</CardTitle>
+                                {guide.excerpt && (
+                                  <CardDescription className="mt-2 line-clamp-2">{guide.excerpt}</CardDescription>
                                 )}
-                              </div>
-                            )}
-                            <Button className="w-full" variant="outline">
-                              Read Guide
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    );
-                  })}
+                              </CardHeader>
+                              <CardContent className="flex-1 flex flex-col justify-end">
+                                <div className="space-y-4">
+                                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                                    {guide.read_time && (
+                                      <span className="flex items-center gap-1">
+                                        <Clock className="h-4 w-4" />
+                                        {guide.read_time} min read
+                                      </span>
+                                    )}
+                                    {guide.view_count !== undefined && guide.view_count > 0 && (
+                                      <span className="flex items-center gap-1">
+                                        <Eye className="h-4 w-4" />
+                                        {guide.view_count} views
+                                      </span>
+                                    )}
+                                  </div>
+                                  {guide.category && (
+                                    <Badge variant="secondary" className="capitalize">{guide.category}</Badge>
+                                  )}
+                                  {guide.tool_tags && guide.tool_tags.length > 0 && (
+                                    <div className="flex flex-wrap gap-1">
+                                      {guide.tool_tags.slice(0, 3).map((tool: string, idx: number) => (
+                                        <Badge key={idx} variant="outline" className="text-xs">{tool}</Badge>
+                                      ))}
+                                      {guide.tool_tags.length > 3 && (
+                                        <Badge variant="outline" className="text-xs">+{guide.tool_tags.length - 3}</Badge>
+                                      )}
+                                    </div>
+                                  )}
+                                  <Button className="w-full" variant="outline">
+                                    Read Guide <ArrowRight className="h-4 w-4 ml-1" />
+                                  </Button>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          );
+                        })}
+                      </div>
+                    </section>
+                  );
+                })}
               </div>
             )}
           </div>

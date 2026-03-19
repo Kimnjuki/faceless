@@ -9,6 +9,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { usePlatformGuides } from "@/hooks/usePlatformGuides";
+import { getFallbackGuideBySlug } from "@/config/platformGuidesFallback";
 
 const PROSE = "prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-headings:text-foreground prose-p:text-foreground/90 prose-p:leading-relaxed";
 
@@ -61,11 +62,19 @@ export default function PlatformGuideDetail() {
   const { slug } = useParams();
   const { guides, loading, error, incrementViewCount, refetch } = usePlatformGuides({});
 
-  const guide = guides.find((g) => g.slug === slug);
+  const convexGuide = guides.find((g) => g.slug === slug);
+  const fallbackGuide = slug ? getFallbackGuideBySlug(slug) : null;
+  const guide = convexGuide ?? (fallbackGuide ? {
+    ...fallbackGuide,
+    read_time: fallbackGuide.readTime,
+    tool_tags: fallbackGuide.toolTags,
+    difficulty_level: fallbackGuide.difficultyLevel,
+    example_applications: fallbackGuide.exampleApplications,
+  } : null);
 
   useEffect(() => {
-    if (guide) {
-      incrementViewCount(guide.id ?? guide._id ?? '');
+    if (guide?.id && !String(guide.id).startsWith("fallback-")) {
+      incrementViewCount(guide.id);
     }
   }, [guide, incrementViewCount]);
 
@@ -252,4 +261,3 @@ export default function PlatformGuideDetail() {
     </>
   );
 }
-

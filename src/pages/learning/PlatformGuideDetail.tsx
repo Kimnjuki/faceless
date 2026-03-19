@@ -222,14 +222,26 @@ export default function PlatformGuideDetail() {
             </Card>
 
             {/* Example Applications */}
-            {guide.example_applications && typeof guide.example_applications === "object" && Object.keys(guide.example_applications).length > 0 && (
+            {guide.example_applications && typeof guide.example_applications === "object" &&
+              (Array.isArray(guide.example_applications) ? guide.example_applications.length > 0 : Object.keys(guide.example_applications).length > 0) && (
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-2 mb-6">
                     <Lightbulb className="h-5 w-5 text-primary" />
                     <h2 className="text-xl font-semibold">Quick Reference & Examples</h2>
                   </div>
-                  <ExampleApplicationsSection data={guide.example_applications as Record<string, unknown>} />
+                  {Array.isArray(guide.example_applications) ? (
+                    <div className="space-y-4">
+                      {(guide.example_applications as Array<{ feature?: string; application?: string }>).map((ex, i) => (
+                        <div key={i} className="border-l-4 border-primary pl-4 py-2">
+                          {ex.feature && <Badge variant="outline" className="text-xs mb-1">{ex.feature}</Badge>}
+                          <p className="text-sm text-muted-foreground">{ex.application ?? String(ex)}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <ExampleApplicationsSection data={guide.example_applications as unknown as Record<string, unknown>} />
+                  )}
                 </CardContent>
               </Card>
             )}

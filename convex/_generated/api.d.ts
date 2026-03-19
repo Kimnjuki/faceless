@@ -25,6 +25,7 @@ import type * as newsIngestor from "../newsIngestor.js";
 import type * as niches from "../niches.js";
 import type * as platformGuides from "../platformGuides.js";
 import type * as profiles from "../profiles.js";
+import type * as seedFacelessArticle from "../seedFacelessArticle.js";
 import type * as templates from "../templates.js";
 import type * as tools from "../tools.js";
 import type * as webinars from "../webinars.js";
@@ -53,6 +54,7 @@ declare const fullApi: ApiFromModules<{
   niches: typeof niches;
   platformGuides: typeof platformGuides;
   profiles: typeof profiles;
+  seedFacelessArticle: typeof seedFacelessArticle;
   templates: typeof templates;
   tools: typeof tools;
   webinars: typeof webinars;

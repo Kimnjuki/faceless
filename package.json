@@ -16,7 +16,8 @@
     "generate-sitemap": "node scripts/generate-sitemap.js",
     "deploy:convex": "npx convex deploy --yes",
     "import-articles": "node scripts/import-articles-from-csv.mjs",
-    "import-all": "node scripts/import-all-from-csv.mjs"
+    "import-all": "node scripts/import-all-from-csv.mjs",
+    "seed:faceless-article": "npx convex run seedFacelessArticle:run"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.9.0",

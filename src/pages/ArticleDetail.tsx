@@ -104,6 +104,7 @@ export default function ArticleDetail() {
     
     const categoryMap: Record<string, 'writing' | 'faceless' | 'ai' | 'monetization' | 'social' | 'productivity' | 'privacy' | 'blogging' | 'multimedia'> = {
       'content-creation': 'writing',
+      'faceless content': 'faceless',
       'faceless-content': 'faceless',
       'ai-automation': 'ai',
       'monetization': 'monetization',

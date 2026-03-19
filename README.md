@@ -5,7 +5,7 @@
 ![ContentAnonymity](https://img.shields.io/badge/Status-Production%20Ready-success)
 ![React](https://img.shields.io/badge/React-18-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
-![Supabase](https://img.shields.io/badge/Database-Supabase-green)
+![Convex](https://img.shields.io/badge/Database-Convex-green)
 
 ## 🚀 Quick Start
 
@@ -40,7 +40,7 @@ npm install
 
 # Set up environment variables
 cp .env.example .env
-# Edit .env with your Supabase credentials
+# Edit .env with your Convex and Auth0 credentials (see .env.example)
 
 # Start development server
 npm run dev
@@ -92,7 +92,7 @@ npm run dev
 - **Routing:** React Router DOM
 - **Animations:** Framer Motion
 - **Icons:** Lucide React
-- **Database:** Supabase
+- **Database:** Convex
 - **Forms:** React Hook Form + Zod
 - **Notifications:** Sonner (toast)
 
@@ -113,63 +113,15 @@ netlify deploy --prod
 
 **See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.**
 
-## 🗄️ Database Setup
-
-Run these SQL commands in your Supabase SQL Editor:
-
-```sql
--- Create leads table
-create table leads (
-  id uuid default gen_random_uuid() primary key,
-  email text unique not null,
-  source text,
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null
-);
-
-alter table leads enable row level security;
-
-create policy "Anyone can insert leads"
-  on leads for insert
-  with check (true);
-
--- Create users table
-create table users (
-  id uuid default gen_random_uuid() primary key,
-  email text unique not null,
-  name text,
-  niche text,
-  goal text,
-  onboarding_completed boolean default false,
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null
-);
-
-alter table users enable row level security;
-
-create policy "Users can read own data"
-  on users for select
-  using (auth.uid() = id);
-
-create policy "Anyone can insert users"
-  on users for insert
-  with check (true);
-
-create policy "Users can update own data"
-  on users for update
-  using (auth.uid() = id);
-```
-
-**See [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) for complete database setup.**
-
 ## 🔐 Environment Variables
 
-Create a `.env` file:
+Copy `.env.example` to `.env` and configure:
 
-```env
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```bash
+cp .env.example .env
 ```
 
-**See [ENV_SETUP.md](./ENV_SETUP.md) for detailed configuration.**
+Key variables: `VITE_CONVEX_URL`, `VITE_AUTH0_DOMAIN`, `VITE_AUTH0_CLIENT_ID`, `VITE_GA_MEASUREMENT_ID`. See [ENV_SETUP.md](./ENV_SETUP.md) for details.
 
 ## 📁 Project Structure
 
@@ -196,8 +148,8 @@ faceless/
 │   └── index.css          # Global styles & theme
 ├── setup-github.sh        # Automated GitHub push script
 ├── DEPLOYMENT.md          # Deployment guide
-├── SUPABASE_SETUP.md      # Database setup guide
-└── README.md             # This file
+├── ENV_SETUP.md           # Environment configuration
+└── README.md              # This file
 ```
 
 ## 🎨 Customization
@@ -323,12 +275,9 @@ Copyright © 2025 Faceless Success Hub. All rights reserved.
 ## 🆘 Support & Resources
 
 - **Quick Start:** [QUICK_START.md](./QUICK_START.md)
-- **GitHub Setup:** [GITHUB_SETUP.md](./GITHUB_SETUP.md)
 - **Deployment:** [DEPLOYMENT.md](./DEPLOYMENT.md)
-- **Database:** [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)
 - **Environment:** [ENV_SETUP.md](./ENV_SETUP.md)
-- **Issues:** Create an issue in this repository
-- **Email:** support@facelesssuccess.com
+- **Launch Checklist:** [LAUNCH_CHECKLIST.md](./LAUNCH_CHECKLIST.md)
 
 ---
 

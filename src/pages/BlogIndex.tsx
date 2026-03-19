@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Search, TrendingUp, Download, Loader2, Clock, Eye, RefreshCw, ArrowDownAZ, BarChart2, Share2, Filter, X } from "lucide-react";
+import { Search, TrendingUp, Download, Loader2, Clock, Eye, RefreshCw, ArrowDownAZ, BarChart2, Share2, X } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ExitIntentModal from "../components/ExitIntentModal";
@@ -49,6 +49,17 @@ export default function BlogIndex() {
   }), [selectedCategory, debouncedSearchQuery, sortBy]);
 
   const { articles, categories, loading: articlesLoading, error, refetch, incrementViewCount, pagination } = useArticles(filters);
+
+  // Deduplicate categories by slug (handles DB duplicates)
+  const uniqueCategories = useMemo(() => {
+    const seen = new Set<string>();
+    return categories.filter((c) => {
+      const slug = c.slug ?? c.name?.toLowerCase().replace(/\s+/g, "-") ?? "";
+      if (!slug || seen.has(slug)) return false;
+      seen.add(slug);
+      return true;
+    });
+  }, [categories]);
 
   // Extract all unique tags from articles
   const allTags = useMemo(() => {
@@ -164,76 +175,70 @@ export default function BlogIndex() {
             <ForeMediaAd slot="e1" className="min-h-[90px]" wrapperClassName="w-full max-w-[970px] mx-auto" />
           </div>
 
-          {/* Filters: Categories, Tags, and Sort */}
-          <div className="space-y-4 mb-12">
-            {/* Categories */}
-            <div className="flex flex-wrap gap-2 justify-center">
-              <Button
-                variant={selectedCategory === "all" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectedCategory("all")}
-              >
-                All Categories
-              </Button>
-              {categories.map((cat) => (
-                <Button
-                  key={cat.id}
-                  variant={selectedCategory === cat.slug ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedCategory(cat.slug)}
-                >
-                  {cat.name}
-                </Button>
-              ))}
+          {/* Filters: compact single row */}
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+            {/* Category */}
+            <div className="flex items-center gap-2">
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-[180px] h-9 border-muted">
+                  <SelectValue placeholder="Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  {uniqueCategories.map((cat) => (
+                    <SelectItem key={cat.id ?? cat.slug} value={cat.slug}>
+                      {cat.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
-            {/* Tags and Sort Row */}
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              {/* Tags Filter */}
-              {allTags.length > 0 && (
-                <div className="flex items-center gap-2 flex-wrap">
-                  <Filter className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Tags:</span>
-                  {selectedTag && (
-                    <Badge variant="default" className="cursor-pointer" onClick={() => setSelectedTag(null)}>
-                      {selectedTag}
-                      <X className="h-3 w-3 ml-1" />
-                    </Badge>
-                  )}
-                  {allTags.slice(0, 10).map((tag) => (
-                    <Badge
-                      key={tag}
-                      variant={selectedTag === tag ? "default" : "outline"}
-                      className="cursor-pointer"
-                      onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
-                    >
-                      {tag}
-                    </Badge>
-                  ))}
-                  {allTags.length > 10 && (
-                    <Badge variant="outline" className="text-xs">
-                      +{allTags.length - 10} more
-                    </Badge>
-                  )}
-                </div>
-              )}
-
-              {/* Sort Dropdown */}
+            {/* Tags */}
+            {allTags.length > 0 && (
               <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Sort by:</span>
-                <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue />
+                <Select
+                  value={selectedTag ?? "none"}
+                  onValueChange={(v) => setSelectedTag(v === "none" ? null : v)}
+                >
+                  <SelectTrigger className="w-[160px] h-9 border-muted">
+                    <SelectValue placeholder="Tag" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="publishedAt">Most Recent</SelectItem>
-                    <SelectItem value="viewCount">Most Popular</SelectItem>
-                    <SelectItem value="shareCount">Most Shared</SelectItem>
-                    <SelectItem value="title">Alphabetical</SelectItem>
+                    <SelectItem value="none">All Tags</SelectItem>
+                    {allTags.map((tag) => (
+                      <SelectItem key={tag} value={tag}>
+                        {tag}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
+                {selectedTag && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9"
+                    onClick={() => setSelectedTag(null)}
+                    title="Clear tag"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
               </div>
-            </div>
+            )}
+
+            {/* Sort */}
+            <Select value={sortBy} onValueChange={(value: "publishedAt" | "viewCount" | "shareCount" | "title") => setSortBy(value)}>
+              <SelectTrigger className="w-[160px] h-9 border-muted">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="publishedAt">Most Recent</SelectItem>
+                <SelectItem value="viewCount">Most Popular</SelectItem>
+                <SelectItem value="shareCount">Most Shared</SelectItem>
+                <SelectItem value="title">Alphabetical</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Data State Messages */}

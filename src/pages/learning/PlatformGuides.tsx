@@ -26,6 +26,7 @@ const platformIcons: Record<string, any> = {
   youtube: Youtube,
   tiktok: Video,
   instagram: Instagram,
+  all: BookOpen,
   general: BookOpen,
 };
 

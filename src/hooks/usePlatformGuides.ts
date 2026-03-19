@@ -22,6 +22,7 @@ function toGuide(g: any): PlatformGuide {
     published_at: g.publishedAt,
     tool_tags: g.toolTags,
     example_applications: g.exampleApplications,
+    difficulty_level: g.difficultyLevel ?? g.difficulty_level,
     created_at: g.createdAt != null ? new Date(g.createdAt).toISOString() : undefined,
     updated_at: g.updatedAt != null ? new Date(g.updatedAt).toISOString() : undefined,
   };

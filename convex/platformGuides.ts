@@ -2,6 +2,41 @@ import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
 /**
+ * Insert a platform guide (for seeding).
+ */
+export const insertGuide = mutation({
+  args: {
+    title: v.string(),
+    slug: v.string(),
+    platform: v.string(),
+    category: v.optional(v.string()),
+    content: v.string(),
+    excerpt: v.optional(v.string()),
+    difficultyLevel: v.optional(v.string()),
+    readTime: v.optional(v.number()),
+    toolTags: v.optional(v.array(v.string())),
+    exampleApplications: v.optional(v.any()),
+    published: v.optional(v.boolean()),
+  },
+  handler: async (ctx, doc) => {
+    const now = Date.now();
+    const existing = await ctx.db
+      .query("platform_guides")
+      .withIndex("by_slug", (q) => q.eq("slug", doc.slug))
+      .first();
+    if (existing) return { status: "already_exists" as const, id: existing._id };
+    const id = await ctx.db.insert("platform_guides", {
+      ...doc,
+      published: doc.published ?? true,
+      publishedAt: now,
+      createdAt: now,
+      updatedAt: now,
+    });
+    return { status: "success" as const, id };
+  },
+});
+
+/**
  * List platform guides (published only).
  */
 export const list = query({

@@ -66,6 +66,8 @@ export default function PlatformGuideDetail() {
   const fallbackGuide = slug ? getFallbackGuideBySlug(slug) : null;
   const guide = convexGuide ?? (fallbackGuide ? {
     ...fallbackGuide,
+    id: undefined as string | undefined,
+    view_count: undefined as number | undefined,
     read_time: fallbackGuide.readTime,
     tool_tags: fallbackGuide.toolTags,
     difficulty_level: fallbackGuide.difficultyLevel,

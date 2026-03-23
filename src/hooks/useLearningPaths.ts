@@ -1,8 +1,16 @@
 import { useMemo, useEffect, useState } from "react";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import type { Id } from "../../convex/_generated/dataModel";
 import { useAuth } from "@/contexts/AuthContext";
 import type { LearningPath, LearningModule, UserLearningProgress } from "@/types/index";
+
+/** Convex document ids are 32-char lowercase alphanumeric strings */
+const LEARNING_PATH_ID_RE = /^[a-z0-9]{32}$/;
+
+export function isLearningPathConvexId(id: string | undefined): id is string {
+  return Boolean(id && LEARNING_PATH_ID_RE.test(id));
+}
 
 interface LearningPathFilters {
   trackType?: string;
@@ -16,8 +24,10 @@ function toModule(m: any): LearningModule {
     id: m._id ?? m.id,
     learning_path_id: m.learningPathId,
     content_type: m.contentType,
+    content_url: m.contentUrl ?? m.content_url,
     duration_minutes: m.durationMinutes,
     order_index: m.orderIndex ?? m.order_index,
+    is_free: m.isFree ?? true,
     created_at: m.createdAt != null ? new Date(m.createdAt).toISOString() : undefined,
     updated_at: m.updatedAt != null ? new Date(m.updatedAt).toISOString() : undefined,
     key_concepts: m.learningObjectives ?? m.keyConcepts,
@@ -112,4 +122,53 @@ export function useLearningPaths(filters: LearningPathFilters = {}) {
   };
 
   return { paths, loading, error, refetch, updateProgress };
+}
+
+/**
+ * Single learning path for detail page — uses Convex getById so navigation works
+ * even when list lookup fails (Id/string mismatch, timing, etc.).
+ */
+export function useLearningPath(pathId: string | undefined) {
+  const { user } = useAuth();
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const validId = isLearningPathConvexId(pathId);
+
+  const raw = useQuery(
+    api.learningPaths.getById,
+    hasConvex && validId ? { pathId: pathId as Id<"learning_paths"> } : "skip"
+  );
+
+  const path = useMemo(() => {
+    if (!validId || !raw) return undefined;
+    return toPath(raw);
+  }, [raw, validId]);
+
+  const loading = hasConvex && validId && raw === undefined;
+
+  const displayError = !hasConvex
+    ? "Convex backend not configured. Set VITE_CONVEX_URL environment variable."
+    : pathId && !validId
+      ? "Invalid learning path link."
+      : validId && raw === null
+        ? "Learning path not found"
+        : null;
+
+  const updateProgress = async (
+    _moduleId: string,
+    _progress: Partial<UserLearningProgress>
+  ): Promise<void> => {
+    if (!user || !hasConvex) return;
+  };
+
+  const refetch = () => {
+    window.location.reload();
+  };
+
+  return {
+    path,
+    loading,
+    error: displayError,
+    refetch,
+    updateProgress,
+  };
 }

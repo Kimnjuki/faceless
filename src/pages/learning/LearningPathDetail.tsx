@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,7 +18,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
-import { useLearningPaths } from "@/hooks/useLearningPaths";
+import { useLearningPath } from "@/hooks/useLearningPaths";
 import { useLearningPathProgress } from "@/hooks/useLearningPathProgress";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -37,38 +37,9 @@ export default function LearningPathDetail() {
   const { user } = useAuth();
   const [viewMode, setViewMode] = useState<"roadmap" | "list">("roadmap");
 
-  const { paths, loading, error, refetch, updateProgress } = useLearningPaths({});
-  const pathProgress = useLearningPathProgress(
-    pathId as any
-  );
-
-  const path = paths.find((p) => p.id === pathId);
+  const { path, loading, error, refetch, updateProgress } = useLearningPath(pathId);
+  const pathProgress = useLearningPathProgress(pathId);
   const modules = path?.modules || [];
-  
-  // Debug logging
-  useEffect(() => {
-    if (pathId) {
-      console.log('🔍 LearningPathDetail Debug:');
-      console.log('  - pathId:', pathId);
-      console.log('  - Total paths:', paths.length);
-      console.log('  - Found path:', path ? path.name : 'NOT FOUND');
-      console.log('  - Path ID:', path?.id);
-      console.log('  - Modules count:', modules.length);
-      if (path && path.modules) {
-        console.log('  - Module details:');
-        path.modules.forEach((m: any, idx: number) => {
-          console.log(`    ${idx + 1}. ${m.title} (ID: ${m.id}, order: ${m.order_index})`);
-        });
-      }
-    }
-  }, [pathId, paths, path, modules]);
-
-  // Refetch when pathId changes or component mounts
-  useEffect(() => {
-    if (pathId) {
-      refetch();
-    }
-  }, [pathId, refetch]);
 
   const handleModuleClick = async (module: any) => {
     if (!user) {

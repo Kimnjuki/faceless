@@ -44,6 +44,8 @@ export interface FallbackNicheFull {
   bestAiTools: string[];
   /** Long-form SEO copy for detail Overview tab */
   longFormContent?: string;
+  /** Optional: comma-separated or short line for meta / chips */
+  seoKeywordLine?: string;
   contentIdeas: FallbackContentIdea[];
   caseStudies: FallbackCaseStudy[];
 }

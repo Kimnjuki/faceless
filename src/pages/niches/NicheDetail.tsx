@@ -94,6 +94,10 @@ export default function NicheDetail() {
     niche && "longFormContent" in niche
       ? (niche as { longFormContent?: string }).longFormContent
       : undefined;
+  const seoKeywordLine =
+    niche && "seoKeywordLine" in niche
+      ? (niche as { seoKeywordLine?: string }).seoKeywordLine
+      : undefined;
 
   return (
     <>
@@ -225,8 +229,17 @@ export default function NicheDetail() {
                     <CardHeader>
                       <CardTitle>In-depth overview</CardTitle>
                       <CardDescription>
-                        SEO-friendly analysis for faceless creators (composite educational guidance).
+                        SEO-friendly analysis for faceless creators (composite educational guidance). Includes a 90-day roadmap checklist, monetization stack, and risk notes.
                       </CardDescription>
+                      {seoKeywordLine && (
+                        <div className="flex flex-wrap gap-2 pt-3">
+                          {seoKeywordLine.split(",").map((kw) => (
+                            <Badge key={kw} variant="secondary" className="text-xs font-normal">
+                              {kw.trim()}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
                     </CardHeader>
                     <CardContent className={DETAIL_PROSE}>
                       <ReactMarkdown>{longFormContent}</ReactMarkdown>

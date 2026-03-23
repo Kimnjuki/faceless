@@ -2,9 +2,17 @@ import type { Niche } from "@/types";
 import { FALLBACK_CORE_NICHES } from "./fallbackCore";
 import { FALLBACK_BULK_NICHES } from "./fallbackBulk";
 import type { FallbackNicheFull } from "./fallbackTypes";
+import { LONG_FORM_900_GENERATED, SEO_KEYWORD_LINES } from "./longForm900.generated";
+
+/** Core niches with 900+ word generated guides (see scripts/generate-niche-longform.mjs). */
+const FALLBACK_CORE_WITH_LONG: FallbackNicheFull[] = FALLBACK_CORE_NICHES.map((n) => ({
+  ...n,
+  longFormContent: LONG_FORM_900_GENERATED[n.slug] ?? n.longFormContent,
+  seoKeywordLine: SEO_KEYWORD_LINES[n.slug] ?? n.seoKeywordLine,
+}));
 
 export const ALL_FALLBACK_NICHES: FallbackNicheFull[] = [
-  ...FALLBACK_CORE_NICHES,
+  ...FALLBACK_CORE_WITH_LONG,
   ...FALLBACK_BULK_NICHES,
 ];
 
@@ -54,5 +62,6 @@ export function fallbackToDetailNiche(f: FallbackNicheFull) {
     caseStudies: f.caseStudies,
     contentIdeas: f.contentIdeas,
     longFormContent: f.longFormContent,
+    seoKeywordLine: f.seoKeywordLine,
   };
 }

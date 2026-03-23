@@ -14,6 +14,7 @@
     "lint:strict": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "generate-sitemap": "node scripts/generate-sitemap.js",
+    "generate:niche-longform": "node scripts/generate-niche-longform.mjs",
     "deploy:convex": "npx convex deploy --yes",
     "import-articles": "node scripts/import-articles-from-csv.mjs",
     "import-all": "node scripts/import-all-from-csv.mjs",

@@ -7,6 +7,14 @@ import {
   fallbackToListNiche,
 } from "@/config/niches/nicheDatabaseFallback";
 
+/**
+ * Public Niche Database always uses the bundled slug-based dataset so:
+ * - "View Details" links are SEO-friendly (/niches/your-slug), not opaque Convex IDs
+ * - The 20+ flagship niches stay consistent with long-form guides and categories
+ * Convex can still be used elsewhere; list view is the canonical bundled DB.
+ */
+const USE_PUBLIC_NICHE_LIST_FROM_BUNDLE = true;
+
 interface NicheFilters {
   category?: string;
   difficulty?: string;
@@ -69,12 +77,16 @@ export function useNiches(filters: NicheFilters = {}) {
   const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
   const raw = useQuery(
     api.niches.list,
-    hasConvex ? { sortBy: "profitability" } : "skip"
+    hasConvex && !USE_PUBLIC_NICHE_LIST_FROM_BUNDLE ? { sortBy: "profitability" } : "skip"
   );
 
-  const loading = hasConvex && raw === undefined;
+  const loading =
+    hasConvex && !USE_PUBLIC_NICHE_LIST_FROM_BUNDLE && raw === undefined;
 
   const sourceList: Niche[] = useMemo(() => {
+    if (USE_PUBLIC_NICHE_LIST_FROM_BUNDLE) {
+      return ALL_FALLBACK_NICHES.map(fallbackToListNiche);
+    }
     if (!hasConvex || !raw?.length) {
       return ALL_FALLBACK_NICHES.map(fallbackToListNiche);
     }
@@ -125,6 +137,6 @@ export function useNiches(filters: NicheFilters = {}) {
     error: null as string | null,
     refetch: () => {},
     totalCount: ALL_FALLBACK_NICHES.length,
-    usingFallback: !hasConvex || !raw?.length,
+    usingFallback: USE_PUBLIC_NICHE_LIST_FROM_BUNDLE || !hasConvex || !raw?.length,
   };
 }

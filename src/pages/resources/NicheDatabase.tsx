@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { useNiches } from "@/hooks/useNiches";
+import { NICHE_DATABASE_INTRO_MARKDOWN } from "@/config/niches/fallbackIntro";
 
 const TrendIcon = ({ status }: { status: string }) => {
   switch (status) {
@@ -23,12 +25,13 @@ const TrendIcon = ({ status }: { status: string }) => {
 };
 
 export default function NicheDatabase() {
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [difficultyFilter, setDifficultyFilter] = useState("all");
   const [sortBy, setSortBy] = useState<"profitability" | "difficulty">("profitability");
 
-  const { niches, loading, error, refetch } = useNiches({
+  const { niches, loading, error, refetch, totalCount, usingFallback } = useNiches({
     category: categoryFilter,
     difficulty: difficultyFilter,
     searchQuery: searchQuery,
@@ -38,9 +41,9 @@ export default function NicheDatabase() {
   return (
     <>
       <SEO
-        title="Profitable Niche Database - Find Your Perfect Faceless Niche | ContentAnonymity"
-        description="Browse 100+ profitable niches for faceless content creators. Find niches by profitability, difficulty, and growth potential. Start exploring today."
-        keywords="profitable niches, faceless content niches, niche database, anonymous content niches, best niches for faceless creators"
+        title="Profitable Niche Database (100+ Faceless Niches) | ContentAnonymity"
+        description="Explore 100+ proven faceless niches with profitability scores, difficulty levels, RPM context, and monetization stacks—finance, health, tech, business, education, and hobbies. Filter, search, and open full guides."
+        keywords="profitable faceless niches 2026, niche database, high RPM topics, anonymous YouTube niches, AI voiceover channel ideas, faceless TikTok niches, affiliate niches, ContentAnonymity"
         url="https://contentanonymity.com/resources/niches"
         canonical="https://contentanonymity.com/resources/niches"
         type="website"
@@ -67,10 +70,19 @@ export default function NicheDatabase() {
                   <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
                 </Button>
               </div>
-              <p className="text-lg text-muted-foreground">
-                Explore 100+ proven faceless niches with profitability scores, difficulty levels, and monetization strategies.
+              <p className="text-lg text-muted-foreground max-w-3xl">
+                Explore <strong>{totalCount}+</strong> researched faceless niches with profitability scores, difficulty, competition, RPM hints, and monetization paths—built for AI voiceover, stock footage, screen capture, and text-first formats.
+                {usingFallback && (
+                  <span className="block mt-2 text-sm">
+                    Showing the full on-site database{hasConvex ? " (Convex list empty—using bundled data)" : ""}.
+                  </span>
+                )}
               </p>
             </div>
+
+            <article className="mb-12 rounded-2xl border border-primary/10 bg-card/60 backdrop-blur-sm p-6 md:p-10 prose prose-lg dark:prose-invert max-w-none prose-headings:text-foreground prose-p:text-foreground/90 prose-strong:text-foreground">
+              <ReactMarkdown>{NICHE_DATABASE_INTRO_MARKDOWN}</ReactMarkdown>
+            </article>
 
             {/* Filters */}
             <div className="mb-8 space-y-4">
@@ -92,9 +104,13 @@ export default function NicheDatabase() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="Entertainment">Entertainment</SelectItem>
-                    <SelectItem value="Education">Education</SelectItem>
+                    <SelectItem value="Finance & Wealth">Finance & Wealth</SelectItem>
                     <SelectItem value="Health & Wellness">Health & Wellness</SelectItem>
+                    <SelectItem value="Tech & Productivity">Tech & Productivity</SelectItem>
+                    <SelectItem value="Lifestyle & Entertainment">Lifestyle & Entertainment</SelectItem>
+                    <SelectItem value="Business & Marketing">Business & Marketing</SelectItem>
+                    <SelectItem value="Evergreen Education">Evergreen Education</SelectItem>
+                    <SelectItem value="Niche Hobbies">Niche Hobbies</SelectItem>
                   </SelectContent>
                 </Select>
                 <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
@@ -132,7 +148,7 @@ export default function NicheDatabase() {
               <div className="text-center py-12">
                 <p className="text-destructive mb-4">{error}</p>
                 <p className="text-sm text-muted-foreground">
-                  Make sure you've run the database setup SQL scripts in Supabase.
+                  If you use Convex, verify deployment and niche seed data—or browse the bundled database below.
                 </p>
               </div>
             )}
@@ -219,9 +235,9 @@ export default function NicheDatabase() {
                   ))
                 ) : (
                   <div className="col-span-full text-center py-12">
-                    <p className="text-muted-foreground">No niches found matching your filters.</p>
+                    <p className="text-muted-foreground">No niches match your filters.</p>
                     <p className="text-sm text-muted-foreground mt-2">
-                      Add niches in your Supabase database to see them here.
+                      Clear search or set category and difficulty to “All” to see the full list.
                     </p>
                   </div>
                 )}

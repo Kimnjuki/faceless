@@ -1,9 +1,14 @@
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "convex/react";
+import ReactMarkdown from "react-markdown";
 import { api } from "../../../convex/_generated/api";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import {
+  getFallbackNicheBySlug,
+  fallbackToDetailNiche,
+} from "@/config/niches/nicheDatabaseFallback";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,16 +32,27 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Id } from "../../../convex/_generated/dataModel";
 
+const DETAIL_PROSE =
+  "prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-p:text-foreground/90";
+
 export default function NicheDetail() {
   const { nicheId } = useParams<{ nicheId: string }>();
   const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
 
-  const niche = useQuery(
+  const fallbackRecord = nicheId ? getFallbackNicheBySlug(nicheId) : undefined;
+
+  const convexNiche = useQuery(
     api.niches.getById,
-    hasConvex && nicheId ? { nicheId: nicheId as Id<"niches"> } : "skip"
+    hasConvex && nicheId && !fallbackRecord
+      ? { nicheId: nicheId as Id<"niches"> }
+      : "skip"
   );
 
-  const loading = hasConvex && nicheId && niche === undefined;
+  const niche = fallbackRecord
+    ? fallbackToDetailNiche(fallbackRecord)
+    : convexNiche;
+
+  const loading = !fallbackRecord && hasConvex && nicheId && convexNiche === undefined;
 
   if (loading) {
     return (
@@ -74,14 +90,19 @@ export default function NicheDetail() {
 
   const profitabilityScore = niche.profitabilityScore ?? 0;
   const evergreenScore = niche.evergreenScore ?? 0;
+  const longFormContent =
+    niche && "longFormContent" in niche
+      ? (niche as { longFormContent?: string }).longFormContent
+      : undefined;
 
   return (
     <>
       <SEO
         title={`${niche.nicheName} - Profitable Faceless Niche Analysis | ContentAnonymity`}
-        description={`Complete analysis of ${niche.nicheName} niche: profitability score ${profitabilityScore}/10, difficulty ${niche.difficultyLevel}, earnings potential ${niche.estimatedEarningsRange || 'high'}.`}
+        description={`Complete analysis of ${niche.nicheName} niche: profitability score ${profitabilityScore}/10, difficulty ${niche.difficultyLevel}, earnings potential ${niche.estimatedEarningsRange || "high"}. Faceless formats, monetization, and risks.`}
         url={`https://contentanonymity.com/niches/${nicheId}`}
         canonical={`https://contentanonymity.com/niches/${nicheId}`}
+        keywords={`${niche.nicheName}, faceless niche, ${niche.category?.name ?? ""}, profitable niches 2026, anonymous content ideas`}
       />
       <Header />
       <main className="min-h-screen bg-background">
@@ -199,6 +220,19 @@ export default function NicheDetail() {
 
               {/* Overview Tab */}
               <TabsContent value="overview" className="space-y-6">
+                {longFormContent && (
+                  <Card className="border-primary/15">
+                    <CardHeader>
+                      <CardTitle>In-depth overview</CardTitle>
+                      <CardDescription>
+                        SEO-friendly analysis for faceless creators (composite educational guidance).
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className={DETAIL_PROSE}>
+                      <ReactMarkdown>{longFormContent}</ReactMarkdown>
+                    </CardContent>
+                  </Card>
+                )}
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* Key Information */}
                   <Card>

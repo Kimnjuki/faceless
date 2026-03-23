@@ -24,6 +24,16 @@ export const get = query({
   },
 });
 
+/** Prefer verified expert for About page / author spotlight. */
+export const getAuthorProfile = query({
+  args: {},
+  handler: async (ctx) => {
+    const all = await ctx.db.query("profiles").collect();
+    const expert = all.find((p) => p.verifiedExpert === true);
+    return expert ?? all[0] ?? null;
+  },
+});
+
 /**
  * List all profiles (e.g. for member directory).
  */

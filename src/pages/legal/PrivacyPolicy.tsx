@@ -91,7 +91,18 @@ export default function PrivacyPolicy() {
               <section>
                 <h2 className="text-2xl font-semibold mb-4">6. Cookies and Tracking</h2>
                 <p className="text-muted-foreground">
-                  We use cookies and similar tracking technologies to track activity on our service and hold certain information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.
+                  We use cookies and similar technologies for session management, preferences, analytics, and (where
+                  consented) advertising. Affiliate and security logs may store IP address and user agent alongside click
+                  data. You can control cookies through your browser; blocking some cookies may limit site functionality.
+                </p>
+              </section>
+
+              <section>
+                <h2 className="text-2xl font-semibold mb-4">Third-party processors</h2>
+                <p className="text-muted-foreground">
+                  We use Convex for application data and real-time APIs, Stripe for payments, and other subprocessors for
+                  email delivery and analytics as disclosed in our agreements. Each subprocessor is selected for security and
+                  compliance appropriate to the data they process.
                 </p>
               </section>
 
@@ -112,9 +123,12 @@ export default function PrivacyPolicy() {
               <section>
                 <h2 className="text-2xl font-semibold mb-4">9. Contact Us</h2>
                 <p className="text-muted-foreground">
-                  If you have any questions about this Privacy Policy, please contact us at:
-                  <br />
-                  <strong>Email:</strong> privacy@facelesssuccess.com
+                  For privacy requests (access, correction, deletion, or questions about this policy), contact us at{" "}
+                  <strong>privacy@contentanonymity.com</strong> or use the{" "}
+                  <Link to="/contact" className="text-primary underline">
+                    contact form
+                  </Link>{" "}
+                  with “Privacy” in the subject line.
                 </p>
               </section>
             </div>

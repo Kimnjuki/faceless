@@ -10,8 +10,8 @@ export default function TermsOfService() {
         title="Terms of Service - User Agreement & Refund Policy | ContentAnonymity"
         description="ContentAnonymity's Terms of Service. Read our terms and conditions for using our platform. Includes service description, user rights, refund policy, and acceptable use policy."
         keywords="terms of service, terms and conditions, user agreement, service terms, refund policy"
-        url="https://contentanonymity.com/terms-of-service"
-        canonical="https://contentanonymity.com/terms-of-service"
+        url="https://contentanonymity.com/terms"
+        canonical="https://contentanonymity.com/terms"
         noindex={false}
       />
       <Header />

@@ -8,6 +8,7 @@ Allow: /
 Disallow: /dashboard/
 Disallow: /auth/
 Disallow: /api/
+Disallow: /creator-studio
 Disallow: /checkout
 Disallow: /admin/
 Disallow: /_next/
@@ -36,6 +37,9 @@ Allow: /community/
 Allow: /news
 Allow: /privacy-policy
 Allow: /terms-of-service
+Allow: /terms
+Allow: /about
+Allow: /contact
 
 # Sitemap location (CRITICAL for SEO - must be present)
 Sitemap: https://contentanonymity.com/sitemap.xml

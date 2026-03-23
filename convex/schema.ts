@@ -733,6 +733,9 @@ export default defineSchema({
   support_tickets: defineTable({
     legacyId: v.optional(v.string()),
     userId: v.optional(v.id("profiles")),
+    /** Guest contact when userId is absent (public contact form). */
+    contactEmail: v.optional(v.string()),
+    contactName: v.optional(v.string()),
     subject: v.string(),
     description: v.string(),
     priority: ticketPriority,

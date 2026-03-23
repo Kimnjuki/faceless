@@ -8,7 +8,7 @@ import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import RelatedContent from "@/components/RelatedContent";
 import Breadcrumb from "@/components/Breadcrumb";
-import ContributorCard from "@/components/ContributorCard";
+import AuthorBio from "@/components/AuthorBio";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -42,6 +42,10 @@ export default function ArticleDetail() {
       category_id: d.categoryId,
       author_id: d.author?.id ?? d.authorId,
       featured_image: d.featuredImage,
+      seo_title: d.seoTitle,
+      meta_description: d.metaDescription,
+      canonical_url: d.canonicalUrl,
+      schema_markup: d.schemaMarkup,
       published_at: publishedAt != null ? new Date(publishedAt).toISOString() : undefined,
       created_at: d.createdAt != null ? new Date(d.createdAt).toISOString() : undefined,
       updated_at: d.updatedAt != null ? new Date(d.updatedAt).toISOString() : undefined,
@@ -147,6 +151,31 @@ export default function ArticleDetail() {
   const uniqueTitle = article.seo_title || article.title || `${article.slug} - Article | ContentAnonymity`;
   const imageCategory = getImageCategory(article.category?.name);
 
+  const baseBlogPostingLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: article.title,
+    description: (article.excerpt || article.meta_description || '').slice(0, 200),
+    image: article.featured_image || 'https://contentanonymity.com/og-image.jpg',
+    datePublished: article.published_at,
+    dateModified: article.updated_at || article.published_at,
+    author: { '@type': 'Person', name: authorName },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ContentAnonymity',
+      logo: { '@type': 'ImageObject', url: 'https://contentanonymity.com/logo-icon.svg' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
+  };
+  const dbMarkup = raw && typeof raw === "object" && "schemaMarkup" in raw ? (raw as { schemaMarkup?: unknown }).schemaMarkup : undefined;
+  const structuredForSeo =
+    dbMarkup == null
+      ? baseBlogPostingLd
+      : [
+          baseBlogPostingLd,
+          ...(Array.isArray(dbMarkup) ? dbMarkup : [dbMarkup as object]),
+        ];
+
   return (
     <>
       <SEO
@@ -163,18 +192,7 @@ export default function ArticleDetail() {
           { name: 'Blog', url: 'https://contentanonymity.com/blog' },
           { name: article.title, url: canonicalUrl }
         ]}
-        structuredData={{
-          '@context': 'https://schema.org',
-          '@type': 'BlogPosting',
-          headline: article.title,
-          description: (article.excerpt || article.meta_description || '').slice(0, 200),
-          image: article.featured_image || 'https://contentanonymity.com/og-image.jpg',
-          datePublished: article.published_at,
-          dateModified: article.updated_at || article.published_at,
-          author: { '@type': 'Person', name: authorName },
-          publisher: { '@type': 'Organization', name: 'ContentAnonymity', logo: { '@type': 'ImageObject', url: 'https://contentanonymity.com/logo-icon.svg' } },
-          mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
-        }}
+        structuredData={structuredForSeo as object}
       />
       <Header />
       <main className="min-h-screen bg-background">
@@ -357,10 +375,7 @@ export default function ArticleDetail() {
               {article.author_id && (
                 <section className="mt-12 pt-8 border-t" aria-labelledby="author-heading">
                   <h2 id="author-heading" className="text-2xl font-bold mb-6">About the Author</h2>
-                  <ContributorCard 
-                    profileId={article.author_id} 
-                    showFullBio={true}
-                  />
+                  <AuthorBio profileId={article.author_id} />
                 </section>
               )}
 

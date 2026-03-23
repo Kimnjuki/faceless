@@ -35,6 +35,8 @@ import WebinarRegistration from "./pages/funnel/WebinarRegistration";
 import ChallengeFunnel from "./pages/funnel/ChallengeFunnel";
 import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
 import TermsOfService from "./pages/legal/TermsOfService";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 import TemplatesLibrary from "./pages/resources/TemplatesLibrary";
 import NicheDatabase from "./pages/resources/NicheDatabase";
 import NicheDetail from "./pages/niches/NicheDetail";
@@ -117,6 +119,9 @@ export default function App() {
         <Route path="/challenge/:name" element={<ChallengeFunnel />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-service" element={<TermsOfService />} />
+        <Route path="/terms" element={<TermsOfService />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/resources/templates" element={<TemplatesLibrary />} />
         <Route path="/resources/niches" element={<NicheDatabase />} />
         <Route path="/niches/:nicheId" element={<NicheDetail />} />

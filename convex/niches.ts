@@ -4,6 +4,38 @@ import { v } from "convex/values";
 /**
  * List niches with optional category/difficulty and sort.
  */
+export const listByCategory = query({
+  args: { categoryId: v.id("niche_categories"), limit: v.optional(v.number()) },
+  handler: async (ctx, { categoryId, limit }) => {
+    let results = await ctx.db.query("niches").collect();
+    results = results.filter((r) => r.categoryId === categoryId);
+    results.sort((a, b) => (b.profitabilityScore ?? 0) - (a.profitabilityScore ?? 0));
+    if (limit) results = results.slice(0, limit);
+    const categories = await ctx.db.query("niche_categories").collect();
+    const catMap = Object.fromEntries(categories.map((c) => [c._id, c]));
+    return results.map((n) => ({
+      ...n,
+      category: n.categoryId ? catMap[n.categoryId] : null,
+    }));
+  },
+});
+
+export const listByDifficulty = query({
+  args: { difficultyLevel: v.string(), limit: v.optional(v.number()) },
+  handler: async (ctx, { difficultyLevel, limit }) => {
+    let results = await ctx.db.query("niches").collect();
+    results = results.filter((r) => r.difficultyLevel === difficultyLevel);
+    results.sort((a, b) => (b.profitabilityScore ?? 0) - (a.profitabilityScore ?? 0));
+    if (limit) results = results.slice(0, limit);
+    const categories = await ctx.db.query("niche_categories").collect();
+    const catMap = Object.fromEntries(categories.map((c) => [c._id, c]));
+    return results.map((n) => ({
+      ...n,
+      category: n.categoryId ? catMap[n.categoryId] : null,
+    }));
+  },
+});
+
 export const list = query({
   args: {
     categoryId: v.optional(v.id("niche_categories")),

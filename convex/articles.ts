@@ -518,3 +518,116 @@ export const listRelated = query({
     }));
   },
 });
+
+/** Alias for AdSense / external docs — published only, newest first. */
+export const listPublished = query({
+  args: { limit: v.optional(v.number()) },
+  handler: async (ctx, { limit = 12 }) => {
+    let results = await ctx.db
+      .query("articles")
+      .withIndex("by_status", (q) => q.eq("status", "published"))
+      .collect();
+    results = results.filter(isVisible);
+    results.sort((a, b) => (b.publishedAt ?? b.createdAt ?? 0) - (a.publishedAt ?? a.createdAt ?? 0));
+    results = results.slice(0, limit);
+    return Promise.all(
+      results.map(async (article) => {
+        const category = article.categoryId ? await ctx.db.get(article.categoryId) : null;
+        const author = article.authorId ? await ctx.db.get(article.authorId) : null;
+        const tags = await ctx.db
+          .query("article_tags")
+          .withIndex("by_article", (q) => q.eq("articleId", article._id))
+          .collect();
+        return {
+          ...article,
+          category: category
+            ? { id: category._id, name: category.name, slug: category.slug, description: category.description }
+            : null,
+          author: author
+            ? { id: author._id, user_id: author.userId, full_name: author.fullName, avatar_url: author.avatarUrl }
+            : null,
+          tags: tags.map((t) => t.tag),
+        };
+      })
+    );
+  },
+});
+
+export const listByCategory = query({
+  args: {
+    categoryId: v.union(v.id("content_categories"), v.literal("uncategorized")),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, { categoryId, limit = 24 }) => {
+    let results = await ctx.db
+      .query("articles")
+      .withIndex("by_status", (q) => q.eq("status", "published"))
+      .collect();
+    results = results.filter(isVisible);
+    if (categoryId === "uncategorized") results = results.filter((a) => !a.categoryId);
+    else results = results.filter((a) => a.categoryId === categoryId);
+    results.sort((a, b) => (b.publishedAt ?? b.createdAt ?? 0) - (a.publishedAt ?? a.createdAt ?? 0));
+    results = results.slice(0, limit);
+    return Promise.all(
+      results.map(async (article) => {
+        const category = article.categoryId ? await ctx.db.get(article.categoryId) : null;
+        const author = article.authorId ? await ctx.db.get(article.authorId) : null;
+        const tags = await ctx.db
+          .query("article_tags")
+          .withIndex("by_article", (q) => q.eq("articleId", article._id))
+          .collect();
+        return {
+          ...article,
+          category: category
+            ? { id: category._id, name: category.name, slug: category.slug, description: category.description }
+            : null,
+          author: author
+            ? { id: author._id, user_id: author.userId, full_name: author.fullName, avatar_url: author.avatarUrl }
+            : null,
+          tags: tags.map((t) => t.tag),
+        };
+      })
+    );
+  },
+});
+
+export const listByTag = query({
+  args: { tag: v.string(), limit: v.optional(v.number()) },
+  handler: async (ctx, { tag, limit = 24 }) => {
+    const tagRows = await ctx.db
+      .query("article_tags")
+      .withIndex("by_tag", (q) => q.eq("tag", tag))
+      .collect();
+    const ids = new Set(tagRows.map((t) => t.articleId).filter(Boolean));
+    let results = await ctx.db
+      .query("articles")
+      .withIndex("by_status", (q) => q.eq("status", "published"))
+      .collect();
+    results = results.filter((a) => ids.has(a._id) && isVisible(a));
+    results.sort((a, b) => (b.publishedAt ?? b.createdAt ?? 0) - (a.publishedAt ?? a.createdAt ?? 0));
+    results = results.slice(0, limit);
+    return Promise.all(
+      results.map(async (article) => {
+        const category = article.categoryId ? await ctx.db.get(article.categoryId) : null;
+        const author = article.authorId ? await ctx.db.get(article.authorId) : null;
+        const tags = await ctx.db
+          .query("article_tags")
+          .withIndex("by_article", (q) => q.eq("articleId", article._id))
+          .collect();
+        return {
+          ...article,
+          category: category
+            ? { id: category._id, name: category.name, slug: category.slug, description: category.description }
+            : null,
+          author: author
+            ? { id: author._id, user_id: author.userId, full_name: author.fullName, avatar_url: author.avatarUrl }
+            : null,
+          tags: tags.map((t) => t.tag),
+        };
+      })
+    );
+  },
+});
+
+/** Alias for incrementViews (naming in implementation checklist). */
+export const incrementViewCount = incrementViews;

@@ -5,6 +5,38 @@ import type { Id } from "./_generated/dataModel";
 /**
  * List learning paths with modules.
  */
+/**
+ * Single path by track (e.g. beginner) with modules.
+ */
+export const getByTrackType = query({
+  args: { trackType: v.string() },
+  handler: async (ctx, { trackType }) => {
+    const paths = await ctx.db.query("learning_paths").collect();
+    const path = paths.find((p) => p.trackType === trackType);
+    if (!path) return null;
+    const modules = await ctx.db
+      .query("learning_modules")
+      .withIndex("by_learning_path", (q) => q.eq("learningPathId", path._id))
+      .collect();
+    modules.sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0));
+    return { ...path, modules };
+  },
+});
+
+export const getWithModules = query({
+  args: { pathId: v.id("learning_paths") },
+  handler: async (ctx, { pathId }) => {
+    const path = await ctx.db.get(pathId);
+    if (!path) return null;
+    const modules = await ctx.db
+      .query("learning_modules")
+      .withIndex("by_learning_path", (q) => q.eq("learningPathId", pathId))
+      .collect();
+    modules.sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0));
+    return { ...path, modules };
+  },
+});
+
 export const list = query({
   args: {
     trackType: v.optional(v.string()),

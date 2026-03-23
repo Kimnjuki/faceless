@@ -36,3 +36,18 @@ export const incrementDownload = mutation({
     });
   },
 });
+
+export const incrementDownloadCount = incrementDownload;
+
+export const listByNiche = query({
+  args: { niche: v.string(), limit: v.optional(v.number()) },
+  handler: async (ctx, { niche, limit }) => {
+    let results = await ctx.db.query("templates").collect();
+    results = results.filter(
+      (t) => t.niche && t.niche.toLowerCase().includes(niche.toLowerCase())
+    );
+    results.sort((a, b) => (b.downloadCount ?? 0) - (a.downloadCount ?? 0));
+    if (limit) results = results.slice(0, limit);
+    return results;
+  },
+});

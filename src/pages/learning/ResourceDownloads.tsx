@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,9 +9,10 @@ import { Search, Download, FileText, Calendar, CheckSquare, TrendingUp, Users } 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import EmailOptIn from "@/components/EmailOptIn";
 import { trackDownload } from "@/utils/analytics";
 
-const resources = [
+const staticResources = [
   {
     id: "1",
     title: "Content Calendar Template",
@@ -73,6 +76,54 @@ const resources = [
 ];
 
 export default function ResourceDownloads() {
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const templates = useQuery(api.templates.list, hasConvex ? { limit: 50 } : "skip");
+  const assets = useQuery(api.digital_assets.listPublic, hasConvex ? { limit: 50 } : "skip");
+
+  const resources = useMemo(() => {
+    const fromDb: Array<{
+      id: string;
+      title: string;
+      type: string;
+      category: string;
+      downloads: number;
+      description: string;
+      fileFormat: string;
+      icon: typeof FileText;
+    }> = [];
+
+    if (templates?.length) {
+      for (const t of templates) {
+        fromDb.push({
+          id: `tpl-${t._id}`,
+          title: t.title,
+          type: "Template",
+          category: t.niche || t.platform || "Templates",
+          downloads: Math.round(t.downloadCount ?? 0),
+          description: t.description ?? "Downloadable template from ContentAnonymity.",
+          fileFormat: t.fileFormat ?? "Various",
+          icon: FileText,
+        });
+      }
+    }
+    if (assets?.length) {
+      for (const a of assets) {
+        fromDb.push({
+          id: `asset-${a._id}`,
+          title: a.fileName,
+          type: "Asset",
+          category: "Downloads",
+          downloads: 0,
+          description: "Digital asset from our library.",
+          fileFormat: a.version ?? "File",
+          icon: Download,
+        });
+      }
+    }
+
+    return [...fromDb, ...staticResources];
+  }, [templates, assets]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
@@ -105,6 +156,14 @@ export default function ResourceDownloads() {
               <p className="text-lg text-muted-foreground">
                 Checklists, PDFs, spreadsheets, and templates to accelerate your success
               </p>
+            </div>
+
+            <div className="max-w-xl mx-auto mb-10 p-6 rounded-xl border bg-muted/30">
+              <h2 className="text-lg font-semibold mb-2">Get new resources by email</h2>
+              <p className="text-sm text-muted-foreground mb-4">
+                Join the list for templates, prompts, and checklists. Unsubscribe anytime.
+              </p>
+              <EmailOptIn source="learning_resources" />
             </div>
 
             <div className="mb-8 space-y-4">

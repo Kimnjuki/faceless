@@ -70,6 +70,27 @@ export const list = query({
   },
 });
 
+/** Same as list with platform filter — explicit alias for docs. */
+export const listByPlatform = query({
+  args: {
+    platform: v.string(),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, { platform, limit }) => {
+    let results = await ctx.db.query("platform_guides").collect();
+    results = results.filter((g) => g.published !== false && g.platform === platform);
+    results.sort((a, b) => (b.publishedAt ?? b.createdAt ?? 0) - (a.publishedAt ?? a.createdAt ?? 0));
+    if (limit) results = results.slice(0, limit);
+    const authorIds = [...new Set(results.map((r) => r.authorId).filter(Boolean))] as any[];
+    const authors = await Promise.all(authorIds.map((id) => ctx.db.get(id)));
+    const authorMap = Object.fromEntries(authorIds.map((id, i) => [id, authors[i]]));
+    return results.map((g) => ({
+      ...g,
+      author: g.authorId ? authorMap[g.authorId] : null,
+    }));
+  },
+});
+
 /**
  * Get platform guide by slug.
  */

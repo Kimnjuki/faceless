@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useQuery, useMutation } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 import { Calculator, TrendingUp, DollarSign } from "lucide-react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -8,42 +10,97 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 import { trackToolUsage } from "@/utils/analytics";
 import { Separator } from "@/components/ui/separator";
 
 export default function ProfitabilityCalculator() {
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const nicheRows = useQuery(api.niche_analysis.list, hasConvex ? { limit: 200 } : "skip");
+  const trackConversion = useMutation(api.conversions.track);
+
+  const nicheOptions = useMemo(() => {
+    if (!nicheRows?.length) return [];
+    return nicheRows.map((r) => r.nicheName).filter(Boolean) as string[];
+  }, [nicheRows]);
+
   const [inputs, setInputs] = useState({
-    niche: "",
-    platform: "",
-    frequency: "3",
-    cpm: "5"
+    nicheName: "",
+    platform: "youtube",
+    videosPerWeek: 3,
+    avgViewsPerVideo: 8000,
+    rpm: 12,
   });
 
   const [results, setResults] = useState<{
     monthly: number;
     yearly: number;
     breakeven: number;
+    monthlyViews: number;
+    contentForMonetization: string;
   } | null>(null);
 
   useEffect(() => {
-    trackToolUsage('Profitability Calculator', 'tools');
+    trackToolUsage("Profitability Calculator", "tools");
   }, []);
 
-  const calculateProfitability = () => {
-    trackToolUsage('Profitability Calculator', 'tools', 'calculate');
-    const postsPerWeek = parseInt(inputs.frequency);
-    const cpmRate = parseFloat(inputs.cpm);
-    const avgViews = inputs.platform === "youtube" ? 10000 : inputs.platform === "tiktok" ? 50000 : 5000;
-    
+  useEffect(() => {
+    if (!nicheRows?.length || inputs.nicheName) return;
+    const first = nicheRows[0];
+    if (first?.nicheName != null && first.avgRpm != null) {
+      const r = first.avgRpm;
+      setInputs((s) => ({
+        ...s,
+        nicheName: first.nicheName,
+        rpm: Math.round(r * 10) / 10,
+      }));
+    }
+  }, [nicheRows, inputs.nicheName]);
+
+  const onNicheChange = (nicheName: string) => {
+    const row = nicheRows?.find((r) => r.nicheName === nicheName);
+    setInputs((s) => ({
+      ...s,
+      nicheName,
+      rpm: row?.avgRpm != null ? Math.round(row.avgRpm * 10) / 10 : s.rpm,
+    }));
+  };
+
+  const calculateProfitability = async () => {
+    trackToolUsage("Profitability Calculator", "tools", "calculate");
+    const postsPerWeek = inputs.videosPerWeek;
+    const rpm = inputs.rpm;
+    const avgViews = inputs.avgViewsPerVideo;
+
     const monthlyViews = postsPerWeek * 4 * avgViews;
-    const monthlyRevenue = (monthlyViews / 1000) * cpmRate;
+    const monthlyRevenue = (monthlyViews / 1000) * rpm;
     const yearlyRevenue = monthlyRevenue * 12;
-    const breakeven = Math.ceil(1000 / monthlyRevenue);
+    const breakeven = monthlyRevenue > 0 ? Math.ceil(1000 / monthlyRevenue) : 999;
+    const yppHours = 4000;
+    const avgMinutesPerVideo = inputs.platform === "tiktok" ? 0.5 : inputs.platform === "instagram" ? 1 : 8;
+    const watchHoursPerMonth = (monthlyViews * avgMinutesPerVideo) / 60;
+    const monthsToYpp =
+      watchHoursPerMonth > 0 ? Math.ceil(yppHours / watchHoursPerMonth) : 999;
+
+    if (hasConvex) {
+      try {
+        await trackConversion({
+          conversionType: "calculator_use",
+          source: "profitability_calculator",
+          medium: inputs.platform,
+          campaign: inputs.nicheName || "unknown",
+        });
+      } catch {
+        /* non-blocking */
+      }
+    }
 
     setResults({
       monthly: Math.round(monthlyRevenue),
       yearly: Math.round(yearlyRevenue),
-      breakeven: breakeven
+      breakeven,
+      monthlyViews: Math.round(monthlyViews),
+      contentForMonetization: `Rough order-of-magnitude: ~${monthsToYpp} months of this pace to reach 4,000 public watch hours (YouTube Partner Programme style threshold) if average watch time tracks video length.`,
     });
   };
 
@@ -99,24 +156,36 @@ export default function ProfitabilityCalculator() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="niche">Niche</Label>
-                    <Select value={inputs.niche} onValueChange={(value) => setInputs({ ...inputs, niche: value })}>
+                    <Label htmlFor="niche">Niche (RPM from benchmarks)</Label>
+                    <Select
+                      value={inputs.nicheName}
+                      onValueChange={onNicheChange}
+                      disabled={!nicheOptions.length}
+                    >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select your niche" />
+                        <SelectValue placeholder={nicheOptions.length ? "Select niche" : "Loading niches…"} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="finance">Finance</SelectItem>
-                        <SelectItem value="tech">Tech & AI</SelectItem>
-                        <SelectItem value="lifestyle">Lifestyle</SelectItem>
-                        <SelectItem value="business">Business</SelectItem>
-                        <SelectItem value="health">Health & Fitness</SelectItem>
+                        {(nicheOptions.length ? nicheOptions : ["Personal Finance & Budgeting"]).map((n) => (
+                          <SelectItem key={n} value={n}>
+                            {n}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
+                    {!hasConvex && (
+                      <p className="text-xs text-muted-foreground">
+                        Connect Convex to load RPM benchmarks from niche analysis.
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="platform">Platform</Label>
-                    <Select value={inputs.platform} onValueChange={(value) => setInputs({ ...inputs, platform: value })}>
+                    <Select
+                      value={inputs.platform}
+                      onValueChange={(value) => setInputs({ ...inputs, platform: value })}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select platform" />
                       </SelectTrigger>
@@ -124,39 +193,58 @@ export default function ProfitabilityCalculator() {
                         <SelectItem value="youtube">YouTube</SelectItem>
                         <SelectItem value="tiktok">TikTok</SelectItem>
                         <SelectItem value="instagram">Instagram</SelectItem>
+                        <SelectItem value="blog">Blog</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="frequency">Posts Per Week</Label>
-                    <Input
-                      id="frequency"
-                      name="frequency"
-                      type="number"
-                      value={inputs.frequency}
-                      onChange={(e) => setInputs({ ...inputs, frequency: e.target.value })}
-                      autoComplete="off"
-                      min="1"
-                      max="14"
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <Label>Videos / posts per week</Label>
+                      <span className="text-sm text-muted-foreground">{inputs.videosPerWeek}</span>
+                    </div>
+                    <Slider
+                      min={1}
+                      max={7}
+                      step={1}
+                      value={[inputs.videosPerWeek]}
+                      onValueChange={(v) => setInputs({ ...inputs, videosPerWeek: v[0] ?? 1 })}
+                    />
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <Label>Avg views per video / post</Label>
+                      <span className="text-sm text-muted-foreground">
+                        {inputs.avgViewsPerVideo.toLocaleString()}
+                      </span>
+                    </div>
+                    <Slider
+                      min={500}
+                      max={200000}
+                      step={500}
+                      value={[inputs.avgViewsPerVideo]}
+                      onValueChange={(v) => setInputs({ ...inputs, avgViewsPerVideo: v[0] ?? 500 })}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="cpm">Estimated CPM ($)</Label>
+                    <Label htmlFor="rpm">RPM ($ per 1,000 views)</Label>
                     <Input
-                      id="cpm"
-                      name="cpm"
+                      id="rpm"
+                      name="rpm"
                       type="number"
-                      value={inputs.cpm}
-                      onChange={(e) => setInputs({ ...inputs, cpm: e.target.value })}
+                      value={inputs.rpm}
+                      onChange={(e) =>
+                        setInputs({ ...inputs, rpm: parseFloat(e.target.value) || 0 })
+                      }
                       autoComplete="off"
-                      min="1"
-                      step="0.5"
+                      min="0.5"
+                      step="0.1"
                     />
                   </div>
 
-                  <Button onClick={calculateProfitability} className="w-full" size="lg">
+                  <Button onClick={() => void calculateProfitability()} className="w-full" size="lg">
                     Calculate Earnings
                   </Button>
                 </CardContent>
@@ -184,8 +272,18 @@ export default function ProfitabilityCalculator() {
                         </div>
                         <Separator />
                         <div>
-                          <p className="text-sm text-muted-foreground mb-1">Months to $1000/mo</p>
+                          <p className="text-sm text-muted-foreground mb-1">Estimated monthly views</p>
+                          <p className="text-xl font-bold">{results.monthlyViews.toLocaleString()}</p>
+                        </div>
+                        <Separator />
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-1">Months to ~$1k/mo (ad-only)</p>
                           <p className="text-xl font-bold">{results.breakeven} months</p>
+                        </div>
+                        <Separator />
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-1">Content volume note</p>
+                          <p className="text-sm leading-relaxed">{results.contentForMonetization}</p>
                         </div>
                       </CardContent>
                     </Card>

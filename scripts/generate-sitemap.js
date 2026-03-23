@@ -63,9 +63,12 @@ const staticRoutes = [
   { path: '/community/events', priority: '0.6', changefreq: 'weekly' },
   { path: '/community/challenges', priority: '0.6', changefreq: 'weekly' },
   
-  // Legal Pages - Low Priority (but important for completeness)
+  // Legal & trust (AdSense / E-E-A-T)
+  { path: '/about', priority: '0.7', changefreq: 'monthly' },
+  { path: '/contact', priority: '0.7', changefreq: 'monthly' },
   { path: '/privacy-policy', priority: '0.5', changefreq: 'yearly' },
-  { path: '/terms-of-service', priority: '0.5', changefreq: 'yearly' },
+  { path: '/terms', priority: '0.5', changefreq: 'yearly' },
+  { path: '/terms-of-service', priority: '0.4', changefreq: 'yearly' },
   
   // Health Check (excluded from indexing but good to have in sitemap for monitoring)
   // Note: Health endpoint should have noindex meta tag

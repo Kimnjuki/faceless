@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,6 +26,9 @@ const TOOL_NAMES: Record<string, string> = {
 };
 
 export default function CreatorStudio() {
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const contentToolDefs = useQuery(api.contentTools.list, hasConvex ? { limit: 24 } : "skip");
+  const toolCatalog = useQuery(api.tools.list, hasConvex ? { limit: 24 } : "skip");
   const [activeTab, setActiveTab] = useState("script");
 
   useEffect(() => {
@@ -130,6 +135,70 @@ export default function CreatorStudio() {
                 <IdeaGenerator />
               </TabsContent>
             </Tabs>
+
+            {(contentToolDefs?.length || toolCatalog?.length) ? (
+              <section className="mt-16 space-y-8">
+                {contentToolDefs && contentToolDefs.length > 0 && (
+                  <div>
+                    <h2 className="text-2xl font-bold mb-4">Studio modules</h2>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {contentToolDefs.map((ct) => (
+                        <Card key={ct._id}>
+                          <CardHeader>
+                            <CardTitle className="text-lg">{ct.name}</CardTitle>
+                            <CardDescription>{ct.category}</CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <p className="text-sm text-muted-foreground">{ct.description}</p>
+                            {ct.keyFeatures && ct.keyFeatures.length > 0 && (
+                              <ul className="mt-3 text-sm list-disc pl-5 space-y-1">
+                                {ct.keyFeatures.slice(0, 4).map((f) => (
+                                  <li key={f}>{f}</li>
+                                ))}
+                              </ul>
+                            )}
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {toolCatalog && toolCatalog.length > 0 && (
+                  <div>
+                    <h2 className="text-2xl font-bold mb-4">Recommended tools</h2>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {toolCatalog.map((t) => (
+                        <Card key={t._id}>
+                          <CardHeader>
+                            <CardTitle className="text-lg">{t.name}</CardTitle>
+                            {t.pricing && (
+                              <CardDescription>{t.pricing}</CardDescription>
+                            )}
+                          </CardHeader>
+                          <CardContent className="space-y-2 text-sm">
+                            {t.description && (
+                              <p className="text-muted-foreground">{t.description}</p>
+                            )}
+                            {t.pros && t.pros.length > 0 && (
+                              <div>
+                                <span className="font-medium">Pros:</span>{" "}
+                                {t.pros.slice(0, 3).join(", ")}
+                              </div>
+                            )}
+                            {t.cons && t.cons.length > 0 && (
+                              <div>
+                                <span className="font-medium">Cons:</span>{" "}
+                                {t.cons.slice(0, 3).join(", ")}
+                              </div>
+                            )}
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </section>
+            ) : null}
           </div>
         </div>
       </main>

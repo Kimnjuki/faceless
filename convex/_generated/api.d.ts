@@ -13,6 +13,7 @@ import type * as challenges from "../challenges.js";
 import type * as community from "../community.js";
 import type * as content from "../content.js";
 import type * as contentCategories from "../contentCategories.js";
+import type * as contentTools from "../contentTools.js";
 import type * as conversions from "../conversions.js";
 import type * as courses from "../courses.js";
 import type * as crons from "../crons.js";
@@ -49,6 +50,7 @@ declare const fullApi: ApiFromModules<{
   community: typeof community;
   content: typeof content;
   contentCategories: typeof contentCategories;
+  contentTools: typeof contentTools;
   conversions: typeof conversions;
   courses: typeof courses;
   crons: typeof crons;

@@ -23,6 +23,7 @@ import SEO from "@/components/SEO";
 import { usePlatformGuides } from "@/hooks/usePlatformGuides";
 import DataStateMessage from "@/components/DataStateMessage";
 import { PLATFORM_GUIDES_FALLBACK } from "@/config/platformGuidesFallback";
+import { isDisplayableConvexPlatformGuide } from "@/utils/platformGuideDisplay";
 
 const platformIcons: Record<string, any> = {
   youtube: Youtube,
@@ -51,7 +52,11 @@ export default function PlatformGuides() {
     PLATFORM_GUIDES_FALLBACK.forEach((g) =>
       bySlug.set(g.slug, { ...g, id: `fallback-${g.slug}`, read_time: g.readTime, tool_tags: g.toolTags, difficulty_level: g.difficultyLevel })
     );
-    convexGuides.forEach((g) => bySlug.set(g.slug, g));
+    // Only merge real Convex rows — skip empty / "Untitled Guide" placeholders (unique slugs flood the grid)
+    convexGuides.forEach((g) => {
+      if (!isDisplayableConvexPlatformGuide(g)) return;
+      bySlug.set(g.slug, g);
+    });
     return Array.from(bySlug.values());
   }, [convexGuides]);
 

@@ -3,6 +3,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import type { Id } from "@/lib/convex-ids";
 import type { Template } from "@/types";
+import { TEMPLATES_LIBRARY_FALLBACK } from "@/config/templatesLibrary/templatesLibraryFallback";
 
 interface TemplateFilters {
   platform?: string;
@@ -15,6 +16,8 @@ function toTemplate(t: any): Template {
   return {
     ...t,
     id: t._id ?? t.id,
+    slug: t.slug,
+    content: t.content,
     download_url: t.downloadUrl,
     download_count: t.downloadCount ?? 0,
     rating_count: t.ratingCount ?? 0,
@@ -41,10 +44,10 @@ export function useTemplates(filters: TemplateFilters = {}) {
 
   const incrementDownload = useMutation(api.templates.incrementDownload);
 
-  // Handle connection errors
+  // Handle connection errors (static fallback still works without Convex)
   useEffect(() => {
     if (!hasConvex) {
-      setConnectionError("Convex backend not configured. Set VITE_CONVEX_URL environment variable.");
+      setConnectionError(null);
       return;
     }
 
@@ -68,24 +71,70 @@ export function useTemplates(filters: TemplateFilters = {}) {
   }, [raw, hasConvex, retryCount]);
 
   const templates: Template[] = useMemo(() => {
-    if (!hasConvex || raw === undefined) return [];
-    try {
-      let list = (raw ?? []).map(toTemplate);
+    const mergeWithFallback = (convexList: Template[]): Template[] => {
+      const byKey = new Map<string, Template>();
+      TEMPLATES_LIBRARY_FALLBACK.forEach((fb) => {
+        byKey.set(fb.slug, { ...fb, download_url: fb.download_url ?? fb.downloadUrl });
+      });
+      convexList.forEach((t) => {
+        const mapped = toTemplate(t);
+        const slug = (mapped as Template & { slug?: string }).slug;
+        if (slug && byKey.has(slug)) {
+          const base = byKey.get(slug)!;
+          byKey.set(slug, {
+            ...base,
+            ...mapped,
+            content: mapped.content ?? base.content,
+            id: mapped.id ?? base.id,
+          });
+        } else {
+          const key = String(mapped.id ?? mapped._id ?? "");
+          if (key) byKey.set(key, mapped);
+        }
+      });
+      return Array.from(byKey.values());
+    };
+
+    const filterClient = (list: Template[]): Template[] => {
+      let result = list;
+      if (filters.platform && filters.platform !== "all") {
+        result = result.filter((t) => t.platform === filters.platform);
+      }
+      if (filters.type && filters.type !== "all") {
+        result = result.filter((t) => t.type === filters.type);
+      }
+      if (filters.niche && filters.niche !== "all") {
+        result = result.filter((t) => t.niche === filters.niche);
+      }
       if (filters.searchQuery) {
         const q = filters.searchQuery.toLowerCase();
-        list = list.filter(
+        result = result.filter(
           (t) =>
             (t.title ?? "").toLowerCase().includes(q) ||
             (t.description ?? "").toLowerCase().includes(q) ||
-            (t.tags ?? []).some((tag: string) => tag.toLowerCase().includes(q))
+            (t.tags ?? []).some((tag: string) => tag.toLowerCase().includes(q)) ||
+            (t.content ?? "").toLowerCase().includes(q)
         );
       }
-      return list;
+      return result;
+    };
+
+    if (!hasConvex || raw === undefined) {
+      return filterClient(
+        TEMPLATES_LIBRARY_FALLBACK.map((fb) => ({
+          ...fb,
+          download_url: fb.download_url ?? fb.downloadUrl,
+        })) as Template[]
+      );
+    }
+    try {
+      const list = mergeWithFallback((raw ?? []).map(toTemplate));
+      return filterClient(list);
     } catch (error) {
       console.error("Error processing templates:", error);
-      return [];
+      return filterClient(TEMPLATES_LIBRARY_FALLBACK.map((fb) => ({ ...fb })) as Template[]);
     }
-  }, [raw, filters.searchQuery, hasConvex]);
+  }, [raw, filters.searchQuery, filters.platform, filters.type, filters.niche, hasConvex]);
 
   const loading = hasConvex && raw === undefined;
   const error = connectionError || (hasConvex && raw === null ? "Failed to load templates" : null);

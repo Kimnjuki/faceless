@@ -758,6 +758,7 @@ export default defineSchema({
   templates: defineTable({
     legacyId: v.optional(v.string()),
     title: v.string(),
+    slug: v.optional(v.string()),
     platform: v.optional(v.string()),
     niche: v.optional(v.string()),
     type: v.optional(v.string()),
@@ -766,6 +767,7 @@ export default defineSchema({
     downloadUrl: v.string(),
     fileFormat: v.optional(v.string()),
     description: v.optional(v.string()),
+    content: v.optional(v.string()),
     tags: v.optional(v.array(v.string())),
     downloadCount: v.optional(v.float64()),
     rating: v.optional(v.float64()),

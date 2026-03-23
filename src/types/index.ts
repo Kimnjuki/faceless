@@ -146,12 +146,16 @@ export interface Template {
   type?: string;
   difficulty?: string;
   previewUrl?: string;
-  downloadUrl: string;
+  /** External file URL; optional when `content` provides an in-app downloadable body */
+  downloadUrl?: string;
   download_url?: string;
   fileFormat?: string;
   file_format?: string;
   description?: string;
   tags?: string[];
+  /** Long-form Markdown body for preview + .txt download (templates library) */
+  content?: string;
+  slug?: string;
   downloadCount?: number;
   download_count?: number;
   rating?: number;

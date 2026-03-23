@@ -44,6 +44,7 @@ import CreatorStudio from "./pages/creator-studio/CreatorStudio";
 import PlatformGuides from "./pages/learning/PlatformGuides";
 import PlatformGuideDetail from "./pages/learning/PlatformGuideDetail";
 import CaseStudies from "./pages/learning/CaseStudies";
+import CaseStudyDetail from "./pages/learning/CaseStudyDetail";
 import LiveWorkshops from "./pages/learning/LiveWorkshops";
 import ResourceDownloads from "./pages/learning/ResourceDownloads";
 import MemberDirectory from "./pages/community/MemberDirectory";
@@ -125,6 +126,7 @@ export default function App() {
         <Route path="/creator-studio" element={<CreatorStudio />} />
         <Route path="/platform-guides/:slug" element={<PlatformGuideDetail />} />
         <Route path="/learning/case-studies" element={<CaseStudies />} />
+        <Route path="/learning/case-studies/:slug" element={<CaseStudyDetail />} />
         <Route path="/learning/workshops" element={<LiveWorkshops />} />
         <Route path="/learning/resources" element={<ResourceDownloads />} />
         <Route path="/community/members" element={<MemberDirectory />} />

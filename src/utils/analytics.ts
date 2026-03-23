@@ -12,7 +12,7 @@ const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-VGB9R02TV
 
 // Engagement tracking state
 let scrollDepthTracked = { 25: false, 50: false, 75: false, 90: false };
-let sessionStartTime = Date.now();
+const sessionStartTime = Date.now();
 let lastActivityTime = Date.now();
 let engagementTimer: NodeJS.Timeout | null = null;
 

@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { getImage, IMAGES } from '@/config/images';
+import React, { useState, useRef } from 'react';
+import { IMAGES } from '@/config/images';
 
 // Define allowed keys for IMAGES object
 type ImageCategoryKey = 
@@ -57,7 +57,7 @@ export default function OptimizedImage({
   loading = 'lazy',
   sizes,
   priority = false,
-  fallbackCategory = 'fallbacks',
+  fallbackCategory: fallbackBucket = 'fallbacks',
   fallbackKey = 'default',
   onError,
   onLoad
@@ -68,8 +68,9 @@ export default function OptimizedImage({
 
   // Get fallback image if category and key are provided
   const fallbackSrc = category && imageKey 
-    ? IMAGES[category]?.[imageKey as keyof typeof IMAGES[typeof category]] || IMAGES.fallbacks[fallbackKey]
-    : IMAGES.fallbacks[fallbackKey];
+    ? IMAGES[category]?.[imageKey as keyof typeof IMAGES[typeof category]] ||
+      (IMAGES[fallbackBucket] as Record<FallbackKey, string>)[fallbackKey]
+    : (IMAGES[fallbackBucket] as Record<FallbackKey, string>)[fallbackKey];
 
   // Handle image error
   const handleError = (error: React.SyntheticEvent<HTMLImageElement, Event>) => {

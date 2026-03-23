@@ -9,7 +9,11 @@ import ConvexConnectionStatus from './components/ConvexConnectionStatus'
 import { initGoogleAnalytics } from './utils/analytics'
 import { initClarity } from './utils/clarity'
 import { initGoogleAdManager, initPrebid } from './utils/adManager'
-import { setupPageVisibilityTracking, setupCoreWebVitalsTracking } from './utils/performanceOptimization'
+import {
+  setupPageVisibilityTracking,
+  setupCoreWebVitalsTracking,
+  trackPagePerformance,
+} from './utils/performanceOptimization'
 import './index.css'
 
 // Initialize Convex client with error handling
@@ -99,14 +103,13 @@ try {
     const cleanupCoreWebVitals = setupCoreWebVitalsTracking();
     
     // Track initial page performance after load
-    if (document.readyState === 'complete') {
-      const { trackPagePerformance } = require('./utils/performanceOptimization');
+    const runTrack = () => {
       trackPagePerformance(window.location.pathname);
+    };
+    if (document.readyState === 'complete') {
+      runTrack();
     } else {
-      window.addEventListener('load', () => {
-        const { trackPagePerformance } = require('./utils/performanceOptimization');
-        trackPagePerformance(window.location.pathname);
-      });
+      window.addEventListener('load', runTrack);
     }
     
     // Cleanup on page unload

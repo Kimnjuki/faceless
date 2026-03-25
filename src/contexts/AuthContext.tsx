@@ -81,10 +81,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!isAuthenticated || !auth0User || !hasConvex) return;
     (async () => {
       try {
+        let pendingName: string | undefined;
+        if (typeof sessionStorage !== "undefined") {
+          const pending = sessionStorage.getItem("faceless_pending_display_name");
+          if (pending?.trim()) {
+            pendingName = pending.trim();
+            sessionStorage.removeItem("faceless_pending_display_name");
+          }
+        }
+        const fallback =
+          auth0User.name?.trim() ||
+          pendingName ||
+          auth0User.email?.split("@")[0] ||
+          "";
         await upsertFromAuth({
           userId: auth0User.sub!,
           email: auth0User.email ?? "",
-          fullName: auth0User.name ?? auth0User.email?.split("@")[0] ?? "",
+          fullName: fallback,
           avatarUrl: auth0User.picture ?? undefined,
         });
       } catch (e) {
@@ -93,9 +106,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })();
   }, [isAuthenticated, auth0User, upsertFromAuth, hasConvex]);
 
-  const signIn = async (_email: string, _password: string) => {
+  /**
+   * Email/password are validated on the client; Auth0 Universal Login performs real authentication.
+   * We pass `login_hint` so the hosted login page can pre-fill the email. Password is entered on Auth0.
+   */
+  const signIn = async (email: string, _password: string) => {
     try {
-      await loginWithRedirect();
+      await loginWithRedirect({
+        authorizationParams: {
+          login_hint: email,
+        },
+      });
       return { user: null, error: null };
     } catch (e: any) {
       toast.error(e?.message ?? "Sign in failed");
@@ -103,9 +124,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signUp = async (_email: string, _password: string, _name?: string) => {
+  const signUp = async (email: string, _password: string, name?: string) => {
     try {
-      await loginWithRedirect({ authorizationParams: { screen_hint: "signup" } });
+      if (typeof sessionStorage !== "undefined" && name?.trim()) {
+        sessionStorage.setItem("faceless_pending_display_name", name.trim());
+      }
+      await loginWithRedirect({
+        authorizationParams: {
+          screen_hint: "signup",
+          login_hint: email,
+        },
+      });
       return { user: null, error: null };
     } catch (e: any) {
       toast.error(e?.message ?? "Sign up failed");

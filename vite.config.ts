@@ -87,6 +87,9 @@ export default defineConfig({
   },
   // Server configuration for development
   server: {
+    // Stable port so Auth0 "Allowed Callback URLs" (e.g. http://localhost:5173/auth/callback) stay valid
+    port: 5173,
+    strictPort: true,
     headers: {
       'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
       'X-Content-Type-Options': 'nosniff',

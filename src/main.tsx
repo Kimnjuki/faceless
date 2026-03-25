@@ -15,6 +15,7 @@ import {
   trackPagePerformance,
 } from './utils/performanceOptimization'
 import './index.css'
+import { isAuth0Configured, normalizeAuth0Domain } from './lib/auth0'
 
 // Initialize Convex client with error handling
 // Always create a client (even if URL is missing) to prevent hook errors
@@ -151,9 +152,9 @@ if (!rootElement) {
   }
 }
 
-const auth0Domain = import.meta.env.VITE_AUTH0_DOMAIN ?? '';
-const auth0ClientId = import.meta.env.VITE_AUTH0_CLIENT_ID ?? '';
-const hasAuth0 = Boolean(auth0Domain && auth0ClientId);
+const auth0Domain = normalizeAuth0Domain(import.meta.env.VITE_AUTH0_DOMAIN);
+const auth0ClientId = import.meta.env.VITE_AUTH0_CLIENT_ID?.trim() ?? '';
+const hasAuth0 = isAuth0Configured();
 
 // Always wrap in ConvexProvider to prevent hook errors
 // Components will check VITE_CONVEX_URL before using Convex features

@@ -104,12 +104,16 @@ export function initWebVitals() {
       console.warn('LCP observer not supported');
     }
 
-    // CLS - Cumulative Layout Shift
+    // CLS - Cumulative Layout Shift (exclude user-input–related shifts per spec)
     try {
       let clsValue = 0;
       const clsObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          const layoutShift = entry as PerformanceEntry & { value?: number };
+          const layoutShift = entry as PerformanceEntry & {
+            value?: number;
+            hadRecentInput?: boolean;
+          };
+          if (layoutShift.hadRecentInput) continue;
           if (!layoutShift.value) continue;
           clsValue += layoutShift.value;
         }
@@ -123,7 +127,11 @@ export function initWebVitals() {
         });
       });
 
-      clsObserver.observe({ entryTypes: ['layout-shift'] });
+      try {
+        clsObserver.observe({ type: 'layout-shift', buffered: true } as PerformanceObserverInit);
+      } catch {
+        clsObserver.observe({ entryTypes: ['layout-shift'] });
+      }
     } catch (e) {
       console.warn('CLS observer not supported');
     }

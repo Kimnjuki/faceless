@@ -19,7 +19,8 @@
     "import-articles": "node scripts/import-articles-from-csv.mjs",
     "import-all": "node scripts/import-all-from-csv.mjs",
     "seed:faceless-article": "npx convex run seedFacelessArticle:run",
-    "seed:platform-guides": "npx convex run seedPlatformGuides:run"
+    "seed:platform-guides": "npx convex run seedPlatformGuides:run",
+    "seed:growth": "npx convex run seedGrowth:seedAll"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.9.0",

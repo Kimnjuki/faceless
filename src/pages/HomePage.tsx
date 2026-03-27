@@ -1,5 +1,7 @@
 import Header from "../components/Header";
 import Hero from "../components/Hero";
+import LiveStatsStrip from "../components/growth/LiveStatsStrip";
+import TrendingNichesStrip from "../components/growth/TrendingNichesStrip";
 import WhyAnonymity from "../components/WhyAnonymity";
 import CompetitorComparison from "../components/CompetitorComparison";
 import Stats from "../components/Stats";
@@ -176,6 +178,8 @@ export default function HomePage() {
       <ExitIntentModal />
       <main id="main-content" role="main">
         <Hero />
+        <LiveStatsStrip />
+        <TrendingNichesStrip />
         <WhyAnonymity />
         {/* ForeMedia E1 - top content */}
         <div className="flex justify-center my-6">

@@ -1,46 +1,79 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Star } from "lucide-react";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import type { Doc } from "../../convex/_generated/dataModel";
 
-const testimonials = [
+type TestimonialRow = {
+  name: string;
+  role: string;
+  content: string;
+  rating: number;
+  initials: string;
+};
+
+const testimonials: TestimonialRow[] = [
   {
     name: "Alex M.",
     role: "Faceless YouTuber",
-    content: "From zero to $5K/month in just 4 months. The automation systems are game-changing!",
+    content:
+      "From zero to $5K/month in just 4 months. The automation systems are game-changing!",
     rating: 5,
-    initials: "AM"
+    initials: "AM",
   },
   {
     name: "Sarah K.",
     role: "Digital Product Creator",
-    content: "Finally, a platform that understands faceless creators. The community alone is worth 10x the price.",
+    content:
+      "Finally, a platform that understands faceless creators. The community alone is worth 10x the price.",
     rating: 5,
-    initials: "SK"
+    initials: "SK",
   },
   {
     name: "Jordan P.",
     role: "Content Entrepreneur",
-    content: "The niche research tools helped me find 3 profitable niches in a week. Incredible ROI.",
+    content:
+      "The niche research tools helped me find 3 profitable niches in a week. Incredible ROI.",
     rating: 5,
-    initials: "JP"
+    initials: "JP",
   },
   {
     name: "Morgan L.",
     role: "Anonymous Creator",
-    content: "The step-by-step learning paths took me from complete beginner to monetized in 6 weeks. No face, no problem.",
+    content:
+      "The step-by-step learning paths took me from complete beginner to monetized in 6 weeks. No face, no problem.",
     rating: 5,
-    initials: "ML"
+    initials: "ML",
   },
   {
     name: "Casey R.",
     role: "TikTok Creator",
-    content: "Profitability calculator and niche quiz saved me months of guesswork. Now I know exactly where to focus.",
+    content:
+      "Profitability calculator and niche quiz saved me months of guesswork. Now I know exactly where to focus.",
     rating: 5,
-    initials: "CR"
-  }
+    initials: "CR",
+  },
 ];
 
 export default function Testimonials() {
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const showcases = useQuery(
+    api.creatorContent.listPublishedShowcases,
+    hasConvex ? { limit: 9 } : "skip"
+  );
+
+  const rows =
+    showcases && showcases.length > 0
+      ? showcases.map((s) => ({
+          name: s.stealthHandle ?? "Anonymous",
+          role: `${s.platform}${s.monthlyRevenue ? ` · ${s.monthlyRevenue}/mo` : ""}`,
+          content: s.story ?? s.tipForBeginners ?? "",
+          rating: 5,
+          initials: (s.stealthHandle ?? "AN").slice(0, 2).toUpperCase(),
+        }))
+      : testimonials;
+
   return (
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
@@ -49,12 +82,14 @@ export default function Testimonials() {
             Success Stories from Our Community
           </h2>
           <p className="text-lg text-muted-foreground">
-            Join thousands of creators building profitable faceless businesses
+            {showcases && showcases.length > 0
+              ? "Rotating anonymous wins from real creator showcases — verified where noted."
+              : "Join thousands of creators building profitable faceless businesses"}
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {testimonials.map((testimonial, index) => (
+          {rows.slice(0, 6).map((testimonial: TestimonialRow, index: number) => (
             <Card key={index}>
               <CardContent className="pt-6">
                 <div className="flex gap-1 mb-4">
@@ -65,7 +100,9 @@ export default function Testimonials() {
                 <p className="text-sm mb-6">{testimonial.content}</p>
                 <div className="flex items-center gap-3">
                   <Avatar>
-                    <AvatarFallback className="bg-primary/10 text-primary">{testimonial.initials}</AvatarFallback>
+                    <AvatarFallback className="bg-primary/10 text-primary">
+                      {testimonial.initials}
+                    </AvatarFallback>
                   </Avatar>
                   <div>
                     <div className="font-semibold text-sm">{testimonial.name}</div>

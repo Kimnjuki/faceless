@@ -9,12 +9,14 @@
  */
 
 import type * as articles from "../articles.js";
+import type * as brandKitGenerate from "../brandKitGenerate.js";
 import type * as challenges from "../challenges.js";
 import type * as community from "../community.js";
 import type * as content from "../content.js";
 import type * as contentCategories from "../contentCategories.js";
 import type * as contentTools from "../contentTools.js";
 import type * as conversions from "../conversions.js";
+import type * as creatorContent from "../creatorContent.js";
 import type * as courses from "../courses.js";
 import type * as crons from "../crons.js";
 import type * as dashboard from "../dashboard.js";
@@ -32,6 +34,7 @@ import type * as platformGuides from "../platformGuides.js";
 import type * as profiles from "../profiles.js";
 import type * as seedAdsense from "../seedAdsense.js";
 import type * as seedFacelessArticle from "../seedFacelessArticle.js";
+import type * as seedGrowth from "../seedGrowth.js";
 import type * as seedPlatformGuides from "../seedPlatformGuides.js";
 import type * as supportTickets from "../supportTickets.js";
 import type * as templates from "../templates.js";
@@ -46,12 +49,14 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   articles: typeof articles;
+  brandKitGenerate: typeof brandKitGenerate;
   challenges: typeof challenges;
   community: typeof community;
   content: typeof content;
   contentCategories: typeof contentCategories;
   contentTools: typeof contentTools;
   conversions: typeof conversions;
+  creatorContent: typeof creatorContent;
   courses: typeof courses;
   crons: typeof crons;
   dashboard: typeof dashboard;
@@ -69,6 +74,7 @@ declare const fullApi: ApiFromModules<{
   profiles: typeof profiles;
   seedAdsense: typeof seedAdsense;
   seedFacelessArticle: typeof seedFacelessArticle;
+  seedGrowth: typeof seedGrowth;
   seedPlatformGuides: typeof seedPlatformGuides;
   supportTickets: typeof supportTickets;
   templates: typeof templates;

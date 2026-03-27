@@ -156,6 +156,12 @@ export default defineSchema({
     medium: v.optional(v.string()),
     createdAt: v.float64(),
     ctaText: v.optional(v.string()),
+    referralType: v.optional(
+      v.union(v.literal("member"), v.literal("external"), v.literal("partner"))
+    ),
+    commissionPercent: v.optional(v.float64()),
+    clickCount: v.optional(v.float64()),
+    conversionCount: v.optional(v.float64()),
   })
     .index("by_slug", ["slug"]),
 
@@ -216,6 +222,13 @@ export default defineSchema({
     viewCount: v.optional(v.float64()),
     shareCount: v.optional(v.float64()),
     targetPlatforms: v.optional(v.array(v.string())),
+    aiGenerated: v.optional(v.boolean()),
+    lastSeoAudit: v.optional(v.float64()),
+    primaryKeyword: v.optional(v.string()),
+    secondaryKeywords: v.optional(v.array(v.string())),
+    contentCluster: v.optional(v.string()),
+    videoEmbedUrl: v.optional(v.string()),
+    downloadableAssetId: v.optional(v.id("digital_assets")),
   })
     .index("by_slug", ["slug"])
     .index("by_legacyId", ["legacyId"])
@@ -224,7 +237,9 @@ export default defineSchema({
     .index("by_author", ["authorId"])
     .index("by_published_at", ["status", "publishedAt"])
     .index("by_category_status", ["categoryId", "status"])
-    .index("by_category_status_published", ["categoryId", "status", "publishedAt"]),
+    .index("by_category_status_published", ["categoryId", "status", "publishedAt"])
+    .index("by_keyword", ["primaryKeyword"])
+    .index("by_cluster", ["contentCluster"]),
 
   community_categories: defineTable({
     legacyId: v.optional(v.string()),
@@ -363,6 +378,17 @@ export default defineSchema({
   // ---------------------------------------------------------------------------
   // Forum / community
   // ---------------------------------------------------------------------------
+  stealth_handles: defineTable({
+    userId: v.optional(v.id("profiles")),
+    handle: v.string(),
+    avatarSeed: v.optional(v.string()),
+    reputation: v.optional(v.float64()),
+    isActive: v.optional(v.boolean()),
+    createdAt: v.float64(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_handle", ["handle"]),
+
   forum_posts: defineTable({
     legacyId: v.optional(v.string()),
     categoryId: v.optional(v.id("community_categories")),
@@ -377,6 +403,9 @@ export default defineSchema({
     lastReplyAt: v.optional(v.float64()),
     createdAt: v.float64(),
     updatedAt: v.float64(),
+    stealthHandleId: v.optional(v.id("stealth_handles")),
+    nicheId: v.optional(v.id("niches")),
+    incomeVerified: v.optional(v.boolean()),
   })
     .index("by_category", ["categoryId"])
     .index("by_author", ["authorId"])
@@ -508,9 +537,17 @@ export default defineSchema({
     targetAudience: v.optional(v.string()),
     primaryContentFocus: v.optional(v.string()),
     monetizationStrategies: v.optional(v.any()),
+    trendScore: v.optional(v.float64()),
+    saturationScore: v.optional(v.float64()),
+    communityMemberCount: v.optional(v.float64()),
+    avgMonthlyRevenue: v.optional(v.string()),
+    topSubNiches: v.optional(v.array(v.string())),
+    platformSpecificTips: v.optional(v.any()),
   })
     .index("by_niche_name", ["nicheName"])
-    .index("by_category", ["categoryId"]),
+    .index("by_category", ["categoryId"])
+    .index("by_trend_score", ["trendScore"])
+    .index("by_profitability", ["profitabilityScore"]),
 
   // ---------------------------------------------------------------------------
   // Orders & products
@@ -664,6 +701,11 @@ export default defineSchema({
     status: productStatus,
     createdAt: v.float64(),
     updatedAt: v.float64(),
+    accessTier: v.optional(accessTier),
+    toolCategory: v.optional(v.string()),
+    demoUrl: v.optional(v.string()),
+    testimonialCount: v.optional(v.float64()),
+    averageRating: v.optional(v.float64()),
   })
     .index("by_slug", ["slug"])
     .index("by_category", ["categoryId"])
@@ -696,6 +738,14 @@ export default defineSchema({
     credentials: v.optional(v.array(v.string())),
     knowsAbout: v.optional(v.array(v.string())),
     verifiedExpert: v.optional(v.boolean()),
+    stealthHandleId: v.optional(v.id("stealth_handles")),
+    channelUrl: v.optional(v.string()),
+    channelPlatform: v.optional(v.string()),
+    monthlyRevenue: v.optional(v.string()),
+    onboardingCompleted: v.optional(v.boolean()),
+    onboardingStep: v.optional(v.float64()),
+    referralCode: v.optional(v.string()),
+    referredBy: v.optional(v.id("profiles")),
   })
     .index("by_user_id", ["userId"])
     .index("by_email", ["email"]),
@@ -882,6 +932,312 @@ export default defineSchema({
   })
     .index("by_host", ["hostId"])
     .index("by_status", ["status"]),
+
+  // ---------------------------------------------------------------------------
+  // Growth / Creator OS (v2 schema — ContentAnonymity expansion)
+  // ---------------------------------------------------------------------------
+  ai_generation_logs: defineTable({
+    userId: v.optional(v.id("profiles")),
+    generationType: v.union(
+      v.literal("script"),
+      v.literal("hook"),
+      v.literal("title"),
+      v.literal("description"),
+      v.literal("brand_kit"),
+      v.literal("content_plan"),
+      v.literal("thumbnail_analysis")
+    ),
+    nicheId: v.optional(v.id("niches")),
+    platform: v.optional(v.string()),
+    inputData: v.any(),
+    outputData: v.any(),
+    tokensUsed: v.optional(v.float64()),
+    createdAt: v.float64(),
+    subscriptionTier: v.optional(v.string()),
+  })
+    .index("by_user", ["userId"])
+    .index("by_type", ["generationType"])
+    .index("by_created", ["createdAt"]),
+
+  channel_audits: defineTable({
+    userId: v.optional(v.id("profiles")),
+    channelUrl: v.string(),
+    platform: v.string(),
+    nicheScore: v.optional(v.float64()),
+    monetizationReadiness: v.optional(v.float64()),
+    contentGapScore: v.optional(v.float64()),
+    seoScore: v.optional(v.float64()),
+    overallScore: v.optional(v.float64()),
+    recommendations: v.optional(v.array(v.string())),
+    auditData: v.any(),
+    createdAt: v.float64(),
+  }).index("by_user", ["userId"]),
+
+  niche_trends: defineTable({
+    nicheId: v.optional(v.id("niches")),
+    nicheName: v.string(),
+    platform: v.string(),
+    trendScore: v.float64(),
+    trendDirection: v.union(
+      v.literal("rising"),
+      v.literal("stable"),
+      v.literal("falling")
+    ),
+    weekOverWeekChange: v.optional(v.float64()),
+    searchVolume: v.optional(v.float64()),
+    competitionIndex: v.optional(v.float64()),
+    dataSource: v.optional(v.string()),
+    snapshotDate: v.float64(),
+    createdAt: v.float64(),
+  })
+    .index("by_niche", ["nicheId"])
+    .index("by_platform", ["platform"])
+    .index("by_date", ["snapshotDate"]),
+
+  income_reports: defineTable({
+    userId: v.optional(v.id("profiles")),
+    platform: v.string(),
+    nicheId: v.optional(v.id("niches")),
+    monthlyRevenue: v.float64(),
+    revenueStreams: v.optional(v.any()),
+    subscriberCount: v.optional(v.float64()),
+    monthlyViews: v.optional(v.float64()),
+    monthsActive: v.optional(v.float64()),
+    hoursPerWeek: v.optional(v.float64()),
+    experienceLevel: v.optional(v.string()),
+    isVerified: v.optional(v.boolean()),
+    reportMonth: v.string(),
+    createdAt: v.float64(),
+  })
+    .index("by_platform", ["platform"])
+    .index("by_niche", ["nicheId"])
+    .index("by_month", ["reportMonth"])
+    .index("by_niche_platform", ["nicheId", "platform"]),
+
+  thumbnail_tests: defineTable({
+    userId: v.optional(v.id("profiles")),
+    nicheId: v.optional(v.id("niches")),
+    platform: v.optional(v.string()),
+    imageUrl_A: v.string(),
+    imageUrl_B: v.optional(v.string()),
+    analysisA: v.optional(v.any()),
+    analysisB: v.optional(v.any()),
+    winner: v.optional(v.union(v.literal("A"), v.literal("B"), v.literal("tie"))),
+    overallScore_A: v.optional(v.float64()),
+    overallScore_B: v.optional(v.float64()),
+    createdAt: v.float64(),
+  }).index("by_user", ["userId"]),
+
+  content_schedules: defineTable({
+    userId: v.optional(v.id("profiles")),
+    nicheId: v.optional(v.id("niches")),
+    platform: v.string(),
+    planDays: v.float64(),
+    uploadsPerWeek: v.float64(),
+    schedule: v.any(),
+    status: v.union(v.literal("active"), v.literal("completed"), v.literal("archived")),
+    startDate: v.float64(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_niche", ["nicheId"]),
+
+  brand_kits: defineTable({
+    userId: v.optional(v.id("profiles")),
+    nicheId: v.optional(v.id("niches")),
+    platform: v.optional(v.string()),
+    channelNames: v.optional(v.array(v.string())),
+    taglines: v.optional(v.array(v.string())),
+    colorPalette: v.optional(v.any()),
+    toneDescriptor: v.optional(v.string()),
+    logoDescription: v.optional(v.string()),
+    styleGuide: v.optional(v.any()),
+    isPrimary: v.optional(v.boolean()),
+    createdAt: v.float64(),
+  }).index("by_user", ["userId"]),
+
+  creator_collabs: defineTable({
+    initiatorId: v.optional(v.id("profiles")),
+    partnerId: v.optional(v.id("profiles")),
+    nicheId: v.optional(v.id("niches")),
+    collabType: v.union(
+      v.literal("co_channel"),
+      v.literal("script_swap"),
+      v.literal("affiliate_split"),
+      v.literal("series")
+    ),
+    status: v.union(
+      v.literal("proposed"),
+      v.literal("active"),
+      v.literal("completed"),
+      v.literal("declined")
+    ),
+    stealthHandleInitiator: v.optional(v.string()),
+    stealthHandlePartner: v.optional(v.string()),
+    revenueSplitPercent: v.optional(v.float64()),
+    description: v.optional(v.string()),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+  })
+    .index("by_initiator", ["initiatorId"])
+    .index("by_partner", ["partnerId"])
+    .index("by_niche", ["nicheId"]),
+
+  niche_saturation_scores: defineTable({
+    nicheId: v.optional(v.id("niches")),
+    nicheName: v.string(),
+    platform: v.string(),
+    saturationScore: v.float64(),
+    underservedSubNiches: v.optional(v.array(v.string())),
+    breakInStrategy: v.optional(v.string()),
+    competitorCount: v.optional(v.float64()),
+    opportunityScore: v.optional(v.float64()),
+    lastUpdated: v.float64(),
+    createdAt: v.float64(),
+  })
+    .index("by_niche", ["nicheId"])
+    .index("by_platform", ["platform"])
+    .index("by_score", ["saturationScore"]),
+
+  user_badges: defineTable({
+    userId: v.optional(v.id("profiles")),
+    badgeId: v.string(),
+    badgeName: v.string(),
+    badgeCategory: v.union(
+      v.literal("learning"),
+      v.literal("community"),
+      v.literal("earnings"),
+      v.literal("tools"),
+      v.literal("streak")
+    ),
+    awardedAt: v.float64(),
+    metadata: v.optional(v.any()),
+  })
+    .index("by_user", ["userId"])
+    .index("by_badge", ["badgeId"]),
+
+  keyword_rankings: defineTable({
+    articleId: v.optional(v.id("articles")),
+    keyword: v.string(),
+    searchEngine: v.optional(v.string()),
+    position: v.optional(v.float64()),
+    previousPosition: v.optional(v.float64()),
+    searchVolume: v.optional(v.float64()),
+    url: v.optional(v.string()),
+    trackedAt: v.float64(),
+  })
+    .index("by_article", ["articleId"])
+    .index("by_keyword", ["keyword"])
+    .index("by_position", ["position"])
+    .index("by_tracked_at", ["trackedAt"]),
+
+  api_keys: defineTable({
+    userId: v.optional(v.id("profiles")),
+    keyHash: v.string(),
+    keyPrefix: v.string(),
+    name: v.string(),
+    scopes: v.optional(v.array(v.string())),
+    lastUsed: v.optional(v.float64()),
+    expiresAt: v.optional(v.float64()),
+    isActive: v.optional(v.boolean()),
+    createdAt: v.float64(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_prefix", ["keyPrefix"]),
+
+  direct_messages: defineTable({
+    senderId: v.optional(v.id("profiles")),
+    recipientId: v.optional(v.id("profiles")),
+    senderHandle: v.optional(v.string()),
+    recipientHandle: v.optional(v.string()),
+    content: v.string(),
+    isRead: v.optional(v.boolean()),
+    threadId: v.string(),
+    createdAt: v.float64(),
+  })
+    .index("by_sender", ["senderId"])
+    .index("by_recipient", ["recipientId"])
+    .index("by_thread", ["threadId"]),
+
+  creator_showcases: defineTable({
+    userId: v.optional(v.id("profiles")),
+    stealthHandle: v.optional(v.string()),
+    nicheId: v.optional(v.id("niches")),
+    platform: v.string(),
+    monthlyRevenue: v.optional(v.string()),
+    subscriberRange: v.optional(v.string()),
+    timeToFirstRevenue: v.optional(v.string()),
+    toolsUsed: v.optional(v.array(v.string())),
+    story: v.optional(v.string()),
+    tipForBeginners: v.optional(v.string()),
+    isVerified: v.optional(v.boolean()),
+    isFeatured: v.optional(v.boolean()),
+    status: v.union(v.literal("pending"), v.literal("published"), v.literal("rejected")),
+    publishedAt: v.optional(v.float64()),
+    createdAt: v.float64(),
+  })
+    .index("by_niche", ["nicheId"])
+    .index("by_status", ["status"])
+    .index("by_featured", ["isFeatured"])
+    .index("by_platform", ["platform"]),
+
+  badge_definitions: defineTable({
+    badgeId: v.string(),
+    badgeName: v.string(),
+    badgeCategory: v.union(
+      v.literal("learning"),
+      v.literal("community"),
+      v.literal("earnings"),
+      v.literal("tools"),
+      v.literal("streak")
+    ),
+    description: v.optional(v.string()),
+    criteria: v.optional(v.any()),
+    icon: v.optional(v.string()),
+    sortOrder: v.optional(v.float64()),
+    createdAt: v.float64(),
+  }).index("by_badge_id", ["badgeId"]),
+
+  seo_audit_snapshots: defineTable({
+    articleId: v.optional(v.id("articles")),
+    pagePath: v.optional(v.string()),
+    url: v.optional(v.string()),
+    overallScore: v.optional(v.float64()),
+    issues: v.optional(v.any()),
+    recommendations: v.optional(v.array(v.string())),
+    primaryKeyword: v.optional(v.string()),
+    snapshotAt: v.float64(),
+    createdAt: v.float64(),
+  })
+    .index("by_article", ["articleId"])
+    .index("by_snapshot_at", ["snapshotAt"])
+    .index("by_page_path", ["pagePath"]),
+
+  referral_rewards: defineTable({
+    referrerId: v.optional(v.id("profiles")),
+    refereeId: v.optional(v.id("profiles")),
+    affiliateLinkId: v.optional(v.id("affiliate_links")),
+    creditAmount: v.optional(v.float64()),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("approved"),
+      v.literal("paid"),
+      v.literal("void")
+    ),
+    createdAt: v.float64(),
+  })
+    .index("by_referrer", ["referrerId"])
+    .index("by_referee", ["refereeId"]),
+
+  webhook_endpoints: defineTable({
+    userId: v.optional(v.id("profiles")),
+    url: v.string(),
+    secret: v.optional(v.string()),
+    events: v.array(v.string()),
+    isActive: v.optional(v.boolean()),
+    createdAt: v.float64(),
+  }).index("by_user", ["userId"]),
 
   // ---------------------------------------------------------------------------
   // News Agency Ingestion (NewsAPI / Reuters etc.)

@@ -62,4 +62,54 @@ http.route({
   }),
 });
 
+/**
+ * POST /api/v1/content/generate — server-to-server AI content generation.
+ * Set CREATOR_HTTP_SECRET in Convex → Environment Variables.
+ * Headers: Authorization: Bearer <CREATOR_HTTP_SECRET>
+ * Body: JSON matching generateCreatorContent args (userId optional).
+ */
+http.route({
+  path: "/api/v1/content/generate",
+  method: "POST",
+  handler: httpAction(async (ctx, req) => {
+    const secret = process.env.CREATOR_HTTP_SECRET;
+    const auth = req.headers.get("authorization") ?? "";
+    if (!secret || auth !== `Bearer ${secret}`) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+    let body: Record<string, unknown>;
+    try {
+      body = (await req.json()) as Record<string, unknown>;
+    } catch {
+      return new Response(JSON.stringify({ error: "Invalid JSON" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+    try {
+      const result = await ctx.runAction(api.creatorContent.generateCreatorContent, {
+        userId: body.userId as any,
+        generationType: body.generationType as any,
+        niche: body.niche as string | undefined,
+        platform: body.platform as string | undefined,
+        tone: body.tone as string | undefined,
+        topic: body.topic as string | undefined,
+        subscriptionTier: body.subscriptionTier as string | undefined,
+      });
+      return new Response(JSON.stringify(result), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (e: any) {
+      return new Response(
+        JSON.stringify({ error: e?.message ?? "Generation failed" }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
+  }),
+});
+
 export default http;

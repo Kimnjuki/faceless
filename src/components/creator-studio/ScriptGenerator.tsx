@@ -1,4 +1,8 @@
 import { useState } from "react";
+import { useAction, useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+import { useAuth } from "@/contexts/AuthContext";
+import type { Id } from "../../../convex/_generated/dataModel";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -57,6 +61,14 @@ const hookTemplates: HookTemplate[] = [
 ];
 
 export default function ScriptGenerator() {
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const { user } = useAuth();
+  const profile = useQuery(
+    api.profiles.getByUserId,
+    user?.id && hasConvex ? { userId: user.id } : "skip"
+  );
+  const generateCreatorContent = useAction(api.creatorContent.generateCreatorContent);
+
   const [topic, setTopic] = useState("");
   const [niche, setNiche] = useState("");
   const [tone, setTone] = useState("professional");
@@ -104,17 +116,29 @@ export default function ScriptGenerator() {
     }
 
     setIsGenerating(true);
-    
-    // Simulate API call to OpenAI
     try {
-      // TODO: Replace with actual OpenAI API call
-      // const response = await fetch('/api/generate-script', {
-      //   method: 'POST',
-      //   body: JSON.stringify({ topic, niche, tone, length })
-      // });
-      
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      if (hasConvex) {
+        const res = await generateCreatorContent({
+          userId: profile?._id as Id<"profiles"> | undefined,
+          generationType: "script",
+          topic,
+          niche,
+          platform: "YouTube",
+          tone,
+          subscriptionTier: profile?.subscriptionTier,
+        });
+        setGeneratedScript(res.text);
+        if (res.demoMode) {
+          toast.message("Demo mode: set ANTHROPIC_API_KEY in Convex for live Claude output.");
+        } else {
+          toast.success("Script generated successfully!");
+        }
+        setIsGenerating(false);
+        return;
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       const mockScript = `# ${topic}
 
 ## Hook
@@ -146,11 +170,11 @@ So there you have it - everything you need to know about ${topic}. Remember, suc
 If you found this helpful, make sure to [subscribe/follow] for more content like this. What questions do you have about ${topic}? Drop them in the comments below!`;
 
       setGeneratedScript(mockScript);
-      setIsGenerating(false);
       toast.success("Script generated successfully!");
     } catch (error) {
-      setIsGenerating(false);
       toast.error("Failed to generate script. Please try again.");
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -180,7 +204,7 @@ If you found this helpful, make sure to [subscribe/follow] for more content like
             <CardTitle>AI Script Generator</CardTitle>
           </div>
           <CardDescription>
-            Generate hooks, outlines, or full scripts for your content. Powered by GPT-4.
+            Generate hooks, outlines, or full scripts. With Convex configured, Claude powers full scripts (set ANTHROPIC_API_KEY in Convex).
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">

@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PenTool, Mic, Image, Video, Calendar, Lightbulb, Sparkles } from "lucide-react";
+import { PenTool, Mic, Image, Video, Calendar, Lightbulb, Sparkles, Palette } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
@@ -14,6 +14,7 @@ import VoiceStudio from "@/components/creator-studio/VoiceStudio";
 import VisualAssetCreator from "@/components/creator-studio/VisualAssetCreator";
 import ContentCalendar from "@/components/creator-studio/ContentCalendar";
 import IdeaGenerator from "@/components/creator-studio/IdeaGenerator";
+import BrandKitPanel from "@/components/creator-studio/BrandKitPanel";
 import { trackToolUsage } from "@/utils/analytics";
 
 const TOOL_NAMES: Record<string, string> = {
@@ -23,6 +24,7 @@ const TOOL_NAMES: Record<string, string> = {
   video: "Video Editor",
   calendar: "Content Calendar",
   ideas: "Idea Generator",
+  brand: "Brand Kit",
 };
 
 export default function CreatorStudio() {
@@ -61,7 +63,7 @@ export default function CreatorStudio() {
 
             {/* Studio Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-6 mb-8">
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 mb-8 gap-1 h-auto py-2">
                 <TabsTrigger value="script" className="flex items-center gap-2">
                   <PenTool className="h-4 w-4" />
                   <span className="hidden sm:inline">Script</span>
@@ -85,6 +87,10 @@ export default function CreatorStudio() {
                 <TabsTrigger value="ideas" className="flex items-center gap-2">
                   <Lightbulb className="h-4 w-4" />
                   <span className="hidden sm:inline">Ideas</span>
+                </TabsTrigger>
+                <TabsTrigger value="brand" className="flex items-center gap-2">
+                  <Palette className="h-4 w-4" />
+                  <span className="hidden sm:inline">Brand</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -133,6 +139,10 @@ export default function CreatorStudio() {
 
               <TabsContent value="ideas" className="mt-8">
                 <IdeaGenerator />
+              </TabsContent>
+
+              <TabsContent value="brand" className="mt-8">
+                <BrandKitPanel />
               </TabsContent>
             </Tabs>
 

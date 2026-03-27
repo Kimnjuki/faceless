@@ -237,3 +237,46 @@ export const getContentIdeas = query({
     return ideas;
   },
 });
+
+/** URL slug from niche display name (e.g. "Finance & Investing" → "finance-investing"). */
+function nicheNameToSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/**
+ * Programmatic SEO: resolve niche by slug for /niches/:nicheSlug/:platform pages.
+ */
+export const getBySlug = query({
+  args: { slug: v.string() },
+  handler: async (ctx, { slug }) => {
+    const normalized = slug.toLowerCase().replace(/^\/+|\/+$/g, "");
+    const niches = await ctx.db.query("niches").collect();
+    const niche = niches.find((n) => nicheNameToSlug(n.nicheName) === normalized);
+    if (!niche) return null;
+
+    const category = niche.categoryId ? await ctx.db.get(niche.categoryId) : null;
+    const caseStudies = await ctx.db
+      .query("niche_case_studies")
+      .withIndex("by_niche", (q) => q.eq("nicheId", niche._id))
+      .collect();
+    const contentIdeas = await ctx.db
+      .query("niche_content_ideas")
+      .withIndex("by_niche", (q) => q.eq("nicheId", niche._id))
+      .collect();
+    const analysis = await ctx.db
+      .query("niche_analysis")
+      .filter((q) => q.eq(q.field("nicheName"), niche.nicheName))
+      .first();
+
+    return {
+      ...niche,
+      category,
+      caseStudies,
+      contentIdeas,
+      analysis,
+    };
+  },
+});

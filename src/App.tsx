@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider, AuthProviderFallback } from "@/contexts/AuthContext";
@@ -18,6 +18,16 @@ import SEOAudit from "./pages/tools/SEOAudit";
 import KeywordResearch from "./pages/tools/KeywordResearch";
 import BacklinkChecker from "./pages/tools/BacklinkChecker";
 import PerformanceMonitor from "./pages/tools/PerformanceMonitor";
+import EarningsSimulator from "./pages/tools/EarningsSimulator";
+import NicheSaturationTool from "./pages/tools/NicheSaturationTool";
+import ChannelAuditTool from "./pages/tools/ChannelAuditTool";
+import ThumbnailAnalyzer from "./pages/tools/ThumbnailAnalyzer";
+import BrandKitTool from "./pages/tools/BrandKitTool";
+import NicheRadar from "./pages/growth/NicheRadar";
+import IncomeIntelligence from "./pages/growth/IncomeIntelligence";
+import Showcase from "./pages/growth/Showcase";
+import CollabHub from "./pages/growth/CollabHub";
+import Leaderboard from "./pages/growth/Leaderboard";
 import Signup from "./pages/auth/Signup";
 import Login from "./pages/auth/Login";
 import OAuthCallback from "./pages/auth/OAuthCallback";
@@ -40,6 +50,7 @@ import Contact from "./pages/Contact";
 import TemplatesLibrary from "./pages/resources/TemplatesLibrary";
 import NicheDatabase from "./pages/resources/NicheDatabase";
 import NicheDetail from "./pages/niches/NicheDetail";
+import NichePlatformLanding from "./pages/niches/NichePlatformLanding";
 import LearningPaths from "./pages/learning/LearningPaths";
 import LearningPathDetail from "./pages/learning/LearningPathDetail";
 import CreatorStudio from "./pages/creator-studio/CreatorStudio";
@@ -95,14 +106,24 @@ export default function App() {
         <Route path="/getting-started" element={<GettingStarted />} />
         <Route path="/blog" element={<BlogIndex />} />
         <Route path="/blog/:slug" element={<ArticleDetail />} />
-        <Route path="/tools/all" element={<ToolComparison />} />
-        <Route path="/tools/:category" element={<ToolComparison />} />
+        {/* Specific /tools/* routes must be declared before /tools/:category */}
         <Route path="/tools/calculator" element={<ProfitabilityCalculator />} />
         <Route path="/tools/niche-quiz" element={<NicheQuiz />} />
         <Route path="/tools/seo-audit" element={<SEOAudit />} />
         <Route path="/tools/keyword-research" element={<KeywordResearch />} />
         <Route path="/tools/backlink-checker" element={<BacklinkChecker />} />
         <Route path="/tools/performance" element={<PerformanceMonitor />} />
+        <Route path="/tools/earnings-simulator" element={<EarningsSimulator />} />
+        <Route path="/tools/niche-saturation" element={<NicheSaturationTool />} />
+        <Route path="/tools/channel-audit" element={<ChannelAuditTool />} />
+        <Route path="/tools/thumbnail-analyzer" element={<ThumbnailAnalyzer />} />
+        <Route path="/tools/niche-calculator" element={<Navigate to="/tools/earnings-simulator" replace />} />
+        <Route path="/tools/rpm-estimator" element={<Navigate to="/tools/earnings-simulator" replace />} />
+        <Route path="/tools/hook-generator" element={<Navigate to="/creator-studio" replace />} />
+        <Route path="/tools/channel-name-generator" element={<Navigate to="/tools/brand-kit" replace />} />
+        <Route path="/tools/brand-kit" element={<BrandKitTool />} />
+        <Route path="/tools/all" element={<ToolComparison />} />
+        <Route path="/tools/:category" element={<ToolComparison />} />
         <Route path="/auth/signup" element={<Signup />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/callback" element={<OAuthCallback />} />
@@ -125,6 +146,7 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/resources/templates" element={<TemplatesLibrary />} />
         <Route path="/resources/niches" element={<NicheDatabase />} />
+        <Route path="/niches/:nicheSlug/:platform" element={<NichePlatformLanding />} />
         <Route path="/niches/:nicheId" element={<NicheDetail />} />
         <Route path="/learning-paths" element={<LearningPaths />} />
         <Route path="/learning-paths/:pathId" element={<LearningPathDetail />} />
@@ -141,6 +163,11 @@ export default function App() {
         <Route path="/404" element={<NotFound />} />
         <Route path="/health" element={<Health />} />
         <Route path="/news" element={<News />} />
+        <Route path="/niche-radar" element={<NicheRadar />} />
+        <Route path="/income-intelligence" element={<IncomeIntelligence />} />
+        <Route path="/showcase" element={<Showcase />} />
+        <Route path="/collab-hub" element={<CollabHub />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/:pillarSlug" element={<PillarPage />} />
         <Route path="*" element={<NotFound />} />
         </Routes>

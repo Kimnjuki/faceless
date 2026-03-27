@@ -44,7 +44,7 @@ export default function Hero() {
               Create 30 days of content in 2 hours with AI. Build profitable income streams with <strong>complete anonymity</strong>. Proven strategies, step-by-step automation, and 10,000+ creators earning $1K+ monthly — <strong>all without revealing your identity.</strong>
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-4">
               <Button 
                 size="lg" 
                 className="text-base px-8 gradient-primary hover:shadow-glow transition-all duration-300 hover-lift" 
@@ -64,6 +64,19 @@ export default function Hero() {
               >
                 <Link to="/creator-studio">
                   <Play className="mr-2 h-4 w-4" /> Try AI Tools Free
+                </Link>
+              </Button>
+            </div>
+            <div className="flex justify-center mb-8">
+              <Button
+                size="lg"
+                variant="secondary"
+                className="text-base px-6 border border-primary/30 bg-background/80 backdrop-blur"
+                asChild
+                onClick={() => trackButtonClick('niche-quiz-hero', 'hero')}
+              >
+                <Link to="/tools/niche-quiz">
+                  Take the 2-minute niche quiz — highest converting step
                 </Link>
               </Button>
             </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import { trackToolUsage } from "@/utils/analytics";
 
 interface Backlink {
   url: string;
@@ -23,12 +24,16 @@ interface Backlink {
   domainAuthority: number;
   type: 'dofollow' | 'nofollow';
   date: string;
+  trustScore?: number;
+  toxicityFlag?: "low" | "medium" | "high";
+  facelessTag?: string;
 }
 
 export default function BacklinkChecker() {
   const [url, setUrl] = useState("");
   const [backlinks, setBacklinks] = useState<Backlink[]>([]);
   const [loading, setLoading] = useState(false);
+  const [phase, setPhase] = useState<"idle" | "fetching" | "analyzing" | "generating">("idle");
   const [stats, setStats] = useState({
     total: 0,
     dofollow: 0,
@@ -36,13 +41,19 @@ export default function BacklinkChecker() {
     referringDomains: 0
   });
 
+  useEffect(() => {
+    trackToolUsage("Anonymous Authority Builder", "tools");
+  }, []);
+
   const handleCheck = async () => {
     if (!url.trim()) return;
     
     setLoading(true);
+    setPhase("fetching");
     
     // Simulate API call (in production, integrate with Ahrefs Free Backlink Checker API or similar)
     setTimeout(() => {
+      setPhase("analyzing");
       const sampleBacklinks: Backlink[] = [
         {
           url: 'https://example.com/article',
@@ -50,7 +61,10 @@ export default function BacklinkChecker() {
           anchorText: 'faceless content creation',
           domainAuthority: 65,
           type: 'dofollow',
-          date: '2024-01-15'
+          date: '2024-01-15',
+          trustScore: 74,
+          toxicityFlag: 'low',
+          facelessTag: 'resource_page'
         },
         {
           url: 'https://blog.example.org/post',
@@ -58,7 +72,10 @@ export default function BacklinkChecker() {
           anchorText: 'ContentAnonymity',
           domainAuthority: 45,
           type: 'dofollow',
-          date: '2024-01-10'
+          date: '2024-01-10',
+          trustScore: 62,
+          toxicityFlag: 'low',
+          facelessTag: 'blog_editorial'
         },
         {
           url: 'https://socialmedia.com/share',
@@ -66,7 +83,10 @@ export default function BacklinkChecker() {
           anchorText: 'anonymous content',
           domainAuthority: 80,
           type: 'nofollow',
-          date: '2024-01-05'
+          date: '2024-01-05',
+          trustScore: 38,
+          toxicityFlag: 'medium',
+          facelessTag: 'social_profile'
         }
       ];
 
@@ -79,10 +99,20 @@ export default function BacklinkChecker() {
         referringDomains: uniqueDomains.size
       });
       
-      setBacklinks(sampleBacklinks);
-      setLoading(false);
+      setTimeout(() => {
+        setPhase("generating");
+        setBacklinks(sampleBacklinks);
+        setLoading(false);
+        setPhase("idle");
+      }, 600);
     }, 1500);
   };
+
+  const avgTrust = useMemo(() => {
+    if (!backlinks.length) return 0;
+    const total = backlinks.reduce((acc, curr) => acc + (curr.trustScore ?? 0), 0);
+    return Math.round(total / backlinks.length);
+  }, [backlinks]);
 
   return (
     <>
@@ -96,10 +126,18 @@ export default function BacklinkChecker() {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold mb-4">Free Backlink Checker</h1>
+              <h1 className="text-4xl font-bold mb-4">Anonymous Authority Builder</h1>
               <p className="text-lg text-muted-foreground mb-6">
-                Analyze your backlink profile and find link building opportunities
+                Backlink insights built for faceless creators — find anonymous-friendly link opportunities
               </p>
+
+              {loading && (
+                <div className="mb-6 text-sm text-muted-foreground">
+                  {phase === "fetching" && "Fetching backlinks..."}
+                  {phase === "analyzing" && "Analyzing patterns..."}
+                  {phase === "generating" && "Generating insights..."}
+                </div>
+              )}
               
               <div className="flex gap-4 max-w-2xl mx-auto mb-8">
                 <Input
@@ -158,7 +196,15 @@ export default function BacklinkChecker() {
                   <CardContent className="pt-6">
                     <div className="text-center">
                       <div className="text-3xl font-bold mb-1">{stats.referringDomains}</div>
-                      <p className="text-sm text-muted-foreground">Referring Domains</p>
+                      <p className="text-sm text-muted-foreground">Referring Domains (Free: 50)</p>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="text-center">
+                      <div className="text-3xl font-bold mb-1">{avgTrust}</div>
+                      <p className="text-sm text-muted-foreground">Avg Trust Score</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -211,6 +257,14 @@ export default function BacklinkChecker() {
                             <Globe className="h-4 w-4 text-muted-foreground" />
                             <span className="text-muted-foreground">{backlink.date}</span>
                           </div>
+                          <div className="flex items-center gap-1">
+                            <span className="text-muted-foreground">Trust:</span>
+                            <span className="font-medium">{backlink.trustScore ?? 0}</span>
+                          </div>
+                          <Badge variant="outline">{backlink.facelessTag}</Badge>
+                          <Badge variant={backlink.toxicityFlag === 'high' ? 'destructive' : 'secondary'}>
+                            Toxicity: {backlink.toxicityFlag}
+                          </Badge>
                         </div>
                       </div>
                     ))}
@@ -276,6 +330,7 @@ export default function BacklinkChecker() {
     </>
   );
 }
+
 
 
 

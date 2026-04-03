@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Sparkles, ArrowRight, Check } from "lucide-react";
+import { Sparkles, ArrowRight, Check, ShieldCheck } from "lucide-react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import SEO from "../../components/SEO";
@@ -9,31 +9,74 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { trackToolUsage } from "@/utils/analytics";
 
-const questions = [
+type QuestionType = "single_select" | "multi_select" | "rank_priorities" | "multi_select_with_search";
+
+type QuizQuestion = {
+  id: string;
+  question: string;
+  type: QuestionType;
+  options: string[];
+  weightDimension: string;
+};
+
+const questions: QuizQuestion[] = [
   {
-    question: "What's your primary goal?",
-    options: ["Make money fast", "Build long-term brand", "Share knowledge", "Creative expression"]
+    id: "anonymity_comfort",
+    question: "Your anonymity comfort level",
+    type: "single_select",
+    options: ["Fully anonymous", "Pseudonym OK", "Voice only OK", "Open to evolving"],
+    weightDimension: "anonymity_sensitivity"
   },
   {
-    question: "How much time can you dedicate weekly?",
-    options: ["1-5 hours", "5-10 hours", "10-20 hours", "20+ hours"]
+    id: "time_commitment",
+    question: "Time you can commit per week",
+    type: "single_select",
+    options: ["Under 5 hrs", "5–10 hrs", "10–20 hrs", "20+ hrs"],
+    weightDimension: "time_available"
   },
   {
-    question: "What's your skill level?",
-    options: ["Complete beginner", "Some experience", "Intermediate", "Advanced"]
+    id: "content_format",
+    question: "Preferred content format",
+    type: "multi_select",
+    options: ["AI voiceover video", "Text + AI images", "Carousel / slides", "Podcast (voice only)", "Shorts / Reels"],
+    weightDimension: "content_format_preference"
   },
   {
-    question: "Which content type excites you most?",
-    options: ["Educational videos", "Entertainment", "Product reviews", "Storytelling"]
+    id: "monetization_goal",
+    question: "Primary monetization goal",
+    type: "single_select",
+    options: ["Ad revenue (CPM)", "Affiliate commissions", "Digital products / courses", "Sponsorships", "SaaS / tools"],
+    weightDimension: "monetization_priority"
+  },
+  {
+    id: "risk_tolerance",
+    question: "Risk tolerance",
+    type: "single_select",
+    options: ["Low", "Medium", "High"],
+    weightDimension: "risk_tolerance"
+  },
+  {
+    id: "startup_budget",
+    question: "Startup budget",
+    type: "single_select",
+    options: ["$0", "$1–$50/mo", "$50–$200/mo", "$200+/mo"],
+    weightDimension: "startup_cost_tolerance"
+  },
+  {
+    id: "niche_affinity",
+    question: "Interests & skills",
+    type: "single_select",
+    options: ["Finance & investing", "Health & wellness", "Tech & AI", "Business & entrepreneurship", "Education & explainers", "Gaming", "True crime", "Self-improvement", "Travel (faceless)", "History & documentaries"],
+    weightDimension: "niche_affinity"
   }
 ];
 
-const recommendations = {
-  "Make money fast": { niche: "Finance & Investing", competition: "High", profit: "$$$$" },
-  "Build long-term brand": { niche: "Personal Development", competition: "Medium", profit: "$$$" },
-  "Share knowledge": { niche: "Tech Tutorials", competition: "Medium", profit: "$$$" },
-  "Creative expression": { niche: "AI Art & Design", competition: "Low", profit: "$$" }
-};
+const nicheProfiles = [
+  { niche: "Finance & Investing", score: 91, competition: "High", rpm: "$18–$42", demand: "500K–2M", first1k: "2–4 months" },
+  { niche: "Tech & AI", score: 87, competition: "Medium", rpm: "$12–$30", demand: "300K–1.5M", first1k: "2–5 months" },
+  { niche: "Business & Entrepreneurship", score: 83, competition: "Medium", rpm: "$10–$28", demand: "200K–1M", first1k: "3–5 months" },
+  { niche: "Education & Explainers", score: 79, competition: "Low", rpm: "$8–$20", demand: "150K–800K", first1k: "3–6 months" }
+];
 
 export default function NicheQuiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -55,7 +98,7 @@ export default function NicheQuiz() {
     }
   };
 
-  const recommendation = recommendations[answers[0] as keyof typeof recommendations] || recommendations["Make money fast"];
+  const recommendation = nicheProfiles[0];
 
   return (
     <>
@@ -97,8 +140,12 @@ export default function NicheQuiz() {
                   <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-4">
                     <Sparkles className="h-6 w-6 text-primary" />
                   </div>
-                  <h1 className="text-3xl font-bold mb-2">Niche Finder Quiz</h1>
-                  <p className="text-muted-foreground">Answer 4 questions to find your perfect niche</p>
+                  <h1 className="text-3xl font-bold mb-2">Faceless Niche Architect</h1>
+                  <p className="text-muted-foreground">Answer 7 questions to generate your niche fit profile</p>
+                  <div className="mt-3 inline-flex items-center gap-2 text-xs text-muted-foreground border rounded-full px-3 py-1">
+                    <ShieldCheck className="h-3.5 w-3.5" />
+                    We never store personally identifiable answers — only anonymous preference patterns
+                  </div>
                 </div>
 
                 <div className="mb-6">
@@ -111,7 +158,8 @@ export default function NicheQuiz() {
 
                 <Card>
                   <CardContent className="pt-8 pb-6">
-                    <h2 className="text-xl font-bold mb-6">{questions[currentQuestion].question}</h2>
+                   <h2 className="text-xl font-bold mb-2">{questions[currentQuestion].question}</h2>
+                   <p className="text-xs text-muted-foreground mb-6">Dimension: {questions[currentQuestion].weightDimension}</p>
                     <div className="space-y-3">
                       {questions[currentQuestion].options.map((option, index) => (
                         <Button
@@ -133,7 +181,7 @@ export default function NicheQuiz() {
                   <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-4">
                     <Check className="h-8 w-8 text-primary" />
                   </div>
-                  <h1 className="text-3xl font-bold mb-2">Your Perfect Niche</h1>
+                  <h1 className="text-3xl font-bold mb-2">Your Top Niche Match</h1>
                   <p className="text-muted-foreground">Based on your answers, here's our recommendation</p>
                 </div>
 
@@ -143,8 +191,15 @@ export default function NicheQuiz() {
                       <h2 className="text-2xl font-bold mb-2">{recommendation.niche}</h2>
                       <div className="flex items-center justify-center gap-3">
                         <Badge>Competition: {recommendation.competition}</Badge>
-                        <Badge variant="secondary">Profit: {recommendation.profit}</Badge>
+                        <Badge variant="secondary">Fit Score: {recommendation.score}/100</Badge>
                       </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-3 mb-6 text-sm">
+                      <div className="p-3 rounded-lg bg-muted/50"><span className="font-medium">Monthly Search Demand:</span> {recommendation.demand}</div>
+                      <div className="p-3 rounded-lg bg-muted/50"><span className="font-medium">Avg RPM Potential:</span> {recommendation.rpm}</div>
+                      <div className="p-3 rounded-lg bg-muted/50"><span className="font-medium">Time to First $1K:</span> {recommendation.first1k}</div>
+                      <div className="p-3 rounded-lg bg-muted/50"><span className="font-medium">Production Difficulty:</span> Medium</div>
                     </div>
 
                     <div className="space-y-4 mb-6">
@@ -172,7 +227,7 @@ export default function NicheQuiz() {
                     </div>
 
                     <Button className="w-full" size="lg">
-                      Get Started with {recommendation.niche} <ArrowRight className="ml-2 h-4 w-4" />
+                      View Your AI Playbook <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </CardContent>
                 </Card>

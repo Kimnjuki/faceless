@@ -9,6 +9,103 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
+// ─── New enum literals for AI features ───────────────────────────────────────
+const anonymizationLevel = v.union(
+  v.literal("low"),
+  v.literal("medium"),
+  v.literal("high"),
+  v.literal("maximum")
+);
+const jobStatus = v.union(
+  v.literal("queued"),
+  v.literal("processing"),
+  v.literal("completed"),
+  v.literal("failed")
+);
+const monetizationPath = v.union(
+  v.literal("affiliate"),
+  v.literal("digital_product"),
+  v.literal("adsense"),
+  v.literal("ugc_brand_deal"),
+  v.literal("saas"),
+  v.literal("course")
+);
+const contentItemStatus = v.union(
+  v.literal("planned"),
+  v.literal("scripted"),
+  v.literal("produced"),
+  v.literal("published"),
+  v.literal("skipped")
+);
+const publishStatus = v.union(
+  v.literal("queued"),
+  v.literal("published"),
+  v.literal("failed"),
+  v.literal("cancelled")
+);
+const exportMode = v.union(
+  v.literal("standard"),
+  v.literal("zero_metadata"),
+  v.literal("maximum_anonymity")
+);
+const abContentType = v.union(
+  v.literal("hook"),
+  v.literal("thumbnail"),
+  v.literal("title"),
+  v.literal("cta"),
+  v.literal("description")
+);
+const sceneType = v.union(
+  v.literal("hook"),
+  v.literal("problem"),
+  v.literal("solution"),
+  v.literal("cta"),
+  v.literal("broll"),
+  v.literal("outro")
+);
+const agencyPlanTier = v.union(
+  v.literal("starter"),
+  v.literal("growth"),
+  v.literal("enterprise")
+);
+const approvalStatus = v.union(
+  v.literal("pending"),
+  v.literal("approved"),
+  v.literal("rejected"),
+  v.literal("revision_requested")
+);
+const playbookDifficulty = v.union(
+  v.literal("beginner"),
+  v.literal("intermediate"),
+  v.literal("advanced")
+);
+const playbookStatus = v.union(
+  v.literal("draft"),
+  v.literal("published"),
+  v.literal("archived")
+);
+const anonymityPreference = v.union(
+  v.literal("standard"),
+  v.literal("enhanced"),
+  v.literal("maximum")
+);
+const calendarStatus = v.union(
+  v.literal("active"),
+  v.literal("archived")
+);
+const agencyClientStatus = v.union(
+  v.literal("active"),
+  v.literal("paused"),
+  v.literal("churned")
+);
+const contentTypeShort = v.union(
+  v.literal("short"),
+  v.literal("long"),
+  v.literal("reel"),
+  v.literal("post"),
+  v.literal("newsletter")
+);
+
 // Status/enum literals for type safety
 const affiliateCommissionStatus = v.union(
   v.literal("pending"),
@@ -902,4 +999,442 @@ export default defineSchema({
   })
     .index("by_externalId", ["externalId"])
     .index("by_publishedAt", ["publishedAt"]),
+
+  // ---------------------------------------------------------------------------
+  // AI Voice Anonymization
+  // ---------------------------------------------------------------------------
+  voice_profiles: defineTable({
+    userId: v.id("profiles"),
+    personaId: v.optional(v.id("creator_personas")),
+    profileName: v.string(),
+    voiceProvider: v.string(),
+    voiceConfig: v.any(),
+    anonymizationLevel: anonymizationLevel,
+    antiMatchingEnabled: v.boolean(),
+    jitterConfig: v.optional(v.any()),
+    pitchEnvelopeConfig: v.optional(v.any()),
+    isActive: v.boolean(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_persona", ["personaId"]),
+
+  voice_projects: defineTable({
+    userId: v.id("profiles"),
+    voiceProfileId: v.id("voice_profiles"),
+    inputAudioUrl: v.optional(v.string()),
+    outputAudioUrl: v.optional(v.string()),
+    status: jobStatus,
+    anonymityScore: v.optional(v.float64()),
+    processingMetadata: v.optional(v.any()),
+    createdAt: v.float64(),
+    completedAt: v.optional(v.float64()),
+  })
+    .index("by_user", ["userId"])
+    .index("by_status", ["status"]),
+
+  // ---------------------------------------------------------------------------
+  // Creator Personas (Pseudonymous Multi-Channel)
+  // ---------------------------------------------------------------------------
+  creator_personas: defineTable({
+    userId: v.id("profiles"),
+    personaName: v.string(),
+    personaSlug: v.string(),
+    targetPlatforms: v.array(v.string()),
+    primaryNiche: v.optional(v.string()),
+    voiceProfileId: v.optional(v.id("voice_profiles")),
+    contentStrategyId: v.optional(v.id("content_calendars")),
+    anonymityLevel: anonymityPreference,
+    isActive: v.boolean(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_slug", ["personaSlug"]),
+
+  // ---------------------------------------------------------------------------
+  // AI Script Generator
+  // ---------------------------------------------------------------------------
+  script_funnel_templates: defineTable({
+    templateName: v.string(),
+    monetizationPath: v.string(),
+    targetPlatform: v.string(),
+    structure: v.any(),
+    ctaFormats: v.array(v.string()),
+    exampleScripts: v.optional(v.array(v.any())),
+    nicheCompatibility: v.optional(v.array(v.string())),
+    performanceScore: v.optional(v.float64()),
+    isPublic: v.boolean(),
+    createdBy: v.optional(v.id("profiles")),
+    createdAt: v.float64(),
+  })
+    .index("by_platform", ["targetPlatform"])
+    .index("by_monetization_path", ["monetizationPath"]),
+
+  script_projects: defineTable({
+    userId: v.id("profiles"),
+    personaId: v.optional(v.id("creator_personas")),
+    title: v.string(),
+    niche: v.string(),
+    targetPlatform: v.string(),
+    monetizationPath: monetizationPath,
+    funnelTemplateId: v.optional(v.id("script_funnel_templates")),
+    hookVariants: v.optional(v.array(v.any())),
+    scriptContent: v.any(),
+    wordCount: v.optional(v.float64()),
+    estimatedDuration: v.optional(v.float64()),
+    status: playbookStatus,
+    performanceData: v.optional(v.any()),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_persona", ["personaId"])
+    .index("by_status", ["status"])
+    .index("by_platform", ["targetPlatform"]),
+
+  // ---------------------------------------------------------------------------
+  // A/B Testing
+  // ---------------------------------------------------------------------------
+  ab_test_experiments: defineTable({
+    userId: v.id("profiles"),
+    personaId: v.optional(v.id("creator_personas")),
+    experimentName: v.string(),
+    contentType: abContentType,
+    platform: v.string(),
+    status: v.union(v.literal("running"), v.literal("completed"), v.literal("paused")),
+    startedAt: v.float64(),
+    completedAt: v.optional(v.float64()),
+    winnerId: v.optional(v.id("ab_test_variants")),
+    statisticalConfidence: v.optional(v.float64()),
+    createdAt: v.float64(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_status", ["status"]),
+
+  ab_test_variants: defineTable({
+    experimentId: v.id("ab_test_experiments"),
+    variantLabel: v.string(),
+    content: v.any(),
+    impressions: v.optional(v.float64()),
+    clicks: v.optional(v.float64()),
+    conversions: v.optional(v.float64()),
+    revenueAttributed: v.optional(v.float64()),
+    ctr: v.optional(v.float64()),
+    createdAt: v.float64(),
+  })
+    .index("by_experiment", ["experimentId"]),
+
+  // ---------------------------------------------------------------------------
+  // Content Calendar & Publishing
+  // ---------------------------------------------------------------------------
+  content_calendars: defineTable({
+    userId: v.id("profiles"),
+    personaId: v.optional(v.id("creator_personas")),
+    calendarName: v.string(),
+    niche: v.string(),
+    targetPlatforms: v.array(v.string()),
+    durationDays: v.float64(),
+    startDate: v.float64(),
+    generatedAt: v.float64(),
+    aiModel: v.optional(v.string()),
+    status: calendarStatus,
+  })
+    .index("by_user", ["userId"])
+    .index("by_persona", ["personaId"]),
+
+  calendar_items: defineTable({
+    calendarId: v.id("content_calendars"),
+    scheduledDate: v.float64(),
+    platform: v.string(),
+    contentTitle: v.string(),
+    hook: v.optional(v.string()),
+    contentType: contentTypeShort,
+    monetizationPath: v.optional(v.string()),
+    estimatedReach: v.optional(v.float64()),
+    estimatedRevenue: v.optional(v.float64()),
+    scriptProjectId: v.optional(v.id("script_projects")),
+    status: contentItemStatus,
+    publishedAt: v.optional(v.float64()),
+    actualPerformance: v.optional(v.any()),
+  })
+    .index("by_calendar", ["calendarId"])
+    .index("by_status", ["status"])
+    .index("by_scheduled_date", ["scheduledDate"]),
+
+  publishing_queue: defineTable({
+    userId: v.id("profiles"),
+    personaId: v.optional(v.id("creator_personas")),
+    calendarItemId: v.optional(v.id("calendar_items")),
+    platform: v.string(),
+    contentTitle: v.string(),
+    adaptedCaption: v.optional(v.string()),
+    hashtags: v.optional(v.array(v.string())),
+    videoUrl: v.optional(v.string()),
+    thumbnailUrl: v.optional(v.string()),
+    scheduledFor: v.float64(),
+    status: publishStatus,
+    platformPostId: v.optional(v.string()),
+    publishedAt: v.optional(v.float64()),
+    errorDetails: v.optional(v.string()),
+    createdAt: v.float64(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_persona", ["personaId"])
+    .index("by_status", ["status"])
+    .index("by_scheduled_for", ["scheduledFor"]),
+
+  platform_connections: defineTable({
+    userId: v.id("profiles"),
+    personaId: v.optional(v.id("creator_personas")),
+    platform: v.string(),
+    platformAccountId: v.optional(v.string()),
+    platformHandle: v.optional(v.string()),
+    accessTokenEncrypted: v.string(),
+    refreshTokenEncrypted: v.optional(v.string()),
+    tokenExpiresAt: v.optional(v.float64()),
+    isActive: v.boolean(),
+    connectedAt: v.float64(),
+    lastUsedAt: v.optional(v.float64()),
+  })
+    .index("by_user", ["userId"])
+    .index("by_persona", ["personaId"])
+    .index("by_platform", ["platform"]),
+
+  // ---------------------------------------------------------------------------
+  // Metadata Stripping & Anonymity Audits
+  // ---------------------------------------------------------------------------
+  export_jobs: defineTable({
+    userId: v.id("profiles"),
+    personaId: v.optional(v.id("creator_personas")),
+    projectType: v.union(
+      v.literal("script"),
+      v.literal("audio"),
+      v.literal("video"),
+      v.literal("image"),
+      v.literal("bundle")
+    ),
+    exportMode: exportMode,
+    metadataStripped: v.boolean(),
+    voiceAnonymized: v.boolean(),
+    fileUrl: v.optional(v.string()),
+    anonymityScore: v.optional(v.float64()),
+    auditLog: v.optional(v.any()),
+    status: v.union(
+      v.literal("queued"),
+      v.literal("processing"),
+      v.literal("ready"),
+      v.literal("expired")
+    ),
+    createdAt: v.float64(),
+    completedAt: v.optional(v.float64()),
+    expiresAt: v.optional(v.float64()),
+  })
+    .index("by_user", ["userId"])
+    .index("by_status", ["status"]),
+
+  anonymity_audits: defineTable({
+    userId: v.id("profiles"),
+    personaId: v.optional(v.id("creator_personas")),
+    exportJobId: v.optional(v.id("export_jobs")),
+    voiceScore: v.float64(),
+    metadataScore: v.float64(),
+    ipExposureScore: v.float64(),
+    traceabilityScore: v.float64(),
+    compositeAnonymityScore: v.float64(),
+    riskFlags: v.array(v.string()),
+    recommendations: v.array(v.string()),
+    createdAt: v.float64(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_persona", ["personaId"]),
+
+  // ---------------------------------------------------------------------------
+  // Storyboards
+  // ---------------------------------------------------------------------------
+  storyboards: defineTable({
+    userId: v.id("profiles"),
+    scriptProjectId: v.id("script_projects"),
+    title: v.string(),
+    platform: v.string(),
+    totalScenes: v.float64(),
+    estimatedDuration: v.float64(),
+    exportUrl: v.optional(v.string()),
+    status: v.union(v.literal("draft"), v.literal("finalized")),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_script_project", ["scriptProjectId"]),
+
+  storyboard_scenes: defineTable({
+    storyboardId: v.id("storyboards"),
+    sceneOrder: v.float64(),
+    timestampStart: v.float64(),
+    timestampEnd: v.float64(),
+    sceneType: sceneType,
+    narrationText: v.string(),
+    visualDescription: v.string(),
+    brollSuggestions: v.array(v.string()),
+    stockSearchQuery: v.optional(v.string()),
+    textOverlay: v.optional(v.string()),
+    overlayPosition: v.optional(v.string()),
+  })
+    .index("by_storyboard", ["storyboardId"]),
+
+  // ---------------------------------------------------------------------------
+  // Playbook Marketplace
+  // ---------------------------------------------------------------------------
+  playbooks: defineTable({
+    authorId: v.id("profiles"),
+    title: v.string(),
+    slug: v.string(),
+    description: v.string(),
+    niche: v.string(),
+    targetPlatforms: v.array(v.string()),
+    monetizationPaths: v.array(v.string()),
+    difficulty: playbookDifficulty,
+    content: v.any(),
+    promptLibrary: v.optional(v.array(v.any())),
+    toolStack: v.optional(v.array(v.string())),
+    expectedIncomeRange: v.optional(v.string()),
+    timeToResults: v.optional(v.string()),
+    price: v.optional(v.float64()),
+    isFree: v.boolean(),
+    aiQualityScore: v.optional(v.float64()),
+    downloadCount: v.optional(v.float64()),
+    status: playbookStatus,
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+  })
+    .index("by_author", ["authorId"])
+    .index("by_niche", ["niche"])
+    .index("by_slug", ["slug"])
+    .index("by_status", ["status"]),
+
+  playbook_purchases: defineTable({
+    userId: v.id("profiles"),
+    playbookId: v.id("playbooks"),
+    orderId: v.optional(v.id("orders")),
+    purchasedAt: v.float64(),
+    accessGranted: v.boolean(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_playbook", ["playbookId"]),
+
+  // ---------------------------------------------------------------------------
+  // Niche Intelligence
+  // ---------------------------------------------------------------------------
+  niche_trend_snapshots: defineTable({
+    nicheId: v.id("niches"),
+    snapshotDate: v.float64(),
+    trendingScore: v.float64(),
+    searchVolumeDelta: v.optional(v.float64()),
+    competitionDelta: v.optional(v.float64()),
+    rpmDelta: v.optional(v.float64()),
+    topKeywords: v.optional(v.array(v.string())),
+    dataSource: v.optional(v.string()),
+    rawData: v.optional(v.any()),
+  })
+    .index("by_niche", ["nicheId"])
+    .index("by_snapshot_date", ["snapshotDate"]),
+
+  // ---------------------------------------------------------------------------
+  // Income Projections
+  // ---------------------------------------------------------------------------
+  income_projections: defineTable({
+    userId: v.id("profiles"),
+    personaId: v.optional(v.id("creator_personas")),
+    nicheId: v.optional(v.id("niches")),
+    postingFrequency: v.string(),
+    monetizationMix: v.any(),
+    projectionPeriodDays: v.float64(),
+    month3Projection: v.optional(v.float64()),
+    month6Projection: v.optional(v.float64()),
+    month12Projection: v.optional(v.float64()),
+    confidenceBand: v.optional(v.any()),
+    assumptions: v.optional(v.any()),
+    createdAt: v.float64(),
+  })
+    .index("by_user", ["userId"]),
+
+  // ---------------------------------------------------------------------------
+  // Agency / White-Label
+  // ---------------------------------------------------------------------------
+  agencies: defineTable({
+    ownerId: v.id("profiles"),
+    agencyName: v.string(),
+    agencySlug: v.string(),
+    whiteLabelDomain: v.optional(v.string()),
+    brandConfig: v.optional(v.any()),
+    planTier: agencyPlanTier,
+    maxClients: v.float64(),
+    maxCreators: v.float64(),
+    isActive: v.boolean(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+  })
+    .index("by_owner", ["ownerId"])
+    .index("by_slug", ["agencySlug"]),
+
+  agency_clients: defineTable({
+    agencyId: v.id("agencies"),
+    clientName: v.string(),
+    clientEmail: v.optional(v.string()),
+    assignedCreatorId: v.optional(v.id("profiles")),
+    brandKitId: v.optional(v.id("brand_kits")),
+    status: agencyClientStatus,
+    joinedAt: v.float64(),
+    updatedAt: v.float64(),
+  })
+    .index("by_agency", ["agencyId"])
+    .index("by_status", ["status"]),
+
+  brand_kits: defineTable({
+    agencyId: v.optional(v.id("agencies")),
+    clientId: v.optional(v.id("agency_clients")),
+    userId: v.optional(v.id("profiles")),
+    brandName: v.string(),
+    primaryColor: v.optional(v.string()),
+    secondaryColor: v.optional(v.string()),
+    fontFamily: v.optional(v.string()),
+    logoUrl: v.optional(v.string()),
+    voiceAndToneGuide: v.optional(v.string()),
+    contentRules: v.optional(v.any()),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+  })
+    .index("by_agency", ["agencyId"])
+    .index("by_user", ["userId"]),
+
+  client_approvals: defineTable({
+    agencyId: v.id("agencies"),
+    clientId: v.id("agency_clients"),
+    contentType: v.string(),
+    contentRef: v.any(),
+    status: approvalStatus,
+    reviewerNote: v.optional(v.string()),
+    submittedAt: v.float64(),
+    reviewedAt: v.optional(v.float64()),
+  })
+    .index("by_agency", ["agencyId"])
+    .index("by_client", ["clientId"])
+    .index("by_status", ["status"]),
+
+  // ---------------------------------------------------------------------------
+  // Affiliate Match Engine
+  // ---------------------------------------------------------------------------
+  affiliate_recommendations: defineTable({
+    userId: v.id("profiles"),
+    nicheId: v.optional(v.id("niches")),
+    programId: v.id("affiliate_programs"),
+    matchScore: v.float64(),
+    matchReasons: v.array(v.string()),
+    estimatedEpc: v.optional(v.float64()),
+    recommendedAt: v.float64(),
+    dismissed: v.optional(v.boolean()),
+  })
+    .index("by_user", ["userId"])
+    .index("by_program", ["programId"]),
 });

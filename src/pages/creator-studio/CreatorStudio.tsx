@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  PenTool, Mic, Image, Video, Calendar, Lightbulb,
+  PenTool, Mic, Image, Calendar, Lightbulb,
   Shield, User, BarChart3, Film, Link, TrendingUp,
   BookOpen, Sparkles,
 } from "lucide-react";
@@ -15,7 +15,6 @@ import SEO from "@/components/SEO";
 import ScriptGenerator from "@/components/creator-studio/ScriptGenerator";
 import VoiceStudio from "@/components/creator-studio/VoiceStudio";
 import VisualAssetCreator from "@/components/creator-studio/VisualAssetCreator";
-import ContentCalendar from "@/components/creator-studio/ContentCalendar";
 import IdeaGenerator from "@/components/creator-studio/IdeaGenerator";
 import AnonymityScoreDashboard from "@/components/creator-studio/AnonymityScoreDashboard";
 import CreatorPersonaManager from "@/components/creator-studio/CreatorPersonaManager";
@@ -29,26 +28,37 @@ import { trackToolUsage } from "@/utils/analytics";
 
 // ─── Tab config ───────────────────────────────────────────────────────────────
 
-const TABS = [
-  // Core creation
-  { id: "script", label: "Script", icon: <PenTool className="h-4 w-4" />, group: "create", badge: "AI" },
-  { id: "voice", label: "Voice", icon: <Mic className="h-4 w-4" />, group: "create" },
-  { id: "storyboard", label: "Storyboard", icon: <Film className="h-4 w-4" />, group: "create", badge: "New" },
-  { id: "visual", label: "Visual", icon: <Image className="h-4 w-4" />, group: "create" },
-  // Strategy & growth
-  { id: "calendar", label: "Calendar", icon: <Calendar className="h-4 w-4" />, group: "strategy", badge: "AI" },
-  { id: "abtest", label: "A/B Test", icon: <BarChart3 className="h-4 w-4" />, group: "strategy", badge: "New" },
-  { id: "affiliate", label: "Affiliate", icon: <Link className="h-4 w-4" />, group: "strategy", badge: "AI" },
-  { id: "income", label: "Income", icon: <TrendingUp className="h-4 w-4" />, group: "strategy" },
-  // Identity & privacy
-  { id: "personas", label: "Personas", icon: <User className="h-4 w-4" />, group: "privacy", badge: "New" },
-  { id: "anonymity", label: "Anonymity", icon: <Shield className="h-4 w-4" />, group: "privacy", badge: "New" },
-  // Community
-  { id: "playbooks", label: "Playbooks", icon: <BookOpen className="h-4 w-4" />, group: "community", badge: "New" },
-  { id: "ideas", label: "Ideas", icon: <Lightbulb className="h-4 w-4" />, group: "community" },
-] as const;
+type TabId =
+  | "script" | "voice" | "storyboard" | "visual"
+  | "calendar" | "abtest" | "affiliate" | "income"
+  | "personas" | "anonymity" | "playbooks" | "ideas";
 
-type TabId = (typeof TABS)[number]["id"];
+interface TabDef {
+  id: TabId;
+  label: string;
+  icon: React.ReactNode;
+  group: string;
+  badge?: string;
+}
+
+const TABS: TabDef[] = [
+  // Core creation
+  { id: "script",     label: "Script",     icon: <PenTool className="h-4 w-4" />,  group: "create",    badge: "AI" },
+  { id: "voice",      label: "Voice",      icon: <Mic className="h-4 w-4" />,       group: "create" },
+  { id: "storyboard", label: "Storyboard", icon: <Film className="h-4 w-4" />,      group: "create",    badge: "New" },
+  { id: "visual",     label: "Visual",     icon: <Image className="h-4 w-4" />,     group: "create" },
+  // Strategy & growth
+  { id: "calendar",   label: "Calendar",   icon: <Calendar className="h-4 w-4" />,  group: "strategy",  badge: "AI" },
+  { id: "abtest",     label: "A/B Test",   icon: <BarChart3 className="h-4 w-4" />, group: "strategy",  badge: "New" },
+  { id: "affiliate",  label: "Affiliate",  icon: <Link className="h-4 w-4" />,      group: "strategy",  badge: "AI" },
+  { id: "income",     label: "Income",     icon: <TrendingUp className="h-4 w-4" />, group: "strategy" },
+  // Identity & privacy
+  { id: "personas",   label: "Personas",   icon: <User className="h-4 w-4" />,      group: "privacy",   badge: "New" },
+  { id: "anonymity",  label: "Anonymity",  icon: <Shield className="h-4 w-4" />,    group: "privacy",   badge: "New" },
+  // Community
+  { id: "playbooks",  label: "Playbooks",  icon: <BookOpen className="h-4 w-4" />,  group: "community", badge: "New" },
+  { id: "ideas",      label: "Ideas",      icon: <Lightbulb className="h-4 w-4" />, group: "community" },
+];
 
 const GROUP_LABELS: Record<string, string> = {
   create: "Create",

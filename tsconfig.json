@@ -8,6 +8,10 @@
 
     /* Bundler mode */
     "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -20,15 +24,9 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
 
-    /* TypeScript 6.0+ deprecation handling */
-    "ignoreDeprecations": "6.0",
-
     /* Path aliases */
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "types": ["node"]
+    "types": ["node"],
+    "ignoreDeprecations": "5.0"
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

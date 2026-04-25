@@ -90,6 +90,22 @@ function isVisible(article: { status: string; publishedAt?: number }) {
 }
 
 /**
+ * TipTap / stored JSON documents start with `{` or `[` after trim.
+ * Markdown and plain text (e.g. "# Title") stay as strings — no failed JSON.parse, no console noise.
+ */
+function parseArticleContentForResponse(content: string): unknown {
+  const trimmed = content.trimStart();
+  if (trimmed.length === 0) return content;
+  const first = trimmed[0];
+  if (first !== "{" && first !== "[") return content;
+  try {
+    return JSON.parse(content) as unknown;
+  } catch {
+    return content;
+  }
+}
+
+/**
  * List articles with optional filters.
  * Only shows published articles where publishedAt <= now.
  * Uses by_status to ensure ALL articles are included (by_published_at may exclude null publishedAt).
@@ -147,17 +163,11 @@ export const list = query({
           .withIndex("by_article", (q) => q.eq("articleId", article._id))
           .collect();
         
-        // Parse JSON content if it's a string
-        let parsedContent = article.content;
-        if (typeof article.content === 'string') {
-          try {
-            parsedContent = JSON.parse(article.content);
-          } catch (e) {
-            console.warn('Failed to parse article content as JSON:', article._id, e);
-            // Keep original content if parsing fails
-          }
-        }
-        
+        const parsedContent =
+          typeof article.content === "string"
+            ? parseArticleContentForResponse(article.content)
+            : article.content;
+
         return {
           ...article,
           content: parsedContent,
@@ -316,8 +326,14 @@ export const getById = query({
       .query("article_tags")
       .withIndex("by_article", (q) => q.eq("articleId", article._id))
       .collect();
+    const parsedContent =
+      typeof article.content === "string"
+        ? parseArticleContentForResponse(article.content)
+        : article.content;
+
     return {
       ...article,
+      content: parsedContent,
       category: category ? { id: category._id, name: category.name, slug: category.slug, description: category.description } : null,
       author: author ? { id: author._id, user_id: author.userId, full_name: author.fullName, avatar_url: author.avatarUrl } : null,
       tags: tags.map((t) => t.tag),
@@ -353,17 +369,11 @@ export const getBySlug = query({
               .query("article_tags")
               .withIndex("by_article", (q) => q.eq("articleId", article._id))
               .collect();
-            // Parse JSON content if it's a string
-            let parsedContent = article.content;
-            if (typeof article.content === 'string') {
-              try {
-                parsedContent = JSON.parse(article.content);
-              } catch (e) {
-                console.warn('Failed to parse article content as JSON:', article._id, e);
-                // Keep original content if parsing fails
-              }
-            }
-            
+            const parsedContent =
+              typeof article.content === "string"
+                ? parseArticleContentForResponse(article.content)
+                : article.content;
+
             return {
               ...article,
               content: parsedContent,
@@ -418,17 +428,11 @@ export const getBySlug = query({
       .withIndex("by_article", (q) => q.eq("articleId", article._id))
       .collect();
     
-    // Parse JSON content if it's a string
-    let parsedContent = article.content;
-    if (typeof article.content === 'string') {
-      try {
-        parsedContent = JSON.parse(article.content);
-      } catch (e) {
-        console.warn('Failed to parse article content as JSON:', article._id, e);
-        // Keep original content if parsing fails
-      }
-    }
-    
+    const parsedContent =
+      typeof article.content === "string"
+        ? parseArticleContentForResponse(article.content)
+        : article.content;
+
     return {
       ...article,
       content: parsedContent,

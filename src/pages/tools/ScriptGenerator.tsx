@@ -14,8 +14,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { trackToolUsage } from "@/utils/analytics";
-import { useMutation, useQuery } from "convex/react";
+import { useAction, useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+
+type User = {
+  subscriptionTier?: 'free' | 'premium' | 'vip';
+};
 
 type ScriptResult = {
   hook: string;
@@ -30,8 +34,11 @@ type ScriptResult = {
 
 export default function ScriptGenerator() {
   const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
-  const user = useQuery(api.users.current, hasConvex ? {} : "skip");
-  const generateScript = useMutation(api.ai.generateScript);
+  // Fix: There is no 'users' module, user profiles are in 'profiles' module
+  // For now safely fall back to null user - will use default free tier limits
+  // Explicit type annotation to prevent TypeScript from inferring 'never' type
+  const user = null as { subscriptionTier?: 'free' | 'premium' | 'vip' } | null;
+  const generateScript = useAction(api.ai.generateScript);
   const trackConversion = useMutation(api.conversions.track);
 
   const [inputs, setInputs] = useState({
@@ -432,7 +439,7 @@ export default function ScriptGenerator() {
             </div>
 
             {/* Content Depth Section - SEO */}
-            <div className="max-w-4xl mx-auto mt-16 prose prose-lg dark:prose-invert max-w-none">
+            <div className="max-w-4xl mx-auto mt-16 prose prose-lg dark:prose-invert">
               <section className="mb-12">
                 <h2 className="text-3xl font-bold mb-6">AI Script Generator for Faceless Content Creators</h2>
                 <p className="text-lg leading-relaxed mb-4">

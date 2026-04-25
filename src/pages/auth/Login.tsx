@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
+import { z } from "zod";
 import { loginSchema, type LoginFormData } from "@/lib/validations";
 import { handleError } from "@/lib/error-handler";
 import SEO from "@/components/SEO";
@@ -23,10 +24,14 @@ export default function Login() {
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check for message in URL params
-    const message = searchParams.get('message');
-    if (message) {
-      setInfoMessage(message);
+    const message = searchParams.get("message");
+    const oauthError = searchParams.get("error");
+    const oauthDesc = searchParams.get("error_description");
+    if (message) setInfoMessage(message);
+    if (oauthError) {
+      const decoded =
+        oauthDesc?.replace(/\+/g, " ") ?? oauthError;
+      setInfoMessage(`Sign-in could not complete: ${decoded}`);
     }
   }, [searchParams]);
 
@@ -41,23 +46,26 @@ export default function Login() {
       
       // Sign in
       const result = await signIn(validated.email, validated.password);
-      
-      // Only redirect if sign in was successful
-      if (result.user && !result.error) {
-        navigate('/dashboard');
+      if (result.error) {
+        handleError(result.error, "Failed to sign in");
+        return;
       }
-    } catch (error: any) {
-      if (error.errors) {
-        // Zod validation errors
+      // Session-based sign-in (e.g. legacy) — Auth0 Universal Login redirects before returning
+      if (result.user) {
+        navigate("/dashboard");
+      }
+    } catch (error: unknown) {
+      if (error instanceof z.ZodError) {
         const fieldErrors: Partial<LoginFormData> = {};
-        error.errors.forEach((err: any) => {
-          if (err.path) {
-            fieldErrors[err.path[0] as keyof LoginFormData] = err.message;
+        for (const issue of error.issues) {
+          const key = issue.path[0];
+          if (key === "email" || key === "password") {
+            fieldErrors[key] = issue.message;
           }
-        });
+        }
         setErrors(fieldErrors);
       } else {
-        handleError(error, 'Failed to sign in');
+        handleError(error, "Failed to sign in");
       }
     } finally {
       setLoading(false);
@@ -86,7 +94,9 @@ export default function Login() {
             </div>
           </div>
           <CardTitle>Welcome Back</CardTitle>
-          <CardDescription>Sign in to your account</CardDescription>
+          <CardDescription>
+            Sign in to your account. You will complete email and password on Auth0&apos;s secure page (your password is not sent to this site).
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {infoMessage && (

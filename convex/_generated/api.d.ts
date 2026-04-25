@@ -8,10 +8,13 @@
  * @module
  */
 
+import type * as ai from "../ai.js";
+import type * as aiTools from "../aiTools.js";
 import type * as articles from "../articles.js";
 import type * as challenges from "../challenges.js";
 import type * as community from "../community.js";
 import type * as content from "../content.js";
+import type * as contentCalendar from "../contentCalendar.js";
 import type * as contentCategories from "../contentCategories.js";
 import type * as contentTools from "../contentTools.js";
 import type * as conversions from "../conversions.js";
@@ -28,7 +31,9 @@ import type * as learningPaths from "../learningPaths.js";
 import type * as newsIngestor from "../newsIngestor.js";
 import type * as niche_analysis from "../niche_analysis.js";
 import type * as niches from "../niches.js";
+import type * as personas from "../personas.js";
 import type * as platformGuides from "../platformGuides.js";
+import type * as playbooks from "../playbooks.js";
 import type * as profiles from "../profiles.js";
 import type * as seedAdsense from "../seedAdsense.js";
 import type * as seedFacelessArticle from "../seedFacelessArticle.js";
@@ -36,6 +41,7 @@ import type * as seedPlatformGuides from "../seedPlatformGuides.js";
 import type * as supportTickets from "../supportTickets.js";
 import type * as templates from "../templates.js";
 import type * as tools from "../tools.js";
+import type * as voiceStudio from "../voiceStudio.js";
 import type * as webinars from "../webinars.js";
 
 import type {
@@ -45,10 +51,13 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  ai: typeof ai;
+  aiTools: typeof aiTools;
   articles: typeof articles;
   challenges: typeof challenges;
   community: typeof community;
   content: typeof content;
+  contentCalendar: typeof contentCalendar;
   contentCategories: typeof contentCategories;
   contentTools: typeof contentTools;
   conversions: typeof conversions;
@@ -65,7 +74,9 @@ declare const fullApi: ApiFromModules<{
   newsIngestor: typeof newsIngestor;
   niche_analysis: typeof niche_analysis;
   niches: typeof niches;
+  personas: typeof personas;
   platformGuides: typeof platformGuides;
+  playbooks: typeof playbooks;
   profiles: typeof profiles;
   seedAdsense: typeof seedAdsense;
   seedFacelessArticle: typeof seedFacelessArticle;
@@ -73,6 +84,7 @@ declare const fullApi: ApiFromModules<{
   supportTickets: typeof supportTickets;
   templates: typeof templates;
   tools: typeof tools;
+  voiceStudio: typeof voiceStudio;
   webinars: typeof webinars;
 }>;
 

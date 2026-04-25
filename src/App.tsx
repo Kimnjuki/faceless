@@ -58,6 +58,7 @@ import News from "./pages/News";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PerformanceOptimizer from "./components/PerformanceOptimizer";
 import ForeMediaAd from "./components/ForeMediaAd";
+import { isAuth0Configured } from "@/lib/auth0";
 
 // Component to track page views on route changes
 function PageViewTracker() {
@@ -76,7 +77,7 @@ if (import.meta.env.PROD || import.meta.env.DEV) {
   initWebVitals();
 }
 
-const hasAuth0 = Boolean(import.meta.env.VITE_AUTH0_DOMAIN && import.meta.env.VITE_AUTH0_CLIENT_ID);
+const hasAuth0 = isAuth0Configured();
 
 export default function App() {
   const AuthWrapper = hasAuth0 ? AuthProvider : AuthProviderFallback;

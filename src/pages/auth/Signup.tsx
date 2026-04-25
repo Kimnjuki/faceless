@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,13 +8,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
+import { z } from "zod";
 import { signupSchema, type SignupFormData } from "@/lib/validations";
 import { handleError } from "@/lib/error-handler";
 import { trackSignup, trackSignupStart, trackFormSubmit } from "@/utils/analytics";
 import SEO from "@/components/SEO";
 
 export default function Signup() {
-  const navigate = useNavigate();
   const { signUp, signInWithGoogle } = useAuth();
   const [step, setStep] = useState(1);
   const [signupStartTracked, setSignupStartTracked] = useState(false);
@@ -64,43 +64,31 @@ export default function Signup() {
         // Track form submission
         trackFormSubmit('signup', 'signup-page');
         
-        // Create user account with pseudonym
+        // Auth0 Universal Login: browser redirects to hosted signup; session returns via /auth/callback
         const result = await signUp(validated.email, validated.password, validated.name);
-        
-        // Check result and handle accordingly
         if (result.error) {
-          // Error already shown in toast by signUp function
-          // Check if it's a validation error we should show in form
-          if (result.error.message?.toLowerCase().includes('email') || 
+          if (result.error.message?.toLowerCase().includes('email') ||
               result.error.message?.toLowerCase().includes('user already registered')) {
             setErrors({ email: result.error.message });
           } else if (result.error.message?.toLowerCase().includes('password')) {
             setErrors({ password: result.error.message });
           }
-          return; // Don't redirect on error
+          return;
         }
-        
-        // Check if user was created or redirect (Auth0 handles session)
-        if (result.user) {
-          trackSignup('email');
-          setTimeout(() => navigate('/dashboard'), 500);
-        } else {
-          // Redirect after sign up attempt (Auth0 may redirect)
-          setTimeout(() => navigate('/auth/login?message=Please check your email to verify your account'), 2000);
-        }
+        trackSignup('email');
+        // Do not navigate here — loginWithRedirect leaves the page; client-side navigation would race the OAuth redirect
       }
-    } catch (error: any) {
-      if (error.errors) {
-        // Zod validation errors
+    } catch (error: unknown) {
+      if (error instanceof z.ZodError) {
         const fieldErrors: Partial<SignupFormData> = {};
-        error.errors.forEach((err: any) => {
-          if (err.path && err.path.length > 0) {
-            const fieldName = err.path[0] as keyof SignupFormData;
-            fieldErrors[fieldName] = err.message;
+        for (const issue of error.issues) {
+          const key = issue.path[0];
+          if (key === "email" || key === "password" || key === "name") {
+            fieldErrors[key] = issue.message;
           }
-        });
+        }
         setErrors(fieldErrors);
-      } else if (error.message) {
+      } else if (error instanceof Error && error.message) {
         // Other errors
         handleError(error, 'Failed to create account');
         // Try to extract field-specific errors
@@ -110,7 +98,7 @@ export default function Signup() {
           setErrors({ password: error.message });
         }
       } else {
-        handleError(error, 'Failed to create account');
+        handleError(error, "Failed to create account");
       }
     } finally {
       setLoading(false);

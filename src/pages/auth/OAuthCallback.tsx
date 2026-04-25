@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import SEO from '@/components/SEO';
+import { isAuth0Configured } from '@/lib/auth0';
 
-const hasAuth0 = Boolean(import.meta.env.VITE_AUTH0_DOMAIN && import.meta.env.VITE_AUTH0_CLIENT_ID);
+const hasAuth0 = isAuth0Configured();
 
 function OAuthCallbackWithAuth0() {
   const navigate = useNavigate();
@@ -14,7 +15,13 @@ function OAuthCallbackWithAuth0() {
     if (isLoading) return;
     if (error) {
       console.error('OAuth error:', error);
-      navigate('/auth/login?error=oauth_failed');
+      const q = new URLSearchParams();
+      const anyErr = error as { error?: string; message?: string; error_description?: string };
+      const code = anyErr.error ?? anyErr.message ?? 'oauth_failed';
+      q.set('error', code);
+      const desc = anyErr.error_description ?? anyErr.message;
+      if (desc && desc !== code) q.set('error_description', desc);
+      navigate(`/auth/login?${q.toString()}`);
       return;
     }
     if (isAuthenticated) {

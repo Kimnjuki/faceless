@@ -1,0 +1,280 @@
+{
+  "platform_audit": {
+    "meta": {
+      "site": "ContentAnonymity.com",
+      "audit_date": "2026-04-25",
+      "auditor_role": "Senior Digital Marketer + Full-Stack Developer",
+      "convex_schema_version": "referenced_v1",
+      "budget_constraint": "limited",
+      "priority_scale": "P0=Critical, P1=High, P2=Medium, P3=Low",
+      "implementation_environment": "Convex + React/Next.js frontend"
+    },
+
+    "executive_summary": {
+      "overall_score": 34,
+      "score_out_of": 100,
+      "verdict": "The platform has strong positioning in a high-growth niche (faceless content is 38% of all new creator monetization ventures in 2025) but suffers from critical structural gaps: thin content, non-functional tools, zero SEO foundation, and no real monetization pipeline. Immediate action on P0 items could 3x organic traffic within 90 days.",
+      "biggest_opportunities": [
+        "Faceless YouTube/TikTok content creation niche is exploding — 217% growth since 2022",
+        "Convex schema already has 40+ tables ready for feature build-out",
+        "Competitors (Faceless.video) are failing users with policy violations — trust gap to fill",
+        "72% of Gen Z viewers care about content quality over creator identity — perfect positioning"
+      ],
+      "critical_risks": [
+        "SSL certificate error blocking crawler access — site invisible to Google AI",
+        "Broken/placeholder tools destroy trust on first visit",
+        "No privacy policy or terms of service (legal liability)",
+        "Zero backlinks and no sitemap = effectively non-indexed"
+      ]
+    },
+
+    "gap_analysis": {
+
+      "technical_infrastructure": {
+        "priority": "P0",
+        "gaps": [
+          {
+            "id": "TECH-001",
+            "issue": "SSL Certificate — Self-signed cert causing verification failure",
+            "impact": "Site blocked by crawlers, AI search engines (Gemini, Perplexity), and some browsers. Zero indexing possible.",
+            "solution": "Install Let's Encrypt free SSL via Certbot or Cloudflare Universal SSL (free tier)",
+            "cost": "$0",
+            "time_to_fix": "2 hours",
+            "convex_relation": null
+          },
+          {
+            "id": "TECH-002",
+            "issue": "Missing robots.txt",
+            "impact": "Crawlers uncertain what to index; may skip entire site",
+            "solution": "Create /robots.txt allowing all crawlers: User-agent: * Allow: / Sitemap: https://contentanonymity.com/sitemap.xml",
+            "cost": "$0",
+            "time_to_fix": "30 mins",
+            "convex_relation": null
+          },
+          {
+            "id": "TECH-003",
+            "issue": "Missing XML sitemap",
+            "impact": "Google cannot discover all pages; new content takes weeks to index",
+            "solution": "Generate sitemap dynamically from Convex articles, platform_guides, niches, tools tables. Auto-submit to Google Search Console and Bing Webmaster.",
+            "cost": "$0",
+            "time_to_fix": "4 hours",
+            "convex_relation": ["articles", "platform_guides", "niches", "tools", "content_categories"],
+            "code_snippet": "// Convex action to build sitemap\nexport const generateSitemap = action(async (ctx) => {\n  const articles = await ctx.runQuery(api.articles.getPublished);\n  const guides = await ctx.runQuery(api.platformGuides.getAll);\n  const niches = await ctx.runQuery(api.niches.getAll);\n  // Generate XML and cache in Convex storage\n});"
+          },
+          {
+            "id": "TECH-004",
+            "issue": "No Core Web Vitals optimization",
+            "impact": "Google ranking penalty; poor mobile experience",
+            "solution": "Compress hero images via TinyPNG/Squoosh. Implement Next.js Image component with lazy loading. Target LCP < 2.5s, CLS < 0.1, FID < 100ms.",
+            "cost": "$0",
+            "time_to_fix": "1 day"
+          },
+          {
+            "id": "TECH-005",
+            "issue": "No schema markup (JSON-LD)",
+            "impact": "Missing rich snippets in Google AI overviews, losing 30-50% potential CTR",
+            "solution": "Add FAQ schema, HowTo schema, Course schema, BreadcrumbList schema on all relevant pages",
+            "cost": "$0",
+            "time_to_fix": "1 day",
+            "schema_examples": {
+              "homepage_faq": "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"FAQPage\",\n  \"mainEntity\": [{\n    \"@type\": \"Question\",\n    \"name\": \"How do I start a faceless YouTube channel in 2026?\",\n    \"acceptedAnswer\": { \"@type\": \"Answer\", \"text\": \"...\" }\n  }]\n}",
+              "course_schema": "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Course\",\n  \"name\": \"Faceless Content Mastery\",\n  \"provider\": { \"@type\": \"Organization\", \"name\": \"ContentAnonymity\" }\n}"
+            }
+          }
+        ]
+      },
+
+      "content_architecture": {
+        "priority": "P0",
+        "current_state": "2 pages (homepage + /getting-started), thin content, heavy hype, zero depth",
+        "target_state": "50+ pages, topical authority clusters, 10k monthly organic visitors in 6 months",
+        "gaps": [
+          {
+            "id": "CONT-001",
+            "issue": "No blog or content hub",
+            "impact": "Zero long-tail SEO traffic; no topical authority",
+            "solution": "Activate the existing 'articles' Convex table and build a blog at /blog. Publish 2 posts per week minimum.",
+            "convex_relation": ["articles", "article_tags", "article_related", "content_categories"],
+            "content_calendar_week1": [
+              "How to Start a Faceless YouTube Channel in 2026 (Zero Budget)",
+              "Best AI Voice Generators for Anonymous Creators: Ranked and Reviewed"
+            ],
+            "content_calendar_week2": [
+              "Faceless TikTok Automation: Complete Setup Guide",
+              "10 Profitable Niches for Faceless YouTube Channels (With RPM Data)"
+            ]
+          },
+          {
+            "id": "CONT-002",
+            "issue": "No pillar page structure",
+            "impact": "Cannot rank for high-volume head terms; low domain authority",
+            "solution": "Create 5 pillar pages as content hubs, each with 10+ cluster articles linking back",
+            "pillar_pages": [
+              {
+                "url": "/faceless-youtube",
+                "title": "The Complete Guide to Faceless YouTube Channels (2026)",
+                "target_keyword": "faceless youtube channel",
+                "monthly_search_volume_est": 22000,
+                "cluster_articles": [
+                  "/faceless-youtube/niche-selection",
+                  "/faceless-youtube/ai-voiceover-tools",
+                  "/faceless-youtube/monetization-strategies",
+                  "/faceless-youtube/script-writing-guide",
+                  "/faceless-youtube/analytics-tracking"
+                ]
+              },
+              {
+                "url": "/tiktok-automation",
+                "title": "TikTok Faceless Content Automation: Full Playbook",
+                "target_keyword": "tiktok automation faceless",
+                "monthly_search_volume_est": 8500,
+                "cluster_articles": [
+                  "/tiktok-automation/ai-video-tools",
+                  "/tiktok-automation/content-scheduling",
+                  "/tiktok-automation/trending-sounds-guide"
+                ]
+              },
+              {
+                "url": "/ai-content-tools",
+                "title": "Best AI Tools for Faceless Content Creators (Tested)",
+                "target_keyword": "ai tools faceless content creation",
+                "monthly_search_volume_est": 5600,
+                "cluster_articles": [
+                  "/ai-content-tools/elevenlabs-review",
+                  "/ai-content-tools/script-generators",
+                  "/ai-content-tools/video-editors"
+                ]
+              },
+              {
+                "url": "/anonymous-monetization",
+                "title": "How to Monetize Content Anonymously: Every Method Ranked",
+                "target_keyword": "anonymous youtube monetization",
+                "monthly_search_volume_est": 4200
+              },
+              {
+                "url": "/niche-research",
+                "title": "Faceless Content Niche Research: Find Your $10k/Month Niche",
+                "target_keyword": "faceless content niche finder",
+                "monthly_search_volume_est": 3100
+              }
+            ],
+            "convex_relation": ["content_categories", "articles", "niches", "niche_categories"]
+          },
+          {
+            "id": "CONT-003",
+            "issue": "No case studies or success stories",
+            "impact": "Zero E-E-A-T signals; users cannot validate claims ('10,000+ creators', '6-figures')",
+            "solution": "Add a /success-stories section using forum_posts (postType: 'success_story'). Collect via embedded form. Offer incentive (free Pro month) for submissions.",
+            "convex_relation": ["forum_posts", "profiles"],
+            "implementation": {
+              "form_fields": ["channel_niche", "monthly_revenue", "tools_used", "time_to_monetization", "testimonial_text", "anonymous_ok"],
+              "display_format": "Card grid with niche tag, earnings range badge, and tool chips"
+            }
+          },
+          {
+            "id": "CONT-004",
+            "issue": "No downloadable resources or lead magnets",
+            "impact": "No email list growth; no retention hook for first-time visitors",
+            "solution": "Create 3 high-value free downloads to trigger email capture",
+            "convex_relation": ["lead_magnets", "email_subscribers"],
+            "lead_magnets": [
+              {
+                "name": "Faceless Content Niche Bible 2026",
+                "type": "PDF",
+                "content": "50 profitable niches with RPM ranges, competition scores, best AI tools per niche",
+                "cta_placement": ["homepage", "/niche-research", "blog sidebar"],
+                "estimated_conversion_rate": "8-12%"
+              },
+              {
+                "name": "30-Day Faceless YouTube Launch Checklist",
+                "type": "Notion template",
+                "content": "Day-by-day action plan from niche selection to first monetized video",
+                "cta_placement": ["/faceless-youtube", "/getting-started"],
+                "estimated_conversion_rate": "15-20%"
+              },
+              {
+                "name": "AI Script Generator Prompt Pack",
+                "type": "Text file / Notion",
+                "content": "50 proven ChatGPT/Claude prompts for faceless video scripts by niche",
+                "cta_placement": ["/ai-content-tools", "blog posts about scripting"],
+                "estimated_conversion_rate": "12-18%"
+              }
+            ]
+          }
+        ]
+      },
+
+      "non_functional_tools": {
+        "priority": "P0",
+        "current_state": "Tools mentioned in CTAs but broken or non-existent: Profitability Calculator, Niche Finder Quiz, AI Tools Free",
+        "impact": "Immediate trust destruction on first visit; users leave and never return",
+        "gaps": [
+          {
+            "id": "TOOL-001",
+            "tool": "Profitability Calculator",
+            "current_state": "Broken/placeholder",
+            "solution": "Build interactive React calculator using existing niche_analysis Convex table data",
+            "url": "/tools/profitability-calculator",
+            "inputs": ["niche", "videos_per_month", "avg_views_per_video", "platform"],
+            "outputs": ["estimated_monthly_revenue", "time_to_monetization", "recommended_tools", "competition_score"],
+            "convex_relation": ["niche_analysis", "niches"],
+            "data_source": "Pull avgRpm, estimatedEarningsRange from niches table",
+            "build_complexity": "Low",
+            "time_to_build": "1-2 days"
+          },
+          {
+            "id": "TOOL-002",
+            "tool": "Niche Finder Quiz",
+            "current_state": "Broken/placeholder",
+            "solution": "Multi-step quiz (6 questions) leading to personalized niche recommendation with gated results (email capture)",
+            "url": "/tools/niche-finder",
+            "questions": [
+              {"q": "How much time can you commit weekly?", "options": ["1-3 hrs", "3-5 hrs", "5-10 hrs", "10+ hrs"]},
+              {"q": "What's your content comfort zone?", "options": ["Educational", "Entertainment", "Finance/Investing", "Tech/AI", "Lifestyle"]},
+              {"q": "What's your startup budget?", "options": ["$0", "$1-$50", "$50-$200", "$200+"]},
+              {"q": "Which platform appeals most?", "options": ["YouTube", "TikTok", "Instagram", "All of them"]},
+              {"q": "How competitive are you?", "options": ["I want easy wins", "Moderate challenge is fine", "I thrive under pressure"]},
+              {"q": "What matters most to you?", "options": ["Quick monetization", "Long-term passive income", "Building an audience", "Learning new skills"]}
+            ],
+            "output": "Top 3 niche recommendations with detailed analysis card pulled from niches Convex table",
+            "gate": "Email required to see full results",
+            "convex_relation": ["niches", "niche_categories", "email_subscribers"],
+            "build_complexity": "Medium",
+            "time_to_build": "2-3 days"
+          },
+          {
+            "id": "TOOL-003",
+            "tool": "AI Tools Free / Script Generator Preview",
+            "current_state": "Broken/placeholder",
+            "solution": "Embed a live AI-powered script generator preview using Anthropic API (claude-sonnet-4-20250514). Free tier: 3 scripts/day. Pro: unlimited.",
+            "url": "/tools/script-generator",
+            "inputs": ["niche", "platform", "topic", "video_length_minutes", "tone"],
+            "outputs": ["hook", "intro", "main_sections", "cta", "title_options", "thumbnail_text_suggestions"],
+            "api_implementation": {
+              "model": "claude-sonnet-4-20250514",
+              "system_prompt": "You are an expert faceless content script writer. Generate viral, platform-optimized scripts that work without showing the creator's face. Always structure: Hook (first 3 seconds) → Value delivery → CTA.",
+              "rate_limit": "3 per day for free users, tracked via user_events table",
+              "auth_gate": "Must create free account to use"
+            },
+            "convex_relation": ["content_tools", "user_events", "profiles"],
+            "build_complexity": "Medium",
+            "time_to_build": "2-3 days"
+          },
+          {
+            "id": "TOOL-004",
+            "tool": "NEW: Trending Topics Scanner",
+            "current_state": "Not built — high-value gap vs competitors",
+            "solution": "Pull trending topics via Google Trends RSS + Reddit API for target niches. Display as live feed.",
+            "url": "/tools/trend-scanner",
+            "features": ["Filter by niche", "Sort by trend velocity", "One-click export to script generator", "Daily email digest (Pro)"],
+            "convex_relation": ["content", "niches"],
+            "build_complexity": "Medium-High",
+            "time_to_build": "3-5 days"
+          },
+          {
+            "id": "TOOL-005",
+            "tool": "NEW: Anonymous Channel Analyzer",
+            "current_state": "Not built — unique competitive differentiator",
+            "solution": "Enter any YouTube channel URL → get AI analysis: niche score, content gaps, estimated RPM, growth potential. Uses YouTube Data API v3 (free tier: 10k units/day).",
+            "url": "/tools/channel-analyzer",
+            "convex_relation": ["niche_

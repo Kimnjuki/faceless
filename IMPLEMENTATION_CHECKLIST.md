@@ -28,8 +28,8 @@ Priority Order: **P0 (Critical) → P1 (High) → P2 (Medium) → P3 (Low)**
 - [ ] CONT-004: Create lead magnets and email capture system
 
 ### Non-Functional Tools
-- [ ] TOOL-001: ✅ Build Profitability Calculator `/tools/profitability-calculator`
-- [ ] TOOL-002: ✅ Build Niche Finder Quiz `/tools/niche-finder` with email gate
+- [x] ✅ TOOL-001: Profitability Calculator ✓ Already fully implemented
+- [x] ✅ TOOL-002: Niche Finder Quiz ✓ Already fully implemented
 - [ ] TOOL-003: Build AI Script Generator `/tools/script-generator` with Anthropic API
 - [ ] TOOL-004: Build Trend Scanner `/tools/trend-scanner`
 - [ ] TOOL-005: Build Channel Analyzer `/tools/channel-analyzer`

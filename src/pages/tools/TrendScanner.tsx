@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { TrendingUp, BarChart3, Clock, Zap, Search, ChevronDown, ChevronUp, ExternalLink, Loader2 } from "lucide-react";
+import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "../../components/ui/table";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import SEO from "../../components/SEO";

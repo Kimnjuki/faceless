@@ -38,6 +38,7 @@ import WebinarRegistration from "./pages/funnel/WebinarRegistration";
 import ChallengeFunnel from "./pages/funnel/ChallengeFunnel";
 import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
 import TermsOfService from "./pages/legal/TermsOfService";
+import AffiliateDisclosure from "./pages/legal/AffiliateDisclosure";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import TemplatesLibrary from "./pages/resources/TemplatesLibrary";
@@ -55,6 +56,7 @@ import ResourceDownloads from "./pages/learning/ResourceDownloads";
 import MemberDirectory from "./pages/community/MemberDirectory";
 import Events from "./pages/community/Events";
 import Challenges from "./pages/community/Challenges";
+import CommunityIndex from "./pages/community/CommunityIndex";
 import NotFound from "./pages/NotFound";
 import Health from "./pages/Health";
 import News from "./pages/News";
@@ -125,8 +127,9 @@ export default function App() {
         <Route path="/webinar/:slug" element={<WebinarRegistration />} />
         <Route path="/challenge/:name" element={<ChallengeFunnel />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/terms-of-service" element={<TermsOfService />} />
-        <Route path="/terms" element={<TermsOfService />} />
+         <Route path="/terms-of-service" element={<TermsOfService />} />
+         <Route path="/terms" element={<TermsOfService />} />
+         <Route path="/affiliate-disclosure" element={<AffiliateDisclosure />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/resources/templates" element={<TemplatesLibrary />} />
@@ -141,9 +144,10 @@ export default function App() {
         <Route path="/learning/case-studies/:slug" element={<CaseStudyDetail />} />
         <Route path="/learning/workshops" element={<LiveWorkshops />} />
         <Route path="/learning/resources" element={<ResourceDownloads />} />
-        <Route path="/community/members" element={<MemberDirectory />} />
-        <Route path="/community/events" element={<Events />} />
-        <Route path="/community/challenges" element={<Challenges />} />
+         <Route path="/community" element={<CommunityIndex />} />
+         <Route path="/community/members" element={<MemberDirectory />} />
+         <Route path="/community/events" element={<Events />} />
+         <Route path="/community/challenges" element={<Challenges />} />
         <Route path="/404" element={<NotFound />} />
         <Route path="/health" element={<Health />} />
         <Route path="/news" element={<News />} />

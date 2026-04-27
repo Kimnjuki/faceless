@@ -175,4 +175,13 @@
             "id": "CONT-004",
             "issue": "No downloadable resources or lead magnets",
             "impact": "No email list growth; no retention hook for first-time visitors",
-            "solution": "Create 3 high-value free downloads to trigger email
+            "solution": "Create 3 high-value free downloads to trigger email signups: 1) Faceless Niche Blueprint, 2) YouTube SEO Checklist, 3) AI Tool Stack Guide. Add exit intent modal and inline CTA blocks on all pages.",
+            "cost": "$0",
+            "time_to_fix": "6 hours",
+            "convex_relation": ["email_subscribers", "digital_assets", "leads"]
+          }
+        ]
+      }
+    }
+  }
+}

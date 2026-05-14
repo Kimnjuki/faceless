@@ -92,7 +92,7 @@ export default function OpportunityFinder() {
 
     const r = generateOpportunities(input);
     setResult(r);
-    trackToolUsage('opportunity-finder', { niche, platforms: selectedPlatforms.join(','), formats: selectedFormats.join(',') });
+    trackToolUsage('opportunity-finder', 'creator-os', `${niche}|${selectedPlatforms.join(',')}|${selectedFormats.join(',')}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

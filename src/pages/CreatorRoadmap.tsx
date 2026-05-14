@@ -62,7 +62,7 @@ export default function CreatorRoadmap() {
     const saved = getRoadmapFromStorage();
     if (saved) {
       setRoadmap(saved);
-      setForm(saved.input);
+      setForm(saved.input as FormData);
       setStep('roadmap');
     }
   }, []);
@@ -91,7 +91,7 @@ export default function CreatorRoadmap() {
     saveRoadmapToStorage(r);
     setStep('roadmap');
     setExpandedPhase(1);
-    trackToolUsage('creator-roadmap-generated', { niche: form.niche, goal: form.goal });
+    trackToolUsage('creator-roadmap-generated', 'creator-os', `${form.niche}|${form.goal}`);
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

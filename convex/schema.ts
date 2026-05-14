@@ -1437,4 +1437,378 @@ export default defineSchema({
   })
     .index("by_user", ["userId"])
     .index("by_program", ["programId"]),
+
+  // ---------------------------------------------------------------------------
+  // User Interests — inferred from browsing, saves, clicks, enrollments
+  // ---------------------------------------------------------------------------
+  user_interests: defineTable({
+    userId: v.optional(v.id("profiles")),
+    category: v.string(),
+    label: v.string(),
+    source: v.union(
+      v.literal("page_view"),
+      v.literal("search"),
+      v.literal("click"),
+      v.literal("save"),
+      v.literal("enrollment"),
+      v.literal("purchase"),
+      v.literal("affiliate_click"),
+      v.literal("manual")
+    ),
+    weight: v.float64(),
+    decayFactor: v.optional(v.float64()),
+    lastActivityAt: v.float64(),
+    createdAt: v.float64(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_category", ["category"])
+    .index("by_user_category", ["userId", "category"]),
+
+  // ---------------------------------------------------------------------------
+  // Content Recommendations — personalized + system-generated
+  // ---------------------------------------------------------------------------
+  content_recommendations: defineTable({
+    userId: v.optional(v.id("profiles")),
+    sessionId: v.optional(v.string()),
+    contentType: v.union(
+      v.literal("article"),
+      v.literal("course"),
+      v.literal("tool"),
+      v.literal("template"),
+      v.literal("guide"),
+      v.literal("playbook"),
+      v.literal("product"),
+      v.literal("learning_path"),
+      v.literal("niche")
+    ),
+    contentId: v.id("articles"),
+    title: v.string(),
+    score: v.float64(),
+    reason: v.optional(v.string()),
+    reasonCategory: v.optional(
+      v.union(
+        v.literal("based_on_view"),
+        v.literal("similar_to_interest"),
+        v.literal("trending"),
+        v.literal("learning_path_progression"),
+        v.literal("niche_recommended"),
+        v.literal("complementary"),
+        v.literal("popular")
+      )
+    ),
+    isRead: v.optional(v.boolean()),
+    isClicked: v.optional(v.boolean()),
+    generatedAt: v.float64(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_session", ["sessionId"])
+    .index("by_content", ["contentId"])
+    .index("by_user_score", ["userId", "score"]),
+
+  // ---------------------------------------------------------------------------
+  // Topic Clusters — SEO pillar/cluster mapping
+  // ---------------------------------------------------------------------------
+  topic_clusters: defineTable({
+    pillarTopic: v.string(),
+    pillarSlug: v.string(),
+    nicheId: v.optional(v.id("niches")),
+    description: v.optional(v.string()),
+    targetKeyword: v.string(),
+    searchVolume: v.optional(v.float64()),
+    difficulty: v.optional(v.string()),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+  })
+    .index("by_pillar_slug", ["pillarSlug"])
+    .index("by_niche", ["nicheId"])
+    .index("by_target_keyword", ["targetKeyword"]),
+
+  cluster_articles: defineTable({
+    clusterId: v.id("topic_clusters"),
+    articleId: v.id("articles"),
+    articleType: v.union(v.literal("pillar"), v.literal("supporting"), v.literal("cornerstone")),
+    linkedAt: v.float64(),
+  })
+    .index("by_cluster", ["clusterId"])
+    .index("by_article", ["articleId"])
+    .index("by_type", ["articleType"]),
+
+  // ---------------------------------------------------------------------------
+  // Community Reputation — points, badges, expertise signals
+  // ---------------------------------------------------------------------------
+  community_reputation: defineTable({
+    userId: v.id("profiles"),
+    totalPoints: v.float64(),
+    postCount: v.float64(),
+    replyCount: v.float64(),
+    solutionCount: v.float64(),
+    upvotesReceived: v.float64(),
+    badges: v.array(
+      v.object({
+        badgeId: v.string(),
+        badgeName: v.string(),
+        badgeIcon: v.optional(v.string()),
+        awardedAt: v.float64(),
+      })
+    ),
+    expertiseTags: v.array(v.string()),
+    trustScore: v.float64(),
+    lastActiveAt: v.float64(),
+    updatedAt: v.float64(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_points", ["totalPoints"])
+    .index("by_trust", ["trustScore"]),
+
+  moderation_flags: defineTable({
+    flaggerId: v.optional(v.id("profiles")),
+    flaggedContentType: v.union(
+      v.literal("post"),
+      v.literal("reply"),
+      v.literal("profile"),
+      v.literal("webinar"),
+      v.literal("playbook")
+    ),
+    flaggedContentId: v.string(),
+    reason: v.string(),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("reviewed"),
+      v.literal("resolved"),
+      v.literal("dismissed")
+    ),
+    resolvedBy: v.optional(v.id("profiles")),
+    createdAt: v.float64(),
+    resolvedAt: v.optional(v.float64()),
+  })
+    .index("by_status", ["status"])
+    .index("by_flagger", ["flaggerId"]),
+
+  // ---------------------------------------------------------------------------
+  // Conversion Funnels — defined user journeys
+  // ---------------------------------------------------------------------------
+  conversion_funnels: defineTable({
+    name: v.string(),
+    slug: v.string(),
+    description: v.optional(v.string()),
+    targetAction: v.union(
+      v.literal("lead_magnet_download"),
+      v.literal("product_purchase"),
+      v.literal("course_enrollment"),
+      v.literal("subscription_signup"),
+      v.literal("affiliate_click"),
+      v.literal("webinar_registration"),
+      v.literal("challenge_completion")
+    ),
+    productId: v.optional(v.id("products")),
+    courseId: v.optional(v.id("courses")),
+    leadMagnetId: v.optional(v.id("lead_magnets")),
+    subscriptionTier: v.optional(v.string()),
+    isActive: v.boolean(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_target", ["targetAction"])
+    .index("by_active", ["isActive"]),
+
+  funnel_steps: defineTable({
+    funnelId: v.id("conversion_funnels"),
+    stepOrder: v.float64(),
+    stepType: v.union(
+      v.literal("landing"),
+      v.literal("lead_magnet"),
+      v.literal("email"),
+      v.literal("checkout"),
+      v.literal("upsell"),
+      v.literal("trial"),
+      v.literal("onboarding"),
+      v.literal("retention")
+    ),
+    pageUrl: v.optional(v.string()),
+    actionLabel: v.string(),
+    expectedConversionRate: v.optional(v.float64()),
+    createdAt: v.float64(),
+  })
+    .index("by_funnel", ["funnelId"])
+    .index("by_funnel_step", ["funnelId", "stepOrder"]),
+
+  funnel_analytics: defineTable({
+    funnelId: v.id("conversion_funnels"),
+    stepId: v.optional(v.id("funnel_steps")),
+    userId: v.optional(v.id("profiles")),
+    sessionId: v.optional(v.string()),
+    eventType: v.union(
+      v.literal("enter"),
+      v.literal("step_view"),
+      v.literal("step_action"),
+      v.literal("dropout"),
+      v.literal("conversion"),
+      v.literal("revenue")
+    ),
+    metadata: v.optional(v.any()),
+    revenue: v.optional(v.float64()),
+    occurredAt: v.float64(),
+  })
+    .index("by_funnel", ["funnelId"])
+    .index("by_user", ["userId"])
+    .index("by_session", ["sessionId"]),
+
+  // ---------------------------------------------------------------------------
+  // AI Prompts Library — reusable prompt templates
+  // ---------------------------------------------------------------------------
+  ai_prompts: defineTable({
+    authorId: v.optional(v.id("profiles")),
+    title: v.string(),
+    slug: v.string(),
+    description: v.optional(v.string()),
+    promptText: v.string(),
+    category: v.union(
+      v.literal("script_writing"),
+      v.literal("hook_generation"),
+      v.literal("thumbnail_design"),
+      v.literal("seo_optimization"),
+      v.literal("content_repurposing"),
+      v.literal("niche_research"),
+      v.literal("audience_growth"),
+      v.literal("monetization"),
+      v.literal("voiceover"),
+      v.literal("storyboarding"),
+      v.literal("branding")
+    ),
+    tags: v.array(v.string()),
+    variables: v.optional(v.array(v.string())),
+    useCount: v.optional(v.float64()),
+    rating: v.optional(v.float64()),
+    isPublic: v.boolean(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_category", ["category"])
+    .index("by_public", ["isPublic"])
+    .index("by_author", ["authorId"]),
+
+  // ---------------------------------------------------------------------------
+  // Content Blocks — reusable FAQ, hook libraries, frameworks, templates
+  // ---------------------------------------------------------------------------
+  content_blocks: defineTable({
+    authorId: v.optional(v.id("profiles")),
+    blockType: v.union(
+      v.literal("faq"),
+      v.literal("hook"),
+      v.literal("framework"),
+      v.literal("cta_template"),
+      v.literal("intro_template"),
+      v.literal("outro_template"),
+      v.literal("transition"),
+      v.literal("statistic"),
+      v.literal("call_to_action")
+    ),
+    title: v.string(),
+    content: v.string(),
+    niche: v.optional(v.string()),
+    platform: v.optional(v.string()),
+    tags: v.array(v.string()),
+    useCount: v.optional(v.float64()),
+    isPublic: v.boolean(),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+  })
+    .index("by_type", ["blockType"])
+    .index("by_niche", ["niche"])
+    .index("by_public", ["isPublic"])
+    .index("by_author", ["authorId"]),
+
+  // ---------------------------------------------------------------------------
+  // Creator Profiles — specialized creator metadata
+  // ---------------------------------------------------------------------------
+  creator_profiles: defineTable({
+    userId: v.id("profiles"),
+    primaryPlatform: v.optional(v.string()),
+    contentFormat: v.optional(v.string()),
+    monetizationStage: v.optional(
+      v.union(
+        v.literal("pre_revenue"),
+        v.literal("early"),
+        v.literal("growing"),
+        v.literal("scaling"),
+        v.literal("established")
+      )
+    ),
+    audienceSizeRange: v.optional(v.string()),
+    anonymityLevel: v.optional(
+      v.union(v.literal("full"), v.literal("partial"), v.literal("public"))
+    ),
+    niches: v.array(v.string()),
+    monthlyContentOutput: v.optional(v.float64()),
+    monthlyRevenue: v.optional(v.float64()),
+    goals: v.optional(v.array(v.string())),
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_stage", ["monetizationStage"])
+    .index("by_platform", ["primaryPlatform"]),
+
+  // ---------------------------------------------------------------------------
+  // Growth Experiments — A/B testing for headlines, CTAs, layout, pricing
+  // ---------------------------------------------------------------------------
+  growth_experiments: defineTable({
+    userId: v.optional(v.id("profiles")),
+    experimentName: v.string(),
+    experimentType: v.union(
+      v.literal("headline"),
+      v.literal("cta"),
+      v.literal("layout"),
+      v.literal("pricing"),
+      v.literal("landing_page"),
+      v.literal("email_subject"),
+      v.literal("thumbnail"),
+      v.literal("content_format")
+    ),
+    pageUrl: v.optional(v.string()),
+    controlVariant: v.any(),
+    testVariants: v.any(),
+    targetMetric: v.union(
+      v.literal("ctr"),
+      v.literal("click_rate"),
+      v.literal("conversion_rate"),
+      v.literal("revenue_per_visitor"),
+      v.literal("time_on_page"),
+      v.literal("bounce_rate"),
+      v.literal("signup_rate")
+    ),
+    trafficAllocation: v.float64(),
+    minSampleSize: v.optional(v.float64()),
+    status: v.union(
+      v.literal("draft"),
+      v.literal("running"),
+      v.literal("completed"),
+      v.literal("paused"),
+      v.literal("cancelled")
+    ),
+    winnerId: v.optional(v.string()),
+    confidenceLevel: v.optional(v.float64()),
+    startedAt: v.float64(),
+    completedAt: v.optional(v.float64()),
+    createdAt: v.float64(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_status", ["status"])
+    .index("by_type", ["experimentType"]),
+
+  experiment_results: defineTable({
+    experimentId: v.id("growth_experiments"),
+    variantId: v.string(),
+    impressions: v.float64(),
+    conversions: v.float64(),
+    revenue: v.optional(v.float64()),
+    ctr: v.optional(v.float64()),
+    averageValue: v.optional(v.float64()),
+    confidenceInterval: v.optional(v.any()),
+    recordedAt: v.float64(),
+  })
+    .index("by_experiment", ["experimentId"])
+    .index("by_variant", ["variantId"]),
 });

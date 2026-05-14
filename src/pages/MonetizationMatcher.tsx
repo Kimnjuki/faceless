@@ -105,7 +105,7 @@ export default function MonetizationMatcher() {
     const r = matchMonetization(profile);
     setResult(r);
     saveMonetizationProfileToStorage(profile);
-    trackToolUsage('monetization-matcher', { stage, niche });
+    trackToolUsage('monetization-matcher', 'creator-os', `${stage}|${niche}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

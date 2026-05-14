@@ -57,6 +57,9 @@ import MemberDirectory from "./pages/community/MemberDirectory";
 import Events from "./pages/community/Events";
 import Challenges from "./pages/community/Challenges";
 import CommunityIndex from "./pages/community/CommunityIndex";
+import CreatorRoadmap from "./pages/CreatorRoadmap";
+import OpportunityFinder from "./pages/OpportunityFinder";
+import MonetizationMatcher from "./pages/MonetizationMatcher";
 import NotFound from "./pages/NotFound";
 import Health from "./pages/Health";
 import News from "./pages/News";
@@ -150,6 +153,9 @@ export default function App() {
          <Route path="/community/challenges" element={<Challenges />} />
         <Route path="/404" element={<NotFound />} />
         <Route path="/health" element={<Health />} />
+        <Route path="/creator-roadmap" element={<CreatorRoadmap />} />
+        <Route path="/opportunity-finder" element={<OpportunityFinder />} />
+        <Route path="/monetization-matcher" element={<MonetizationMatcher />} />
         <Route path="/news" element={<News />} />
         <Route path="/:pillarSlug" element={<PillarPage />} />
         <Route path="*" element={<NotFound />} />

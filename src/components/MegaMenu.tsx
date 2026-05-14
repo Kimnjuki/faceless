@@ -20,7 +20,10 @@ import {
   Video,
   Music,
   Image as ImageIcon,
-  PenTool
+  PenTool,
+  Route,
+  DollarSign,
+  Lightbulb,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -304,15 +307,27 @@ export function ToolsMegaMenu({ trigger }: MegaMenuProps) {
       <DropdownMenuTrigger asChild>
         {trigger}
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[600px] p-4" align="start">
-        <div className="grid grid-cols-2 gap-6">
+      <DropdownMenuContent className="w-[700px] p-4" align="start">
+        <div className="grid grid-cols-3 gap-6">
           <div>
-            <DropdownMenuLabel className="mb-3">Calculators</DropdownMenuLabel>
+            <DropdownMenuLabel className="mb-3">Creator OS</DropdownMenuLabel>
             <div className="space-y-2">
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/tools/calculator">
-                  <Calculator className="mr-2 h-4 w-4" />
-                  Profitability Calculator
+                <Link to="/creator-roadmap">
+                  <Route className="mr-2 h-4 w-4" />
+                  AI Creator Roadmap
+                </Link>
+              </Button>
+              <Button variant="ghost" className="w-full justify-start" asChild>
+                <Link to="/opportunity-finder">
+                  <Lightbulb className="mr-2 h-4 w-4" />
+                  Opportunity Finder
+                </Link>
+              </Button>
+              <Button variant="ghost" className="w-full justify-start" asChild>
+                <Link to="/monetization-matcher">
+                  <DollarSign className="mr-2 h-4 w-4" />
+                  Monetization Matcher
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
@@ -322,7 +337,18 @@ export function ToolsMegaMenu({ trigger }: MegaMenuProps) {
                 </Link>
               </Button>
             </div>
-            <DropdownMenuLabel className="mb-3 mt-4">SEO Tools</DropdownMenuLabel>
+            <DropdownMenuLabel className="mb-3 mt-4">Calculators</DropdownMenuLabel>
+            <div className="space-y-2">
+              <Button variant="ghost" className="w-full justify-start" asChild>
+                <Link to="/tools/calculator">
+                  <Calculator className="mr-2 h-4 w-4" />
+                  Profitability Calculator
+                </Link>
+              </Button>
+            </div>
+          </div>
+          <div>
+            <DropdownMenuLabel className="mb-3">SEO & Analysis</DropdownMenuLabel>
             <div className="space-y-2">
               <Button variant="ghost" className="w-full justify-start" asChild>
                 <Link to="/tools/seo-audit">
@@ -342,17 +368,6 @@ export function ToolsMegaMenu({ trigger }: MegaMenuProps) {
                   Backlink Checker
                 </Link>
               </Button>
-            </div>
-          </div>
-          <div>
-            <DropdownMenuLabel className="mb-3">Analysis</DropdownMenuLabel>
-            <div className="space-y-2">
-              <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/tools/all">
-                  <Wrench className="mr-2 h-4 w-4" />
-                  Tool Comparison
-                </Link>
-              </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
                 <Link to="/tools/performance">
                   <BarChart3 className="mr-2 h-4 w-4" />
@@ -360,8 +375,16 @@ export function ToolsMegaMenu({ trigger }: MegaMenuProps) {
                 </Link>
               </Button>
             </div>
-            <DropdownMenuLabel className="mb-3 mt-4">Resources</DropdownMenuLabel>
+          </div>
+          <div>
+            <DropdownMenuLabel className="mb-3">Resources</DropdownMenuLabel>
             <div className="space-y-2">
+              <Button variant="ghost" className="w-full justify-start" asChild>
+                <Link to="/tools/all">
+                  <Wrench className="mr-2 h-4 w-4" />
+                  Tool Comparison
+                </Link>
+              </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
                 <Link to="/resources/templates">
                   <PenTool className="mr-2 h-4 w-4" />
@@ -372,6 +395,12 @@ export function ToolsMegaMenu({ trigger }: MegaMenuProps) {
                 <Link to="/resources/niches">
                   <Library className="mr-2 h-4 w-4" />
                   Niche Database
+                </Link>
+              </Button>
+              <Button variant="ghost" className="w-full justify-start" asChild>
+                <Link to="/creator-studio">
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Creator Studio
                 </Link>
               </Button>
             </div>

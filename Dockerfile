@@ -33,7 +33,7 @@ ENV VITE_CLARITY_PROJECT_ID=$VITE_CLARITY_PROJECT_ID
 ENV VITE_STRIPE_PUBLIC_KEY=$VITE_STRIPE_PUBLIC_KEY
 
 # Build the application with pre-rendering for SEO
-RUN npm run build:prerender || npm run build
+RUN npm run build:quick
 
 # Note: Environment variables are baked into the build output (dist folder)
 # They are not needed in the final nginx image, but they remain in the builder stage history

@@ -23,6 +23,158 @@
     
     <!-- Canonical URL (critical for SEO - prevents duplicate content) -->
     <link rel="canonical" href="https://contentanonymity.com/" />
+<!-- PRE-JS SEO INJECTION: Dynamic meta tags per route before JS executes -->
+<script>
+(function() {
+  var path = window.location.pathname;
+  var slugMatch = path.match(/^\/blog\/([^\/?#]+)/);
+  var isBlog = slugMatch !== null;
+  var isHome = path === '/' || path === '';
+
+  var articleMeta = {
+  "ai-content-disclosure-ethical-guide-2026": "AI Content Disclosure: Ethical Guidelines for Faceless Creators (2026)",
+  "ai-news-automation-channel-daily-workflow": "AI News Automation: Build a Daily Workflow for Content in 2026",
+  "ai-storytelling-brain-rot-economy-2026": "AI Storytelling in the Brain Rot Economy: Content Strategy for 2026",
+  "ai-voice-brand-builder-quiz": "Find Your Perfect AI Voice Brand with This Interactive Quiz",
+  "anonymous-creator-privacy-security-stack-2026": "The Anonymous Creator's Privacy & Security Stack for 2026",
+  "automate-faceless-tiktok-guide-2026": "How to Automate a Faceless TikTok Channel: Complete 2026 Guide",
+  "best-faceless-youtube-niches-2026-ultimate-guide": "Best Faceless YouTube Niches 2026: Ultimate Guide to Profitable Content",
+  "convert-faceless-traffic-to-newsletter-2026": "Convert Faceless Content Traffic to Newsletters: 2026 Strategy",
+  "corporate-true-crime-30-day-calendar": "Corporate True Crime Channel: 30-Day Content Calendar & Strategy",
+  "dangerous-sea-historical-mystery-tiktok-2026": "Dangerous Sea & Historical Mystery Content: TikTok Strategy for 2026",
+  "edit-business-documentaries-magnates-media-style": "Edit Business Documentaries Like Magnates Media: A Complete Guide",
+  "faceless-content-legal-guide": "Faceless Content Legal Guide: Copyright, Disclosure & Privacy Laws",
+  "faceless-growth-challenge-30-days-2026": "30-Day Faceless Growth Challenge: Build an Audience Without Showing Your Face",
+  "faceless-strategy-playbook-2025": "Faceless Content Strategy Playbook: Proven Frameworks for Anonymous Creators",
+  "faceless-tech-tutorial-affiliate-strategy-2026": "Faceless Tech Tutorials: Affiliate Marketing Strategy for 2026",
+  "faceless-travel-vlog-drone-pov-2026": "Faceless Travel Vlogging: Drone POV Content Strategy for 2026",
+  "faceless-youtube-blueprint-2025": "The Faceless YouTube Blueprint: Build a Channel Without Showing Your Face",
+  "faceless-youtube-channel-guide-2026": "Faceless YouTube Channel Guide: Step-by-Step Setup & Growth for 2026",
+  "future-of-faceless-content-2027-predictions": "Future of Faceless Content: 2027 Predictions & Emerging Trends",
+  "horror-story-channel-case-study": "Horror Story Channel Case Study: How One Faceless Channel Got 1M Views",
+  "how-to-create-ai-influencers-instagram-2026": "How to Create AI Influencers for Instagram: Complete 2026 Guide",
+  "how-to-monetize-faceless-channel-without-adsense": "How to Monetize a Faceless Channel Without AdSense: 10 Proven Methods",
+  "how-to-start-faceless-youtube-ai-voiceover-2026": "How to Start a Faceless YouTube Channel with AI Voiceover in 2026",
+  "instagram-reels-faceless-brand": "Instagram Reels for Faceless Brands: Strategy Guide for Anonymous Creators",
+  "luxury-lifestyle-faceless-high-cpm-2026": "Luxury Lifestyle Faceless Content: High CPM Niche Strategy for 2026",
+  "monetize-faceless-channel-without-ads-2026": "Monetize Your Faceless Channel Without Ads: 2026 Income Strategies",
+  "niche-idea-generator-guide": "Niche Idea Generator: Find Your Perfect Faceless Content Niche",
+  "pinterest-marketing-strategy-blog-traffic-2026": "Pinterest Marketing Strategy: Drive Blog Traffic as a Faceless Creator",
+  "psychology-of-faceless-branding-2026": "The Psychology of Faceless Branding: Why Anonymous Content Works in 2026",
+  "reddit-story-automation-shorts-reels-2026": "Reddit Story Automation: Create Viral Shorts & Reels in 2026",
+  "silent-vlog-asmr-faceless-trend-2026": "Silent Vlog & ASMR: The Growing Faceless Content Trend in 2026",
+  "stoic-philosophy-faceless-niche-2026": "Stoic Philosophy Content: A Profitable Faceless Niche for 2026",
+  "thumbnail-psychology-framework": "Thumbnail Psychology Framework: Click-Through Rate Optimization Guide",
+  "tiktok-growth-strategy-faceless": "Faceless TikTok Growth Strategy: Go Viral Without Showing Your Face",
+  "tiktok-shop-faceless-creator-strategy-2026": "TikTok Shop for Faceless Creators: E-Commerce Strategy for 2026",
+  "top-10-ai-video-generators-2026": "Top 10 AI Video Generators for Faceless Content in 2026 [Reviewed]",
+  "ultimate-top-10-ai-faceless-content-tools-review": "Ultimate Review: Top 10 AI Faceless Content Tools for 2026",
+  "vtuber-startup-guide-ai-motion-capture-2026": "VTuber Startup Guide: AI Motion Capture for Faceless Streaming in 2026",
+  "youtube-automation-strategy-2025": "YouTube Automation Strategy: Scale Faceless Content in 2025",
+  "youtube-monetization-ai-faceless-policy-2026": "YouTube Monetization & AI Faceless Content: Policy Guide for 2026"
+};
+
+  var articleDesc = {
+  "ai-content-disclosure-ethical-guide-2026": "Learn the ethical guidelines for disclosing AI-generated content as a faceless creator. Stay compliant with platform policies and build trust with your audience.",
+  "ai-news-automation-channel-daily-workflow": "Build a fully automated AI news channel workflow. Generate daily content with AI tools, voiceovers, and video assembly for consistent publishing.",
+  "ai-storytelling-brain-rot-economy-2026": "Master AI storytelling techniques for the brain rot economy. Create engaging faceless content that captures short attention spans in 2026.",
+  "ai-voice-brand-builder-quiz": "Take the AI voice brand quiz to discover your ideal narration style. Match with AI voices that resonate with your faceless content niche.",
+  "anonymous-creator-privacy-security-stack-2026": "Protect your identity as an anonymous creator with the essential privacy and security tools stack for 2026. Stay safe while building your brand.",
+  "automate-faceless-tiktok-guide-2026": "Automate your faceless TikTok channel with AI tools and scheduling. Step-by-step guide to create and publish content without daily manual work.",
+  "best-faceless-youtube-niches-2026-ultimate-guide": "Discover the most profitable faceless YouTube niches for 2026. Complete guide to choosing, testing, and scaling anonymous content channels.",
+  "convert-faceless-traffic-to-newsletter-2026": "Turn your faceless content traffic into newsletter subscribers. Proven lead generation strategies for anonymous creators in 2026.",
+  "corporate-true-crime-30-day-calendar": "Launch a corporate true crime channel with this 30-day content calendar. Research, scripting, and production templates included.",
+  "dangerous-sea-historical-mystery-tiktok-2026": "Create viral historical mystery content about dangerous seas for TikTok. Faceless content strategy combining education and entertainment.",
+  "edit-business-documentaries-magnates-media-style": "Learn to edit business documentaries like Magnates Media. Step-by-step production workflow for faceless documentary channels.",
+  "faceless-content-legal-guide": "Navigate the legal landscape of faceless content creation. Copyright, fair use, disclosure requirements, and privacy laws explained.",
+  "faceless-growth-challenge-30-days-2026": "Join the 30-day faceless growth challenge. Daily tasks to build your anonymous content channel from zero to growing audience.",
+  "faceless-strategy-playbook-2025": "Proven frameworks and strategies for building a successful faceless content business. The complete playbook for anonymous creators.",
+  "faceless-tech-tutorial-affiliate-strategy-2026": "Create profitable faceless tech tutorials with affiliate marketing. Strategy guide for earning commissions without showing your face.",
+  "faceless-travel-vlog-drone-pov-2026": "Start a faceless travel vlog channel using drone POV footage. Complete guide to creating travel content anonymously in 2026.",
+  "faceless-youtube-blueprint-2025": "The complete blueprint for building a faceless YouTube channel. From niche selection to monetization, everything you need to know.",
+  "faceless-youtube-channel-guide-2026": "Step-by-step guide to starting and growing a faceless YouTube channel in 2026. Setup, content strategy, and scaling tips included.",
+  "future-of-faceless-content-2027-predictions": "Explore predictions for the future of faceless content creation in 2027. Emerging trends, technologies, and opportunities for anonymous creators.",
+  "horror-story-channel-case-study": "Detailed case study of a faceless horror story channel that reached 1M views. Learn the exact strategy, tools, and content formula used.",
+  "how-to-create-ai-influencers-instagram-2026": "Create AI influencers for Instagram without showing your face. Complete 2026 guide to building and monetizing AI-generated personas.",
+  "how-to-monetize-faceless-channel-without-adsense": "10 proven ways to monetize your faceless content channel without relying on AdSense. Diversify your income as an anonymous creator.",
+  "how-to-start-faceless-youtube-ai-voiceover-2026": "Start a faceless YouTube channel using AI voiceover technology. Complete beginner's guide to equipment, tools, and content strategy.",
+  "instagram-reels-faceless-brand": "Master Instagram Reels as a faceless brand. Strategy guide for anonymous creators to grow, engage, and monetize on Instagram.",
+  "luxury-lifestyle-faceless-high-cpm-2026": "Tap into the luxury lifestyle niche with faceless content. High CPM strategy guide for premium anonymous content creation in 2026.",
+  "monetize-faceless-channel-without-ads-2026": "Diversify your income with proven monetization strategies for faceless channels. Move beyond ads with digital products, affiliates, and memberships.",
+  "niche-idea-generator-guide": "Find your perfect faceless content niche with this comprehensive idea generator guide. Discover profitable, low-competition niches today.",
+  "pinterest-marketing-strategy-blog-traffic-2026": "Drive blog traffic as a faceless creator using Pinterest marketing. Strategy guide for Pinterest SEO and content promotion in 2026.",
+  "psychology-of-faceless-branding-2026": "Understand the psychology behind faceless branding and why anonymous content resonates with modern audiences in 2026.",
+  "reddit-story-automation-shorts-reels-2026": "Automate Reddit story content for YouTube Shorts and Instagram Reels. Turn popular threads into viral faceless videos.",
+  "silent-vlog-asmr-faceless-trend-2026": "Explore the silent vlog and ASMR trend for faceless content creators. How to produce relaxing, engaging content without narration.",
+  "stoic-philosophy-faceless-niche-2026": "Build a faceless content channel around stoic philosophy. Profitable niche strategy combining ancient wisdom with modern content formats.",
+  "thumbnail-psychology-framework": "Master thumbnail psychology with this comprehensive framework. Boost click-through rates on your faceless content channel.",
+  "tiktok-growth-strategy-faceless": "Grow your faceless TikTok channel with proven strategies. Viral content techniques, algorithm hacks, and engagement tips for anonymous creators.",
+  "tiktok-shop-faceless-creator-strategy-2026": "Leverage TikTok Shop as a faceless creator. E-commerce and affiliate strategy guide for selling products without showing your face.",
+  "top-10-ai-video-generators-2026": "Compare the top 10 AI video generators for faceless content creation in 2026. In-depth review of features, pricing, and output quality.",
+  "ultimate-top-10-ai-faceless-content-tools-review": "The ultimate review of AI tools for faceless content creators. Compare 10 essential tools for video, audio, and image generation.",
+  "vtuber-startup-guide-ai-motion-capture-2026": "Start your VTuber journey with AI motion capture technology. Complete guide to faceless streaming with virtual avatars in 2026.",
+  "youtube-automation-strategy-2025": "Scale your faceless content with YouTube automation strategies. Systems and workflows for hands-off channel growth in 2025.",
+  "youtube-monetization-ai-faceless-policy-2026": "Navigate YouTube's monetization policies for AI-generated and faceless content. Stay compliant while maximizing ad revenue in 2026."
+};
+
+  var slug = isBlog ? slugMatch[1] : null;
+  var canonical = 'https://contentanonymity.com' + (path.endsWith('/') && path !== '/' ? path.slice(0, -1) : path) || 'https://contentanonymity.com';
+
+  if (isHome) {
+    return;
+  }
+
+  // Update canonical
+  var canonLink = document.querySelector('link[rel="canonical"]');
+  if (canonLink) canonLink.href = canonical;
+
+  if (slug && articleMeta[slug]) {
+    var title = articleMeta[slug] + ' | ContentAnonymity';
+    document.title = title;
+    var m = document.querySelector('meta[name="title"]');
+    if (m) m.setAttribute('content', title);
+    var d = document.querySelector('meta[name="description"]');
+    if (d) d.setAttribute('content', articleDesc[slug] || '');
+    var ot = document.querySelector('meta[property="og:title"]');
+    if (ot) ot.setAttribute('content', title);
+    var od = document.querySelector('meta[property="og:description"]');
+    if (od) od.setAttribute('content', articleDesc[slug] || '');
+    var ou = document.querySelector('meta[property="og:url"]');
+    if (ou) ou.setAttribute('content', canonical);
+    var ogt = document.querySelector('meta[property="og:type"]');
+    if (ogt) ogt.setAttribute('content', 'article');
+    var tt = document.querySelector('meta[name="twitter:title"]');
+    if (tt) tt.setAttribute('content', title);
+    var td = document.querySelector('meta[name="twitter:description"]');
+    if (td) td.setAttribute('content', articleDesc[slug] || '');
+    var tu = document.querySelector('meta[name="twitter:url"]');
+    if (tu) tu.setAttribute('content', canonical);
+    var tb = document.querySelector('meta[name="twitter:card"]');
+    if (tb) tb.setAttribute('content', 'summary_large_image');
+
+    // Inject Article JSON-LD
+    var script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": articleMeta[slug],
+      "description": articleDesc[slug],
+      "url": canonical,
+      "mainEntityOfPage": { "@type": "WebPage", "@id": canonical },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ContentAnonymity",
+        "url": "https://contentanonymity.com",
+        "logo": { "@type": "ImageObject", "url": "https://contentanonymity.com/logo-icon.svg" }
+      },
+      "author": { "@type": "Person", "name": "ContentAnonymity" }
+    });
+    document.head.appendChild(script);
+  }
+})();
+</script>
+
     
     <!-- Impact Site Verification -->
     <meta name='impact-site-verification' value='10604aeb-9044-41c6-b3fd-ab8a816a755c'>

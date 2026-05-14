@@ -32,24 +32,16 @@ export default defineConfig({
     // Performance optimizations
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui-vendor': [
-            '@radix-ui/react-dialog', 
-            '@radix-ui/react-dropdown-menu', 
-            '@radix-ui/react-select',
-            '@radix-ui/react-accordion',
-            '@radix-ui/react-avatar',
-            '@radix-ui/react-label',
-            '@radix-ui/react-progress',
-            '@radix-ui/react-scroll-area',
-            '@radix-ui/react-separator',
-            '@radix-ui/react-slot',
-            '@radix-ui/react-switch',
-            '@radix-ui/react-tabs',
-            '@radix-ui/react-toast',
-          ],
-          'utils': ['date-fns', 'zod', 'clsx', 'tailwind-merge'],
+        manualChunks(id, {getModuleInfo}) {
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom') || id.includes('node_modules/react-router-dom')) {
+            return 'react-vendor';
+          }
+          if (id.includes('node_modules/@radix-ui')) {
+            return 'ui-vendor';
+          }
+          if (id.includes('node_modules/date-fns') || id.includes('node_modules/zod') || id.includes('node_modules/clsx') || id.includes('node_modules/tailwind-merge')) {
+            return 'utils';
+          }
         },
         // Optimize chunk file names for better caching
         chunkFileNames: 'assets/js/[name]-[hash].js',

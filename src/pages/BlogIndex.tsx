@@ -98,8 +98,8 @@ export default function BlogIndex() {
   return (
     <>
       <SEO
-        title="50+ Faceless Content Strategies & Guides for 2026"
-        description="Browse 50+ expert guides on faceless content creation, monetization & AI automation. Real strategies, real results. Start reading and building today."
+        title="Faceless Content Blog: Strategies, Guides & Tips for Anonymous Creators"
+        description="Browse expert guides on faceless content creation, monetization & AI automation. Real strategies from creators earning 6-figures anonymously. Start reading today."
         keywords="faceless YouTube channel ideas, faceless business blog, anonymous content guides, faceless content strategies 2025, content anonymity resources"
         url="https://contentanonymity.com/blog"
         canonical="https://contentanonymity.com/blog"

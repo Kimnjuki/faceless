@@ -15,9 +15,9 @@ export default function GettingStarted() {
   return (
     <>
       <SEO
-        title="4-Step System to Launch Your Faceless Business in 30 Days"
-        description="Follow this proven roadmap to launch your faceless content business in 30 days. Step-by-step system with AI automation. Start your free trial today."
-        keywords="faceless content business, anonymous content creation, faceless business roadmap, content anonymity guide, faceless content strategy 2026"
+        title="How to Start a Faceless Content Business: Beginner's 30-Day Plan"
+        description="Follow this proven 30-day roadmap to start your faceless content business from scratch. Step-by-step system with AI automation, niche selection & monetization. Start free today."
+        keywords="faceless content business, anonymous content creation, faceless business roadmap, content anonymity guide, faceless content strategy 2026, how to start faceless content"
         url="https://contentanonymity.com/getting-started"
         canonical="https://contentanonymity.com/getting-started"
         type="article"

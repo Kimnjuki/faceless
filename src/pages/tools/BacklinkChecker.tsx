@@ -117,18 +117,28 @@ export default function BacklinkChecker() {
   return (
     <>
       <SEO
-        title="Free Backlink Checker - Analyze Backlinks | ContentAnonymity"
-        description="Free backlink checker to analyze your backlink profile. See referring domains, anchor text, and link types. Alternative to Ahrefs backlink tool."
+        title="Free Backlink Checker: How to Check Backlinks & Analyze Your Profile"
+        description="Free backlink checker to see how many backlinks your site has. Analyze referring domains, anchor text, dofollow/nofollow links. Step-by-step guide for checking backlinks without paid tools."
         canonical="https://contentanonymity.com/tools/backlink-checker"
+        howToData={{
+          name: "How to Check Your Backlinks for Free",
+          description: "Use this free backlink checker tool to analyze your site's backlink profile. Follow these steps to identify referring domains, check anchor text distribution, and find link building opportunities.",
+          steps: [
+            { name: "Enter your website URL", text: "Type your domain (e.g., example.com) in the input field above. Make sure to enter the root domain without http://" },
+            { name: "Click Check Backlinks", text: "Press the 'Check Backlinks' button to start the analysis. The tool will scan your site's backlink profile." },
+            { name: "Review your backlink data", text: "Analyze the results showing referring domains, total backlinks, anchor text distribution, and dofollow vs nofollow breakdown." },
+            { name: "Export and take action", text: "Use the insights to identify link building opportunities, disavow toxic backlinks, and improve your SEO strategy." }
+          ]
+        }}
       />
       <Header />
       <main className="min-h-screen py-12 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold mb-4">Anonymous Authority Builder</h1>
+              <h1 className="text-4xl font-bold mb-4">Free Backlink Checker Tool</h1>
               <p className="text-lg text-muted-foreground mb-6">
-                Backlink insights built for faceless creators — find anonymous-friendly link opportunities
+                Analyze your backlink profile: referring domains, anchor text, and link types. Free tool for faceless creators and SEO professionals.
               </p>
 
               {loading && (

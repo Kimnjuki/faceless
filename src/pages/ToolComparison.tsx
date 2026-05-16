@@ -1,8 +1,8 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { Check, X, ExternalLink, Star, Loader2, Search, RefreshCw } from "lucide-react";
+import { Check, X, ExternalLink, Star, Loader2, Search, RefreshCw, Sparkles } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import SEO from "../components/SEO";
@@ -76,10 +76,10 @@ export default function ToolComparison() {
 
   const pageTitle = category && category !== 'all' 
     ? `Best ${category.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase())} Tools for Faceless Creators`
-    : 'Content Creation Tools Comparison - Find Your Perfect Tool';
+    : 'Best Faceless Content Creation Tools: Compare & Find Your Perfect Fit';
   const pageDescription = category && category !== 'all'
     ? `Compare the best ${category.replace(/-/g, " ")} tools for faceless content creators. Find features, pricing, and reviews to choose the perfect tool for your anonymous content business.`
-    : 'Compare AI tools, video editors, voice generators, and more for faceless content creation. Find the perfect tools to build your anonymous content empire.';
+    : 'Compare the best faceless content creation tools: AI generators, video editors, voiceovers & more. Side-by-side features, pricing & reviews for anonymous creators. Find your perfect tool stack today.';
   const canonicalUrl = category && category !== 'all'
     ? `https://contentanonymity.com/tools/${category}`
     : 'https://contentanonymity.com/tools/all';
@@ -129,6 +129,29 @@ export default function ToolComparison() {
                   {tools.length} {tools.length === 1 ? 'tool' : 'tools'} available
                 </p>
               )}
+            </div>
+
+            {/* Quick Links - Popular Tools */}
+            <div className="mb-6 flex flex-wrap justify-center gap-3">
+              <Link
+                to="/tools/niche-quiz"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium hover:bg-primary/20 transition-colors"
+              >
+                <Sparkles className="h-4 w-4" />
+                Find Your Niche Quiz
+              </Link>
+              <Link
+                to="/tools/calculator"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium hover:bg-primary/20 transition-colors"
+              >
+                Calculator
+              </Link>
+              <Link
+                to="/tools/backlink-checker"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium hover:bg-primary/20 transition-colors"
+              >
+                Backlink Checker
+              </Link>
             </div>
 
             {/* Filters */}

@@ -103,8 +103,8 @@ export default function NicheQuiz() {
   return (
     <>
       <SEO
-        title="Find Your Perfect Niche in 2 Minutes | Free Quiz 2026"
-        description="Not sure what niche to pick? Take our 2-minute quiz and discover the perfect faceless content niche matched to your skills & interests. Start now—it's free."
+        title="How to Find Your Perfect Niche: Free Quiz (2 Minutes)"
+        description="Not sure what niche to pick? Take our 2-minute free quiz to discover your perfect faceless content niche matched to your skills and interests. Start now."
         url="https://contentanonymity.com/tools/niche-quiz"
         canonical="https://contentanonymity.com/tools/niche-quiz"
         breadcrumbItems={[

@@ -107,8 +107,8 @@ export default function ProfitabilityCalculator() {
   return (
     <>
       <SEO
-        title="How Much Can You Earn? Free Faceless Calculator 2026"
-        description="Estimate your earning potential from faceless content in seconds. Input your niche, hours & platform — get a detailed revenue breakdown. Try it free now."
+        title="Free Faceless Content Profit Calculator \u2014 Estimate Your Earnings 2026"
+        description="Estimate your faceless content earnings in seconds. Enter your niche, hours and platform for a detailed revenue projection. Free profitability calculator for anonymous creators. Try it now."
         url="https://contentanonymity.com/tools/calculator"
         canonical="https://contentanonymity.com/tools/calculator"
         breadcrumbItems={[

@@ -26,8 +26,8 @@ export default function HomePage() {
   return (
     <>
       <SEO
-        title="Build a Faceless Content Empire in 2026"
-        description="Discover the system 10,000+ creators use to earn 6-figures anonymously. AI automation, monetization strategies & step-by-step courses. Start free today."
+        title="Faceless Content Business: Build Profitable Anonymous Channels in 2026"
+        description="Discover how to build a profitable faceless content business with AI automation and complete anonymity. Join 10,000+ creators earning 6-figures. Start free today."
         keywords="faceless content business, anonymous content creator, faceless YouTube channel, faceless TikTok, faceless Instagram, AI content creation, faceless business 2026, how to make money without showing face"
         url="https://contentanonymity.com"
         canonical="https://contentanonymity.com"

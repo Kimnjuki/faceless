@@ -12,7 +12,8 @@ function getKey(): string | null {
 }
 
 function getModel(): string {
-  return import.meta.env.VITE_NVIDIA_MODEL ?? 'meta/llama-3.1-8b-instruct';
+  // Upgraded to 70B for significantly better reasoning. Override via VITE_NVIDIA_MODEL.
+  return import.meta.env.VITE_NVIDIA_MODEL ?? 'meta/llama-3.1-70b-instruct';
 }
 
 interface Message {

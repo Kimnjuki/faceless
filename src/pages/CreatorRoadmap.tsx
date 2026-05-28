@@ -3,8 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Route, GraduationCap, TrendingUp, Target, Clock, CheckCircle2,
   ArrowRight, ChevronDown, Sparkles, BarChart3, DollarSign, Lightbulb,
-  Monitor, Tablet, Smartphone, Users, FileText, BookOpen,
+  Monitor, Tablet, Smartphone, Users, FileText, BookOpen, Brain,
 } from "lucide-react";
+import { chatCompletion } from "@/lib/ai/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
@@ -56,6 +57,8 @@ export default function CreatorRoadmap() {
   });
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [aiInsights, setAiInsights] = useState<string | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
 
   // Load existing roadmap from storage
   useEffect(() => {
@@ -92,6 +95,25 @@ export default function CreatorRoadmap() {
     setStep('roadmap');
     setExpandedPhase(1);
     trackToolUsage('creator-roadmap-generated', 'creator-os', `${form.niche}|${form.goal}`);
+
+    // ── NVIDIA-powered AI insights ──
+    setAiInsights(null);
+    setAiLoading(true);
+    chatCompletion([
+      {
+        role: 'system',
+        content: 'You are a faceless content creation strategist. Given a niche, skill level, goal, and weekly hours, provide 3 specific, actionable insights that would help THIS creator succeed. Each insight should be 1-2 sentences. Keep it under 150 words. Use bullet points. Be specific — name real tools, real strategies, real metrics.',
+      },
+      {
+        role: 'user',
+        content: `Niche: ${form.niche}\nSkill Level: ${form.skillLevel}\nGoal: ${form.goal}\nWeekly Hours: ${form.weeklyHours}\nAudience: ${form.existingAudience ? 'Has some followers' : 'Starting from zero'}\nBudget: ${form.budget}\n\nWhat are my top 3 priorities?`,
+      },
+    ], { temperature: 0.5, maxTokens: 384 }).then(text => {
+      if (text && !text.startsWith('Here') && !text.startsWith('I analyze')) {
+        setAiInsights(text);
+      }
+      setAiLoading(false);
+    }).catch(() => setAiLoading(false));
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -302,6 +324,39 @@ export default function CreatorRoadmap() {
                     </div>
                   </CardContent>
                 </Card>
+
+                {/* AI-Powered Insights */}
+                {(aiInsights || aiLoading) && (
+                  <Card className="border-indigo-500/30 bg-gradient-to-r from-indigo-900/30 to-purple-900/30 backdrop-blur-sm">
+                    <CardHeader>
+                      <CardTitle className="text-white flex items-center gap-2">
+                        <Brain className="h-5 w-5 text-purple-400" />
+                        AI Insights
+                        {aiLoading && (
+                          <span className="text-xs text-slate-400 animate-pulse ml-2">Generating…</span>
+                        )}
+                      </CardTitle>
+                      <CardDescription className="text-slate-400">
+                        NVIDIA NIM personalized strategy for your niche
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="bg-slate-950/50 rounded-lg border border-indigo-800/20 p-4">
+                        {aiLoading ? (
+                          <div className="space-y-2">
+                            <div className="h-4 bg-slate-800 rounded animate-pulse w-3/4" />
+                            <div className="h-4 bg-slate-800 rounded animate-pulse w-1/2" />
+                            <div className="h-4 bg-slate-800 rounded animate-pulse w-2/3" />
+                          </div>
+                        ) : (
+                          <p className="text-slate-200 text-sm whitespace-pre-wrap leading-relaxed">
+                            {aiInsights}
+                          </p>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
 
                 {/* Revenue Projection */}
                 <Card className="border-slate-800 bg-slate-900/80 backdrop-blur-sm">

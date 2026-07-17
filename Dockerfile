@@ -8,8 +8,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies (using npm install for flexibility with or without lockfile)
-RUN npm install --frozen-lockfile || npm install
+# Install dependencies (skip Chromium download from puppeteer to avoid slow/failed installs)
+RUN PUPPETEER_SKIP_DOWNLOAD=1 npm install --frozen-lockfile || npm install
 
 # Copy source code
 COPY . .

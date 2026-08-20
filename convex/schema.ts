@@ -313,6 +313,13 @@ export default defineSchema({
     viewCount: v.optional(v.float64()),
     shareCount: v.optional(v.float64()),
     targetPlatforms: v.optional(v.array(v.string())),
+    // E-E-A-T / trust signals (P1: content trust block)
+    reviewerId: v.optional(v.id("profiles")),
+    lastReviewedAt: v.optional(v.float64()),
+    methodologyNotes: v.optional(v.string()),
+    aiAssistanceDisclosure: v.optional(v.string()),
+    // CMS-driven 301 handling for retired content (P0-4 / T0-4)
+    redirectToSlug: v.optional(v.string()),
   })
     .index("by_slug", ["slug"])
     .index("by_legacyId", ["legacyId"])
@@ -562,6 +569,13 @@ export default defineSchema({
     contentStyle: v.optional(v.string()),
     keySuccessFactors: v.optional(v.array(v.string())),
     toolsUsed: v.optional(v.array(v.string())),
+    // Transparent case-study fields (P4 differentiation pillar)
+    timePeriodMonths: v.optional(v.float64()),
+    totalCosts: v.optional(v.float64()),
+    trafficSources: v.optional(v.array(v.string())),
+    revenueSources: v.optional(v.array(v.string())),
+    failedExperiments: v.optional(v.array(v.string())),
+    generalizabilityCaveat: v.optional(v.string()),
     createdAt: v.float64(),
   }).index("by_niche", ["nicheId"]),
 
@@ -691,6 +705,11 @@ export default defineSchema({
     updatedAt: v.float64(),
     toolTags: v.optional(v.array(v.string())),
     exampleApplications: v.optional(v.any()),
+    // E-E-A-T / trust signals (P1: content trust block)
+    reviewerId: v.optional(v.id("profiles")),
+    lastReviewedAt: v.optional(v.float64()),
+    // CMS-driven 301 handling for retired content (P0-4 / T0-4)
+    redirectToSlug: v.optional(v.string()),
   })
     .index("by_slug", ["slug"])
     .index("by_platform", ["platform"])
@@ -869,6 +888,8 @@ export default defineSchema({
     description: v.optional(v.string()),
     content: v.optional(v.string()),
     tags: v.optional(v.array(v.string())),
+    // Workflow-templates taxonomy (P4 differentiation pillar)
+    category: v.optional(v.string()),
     downloadCount: v.optional(v.float64()),
     rating: v.optional(v.float64()),
     ratingCount: v.optional(v.float64()),
@@ -908,6 +929,16 @@ export default defineSchema({
     ratingCount: v.optional(v.float64()),
     tutorialUrl: v.optional(v.string()),
     status: v.optional(v.string()),
+    // Tested tool laboratory fields (P4 differentiation pillar)
+    testMethodology: v.optional(v.string()),
+    lastTestedAt: v.optional(v.float64()),
+    dataRetentionPolicy: v.optional(v.string()),
+    exportFormats: v.optional(v.array(v.string())),
+    hasApi: v.optional(v.boolean()),
+    hasWatermark: v.optional(v.boolean()),
+    commercialUseRights: v.optional(v.string()),
+    notRecommendedIf: v.optional(v.array(v.string())),
+    evidenceScreenshots: v.optional(v.array(v.string())),
     createdAt: v.float64(),
     updatedAt: v.float64(),
   })
@@ -1811,4 +1842,37 @@ export default defineSchema({
   })
     .index("by_experiment", ["experimentId"])
     .index("by_variant", ["variantId"]),
+
+  // ---------------------------------------------------------------------------
+  // Privacy threat models — differentiated trust content (P4 pillar)
+  // ---------------------------------------------------------------------------
+  threat_models: defineTable({
+    creatorProfile: v.string(), // e.g. 'faceless_youtuber', 'anonymous_blogger'
+    mainRisks: v.array(v.string()),
+    recommendedControls: v.array(v.string()),
+    legalCaveat: v.string(), // anonymity-is-not-absolute disclosure
+    updatedAt: v.float64(),
+    reviewerId: v.optional(v.id("profiles")),
+  }).index("by_profile", ["creatorProfile"]),
+
+  // ---------------------------------------------------------------------------
+  // Redirects — single source of truth for 301/302/410 (P0-4 / T0-4)
+  // ---------------------------------------------------------------------------
+  redirects: defineTable({
+    fromPath: v.string(),
+    toPath: v.string(),
+    statusCode: v.union(v.literal(301), v.literal(302), v.literal(410)),
+    reason: v.optional(v.string()),
+    createdAt: v.float64(),
+  }).index("by_from_path", ["fromPath"]),
+
+  // ---------------------------------------------------------------------------
+  // Route health checks — backs CI route checker (P0-3 / T0-3)
+  // ---------------------------------------------------------------------------
+  route_health_checks: defineTable({
+    path: v.string(),
+    lastStatusCode: v.float64(),
+    lastCheckedAt: v.float64(),
+    consecutiveFailures: v.float64(),
+  }).index("by_path", ["path"]),
 });

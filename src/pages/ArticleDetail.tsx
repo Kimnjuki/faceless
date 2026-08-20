@@ -9,6 +9,7 @@ import SEO from "@/components/SEO";
 import RelatedContent from "@/components/RelatedContent";
 import Breadcrumb from "@/components/Breadcrumb";
 import AuthorBio from "@/components/AuthorBio";
+import ArticleTrustBlock from "@/components/ArticleTrustBlock";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -247,6 +248,13 @@ export default function ArticleDetail() {
                   <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-[1.1] text-foreground drop-shadow-lg">
                     {article.title}
                   </h1>
+                  <ArticleTrustBlock
+                    publishedAt={article.published_at}
+                    lastReviewedAt={(raw as any)?.lastReviewedAt}
+                    reviewerId={(raw as any)?.reviewerId}
+                    methodologyNotes={(raw as any)?.methodologyNotes}
+                    aiAssistanceDisclosure={(raw as any)?.aiAssistanceDisclosure}
+                  />
                   {article.excerpt && (
                     <p className="text-xl md:text-2xl text-foreground/90 mb-6 leading-relaxed font-light">
                       {article.excerpt}

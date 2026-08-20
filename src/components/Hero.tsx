@@ -41,7 +41,7 @@ export default function Hero() {
             </h2>
 
             <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
-              Create 30 days of content in 2 hours with AI. Build profitable income streams with <strong>complete anonymity</strong>. Proven strategies, step-by-step automation, and 10,000+ creators earning $1K+ monthly — <strong>all without revealing your identity.</strong>
+               Create 30 days of content in 2 hours with AI. Build profitable income streams with <strong>a privacy-first approach</strong>. Proven strategies, step-by-step automation, and 10,000+ creators earning $1K+ monthly — <strong>all without putting your identity online.</strong>
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
@@ -127,8 +127,8 @@ export default function Hero() {
               <div className="h-14 w-14 rounded-2xl gradient-primary flex items-center justify-center mb-5 shadow-glow group-hover:scale-110 transition-transform duration-300">
                 <Shield className="h-7 w-7 text-white" />
               </div>
-              <h3 className="font-bold text-lg mb-3 gradient-text">Complete Privacy Protection</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Stay 100% anonymous while building your empire</p>
+              <h3 className="font-bold text-lg mb-3 gradient-text">Privacy-First by Design</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">Build without putting your identity online</p>
             </div>
 
             <div className="flex flex-col items-center text-center p-8 rounded-2xl glass border border-primary/10 hover-lift transition-all duration-300 group">

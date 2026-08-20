@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowRight, Play, Shield, Zap, Users, TrendingUp, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Shield, Zap, Users, TrendingUp, CheckCircle2 } from "lucide-react";
 import { trackButtonClick } from "@/utils/analytics";
 import OptimizedImage from "@/components/OptimizedImage";
 import { IMAGES } from "@/config/images";
@@ -30,51 +30,43 @@ export default function Hero() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
               </span>
-              <span className="gradient-text font-bold">10,000+ Creators</span> Earning $1,000+ Monthly Anonymously
+              <span className="gradient-text font-bold">10,000+ Faceless Creators</span> Building Real Businesses
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
               Build a Faceless Content Empire in 2026
             </h1>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-muted-foreground mb-6">
-              Join 10,000+ Anonymous Creators Earning $1,000+ Monthly — AI Tools, Templates & Community
+              Privacy-conscious workflows for research, production, distribution &amp; monetization across YouTube, TikTok, newsletters &amp; more
             </h2>
 
             <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
-               Create 30 days of content in 2 hours with AI. Build profitable income streams with <strong>a privacy-first approach</strong>. Proven strategies, step-by-step automation, and 10,000+ creators earning $1K+ monthly — <strong>all without putting your identity online.</strong>
+               Create 30 days of content in 2 hours with AI. Build profitable income streams with <strong>a privacy-first approach</strong>. Proven strategies, step-by-step automation, and a growing community of faceless creators — <strong>all without putting your identity online.</strong>
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-              <Button 
-                size="lg" 
-                className="text-base px-8 gradient-primary hover:shadow-glow transition-all duration-300 hover-lift" 
+            {/* Single primary CTA above the fold (P1: CTA hierarchy) */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
+              <Button
+                size="lg"
+                className="text-base px-8 gradient-primary hover:shadow-glow transition-all duration-300 hover-lift"
                 asChild
-                onClick={() => trackButtonClick('start-journey', 'hero')}
+                onClick={() => trackButtonClick('niche_quiz', 'hero')}
               >
-                <Link to="/auth/signup">
-                  Get Free Access to Creator Tools <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                <Link to="/tools/niche-quiz">
+                  Take the Free Niche Quiz <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
+              <Button
+                size="lg"
+                variant="outline"
                 className="text-base glass border-primary/20 hover:border-primary/40 hover:bg-primary/5 transition-all duration-300"
                 asChild
-                onClick={() => trackButtonClick('try-ai-tools', 'hero')}
+                onClick={() => trackButtonClick('explore_playbook', 'hero')}
               >
-                <Link to="/creator-studio">
-                  <Play className="mr-2 h-4 w-4" /> Try AI Tools Free
+                <Link to="/start-here">
+                  Explore the Creator Playbook
                 </Link>
               </Button>
-            </div>
-
-            <div className="flex flex-wrap justify-center gap-4 text-sm mb-6">
-              <Link to="/getting-started" className="text-primary hover:underline font-medium">Getting Started</Link>
-              <Link to="/blog" className="text-primary hover:underline font-medium">Blog</Link>
-              <Link to="/tools/calculator" className="text-primary hover:underline font-medium">Calculator</Link>
-              <Link to="/tools/niche-quiz" className="text-primary hover:underline font-medium">Niche Quiz</Link>
-              <Link to="/learning-paths" className="text-primary hover:underline font-medium">Learning Paths</Link>
-              <Link to="/platform-guides" className="text-primary hover:underline font-medium">Platform Guides</Link>
             </div>
             <div className="flex flex-wrap justify-center gap-6 text-sm mb-8">
               <div className="flex items-center gap-2 text-muted-foreground">
@@ -103,8 +95,8 @@ export default function Hero() {
               <div className="flex items-center gap-3">
                 <TrendingUp className="h-8 w-8 text-primary" />
                 <div className="text-left">
-                  <div className="font-bold text-foreground">$1K+</div>
-                  <div className="text-xs text-muted-foreground">Avg. Monthly Earnings</div>
+                  <div className="font-bold text-foreground">AI-Powered</div>
+                  <div className="text-xs text-muted-foreground">Content Workflows</div>
                 </div>
               </div>
               <div className="flex items-center gap-3">

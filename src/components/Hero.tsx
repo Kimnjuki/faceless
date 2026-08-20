@@ -2,10 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Shield, Zap, Users, TrendingUp, CheckCircle2 } from "lucide-react";
 import { trackButtonClick } from "@/utils/analytics";
+import { useTrackEvent } from "@/hooks/useTrackEvent";
 import OptimizedImage from "@/components/OptimizedImage";
 import { IMAGES } from "@/config/images";
 
 export default function Hero() {
+  const track = useTrackEvent();
   return (
     <section className="relative py-20 md:py-32 overflow-hidden min-h-[600px] md:min-h-[700px]" style={{ containIntrinsicSize: '600px 700px' }}>
       {/* Hero Background Image */}
@@ -52,7 +54,7 @@ export default function Hero() {
                 asChild
                 onClick={() => trackButtonClick('niche_quiz', 'hero')}
               >
-                <Link to="/tools/niche-quiz">
+                <Link to="/tools/niche-quiz" onClick={() => { trackButtonClick('niche_quiz', 'hero'); track('quiz_started', { location: 'hero' }); }}>
                   Take the Free Niche Quiz <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { useTrackEvent } from "@/hooks/useTrackEvent";
 
 type EmailOptInProps = {
   source?: string;
@@ -21,6 +22,7 @@ export default function EmailOptIn({
 }: EmailOptInProps) {
   const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
   const subscribe = useMutation(api.email_subscribers.create);
+  const track = useTrackEvent();
   const [email, setEmail] = useState("");
   const [pending, setPending] = useState(false);
 
@@ -38,6 +40,7 @@ export default function EmailOptIn({
         source,
         ...(leadMagnetId ? { leadMagnetId: leadMagnetId as any } : {}),
       });
+      await track("email_signup", { source, leadMagnetId });
       toast.success("You are subscribed.");
       setEmail("");
     } catch (err) {

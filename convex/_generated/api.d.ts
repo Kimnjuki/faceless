@@ -10,6 +10,7 @@
 
 import type * as ai from "../ai.js";
 import type * as aiTools from "../aiTools.js";
+import type * as articleMaintenance from "../articleMaintenance.js";
 import type * as articles from "../articles.js";
 import type * as challenges from "../challenges.js";
 import type * as community from "../community.js";
@@ -35,12 +36,17 @@ import type * as personas from "../personas.js";
 import type * as platformGuides from "../platformGuides.js";
 import type * as playbooks from "../playbooks.js";
 import type * as profiles from "../profiles.js";
+import type * as redirects from "../redirects.js";
+import type * as routeHealth from "../routeHealth.js";
 import type * as seedAdsense from "../seedAdsense.js";
 import type * as seedFacelessArticle from "../seedFacelessArticle.js";
 import type * as seedPlatformGuides from "../seedPlatformGuides.js";
+import type * as seedThreatModels from "../seedThreatModels.js";
 import type * as supportTickets from "../supportTickets.js";
 import type * as templates from "../templates.js";
+import type * as threatModels from "../threatModels.js";
 import type * as tools from "../tools.js";
+import type * as userEvents from "../userEvents.js";
 import type * as voiceStudio from "../voiceStudio.js";
 import type * as webinars from "../webinars.js";
 
@@ -53,6 +59,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   ai: typeof ai;
   aiTools: typeof aiTools;
+  articleMaintenance: typeof articleMaintenance;
   articles: typeof articles;
   challenges: typeof challenges;
   community: typeof community;
@@ -78,12 +85,17 @@ declare const fullApi: ApiFromModules<{
   platformGuides: typeof platformGuides;
   playbooks: typeof playbooks;
   profiles: typeof profiles;
+  redirects: typeof redirects;
+  routeHealth: typeof routeHealth;
   seedAdsense: typeof seedAdsense;
   seedFacelessArticle: typeof seedFacelessArticle;
   seedPlatformGuides: typeof seedPlatformGuides;
+  seedThreatModels: typeof seedThreatModels;
   supportTickets: typeof supportTickets;
   templates: typeof templates;
+  threatModels: typeof threatModels;
   tools: typeof tools;
+  userEvents: typeof userEvents;
   voiceStudio: typeof voiceStudio;
   webinars: typeof webinars;
 }>;

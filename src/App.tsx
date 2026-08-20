@@ -62,6 +62,7 @@ import OpportunityFinder from "./pages/OpportunityFinder";
 import MonetizationMatcher from "./pages/MonetizationMatcher";
 import NotFound from "./pages/NotFound";
 import Health from "./pages/Health";
+import ThreatModels from "./pages/ThreatModels";
 import News from "./pages/News";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PerformanceOptimizer from "./components/PerformanceOptimizer";
@@ -134,7 +135,8 @@ export default function App() {
          <Route path="/terms" element={<TermsOfService />} />
          <Route path="/affiliate-disclosure" element={<AffiliateDisclosure />} />
         <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy/threat-models" element={<ThreatModels />} />
         <Route path="/resources/templates" element={<TemplatesLibrary />} />
         <Route path="/resources/niches" element={<NicheDatabase />} />
         <Route path="/niches/:nicheId" element={<NicheDetail />} />

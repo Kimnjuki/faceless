@@ -135,6 +135,23 @@ export interface Tool {
   created_at?: string;
   affiliate_link?: { destination_url?: string; slug?: string; cta_text?: string } | null;
   affiliate_url?: string | null;
+  // Tested tool laboratory fields (P4 differentiation pillar)
+  testMethodology?: string;
+  lastTestedAt?: number;
+  last_tested_at?: number;
+  dataRetentionPolicy?: string;
+  exportFormats?: string[];
+  export_formats?: string[];
+  hasApi?: boolean;
+  has_api?: boolean;
+  hasWatermark?: boolean;
+  has_watermark?: boolean;
+  commercialUseRights?: string;
+  commercial_use_rights?: string;
+  notRecommendedIf?: string[];
+  not_recommended_if?: string[];
+  evidenceScreenshots?: string[];
+  evidence_screenshots?: string[];
 }
 
 export interface Template {

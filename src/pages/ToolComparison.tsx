@@ -2,7 +2,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { Check, X, ExternalLink, Star, Loader2, Search, RefreshCw, Sparkles } from "lucide-react";
+import { Check, X, ExternalLink, Star, Loader2, Search, RefreshCw, Sparkles, FlaskConical } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import SEO from "../components/SEO";
@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTools } from "@/hooks/useTools";
+import { useTrackEvent } from "@/hooks/useTrackEvent";
 import type { Tool } from "@/types";
 
 // Map URL category to database category name
@@ -64,9 +65,11 @@ export default function ToolComparison() {
     searchQuery: searchQuery,
     sortBy: sortBy
   });
+  const track = useTrackEvent();
 
   const handleToolClick = async (tool: Tool) => {
     await trackClick(tool.id ?? tool._id ?? '');
+    await track('tool_comparison_clicked', { tool: tool.name, category: tool.category?.name });
     // Use affiliate link if available, otherwise website URL
     const url = tool.affiliate_url || tool.affiliate_link?.destination_url || tool.websiteUrl || tool.website_url;
     if (url) {
@@ -323,6 +326,56 @@ export default function ToolComparison() {
                           <p className="text-xs text-muted-foreground">
                             <span className="font-semibold">Best for:</span> {tool.best_for}
                           </p>
+                        </div>
+                      )}
+
+                      {/* Tested tool laboratory fields (P4 differentiation pillar) */}
+                      {(tool.testMethodology || tool.lastTestedAt || tool.notRecommendedIf?.length || tool.hasApi !== undefined || tool.hasWatermark !== undefined || tool.commercialUseRights || tool.dataRetentionPolicy || tool.exportFormats?.length) && (
+                        <div className="mb-4 rounded-lg border border-primary/10 bg-muted/30 p-3 text-xs space-y-2">
+                          <div className="flex items-center gap-2 font-semibold text-foreground">
+                            <FlaskConical className="h-4 w-4 text-primary" /> Tested &amp; verified
+                            {tool.lastTestedAt ? (
+                              <span className="font-normal text-muted-foreground">
+                                · {new Date(tool.lastTestedAt).toLocaleDateString()}
+                              </span>
+                            ) : null}
+                          </div>
+                          {tool.testMethodology && (
+                            <p className="text-muted-foreground leading-relaxed">{tool.testMethodology}</p>
+                          )}
+                          <div className="flex flex-wrap gap-1.5">
+                            {tool.hasApi !== undefined && (
+                              <Badge variant={tool.hasApi ? "secondary" : "outline"}>
+                                {tool.hasApi ? "API" : "No API"}
+                              </Badge>
+                            )}
+                            {tool.hasWatermark !== undefined && (
+                              <Badge variant={tool.hasWatermark ? "outline" : "secondary"}>
+                                {tool.hasWatermark ? "Watermark" : "No watermark"}
+                              </Badge>
+                            )}
+                            {tool.commercialUseRights && (
+                              <Badge variant="outline">{tool.commercialUseRights}</Badge>
+                            )}
+                            {tool.exportFormats?.map((f: string) => (
+                              <Badge key={f} variant="outline">{f}</Badge>
+                            ))}
+                          </div>
+                          {tool.dataRetentionPolicy && (
+                            <p className="text-muted-foreground">
+                              <span className="font-medium">Data retention:</span> {tool.dataRetentionPolicy}
+                            </p>
+                          )}
+                          {tool.notRecommendedIf?.length ? (
+                            <div>
+                              <p className="font-medium text-destructive">Not recommended if:</p>
+                              <ul className="list-disc list-inside text-muted-foreground">
+                                {tool.notRecommendedIf.map((n: string, i: number) => (
+                                  <li key={i}>{n}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          ) : null}
                         </div>
                       )}
 

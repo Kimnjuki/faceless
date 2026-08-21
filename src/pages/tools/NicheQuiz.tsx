@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Sparkles, ArrowRight, Check, ShieldCheck } from "lucide-react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { trackToolUsage } from "@/utils/analytics";
+import { useTrackEvent } from "@/hooks/useTrackEvent";
 
 type QuestionType = "single_select" | "multi_select" | "rank_priorities" | "multi_select_with_search";
 
@@ -86,14 +87,21 @@ export default function NicheQuiz() {
   }, []);
   const [answers, setAnswers] = useState<string[]>([]);
   const [showResults, setShowResults] = useState(false);
+  const track = useTrackEvent();
+  const startedRef = useRef(false);
 
   const handleAnswer = (answer: string) => {
     const newAnswers = [...answers, answer];
     setAnswers(newAnswers);
+    if (!startedRef.current) {
+      startedRef.current = true;
+      track("quiz_started", { questionCount: questions.length });
+    }
 
     if (currentQuestion < questions.length - 1) {
       setTimeout(() => setCurrentQuestion(currentQuestion + 1), 300);
     } else {
+      track("quiz_completed", { answers: newAnswers.length });
       setTimeout(() => setShowResults(true), 300);
     }
   };

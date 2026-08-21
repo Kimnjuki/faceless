@@ -19,6 +19,7 @@ import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { useTemplates } from "@/hooks/useTemplates";
 import { trackDownload } from "@/utils/analytics";
+import { useTrackEvent } from "@/hooks/useTrackEvent";
 import type { Template } from "@/types";
 
 const formatIcons = {
@@ -50,9 +51,11 @@ export default function TemplatesLibrary() {
     type: typeFilter,
     searchQuery: searchQuery,
   });
+  const track = useTrackEvent();
 
   const handleDownload = async (template: Template) => {
     trackDownload(template.title || "Template", template.type || "template", "templates-library");
+    track("template_downloaded", { template: template.title, type: template.type });
 
     if (template.id && !String(template.id).startsWith("fallback-")) {
       await incrementDownload(template.id);

@@ -12,10 +12,12 @@ import { z } from "zod";
 import { signupSchema, type SignupFormData } from "@/lib/validations";
 import { handleError } from "@/lib/error-handler";
 import { trackSignup, trackSignupStart, trackFormSubmit } from "@/utils/analytics";
+import { useTrackEvent } from "@/hooks/useTrackEvent";
 import SEO from "@/components/SEO";
 
 export default function Signup() {
   const { signUp, signInWithGoogle } = useAuth();
+  const track = useTrackEvent();
   const [step, setStep] = useState(1);
   const [signupStartTracked, setSignupStartTracked] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -76,6 +78,7 @@ export default function Signup() {
           return;
         }
         trackSignup('email');
+        track('trial_started', { method: 'email' });
         // Do not navigate here — loginWithRedirect leaves the page; client-side navigation would race the OAuth redirect
       }
     } catch (error: unknown) {

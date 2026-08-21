@@ -35,6 +35,9 @@ ENV VITE_STRIPE_PUBLIC_KEY=$VITE_STRIPE_PUBLIC_KEY
 ENV VITE_NVIDIA_API_KEY=$VITE_NVIDIA_API_KEY
 
 # Build the application with pre-rendering for SEO
+# Raise Node's heap limit: the constrained Coolify build container can be
+# OOM-killed (silent exit 255 during `vite build` transform) without this.
+ENV NODE_OPTIONS=--max-old-space-size=2048
 RUN npm run build:quick
 
 # Note: Environment variables are baked into the build output (dist folder)

@@ -61,10 +61,10 @@ export default function SEO({
   // Enforce < 60 characters for title (SEO best practice)
   const truncatedTitle = title.length > 60 ? title.substring(0, 57) + '...' : title;
   const fullTitle = truncatedTitle.includes('ContentAnonymity') ? truncatedTitle : `${truncatedTitle} | ContentAnonymity`;
-  
+
   // Enforce < 60 characters for full title (with site name)
   const finalTitle = fullTitle.length > 60 ? fullTitle.substring(0, 57) + '...' : fullTitle;
-  
+
   // Enforce 155-160 characters for description (Google SERP display) and add strong CTA if missing
   let finalDescription = description;
   if (finalDescription.length > 160) {
@@ -74,11 +74,12 @@ export default function SEO({
   if (!hasCTA && finalDescription.length < 145) {
     finalDescription += ' Start building today.';
   }
-  
+
   // Always generate canonical URL - use provided canonical, or construct from url, or default to homepage
   // Normalize: remove trailing slash (except for homepage) to fix "Duplicate pages without canonical"
   const rawCanonical = canonical || url || 'https://contentanonymity.com';
   const canonicalUrl = rawCanonical.replace(/\/+$/, '') || rawCanonical;
+  const finalUrl = (url || 'https://contentanonymity.com').replace(/\/+$/, '') || (url || 'https://contentanonymity.com');
   const baseStructuredData = {
     '@context': 'https://schema.org',
     '@type': type === 'article' ? 'Article' : type === 'product' ? 'Product' : 'WebPage',
@@ -373,7 +374,7 @@ export default function SEO({
 
       {/* Open Graph / Facebook - Enhanced */}
       <meta property="og:type" content={type === 'article' ? 'article' : type === 'product' ? 'product' : 'website'} />
-      <meta property="og:url" content={canonicalUrl} />
+      <meta property="og:url" content={finalUrl} />
       <meta property="og:title" content={finalTitle} />
       <meta property="og:description" content={finalDescription} />
       <meta property="og:image" content={image} />
@@ -390,7 +391,7 @@ export default function SEO({
 
       {/* Twitter Card - Enhanced */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:url" content={canonicalUrl} />
+      <meta name="twitter:url" content={finalUrl} />
       <meta name="twitter:title" content={finalTitle} />
       <meta name="twitter:description" content={finalDescription} />
       <meta name="twitter:image" content={image} />

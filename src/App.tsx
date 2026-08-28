@@ -48,6 +48,7 @@ import LearningPaths from "./pages/learning/LearningPaths";
 import LearningPathDetail from "./pages/learning/LearningPathDetail";
 import CreatorStudio from "./pages/creator-studio/CreatorStudio";
 import PlatformGuides from "./pages/learning/PlatformGuides";
+import AiPlaybook from "./pages/dashboard/AiPlaybook";
 import PlatformGuideDetail from "./pages/learning/PlatformGuideDetail";
 import CaseStudies from "./pages/learning/CaseStudies";
 import CaseStudyDetail from "./pages/learning/CaseStudyDetail";
@@ -119,6 +120,7 @@ export default function App() {
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/callback" element={<OAuthCallback />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/dashboard/playbook" element={<ProtectedRoute><AiPlaybook /></ProtectedRoute>} />
         <Route path="/dashboard/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
         <Route path="/courses/:courseId/learn" element={<ProtectedRoute><CoursePlayer /></ProtectedRoute>} />
         <Route path="/dashboard/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />

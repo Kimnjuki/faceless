@@ -38,6 +38,10 @@ export default function CaseStudies() {
         url={LIST_CANONICAL}
         canonical={LIST_CANONICAL}
         type="article"
+        breadcrumbItems={[
+          { name: 'Home', url: 'https://contentanonymity.com' },
+          { name: 'Case Studies', url: 'https://contentanonymity.com/learning/case-studies' }
+        ]}
       />
       <Header />
       <main className="min-h-screen bg-background py-12">

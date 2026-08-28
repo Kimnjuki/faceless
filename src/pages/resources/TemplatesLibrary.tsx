@@ -88,7 +88,11 @@ export default function TemplatesLibrary() {
         url="https://contentanonymity.com/resources/templates"
         canonical="https://contentanonymity.com/resources/templates"
         type="website"
-        breadcrumbItems={[{ name: "Templates Library", url: "https://contentanonymity.com/resources/templates" }]}
+        breadcrumbItems={[
+          { name: 'Home', url: 'https://contentanonymity.com' },
+          { name: 'Resources', url: 'https://contentanonymity.com/resources/templates' },
+          { name: 'Templates Library', url: 'https://contentanonymity.com/resources/templates' }
+        ]}
         faqData={[
           {
             question: "Are these templates really free to use?",

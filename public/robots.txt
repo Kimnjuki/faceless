@@ -28,6 +28,12 @@ Allow: /learning-paths
 Allow: /learning-paths/
 Allow: /platform-guides
 Allow: /platform-guides/
+Allow: /platform-guides/*
+
+# Additional important content areas
+Allow: /niches
+Allow: /niches/
+Allow: /niches/*
 Allow: /learning/
 Allow: /resources/
 Allow: /products/

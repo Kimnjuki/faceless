@@ -1,4 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "convex/react";
 import { Sparkles, ArrowRight, Check, ShieldCheck } from "lucide-react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -9,6 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { trackToolUsage } from "@/utils/analytics";
 import { useTrackEvent } from "@/hooks/useTrackEvent";
+import { api } from "../../../convex/_generated/api";
 
 type QuestionType = "single_select" | "multi_select" | "rank_priorities" | "multi_select_with_search";
 
@@ -106,7 +109,77 @@ export default function NicheQuiz() {
     }
   };
 
-  const recommendation = nicheProfiles[0];
+  const recommendation = useMemo(() => {
+    const affinity = answers[6];
+    const monetization = answers[3];
+    if (affinity === "Finance & investing") return nicheProfiles[0];
+    if (affinity === "Tech & AI") return nicheProfiles[1];
+    if (affinity === "Business & entrepreneurship") return nicheProfiles[2];
+    if (affinity === "Education & explainers") return nicheProfiles[3];
+    if (monetization === "Ad revenue (CPM)") return nicheProfiles[0];
+    if (monetization === "SaaS / tools") return nicheProfiles[1];
+    if (monetization === "Digital products / courses") return nicheProfiles[3];
+    if (monetization === "Sponsorships") return nicheProfiles[2];
+    return nicheProfiles[0];
+  }, [answers]);
+
+  const navigate = useNavigate();
+
+  const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const allPaths = useQuery(
+    api.learningPaths.list,
+    hasConvex ? { limit: 10 } : "skip"
+  );
+  const allTools = useQuery(
+    api.tools.list,
+    hasConvex ? {} : "skip"
+  );
+
+  const starterKitViewedRef = useRef(false);
+
+  useEffect(() => {
+    if (showResults && !starterKitViewedRef.current) {
+      starterKitViewedRef.current = true;
+      track("starter_kit_viewed", { niche: recommendation.niche });
+    }
+  }, [showResults, recommendation.niche, track]);
+
+  const handleViewPlaybook = () => {
+    sessionStorage.setItem(
+      "quiz_result",
+      JSON.stringify({
+        niche: recommendation.niche,
+        score: recommendation.score,
+        competition: recommendation.competition,
+        rpm: recommendation.rpm,
+        demand: recommendation.demand,
+        first1k: recommendation.first1k,
+      })
+    );
+    navigate("/dashboard/playbook");
+  };
+
+  const nicheToToolCategories: Record<string, string[]> = {
+    "Finance & Investing": ["AI Scripting/Writing", "Design & Thumbnails", "AI Video Generation"],
+    "Tech & AI": ["AI Scripting/Writing", "AI Video Generation", "Generative Video (AI)"],
+    "Business & Entrepreneurship": ["AI Scripting/Writing", "Repurposing/Automation", "Design & Thumbnails"],
+    "Education & Explainers": ["AI Voiceover", "AI Video Creation", "AI Scripting/Writing"],
+  };
+
+  const recommendedPath = useMemo(() => {
+    if (!allPaths || allPaths.length === 0) return null;
+    return allPaths[0];
+  }, [allPaths]);
+
+  const recommendedTools = useMemo(() => {
+    if (!allTools || allTools.length === 0) return [];
+    const categories = nicheToToolCategories[recommendation.niche] || ["AI Scripting/Writing", "Video Editing"];
+    return allTools
+      .filter(t => categories.includes(t.category))
+      .slice(0, 3);
+  }, [allTools, recommendation.niche]);
+
+  const hasStarterKit = recommendedPath || recommendedTools.length > 0;
 
   return (
     <>
@@ -232,11 +305,36 @@ export default function NicheQuiz() {
                           <p className="text-sm text-muted-foreground">Perfect for anonymous creators</p>
                         </div>
                       </div>
-                    </div>
+                     </div>
 
-                    <Button className="w-full" size="lg">
-                      View Your AI Playbook <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
+                     {hasStarterKit && (
+                       <div className="mb-6 p-4 rounded-xl border bg-muted/30">
+                         <h3 className="text-lg font-semibold mb-3">Your Starter Kit</h3>
+                         {recommendedPath && (
+                           <div className="mb-3">
+                             <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Learning Path</p>
+                             <p className="font-medium">{recommendedPath.name}</p>
+                             <p className="text-xs text-muted-foreground">
+                               {recommendedPath.modules?.length ?? 0} modules · {recommendedPath.difficultyLevel ?? "intermediate"}
+                             </p>
+                           </div>
+                         )}
+                         {recommendedTools.length > 0 && (
+                           <div>
+                             <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Recommended Tools</p>
+                             <div className="flex flex-wrap gap-2">
+                               {recommendedTools.map(tool => (
+                                 <Badge key={tool._id} variant="outline">{tool.name}</Badge>
+                               ))}
+                             </div>
+                           </div>
+                         )}
+                       </div>
+                     )}
+
+                     <Button className="w-full" size="lg" onClick={handleViewPlaybook}>
+                       View Your AI Playbook <ArrowRight className="ml-2 h-4 w-4" />
+                     </Button>
                   </CardContent>
                 </Card>
 

@@ -48,6 +48,7 @@ export default function NicheDatabase() {
         canonical="https://contentanonymity.com/resources/niches"
         type="website"
         breadcrumbItems={[
+          { name: 'Home', url: 'https://contentanonymity.com' },
           { name: 'Resources', url: 'https://contentanonymity.com/resources/templates' },
           { name: 'Niche Database', url: 'https://contentanonymity.com/resources/niches' }
         ]}

@@ -88,7 +88,6 @@ export default function PlatformGuideDetail() {
           description="Loading platform guide..."
           url={`https://contentanonymity.com/platform-guides/${slug || ''}`}
           canonical={`https://contentanonymity.com/platform-guides/${slug || ''}`}
-          noindex={true}
         />
         <Header />
         <div className="min-h-screen flex items-center justify-center">

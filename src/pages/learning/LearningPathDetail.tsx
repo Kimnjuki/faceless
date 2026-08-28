@@ -253,7 +253,6 @@ export default function LearningPathDetail() {
           description="Loading learning path content..."
           url={`https://contentanonymity.com/learning-paths/${pathId || ''}`}
           canonical={`https://contentanonymity.com/learning-paths/${pathId || ''}`}
-          noindex={true}
         />
         <Header />
         <div className="min-h-screen flex items-center justify-center">
@@ -284,7 +283,7 @@ export default function LearningPathDetail() {
   const overallProgress = calculateOverallProgress();
 
   const pageTitle = path ? `${path.name} - Learning Path | ContentAnonymity` : `Learning Path ${pathId || ''} | ContentAnonymity`;
-  const pageDescription = path 
+  const pageDescription = path
     ? `Master ${path.name.toLowerCase()} with this structured learning path. ${path.description || 'Step-by-step modules to build your faceless content skills.'}`
     : 'Structured learning path to master faceless content creation.';
   const canonicalUrl = `https://contentanonymity.com/learning-paths/${pathId}`;

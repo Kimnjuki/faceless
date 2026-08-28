@@ -175,7 +175,7 @@ export default function NicheQuiz() {
     if (!allTools || allTools.length === 0) return [];
     const categories = nicheToToolCategories[recommendation.niche] || ["AI Scripting/Writing", "Video Editing"];
     return allTools
-      .filter(t => categories.includes(t.category))
+      .filter(t => categories.includes(t.category?.name ?? ""))
       .slice(0, 3);
   }, [allTools, recommendation.niche]);
 

@@ -28,6 +28,17 @@ const footerSections = [
     ]
   },
   {
+    title: "Popular Guides",
+    links: [
+      { label: "YouTube Faceless Strategy", href: "/platform-guides/youtube-faceless-strategy" },
+      { label: "TikTok Faceless Virality", href: "/platform-guides/tiktok-faceless-virality" },
+      { label: "Instagram Faceless Aesthetic", href: "/platform-guides/instagram-faceless-aesthetic" },
+      { label: "Faceless YouTube Setup", href: "/platform-guides/faceless-youtube-setup-2025" },
+      { label: "TikTok Account Warming", href: "/platform-guides/tiktok-account-warming-strategy" },
+      { label: "Instagram Reels Monetization", href: "/platform-guides/instagram-reels-monetization" }
+    ]
+  },
+  {
     title: "Resources",
     links: [
       { label: "LiveWire News", href: "/news" },
@@ -55,7 +66,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-primary/10 glass bg-muted/20 backdrop-blur-md">
       <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-6 gap-8 mb-12">
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="flex items-center gap-3 mb-6 hover:opacity-90 transition-all group">
               <div className="flex items-center justify-center p-2 rounded-xl bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-md shadow-lg border border-primary/10 group-hover:shadow-xl group-hover:border-primary/30 group-hover:scale-105 transition-all duration-300">

@@ -20,7 +20,18 @@ import ExitIntentModal from "../components/ExitIntentModal";
 import SEO from "../components/SEO";
 import AdSenseDisplay from "../components/AdSenseDisplay";
 import ForeMediaAd from "../components/ForeMediaAd";
+import { Link } from "react-router-dom";
 import { faqs as faqData } from "../components/FAQ";
+
+/** Canonical Platform Guide URLs (kept in sync with public/sitemap.xml). */
+const POPULAR_GUIDES = [
+  { title: "YouTube Faceless Strategy", href: "/platform-guides/youtube-faceless-strategy" },
+  { title: "TikTok Faceless Virality", href: "/platform-guides/tiktok-faceless-virality" },
+  { title: "Instagram Faceless Aesthetic", href: "/platform-guides/instagram-faceless-aesthetic" },
+  { title: "Faceless YouTube Setup", href: "/platform-guides/faceless-youtube-setup-2025" },
+  { title: "TikTok Account Warming", href: "/platform-guides/tiktok-account-warming-strategy" },
+  { title: "Instagram Reels Monetization", href: "/platform-guides/instagram-reels-monetization" },
+];
 
 export default function HomePage() {
   return (
@@ -201,6 +212,39 @@ export default function HomePage() {
         <ArticleGrid />
         {/* Ad Banner */}
         <AdSenseDisplay size="300x250" className="my-8" />
+        {/* Popular Platform Guides — crawlable internal links to canonical guide pages */}
+        <section aria-labelledby="popular-guides-heading" className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-10">
+              <h2 id="popular-guides-heading" className="text-3xl md:text-4xl font-bold gradient-text mb-3">
+                Popular Platform Guides
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Step-by-step faceless content playbooks for YouTube, TikTok, and Instagram — proven strategies you can apply today.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {POPULAR_GUIDES.map((guide) => (
+                <Link
+                  key={guide.href}
+                  to={guide.href}
+                  className="group flex items-center justify-between rounded-xl border bg-background p-5 transition-all hover:border-primary/40 hover:shadow-md"
+                >
+                  <span className="font-semibold group-hover:text-primary transition-colors">{guide.title}</span>
+                  <span aria-hidden="true" className="text-primary transition-transform group-hover:translate-x-1">→</span>
+                </Link>
+              ))}
+            </div>
+            <div className="mt-8 text-center">
+              <Link
+                to="/platform-guides"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                View All Platform Guides →
+              </Link>
+            </div>
+          </div>
+        </section>
         <Testimonials />
         <ProductLadder />
         <ExploreSection />

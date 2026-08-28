@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { SITE_URL } from '@/lib/site-url';
 
 interface SEOProps {
   title?: string;
@@ -43,8 +44,8 @@ export default function SEO({
   title = 'ContentAnonymity - Build Your Faceless Content Empire',
   description = 'Build profitable faceless content businesses with AI automation. Complete platform for anonymous digital entrepreneurship. Join 10,000+ creators earning 6-figures anonymously.',
   keywords = 'faceless content, anonymous content creator, content anonymity, faceless business, AI content creation',
-  image = 'https://contentanonymity.com/og-image.jpg',
-  url = 'https://contentanonymity.com',
+  image = `${SITE_URL}/og-image.jpg`,
+  url = SITE_URL,
   type = 'website',
   author = 'ContentAnonymity',
   publishedTime,
@@ -77,9 +78,9 @@ export default function SEO({
 
   // Always generate canonical URL - use provided canonical, or construct from url, or default to homepage
   // Normalize: remove trailing slash (except for homepage) to fix "Duplicate pages without canonical"
-  const rawCanonical = canonical || url || 'https://contentanonymity.com';
+  const rawCanonical = canonical || url || SITE_URL;
   const canonicalUrl = rawCanonical.replace(/\/+$/, '') || rawCanonical;
-  const finalUrl = (url || 'https://contentanonymity.com').replace(/\/+$/, '') || (url || 'https://contentanonymity.com');
+  const finalUrl = (url || SITE_URL).replace(/\/+$/, '') || (url || SITE_URL);
   const baseStructuredData = {
     '@context': 'https://schema.org',
     '@type': type === 'article' ? 'Article' : type === 'product' ? 'Product' : 'WebPage',
@@ -340,12 +341,12 @@ export default function SEO({
           '@context': 'https://schema.org',
           '@type': 'BreadcrumbList',
           itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://contentanonymity.com' },
+            { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
             ...breadcrumbItems.map((item, i) => ({
               '@type': 'ListItem' as const,
               position: i + 2,
               name: item.name,
-              item: item.url.startsWith('http') ? item.url : `https://contentanonymity.com${item.url}`,
+              item: item.url.startsWith('http') ? item.url : `${SITE_URL}${item.url}`,
             })),
           ],
         };

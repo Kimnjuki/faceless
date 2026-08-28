@@ -68,11 +68,40 @@ const staticRoutes = [
   { path: '/contact', priority: '0.7', changefreq: 'monthly' },
   { path: '/privacy-policy', priority: '0.5', changefreq: 'yearly' },
   { path: '/terms', priority: '0.5', changefreq: 'yearly' },
-  { path: '/terms-of-service', priority: '0.4', changefreq: 'yearly' },
+  // Note: /terms-of-service is intentionally excluded — the page canonicalizes to /terms.
   
   // Health Check (excluded from indexing but good to have in sitemap for monitoring)
   // Note: Health endpoint should have noindex meta tag
 ];
+
+/**
+ * Canonical URL hygiene — the sitemap must only publish URLs that are indexable,
+ * return HTTP 200, and self-canonicalize. In particular:
+ *  - No query strings / hashes / tracking params.
+ *  - No URL-unsafe or malformed slugs (spaces, apostrophes, stars, trailing dots).
+ *  - No auto-generated CSV-import placeholder rows (guide-<ts>-<rand>).
+ *  - No placeholder/category-mislabeled article slugs that canonicalize elsewhere.
+ *  - No duplicate URLs (repeated CSV rows for the same slug).
+ */
+const VALID_SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const AUTO_GUIDE_SLUG_RE = /^guide-\d+-[a-z0-9]+$/;
+const EXCLUDED_ARTICLE_SLUGS = new Set(['workflows', 'anonymity']);
+
+function isSitemapEligibleRoute(path) {
+  if (typeof path !== 'string' || path.length === 0) return false;
+  if (path === '/') return true; // homepage (static route)
+  if (path.includes('?') || path.includes('#')) return false;
+  const segments = path.split('/').filter(Boolean);
+  if (segments.length === 0) return false;
+  // Every path segment must be a URL-safe slug (no spaces / punctuation / encodings).
+  for (const segment of segments) {
+    if (!VALID_SLUG_RE.test(segment)) return false;
+  }
+  const last = segments[segments.length - 1];
+  if (segments[0] === 'platform-guides' && AUTO_GUIDE_SLUG_RE.test(last)) return false;
+  if (segments[0] === 'blog' && EXCLUDED_ARTICLE_SLUGS.has(last)) return false;
+  return true;
+}
 
 function generateSitemap(routes) {
   const currentDate = new Date().toISOString().split('T')[0];
@@ -157,7 +186,21 @@ async function main() {
   try {
     console.log('🚀 Generating sitemap...');
     const dynamic = await fetchDynamicRoutes();
-    const allRoutes = [...staticRoutes, ...dynamic];
+    // Keep only canonical, indexable, self-canonicalizing routes.
+    const before = [...staticRoutes, ...dynamic];
+    const seen = new Set();
+    const allRoutes = before.filter((r) => {
+      const path = typeof r.path === 'string' && r.path.startsWith('/') ? r.path : `/${r.path || ''}`;
+      if (!isSitemapEligibleRoute(path)) return false;
+      const url = SITE_URL + path;
+      if (seen.has(url)) return false;
+      seen.add(url);
+      return true;
+    });
+    const removed = before.length - allRoutes.length;
+    if (removed > 0) {
+      console.log(`   ⚠️  Filtered ${removed} non-canonical / duplicate / malformed URL(s) from the sitemap.`);
+    }
     const xml = generateSitemap(allRoutes);
     fs.writeFileSync(SITEMAP_PATH, xml, 'utf8');
     console.log(`✅ Sitemap generated successfully!`);

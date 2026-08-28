@@ -121,6 +121,16 @@ export default function PlatformGuideDetail() {
     : 'Platform-specific guide for faceless content creators.';
   const canonicalUrl = `https://contentanonymity.com/platform-guides/${slug}`;
 
+  // CSV-imported placeholder guides (auto-generated "guide-<ts>-<rand>" slugs,
+  // "Untitled Guide" rows, or malformed URL-unsafe slugs) are not canonical pages.
+  // Keep them out of the index so they cannot compete with the real guide pages.
+  const VALID_SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+  const AUTO_GUIDE_SLUG_RE = /^guide-\d+-[a-z0-9]+$/;
+  const isPlaceholderGuide =
+    (slug ? !VALID_SLUG_RE.test(slug) || AUTO_GUIDE_SLUG_RE.test(slug) : true) ||
+    !guide?.title ||
+    /^untitled(\s+guide)?$/i.test(String(guide.title ?? "").trim());
+
   return (
     <>
       <SEO
@@ -130,8 +140,9 @@ export default function PlatformGuideDetail() {
         url={canonicalUrl}
         canonical={canonicalUrl}
         type="article"
+        noindex={isPlaceholderGuide}
         breadcrumbItems={[
-          { name: 'Platform Guides', url: 'https://contentanonymity.com/platform-guides' },
+          { name: 'Platform Guides', url: `https://contentanonymity.com/platform-guides` },
           { name: guide?.title || 'Guide', url: canonicalUrl }
         ]}
       />

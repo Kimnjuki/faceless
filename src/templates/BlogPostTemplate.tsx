@@ -12,7 +12,7 @@
  * 5. Tutorials: "Step-by-Step: Creating Your First Faceless Video"
  */
 
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import SEO from "../components/SEO";
@@ -167,12 +167,12 @@ export default function BlogPostTemplate({
               <p className="text-muted-foreground mb-6">
                 Join 10,000+ creators earning 6-figures anonymously with our complete platform.
               </p>
-              <a
-                href="/auth/signup"
+              <Link
+                to="/auth/signup"
                 className="inline-block px-8 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors"
               >
                 Start Your Free Trial →
-              </a>
+              </Link>
             </div>
           </div>
 

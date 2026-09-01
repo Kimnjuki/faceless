@@ -5,6 +5,7 @@ import {
   Instagram, Globe, Mic, Linkedin, BookOpen, Copy, Download, Share2,
   Search, Filter, ArrowRight, CheckCircle2,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
@@ -318,9 +319,9 @@ export default function OpportunityFinder() {
                                 className="text-slate-400 hover:text-white h-8 px-2"
                                 asChild
                               >
-                                <a href={`/creator-studio?idea=${encodeURIComponent(idea.title)}`}>
+                                <Link to={`/creator-studio?idea=${encodeURIComponent(idea.title)}`}>
                                   <ArrowRight className="h-4 w-4" />
-                                </a>
+                                </Link>
                               </Button>
                             </div>
                           </div>

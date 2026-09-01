@@ -60,7 +60,8 @@ export default function OptimizedImage({
   fallbackCategory: fallbackBucket = 'fallbacks',
   fallbackKey = 'default',
   onError,
-  onLoad
+  onLoad,
+  ...props
 }: OptimizedImageProps) {
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);

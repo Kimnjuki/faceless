@@ -63,15 +63,9 @@ export function DashboardMegaMenu({ trigger }: MegaMenuProps) {
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/dashboard/progress">
+                <Link to="/dashboard/courses">
                   <TrendingUp className="mr-2 h-4 w-4" />
                   Learning Progress
-                </Link>
-              </Button>
-              <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/dashboard/bookmarks">
-                  <FolderOpen className="mr-2 h-4 w-4" />
-                  Bookmarks
                 </Link>
               </Button>
             </div>
@@ -218,19 +212,19 @@ export function ResourcesMegaMenu({ trigger }: MegaMenuProps) {
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/pillar/youtube">
+                 <Link to="/youtube">
                   <Video className="mr-2 h-4 w-4" />
                   YouTube Strategies
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/pillar/tiktok">
+                 <Link to="/tiktok">
                   <Video className="mr-2 h-4 w-4" />
                   TikTok Growth
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/pillar/instagram">
+                 <Link to="/instagram">
                   <ImageIcon className="mr-2 h-4 w-4" />
                   Instagram Reels
                 </Link>

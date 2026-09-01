@@ -22,14 +22,14 @@ const exploreLinks = [
   { label: "Keyword Research", href: "/tools/keyword-research", icon: BarChart3 },
   { label: "Backlink Checker", href: "/tools/backlink-checker", icon: BarChart3 },
   { label: "Performance Monitor", href: "/tools/performance", icon: BarChart3 },
-  { label: "YouTube Automation", href: "/pillar/youtube", icon: BarChart3 },
-  { label: "TikTok Growth", href: "/pillar/tiktok", icon: BarChart3 },
-  { label: "Instagram Reels", href: "/pillar/instagram", icon: BarChart3 },
+  { label: "YouTube Automation", href: "/youtube", icon: BarChart3 },
+  { label: "TikTok Growth", href: "/tiktok", icon: BarChart3 },
+  { label: "Instagram Reels", href: "/instagram", icon: BarChart3 },
   { label: "Member Directory", href: "/community/members", icon: Users },
   { label: "Community Events", href: "/community/events", icon: Users },
   { label: "Challenges", href: "/community/challenges", icon: Users },
   { label: "Privacy Policy", href: "/privacy-policy", icon: FileText },
-  { label: "Terms of Service", href: "/terms-of-service", icon: Scale },
+  { label: "Terms of Service", href: "/terms", icon: Scale },
 ];
 
 export default function ExploreSection() {

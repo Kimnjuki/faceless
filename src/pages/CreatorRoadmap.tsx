@@ -5,6 +5,7 @@ import {
   ArrowRight, ChevronDown, Sparkles, BarChart3, DollarSign, Lightbulb,
   Monitor, Tablet, Smartphone, Users, FileText, BookOpen, Brain,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { chatCompletion } from "@/lib/ai/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -450,7 +451,7 @@ export default function CreatorRoadmap() {
                                                 className="text-xs text-indigo-400 hover:text-indigo-300 underline underline-offset-2"
                                               >
                                                 {r.label}
-                                              </a>
+                                                </a>
                                             ))}
                                           </div>
                                         )}
@@ -491,9 +492,9 @@ export default function CreatorRoadmap() {
                     Create New Roadmap
                   </Button>
                   <Button className="bg-indigo-600 hover:bg-indigo-500 text-white" asChild>
-                    <a href="/opportunity-finder">
-                      Find Content Opportunities <ArrowRight className="h-4 w-4 ml-2" />
-                    </a>
+                      <Link to="/opportunity-finder">
+                        Find Content Opportunities <ArrowRight className="h-4 w-4 ml-2" />
+                      </Link>
                   </Button>
                 </div>
               </motion.div>

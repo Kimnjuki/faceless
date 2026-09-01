@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Cookie, Shield } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { enableAnalytics, disableAnalytics } from '@/utils/analytics';
@@ -77,9 +78,9 @@ export default function AnalyticsConsent() {
               </div>
               
               <p className="text-xs text-muted-foreground mt-4">
-                <a href="/privacy-policy" className="text-primary hover:underline">
+                <Link to="/privacy-policy" className="text-primary hover:underline">
                   Learn more about our privacy practices
-                </a>
+                </Link>
               </p>
             </div>
           </div>

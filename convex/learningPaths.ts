@@ -100,6 +100,28 @@ export const getById = query({
 });
 
 /**
+ * Get single learning path by stable slug (P1-01).
+ * New paths persist a human-readable `slug` so the URL survives reimports instead of
+ * orphaning the old random document-id hash into a 404.
+ */
+export const getBySlug = query({
+  args: { slug: v.string() },
+  handler: async (ctx, { slug }) => {
+    const path = await ctx.db
+      .query("learning_paths")
+      .withIndex("by_slug", (q) => q.eq("slug", slug))
+      .unique();
+    if (!path) return null;
+    const modules = await ctx.db
+      .query("learning_modules")
+      .withIndex("by_learning_path", (q) => q.eq("learningPathId", path._id))
+      .collect();
+    modules.sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0));
+    return { ...path, modules };
+  },
+});
+
+/**
  * Get user's progress for a specific learning path.
  */
 export const getUserPathProgress = query({

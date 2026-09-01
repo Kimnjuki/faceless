@@ -266,6 +266,11 @@ export default function LearningPathDetail() {
   if (error || !path) {
     return (
       <>
+        <SEO
+          title="Learning Path Not Found | ContentAnonymity"
+          description="This learning path could not be found."
+          noindex={true}
+        />
         <Header />
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">

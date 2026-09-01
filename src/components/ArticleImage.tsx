@@ -43,7 +43,7 @@ export default function ArticleImage({
         alt={alt}
         loading={priority ? 'eager' : loading}
         decoding="async"
-        fetchpriority={priority ? 'high' : undefined}
+        fetchPriority={priority ? 'high' : undefined}
         onError={() => setError(true)}
         onLoad={() => setLoaded(true)}
         className={`transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'} ${className}`}

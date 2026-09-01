@@ -100,6 +100,10 @@ function isSitemapEligibleRoute(path) {
   const last = segments[segments.length - 1];
   if (segments[0] === 'platform-guides' && AUTO_GUIDE_SLUG_RE.test(last)) return false;
   if (segments[0] === 'blog' && EXCLUDED_ARTICLE_SLUGS.has(last)) return false;
+  // P1-01: exclude fragile random-hash learning-path URLs emitted by early sitemap versions
+  // (e.g. /learning-paths/r9722mc7k7cn7n3hnq2f37fdqn80y6yv). Convex doc IDs are 32-char
+  // lowercase alphanumeric; they regenerate and orphan the old URL into a 404.
+  if (segments[0] === 'learning-paths' && /^[a-z0-9]{32}$/.test(last)) return false;
   return true;
 }
 
@@ -200,6 +204,17 @@ async function main() {
     const removed = before.length - allRoutes.length;
     if (removed > 0) {
       console.log(`   ⚠️  Filtered ${removed} non-canonical / duplicate / malformed URL(s) from the sitemap.`);
+    }
+    // P0-03 verification guard: hard-fail if the sitemap ever leaks a www host or duplicate URL.
+    // Search engines treat www. + non-www as two competing duplicate URLs, which is the root
+    // cause of this audit's indexing collapse. No <loc> may ever contain 'www.' or repeat.
+    const leakedWww = allRoutes.filter((r) => (SITE_URL + r.path).includes('www.'));
+    if (leakedWww.length > 0) {
+      throw new Error(`Sitemap would emit ${leakedWww.length} www-host URL(s): ${leakedWww.map((r) => SITE_URL + r.path).join(', ')}`);
+    }
+    const urlSet = new Set(allRoutes.map((r) => SITE_URL + r.path));
+    if (urlSet.size !== allRoutes.length) {
+      throw new Error(`Sitemap contains ${allRoutes.length - urlSet.size} duplicate URL(s) after filtering`);
     }
     const xml = generateSitemap(allRoutes);
     fs.writeFileSync(SITEMAP_PATH, xml, 'utf8');

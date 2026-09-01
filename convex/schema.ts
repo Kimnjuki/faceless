@@ -530,6 +530,10 @@ export default defineSchema({
 
   learning_paths: defineTable({
     legacyId: v.optional(v.string()),
+    // Stable, permanent URL slug (P1-01). Random Convex doc-id hashes orphanned URLs on
+    // reimport, causing 404s. New/imported paths should persist a slug here and the
+    // sitemap / learning-paths route will use it instead of the document id.
+    slug: v.optional(v.string()),
     name: v.string(),
     trackType: v.string(),
     description: v.optional(v.string()),
@@ -537,7 +541,7 @@ export default defineSchema({
     difficultyLevel: v.optional(v.string()),
     orderIndex: v.optional(v.float64()),
     createdAt: v.float64(),
-  }),
+  }).index("by_slug", ["slug"]),
 
   // ---------------------------------------------------------------------------
   // Niches

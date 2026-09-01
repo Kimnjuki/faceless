@@ -101,6 +101,11 @@ export default function PlatformGuideDetail() {
   if (error || !guide) {
     return (
       <>
+        <SEO
+          title="Guide Not Found | ContentAnonymity"
+          description="This platform guide could not be found."
+          noindex={true}
+        />
         <Header />
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">

@@ -133,6 +133,11 @@ export default function ArticleDetail() {
   if (error || !article) {
     return (
       <>
+        <SEO
+          title="Article Not Found | ContentAnonymity"
+          description="This article could not be found."
+          noindex={true}
+        />
         <Header />
         <div className="min-h-screen flex items-center justify-center text-center">
           <div>

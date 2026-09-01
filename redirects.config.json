@@ -1,0 +1,4 @@
+{
+  "_comment": "P1-01 404-page redirect registry. Populate the empty 'redirects' array from the GSC export: Search Console > Indexing > Pages > 'Not found (404)'. Each entry: {\"source\": \"/old-url\", \"destination\": \"/new-url\", \"permanent\": true, \"reason\": \"...\"}. Then run: node scripts/populate-redirects.mjs (writes vercel.json redirects + nginx-redirects.conf).",
+  "redirects": []
+}

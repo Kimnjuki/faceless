@@ -94,10 +94,23 @@ http.route({
           path: `${SITE_URL}/blog/${a.slug}`,
           lastmod: toDate(a.updatedAt ?? a.publishedAt ?? a.createdAt ?? 0),
         }));
-      out.paths = (paths as any[]).map((p) => ({
-        path: `${SITE_URL}/learning-paths/${p._id}`,
-        lastmod: toDate(p.createdAt ?? 0),
-      }));
+      out.paths = (paths as any[])
+        // P1-01: Exclude learning paths whose URL is a random Convex document-id hash
+        // (e.g. /learning-paths/r9722mc7k7cn7n3hnq2f37fdqn80y6yv). These are fragile:
+        // any regeneration/import of the learning_paths table orphans the old URLs into
+        // 404s, polluting the sitemap. Only emit paths that have a stable, permanent slug.
+        // A single-segment 32-char lowercase-alphanumeric value is a doc id, not a
+        // human-readable slug, so those are excluded as well.
+        .filter((p) => {
+          const slug = p.slug ? String(p.slug) : "";
+          if (!slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return false;
+          if (/^[a-z0-9]{32}$/.test(slug)) return false; // doc-id-length hash
+          return true;
+        })
+        .map((p) => ({
+          path: `${SITE_URL}/learning-paths/${p.slug}`,
+          lastmod: toDate(p.createdAt ?? 0),
+        }));
       // Guides — displayable + canonical slug, de-duplicated by slug so each
       // repeated CSV row does not produce a duplicate URL in the sitemap.
       const seenGuideSlugs = new Set<string>();

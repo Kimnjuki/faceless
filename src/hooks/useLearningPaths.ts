@@ -127,31 +127,40 @@ export function useLearningPaths(filters: LearningPathFilters = {}) {
 /**
  * Single learning path for detail page — uses Convex getById so navigation works
  * even when list lookup fails (Id/string mismatch, timing, etc.).
+ * Falls back to stable-slug lookup for the P1-01 hash-slug migration.
  */
 export function useLearningPath(pathId: string | undefined) {
   const { user } = useAuth();
   const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
   const validId = isLearningPathConvexId(pathId);
 
-  const raw = useQuery(
+  const rawById = useQuery(
     api.learningPaths.getById,
     hasConvex && validId ? { pathId: pathId as Id<"learning_paths"> } : "skip"
   );
+  const rawBySlug = useQuery(
+    api.learningPaths.getBySlug,
+    hasConvex && !validId && pathId ? { slug: pathId } : "skip"
+  );
+
+  const raw = rawById ?? rawBySlug;
 
   const path = useMemo(() => {
-    if (!validId || !raw) return undefined;
+    if ((!validId && !pathId) || !raw) return undefined;
     return toPath(raw);
-  }, [raw, validId]);
+  }, [raw, validId, pathId]);
 
-  const loading = hasConvex && validId && raw === undefined;
+  const loading = hasConvex && Boolean(pathId) && raw === undefined;
+
+  const notFound =
+    (validId && rawById === null) || // id lookup resolved to nothing
+    (!validId && rawBySlug === null); // slug lookup resolved to nothing
 
   const displayError = !hasConvex
     ? "Convex backend not configured. Set VITE_CONVEX_URL environment variable."
-    : pathId && !validId
-      ? "Invalid learning path link."
-      : validId && raw === null
-        ? "Learning path not found"
-        : null;
+    : pathId && notFound
+      ? "Learning path not found"
+      : null;
 
   const updateProgress = async (
     _moduleId: string,

@@ -77,10 +77,14 @@ export default function SEO({
   }
 
   // Always generate canonical URL - use provided canonical, or construct from url, or default to homepage
-  // Normalize: remove trailing slash (except for homepage) to fix "Duplicate pages without canonical"
-  const rawCanonical = canonical || url || SITE_URL;
+  // Normalize: remove trailing slash (except for homepage) to fix "Duplicate pages without canonical".
+  // Host canonicalization (P0-02): collapse ANY www. form into the canonical non-www host so the
+  // self-referential canonical / og:url / twitter:url can never point at www.contentanonymity.com,
+  // even if a page passes a www URL explicitly or a prerendered snapshot was crawled via the www host.
+  const stripWwwHost = (u: string) => u.replace(/^https:\/\/www\.contentanonymity\.com/i, 'https://contentanonymity.com');
+  const rawCanonical = stripWwwHost(canonical || url || SITE_URL);
   const canonicalUrl = rawCanonical.replace(/\/+$/, '') || rawCanonical;
-  const finalUrl = (url || SITE_URL).replace(/\/+$/, '') || (url || SITE_URL);
+  const finalUrl = stripWwwHost(url || SITE_URL).replace(/\/+$/, '') || stripWwwHost(url || SITE_URL);
   const baseStructuredData = {
     '@context': 'https://schema.org',
     '@type': type === 'article' ? 'Article' : type === 'product' ? 'Product' : 'WebPage',

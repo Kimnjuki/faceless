@@ -207,6 +207,23 @@ async function main() {
     console.log(`   Location: ${SITEMAP_PATH}`);
     console.log(`   Total URLs: ${allRoutes.length}`);
     console.log(`   Static: ${staticRoutes.length}, Dynamic: ${dynamic.length}`);
+
+    // Notify IndexNow that the sitemap has been updated
+    const INDEXNOW_KEY = "contentanonymity-indexnow-2026-secure-random-key-abc123def456";
+    try {
+      const indexnowRes = await fetch("https://api.indexnow.org/indexnow", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: `${SITE_URL}/sitemap.xml`, key: INDEXNOW_KEY }),
+      });
+      if (indexnowRes.ok) {
+        console.log(`   ✅ IndexNow notified of sitemap update`);
+      } else {
+        console.warn(`   ⚠️  IndexNow notification returned ${indexnowRes.status}`);
+      }
+    } catch (err) {
+      console.warn(`   ⚠️  IndexNow notification failed: ${err.message}`);
+    }
   } catch (error) {
     console.error('❌ Error generating sitemap:', error);
     process.exit(1);

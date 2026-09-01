@@ -13,7 +13,7 @@
     <!-- Primary Meta Tags (fallback; React Helmet overrides per page) -->
     <title>Build a Faceless Content Empire in 2026 | ContentAnonymity</title>
     <meta name="title" content="Build a Faceless Content Empire in 2026 | ContentAnonymity" />
-    <meta name="description" content="Discover the system 10,000+ creators use to build profitable faceless content businesses with privacy-first AI workflows, monetization strategies & step-by-step courses. Start free today." />
+    <meta name="description" content="Build profitable faceless content businesses with AI automation. Join 10,000+ creators earning 6-figures anonymously. Start free today." />
     <meta name="keywords" content="faceless content, anonymous content creator, content anonymity, faceless business, AI content creation" />
     <meta name="author" content="ContentAnonymity" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
@@ -75,7 +75,7 @@
 };
 
   var articleDesc = {
-  "ai-content-disclosure-ethical-guide-2026": "Learn the ethical guidelines for disclosing AI-generated content as a faceless creator. Stay compliant with platform policies and build trust with your audience.",
+  "ai-content-disclosure-ethical-guide-2026": "Learn ethical guidelines for disclosing AI-generated content as a faceless creator. Stay compliant with platform policies and build trust with your audience.",
   "ai-news-automation-channel-daily-workflow": "Build a fully automated AI news channel workflow. Generate daily content with AI tools, voiceovers, and video assembly for consistent publishing.",
   "ai-storytelling-brain-rot-economy-2026": "Master AI storytelling techniques for the brain rot economy. Create engaging faceless content that captures short attention spans in 2026.",
   "ai-voice-brand-builder-quiz": "Take the AI voice brand quiz to discover your ideal narration style. Match with AI voices that resonate with your faceless content niche.",
@@ -120,6 +120,12 @@
   var slug = isBlog ? slugMatch[1] : null;
   var canonical = 'https://contentanonymity.com' + (path.endsWith('/') && path !== '/' ? path.slice(0, -1) : path) || 'https://contentanonymity.com';
 
+  function truncateDesc(str, max) {
+    if (!str) return '';
+    if (str.length <= max) return str;
+    return str.substring(0, max - 3) + '...';
+  }
+
   if (isHome) {
     return;
   }
@@ -134,11 +140,11 @@
     var m = document.querySelector('meta[name="title"]');
     if (m) m.setAttribute('content', title);
     var d = document.querySelector('meta[name="description"]');
-    if (d) d.setAttribute('content', articleDesc[slug] || '');
+    if (d) d.setAttribute('content', truncateDesc(articleDesc[slug] || '', 160));
     var ot = document.querySelector('meta[property="og:title"]');
     if (ot) ot.setAttribute('content', title);
     var od = document.querySelector('meta[property="og:description"]');
-    if (od) od.setAttribute('content', articleDesc[slug] || '');
+    if (od) od.setAttribute('content', truncateDesc(articleDesc[slug] || '', 160));
     var ou = document.querySelector('meta[property="og:url"]');
     if (ou) ou.setAttribute('content', canonical);
     var ogt = document.querySelector('meta[property="og:type"]');
@@ -146,7 +152,7 @@
     var tt = document.querySelector('meta[name="twitter:title"]');
     if (tt) tt.setAttribute('content', title);
     var td = document.querySelector('meta[name="twitter:description"]');
-    if (td) td.setAttribute('content', articleDesc[slug] || '');
+    if (td) td.setAttribute('content', truncateDesc(articleDesc[slug] || '', 160));
     var tu = document.querySelector('meta[name="twitter:url"]');
     if (tu) tu.setAttribute('content', canonical);
     var tb = document.querySelector('meta[name="twitter:card"]');

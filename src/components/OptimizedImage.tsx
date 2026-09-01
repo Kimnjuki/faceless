@@ -175,6 +175,8 @@ export default function OptimizedImage({
           objectFit: 'cover',
           objectPosition: 'center'
         }}
+        decoding="async"
+        {...props}
       />
     </picture>
   );

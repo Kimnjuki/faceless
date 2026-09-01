@@ -1,70 +1,71 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider, AuthProviderFallback } from "@/contexts/AuthContext";
 import AnalyticsConsent from "@/components/AnalyticsConsent";
 import { trackPageView } from "@/utils/analytics";
 import { initWebVitals } from "@/utils/webVitals";
-import HomePage from "./pages/HomePage";
-import StartHere from "./pages/StartHere";
-import GettingStarted from "./pages/GettingStarted";
-import BlogIndex from "./pages/BlogIndex";
-import ArticleDetail from "./pages/ArticleDetail";
-import PillarPage from "./pages/PillarPage";
-import ToolComparison from "./pages/ToolComparison";
-import ProfitabilityCalculator from "./pages/tools/ProfitabilityCalculator";
-import NicheQuiz from "./pages/tools/NicheQuiz";
-import SEOAudit from "./pages/tools/SEOAudit";
-import KeywordResearch from "./pages/tools/KeywordResearch";
-import BacklinkChecker from "./pages/tools/BacklinkChecker";
-import PerformanceMonitor from "./pages/tools/PerformanceMonitor";
-import ScriptGenerator from "./pages/tools/ScriptGenerator";
-import TrendScanner from "./pages/tools/TrendScanner";
-import ChannelAnalyzer from "./pages/tools/ChannelAnalyzer";
-import Signup from "./pages/auth/Signup";
-import Login from "./pages/auth/Login";
-import OAuthCallback from "./pages/auth/OAuthCallback";
-import Dashboard from "./pages/dashboard/Dashboard";
-import Courses from "./pages/dashboard/Courses";
-import CoursePlayer from "./pages/courses/CoursePlayer";
-import Community from "./pages/dashboard/Community";
-import Profile from "./pages/dashboard/Profile";
-import ContentCreation from "./pages/dashboard/ContentCreation";
-import AnalyticsDashboard from "./pages/dashboard/AnalyticsDashboard";
-import ProductListing from "./pages/ecommerce/ProductListing";
-import ProductDetail from "./pages/ecommerce/ProductDetail";
-import Checkout from "./pages/ecommerce/Checkout";
-import WebinarRegistration from "./pages/funnel/WebinarRegistration";
-import ChallengeFunnel from "./pages/funnel/ChallengeFunnel";
-import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
-import TermsOfService from "./pages/legal/TermsOfService";
-import AffiliateDisclosure from "./pages/legal/AffiliateDisclosure";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import TemplatesLibrary from "./pages/resources/TemplatesLibrary";
-import NicheDatabase from "./pages/resources/NicheDatabase";
-import NicheDetail from "./pages/niches/NicheDetail";
-import LearningPaths from "./pages/learning/LearningPaths";
-import LearningPathDetail from "./pages/learning/LearningPathDetail";
-import CreatorStudio from "./pages/creator-studio/CreatorStudio";
-import PlatformGuides from "./pages/learning/PlatformGuides";
-import AiPlaybook from "./pages/dashboard/AiPlaybook";
-import PlatformGuideDetail from "./pages/learning/PlatformGuideDetail";
-import CaseStudies from "./pages/learning/CaseStudies";
-import CaseStudyDetail from "./pages/learning/CaseStudyDetail";
-import LiveWorkshops from "./pages/learning/LiveWorkshops";
-import ResourceDownloads from "./pages/learning/ResourceDownloads";
-import MemberDirectory from "./pages/community/MemberDirectory";
-import Events from "./pages/community/Events";
-import Challenges from "./pages/community/Challenges";
-import CommunityIndex from "./pages/community/CommunityIndex";
-import CreatorRoadmap from "./pages/CreatorRoadmap";
-import OpportunityFinder from "./pages/OpportunityFinder";
-import MonetizationMatcher from "./pages/MonetizationMatcher";
-import NotFound from "./pages/NotFound";
-import Health from "./pages/Health";
-import ThreatModels from "./pages/ThreatModels";
-import News from "./pages/News";
+const HomePage = lazy(() => import("./pages/HomePage"));
+const StartHere = lazy(() => import("./pages/StartHere"));
+const GettingStarted = lazy(() => import("./pages/GettingStarted"));
+const BlogIndex = lazy(() => import("./pages/BlogIndex"));
+const ArticleDetail = lazy(() => import("./pages/ArticleDetail"));
+const PillarPage = lazy(() => import("./pages/PillarPage"));
+const ToolComparison = lazy(() => import("./pages/ToolComparison"));
+const ProfitabilityCalculator = lazy(() => import("./pages/tools/ProfitabilityCalculator"));
+const NicheQuiz = lazy(() => import("./pages/tools/NicheQuiz"));
+const SEOAudit = lazy(() => import("./pages/tools/SEOAudit"));
+const KeywordResearch = lazy(() => import("./pages/tools/KeywordResearch"));
+const BacklinkChecker = lazy(() => import("./pages/tools/BacklinkChecker"));
+const PerformanceMonitor = lazy(() => import("./pages/tools/PerformanceMonitor"));
+const ScriptGenerator = lazy(() => import("./pages/tools/ScriptGenerator"));
+const TrendScanner = lazy(() => import("./pages/tools/TrendScanner"));
+const ChannelAnalyzer = lazy(() => import("./pages/tools/ChannelAnalyzer"));
+const Signup = lazy(() => import("./pages/auth/Signup"));
+const Login = lazy(() => import("./pages/auth/Login"));
+const OAuthCallback = lazy(() => import("./pages/auth/OAuthCallback"));
+const Dashboard = lazy(() => import("./pages/dashboard/Dashboard"));
+const Courses = lazy(() => import("./pages/dashboard/Courses"));
+const CoursePlayer = lazy(() => import("./pages/courses/CoursePlayer"));
+const Community = lazy(() => import("./pages/dashboard/Community"));
+const Profile = lazy(() => import("./pages/dashboard/Profile"));
+const ContentCreation = lazy(() => import("./pages/dashboard/ContentCreation"));
+const AnalyticsDashboard = lazy(() => import("./pages/dashboard/AnalyticsDashboard"));
+const ProductListing = lazy(() => import("./pages/ecommerce/ProductListing"));
+const ProductDetail = lazy(() => import("./pages/ecommerce/ProductDetail"));
+const Checkout = lazy(() => import("./pages/ecommerce/Checkout"));
+const WebinarRegistration = lazy(() => import("./pages/funnel/WebinarRegistration"));
+const ChallengeFunnel = lazy(() => import("./pages/funnel/ChallengeFunnel"));
+const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./pages/legal/TermsOfService"));
+const AffiliateDisclosure = lazy(() => import("./pages/legal/AffiliateDisclosure"));
+const About = lazy(() => import("./pages/About"));
+const Contact = lazy(() => import("./pages/Contact"));
+const TemplatesLibrary = lazy(() => import("./pages/resources/TemplatesLibrary"));
+const NicheDatabase = lazy(() => import("./pages/resources/NicheDatabase"));
+const NicheDetail = lazy(() => import("./pages/niches/NicheDetail"));
+const LearningPaths = lazy(() => import("./pages/learning/LearningPaths"));
+const LearningPathDetail = lazy(() => import("./pages/learning/LearningPathDetail"));
+const CreatorStudio = lazy(() => import("./pages/creator-studio/CreatorStudio"));
+const PlatformGuides = lazy(() => import("./pages/learning/PlatformGuides"));
+const AiPlaybook = lazy(() => import("./pages/dashboard/AiPlaybook"));
+const PlatformGuideDetail = lazy(() => import("./pages/learning/PlatformGuideDetail"));
+const CaseStudies = lazy(() => import("./pages/learning/CaseStudies"));
+const CaseStudyDetail = lazy(() => import("./pages/learning/CaseStudyDetail"));
+const LiveWorkshops = lazy(() => import("./pages/learning/LiveWorkshops"));
+const ResourceDownloads = lazy(() => import("./pages/learning/ResourceDownloads"));
+const MemberDirectory = lazy(() => import("./pages/community/MemberDirectory"));
+const Events = lazy(() => import("./pages/community/Events"));
+const Challenges = lazy(() => import("./pages/community/Challenges"));
+const CommunityIndex = lazy(() => import("./pages/community/CommunityIndex"));
+const CreatorRoadmap = lazy(() => import("./pages/CreatorRoadmap"));
+const OpportunityFinder = lazy(() => import("./pages/OpportunityFinder"));
+const MonetizationMatcher = lazy(() => import("./pages/MonetizationMatcher"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Health = lazy(() => import("./pages/Health"));
+const ThreatModels = lazy(() => import("./pages/ThreatModels"));
+const News = lazy(() => import("./pages/News"));
+
 import ProtectedRoute from "./components/ProtectedRoute";
 import PerformanceOptimizer from "./components/PerformanceOptimizer";
 import ForeMediaAd from "./components/ForeMediaAd";
@@ -99,6 +100,14 @@ export default function App() {
         <AnalyticsConsent />
         {/* ForeMedia POP_ADS - loads once site-wide */}
         <ForeMediaAd slot="pop_ads" />
+        <Suspense fallback={
+          <div className="min-h-[60vh] flex items-center justify-center">
+            <div className="flex flex-col items-center gap-3 text-muted-foreground">
+              <div className="h-8 w-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              <span className="text-sm">Loading page…</span>
+            </div>
+          </div>
+        }>
         <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/start-here" element={<StartHere />} />
@@ -164,6 +173,7 @@ export default function App() {
         <Route path="/:pillarSlug" element={<PillarPage />} />
         <Route path="*" element={<NotFound />} />
         </Routes>
+        </Suspense>
         <Toaster />
       </Router>
     </AuthWrapper>

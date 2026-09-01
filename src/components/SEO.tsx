@@ -42,7 +42,7 @@ interface SEOProps {
 
 export default function SEO({
   title = 'ContentAnonymity - Build Your Faceless Content Empire',
-  description = 'Build profitable faceless content businesses with AI automation. Complete platform for anonymous digital entrepreneurship. Join 10,000+ creators earning 6-figures anonymously.',
+  description = 'Build profitable faceless content businesses with AI automation. Join 10,000+ creators earning 6-figures anonymously.',
   keywords = 'faceless content, anonymous content creator, content anonymity, faceless business, AI content creation',
   image = `${SITE_URL}/og-image.jpg`,
   url = SITE_URL,

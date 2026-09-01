@@ -74,8 +74,22 @@ http.route({
       ]);
       const toDate = (n: number) => new Date(n).toISOString().split("T")[0];
       // Articles — canonical slugs only (no placeholder/category-mislabeled slugs).
+      // Articles — canonical slugs only.
+      // Drop articles that redirect to another slug or whose canonicalUrl points elsewhere.
       out.articles = (articles as any[])
         .filter((a) => isCanonicalArticleSlug((a.slug ?? "") as string))
+        .filter((a) => {
+          if (a.redirectToSlug) return false;
+          const rawCanonical = (a.canonicalUrl ?? "").trim();
+          if (!rawCanonical) return true;
+          const expected = `${SITE_URL}/blog/${a.slug}`;
+          try {
+            const resolved = new URL(rawCanonical, SITE_URL).href.replace(/\/+$/, "");
+            return resolved === expected.replace(/\/+$/, "");
+          } catch {
+            return false;
+          }
+        })
         .map((a) => ({
           path: `${SITE_URL}/blog/${a.slug}`,
           lastmod: toDate(a.updatedAt ?? a.publishedAt ?? a.createdAt ?? 0),
@@ -90,6 +104,7 @@ http.route({
       out.guides = (guides as any[])
         .filter(isCanonicalPlatformGuide)
         .filter((g) => {
+          if (g.redirectToSlug) return false;
           const slug = (g.slug ?? "") as string;
           if (seenGuideSlugs.has(slug)) return false;
           seenGuideSlugs.add(slug);
@@ -105,6 +120,43 @@ http.route({
     return new Response(JSON.stringify(out), {
       headers: { "Content-Type": "application/json" },
     });
+  }),
+});
+
+/**
+ * GET /api/indexnow - notify search engines that a URL has been updated.
+ * Query: ?url=<url>&key=<key>
+ */
+http.route({
+  path: "/api/indexnow",
+  method: "GET",
+  handler: httpAction(async (_ctx, request) => {
+    const url = new URL(request.url);
+    const target = url.searchParams.get("url");
+    const key = url.searchParams.get("key");
+    const EXPECTED_KEY = "contentanonymity-indexnow-2026-secure-random-key-abc123def456";
+    if (!target || !key || key !== EXPECTED_KEY) {
+      return new Response(JSON.stringify({ ok: false, error: "invalid_params" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+    try {
+      const res = await fetch("https://api.indexnow.org/indexnow", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: target, key: EXPECTED_KEY }),
+      });
+      return new Response(JSON.stringify({ ok: res.ok, status: res.status }), {
+        status: res.ok ? 200 : 502,
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (err) {
+      return new Response(JSON.stringify({ ok: false, error: String(err) }), {
+        status: 502,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
   }),
 });
 

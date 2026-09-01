@@ -57,3 +57,22 @@ export const upsert = mutation({
     });
   },
 });
+
+/**
+ * Convert all 302 temporary redirects to 301 permanent redirects.
+ * Safe to re-run; only touches records currently at 302.
+ */
+export const convert302to301 = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const all = await ctx.db.query("redirects").collect();
+    let converted = 0;
+    for (const r of all) {
+      if (r.statusCode === 302) {
+        await ctx.db.patch(r._id, { statusCode: 301, reason: r.reason ? `${r.reason} (converted from 302)` : "converted from 302" });
+        converted++;
+      }
+    }
+    return { converted };
+  },
+});

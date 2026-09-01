@@ -22,7 +22,7 @@ type QuizResult = {
 type Tool = {
   _id: string;
   name: string;
-  category: string;
+  categoryId?: string;
   description?: string;
 };
 
@@ -44,7 +44,7 @@ function toPlainTool(tool: any): Tool {
   return {
     _id: tool._id,
     name: tool.name,
-    category: tool.category?.name ?? "",
+    categoryId: tool.categoryId?._id ?? tool.categoryId,
     description: tool.description,
   };
 }
@@ -181,7 +181,7 @@ export default function AiPlaybook() {
                 {recommendedTools.map(tool => (
                   <div key={tool._id} className="p-3 rounded-lg border bg-muted/30">
                     <p className="font-medium text-sm mb-1">{tool.name}</p>
-                    <Badge variant="secondary" className="text-xs">{tool.category}</Badge>
+                    <Badge variant="secondary" className="text-xs">{tool.categoryId}</Badge>
                   </div>
                 ))}
               </div>
@@ -202,6 +202,6 @@ function useMemoFilteredTools(tools: Tool[] | undefined, result: QuizResult | nu
 
   if (!tools) return [];
   return tools
-    .filter(t => categories.includes(t.category))
+    .filter(t => categories.includes(t.categoryId || ""))
     .slice(0, 3);
 }

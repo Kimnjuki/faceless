@@ -172,12 +172,12 @@ export default function NicheQuiz() {
   }, [allPaths]);
 
   const recommendedTools = useMemo(() => {
-    if (!allTools || allTools.length === 0) return [];
-    const categories = nicheToToolCategories[recommendation.niche] || ["AI Scripting/Writing", "Video Editing"];
-    return allTools
-      .filter(t => categories.includes(t.category?.name ?? ""))
-      .slice(0, 3);
-  }, [allTools, recommendation.niche]);
+      if (!allTools || allTools.length === 0) return [];
+      const categories = nicheToToolCategories[recommendation.niche] || ["AI Scripting/Writing", "Video Editing"];
+      return allTools
+        .filter(t => categories.includes(t.categoryId as unknown as string))
+        .slice(0, 3);
+    }, [allTools, recommendation.niche]);
 
   const hasStarterKit = recommendedPath || recommendedTools.length > 0;
 

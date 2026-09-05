@@ -147,7 +147,7 @@ Add to `index.html` (already in your project):
 <meta name="description" content="Build profitable faceless content businesses with AI automation">
 <meta property="og:title" content="Faceless Solopreneur Hub">
 <meta property="og:description" content="The definitive platform for anonymous digital entrepreneurship">
-<meta property="og:image" content="/og-image.jpg">
+<meta property="og:image" content="https://contentanonymity.com/og-image.png">
 ```
 
 ---

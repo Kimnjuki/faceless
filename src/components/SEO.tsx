@@ -44,7 +44,7 @@ export default function SEO({
   title = 'ContentAnonymity - Build Your Faceless Content Empire',
   description = 'Build profitable faceless content businesses with AI automation. Join 10,000+ creators earning 6-figures anonymously.',
   keywords = 'faceless content, anonymous content creator, content anonymity, faceless business, AI content creation',
-  image = `${SITE_URL}/og-image.jpg`,
+  image = `${SITE_URL}/og-image.png`,
   url = SITE_URL,
   type = 'website',
   author = 'ContentAnonymity',
@@ -83,8 +83,15 @@ export default function SEO({
   // even if a page passes a www URL explicitly or a prerendered snapshot was crawled via the www host.
   const stripWwwHost = (u: string) => u.replace(/^https:\/\/www\.contentanonymity\.com/i, 'https://contentanonymity.com');
   const rawCanonical = stripWwwHost(canonical || url || SITE_URL);
-  const canonicalUrl = rawCanonical.replace(/\/+$/, '') || rawCanonical;
-  const finalUrl = stripWwwHost(url || SITE_URL).replace(/\/+$/, '') || stripWwwHost(url || SITE_URL);
+  // Keep the trailing slash ON the homepage root (canonical form is
+  // https://contentanonymity.com/ to match the sitemap <loc> and HOME_URL);
+  // strip it everywhere else so /blog/ never competes with /blog.
+  const isRoot = rawCanonical.replace(/\/+$/, '') + '/' === `${SITE_URL}/`;
+  const canonicalUrl = isRoot ? `${SITE_URL}/` : rawCanonical.replace(/\/+$/, '') || rawCanonical;
+  const strippedUrl = stripWwwHost(url || SITE_URL).replace(/\/+$/, '');
+  const finalUrl = strippedUrl || stripWwwHost(url || SITE_URL);
+  const urlIsRoot = strippedUrl === stripWwwHost(SITE_URL);
+  const resolvedUrl = urlIsRoot ? `${SITE_URL}/` : finalUrl;
   const baseStructuredData = {
     '@context': 'https://schema.org',
     '@type': type === 'article' ? 'Article' : type === 'product' ? 'Product' : 'WebPage',
@@ -379,7 +386,7 @@ export default function SEO({
 
       {/* Open Graph / Facebook - Enhanced */}
       <meta property="og:type" content={type === 'article' ? 'article' : type === 'product' ? 'product' : 'website'} />
-      <meta property="og:url" content={finalUrl} />
+      <meta property="og:url" content={resolvedUrl} />
       <meta property="og:title" content={finalTitle} />
       <meta property="og:description" content={finalDescription} />
       <meta property="og:image" content={image} />
@@ -396,7 +403,7 @@ export default function SEO({
 
       {/* Twitter Card - Enhanced */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:url" content={finalUrl} />
+      <meta name="twitter:url" content={resolvedUrl} />
       <meta name="twitter:title" content={finalTitle} />
       <meta name="twitter:description" content={finalDescription} />
       <meta name="twitter:image" content={image} />

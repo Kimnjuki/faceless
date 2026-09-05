@@ -1,0 +1,16 @@
+month,week,indexed_pages,not_indexed_pages,notes
+Jun 2026,Jun-01,18,9,"Pre-collapse baseline (17-19 indexed)"
+Jun 2026,Jun-08,18,10,
+Jun 2026,Jun-13,2,14,"COLLAPSE - matches Ahrefs redirect-loop start date"
+Jun 2026,Jun-15,2,16,
+Jun 2026,Jun-22,2,20,
+Jun 2026,Jun-29,2,24,
+Jul 2026,Jul-06,2,27,
+Jul 2026,Jul-13,2,29,
+Jul 2026,Jul-20,2,31,
+Jul 2026,Jul-27,2,33,
+Aug 2026,Aug-03,2,34,
+Aug 2026,Aug-10,2,35,
+Aug 2026,Aug-17,2,36,
+Aug 2026,Aug-24,2,36,"Crawled-currently-not-indexed accumulates; indexed stuck at 2"
+Aug 2026,Aug-31,2,36,"Awaiting canonical-host fix (CRIT-001)"

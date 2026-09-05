@@ -1,0 +1,5 @@
+url,status_recorded_by_ahrefs,status_verified_live_2026_09_05,terminal_url,verdict,fix
+http://www.contentanonymity.com/,302,307 -> https://www.contentanonymity.com/,https://www.contentanonymity.com/,PART_OF_LOOP,Cloudflare Always-Use-HTTPS hop (by design); then https://www 301 -> bare -> bare 301 -> www (ping-pong). Keep HTTPS rule; fix the canonicalization rules.
+https://www.contentanonymity.com/,301,"301 -> https://contentanonymity.com/",https://contentanonymity.com/,PART_OF_LOOP,Existing www->non-www 301 conflicts with new Cloudflare non-www->www rule -> ping-pong. Keep THIS rule; delete the non-www->www rule.
+http://contentanonymity.com/,302,307 -> https://contentanonymity.com/,https://contentanonymity.com/,PART_OF_LOOP,Cloudflare Always-Use-HTTPS hop (by design); then canonical host 301 -> www -> non-www (ping-pong). Keep HTTPS rule; fix the canonicalization rules.
+https://contentanonymity.com/,301,"301 -> https://www.contentanonymity.com/ (added by user 05-sep-2026)",https://www.contentanonymity.com/,CRITICAL_REDIRECT_LOOP,Remove the Cloudflare rule that redirects the canonical host to www. Canonical host https://contentanonymity.com/ must return 200.

@@ -1,0 +1,18 @@
+field,value
+domain,contentanonymity.com
+canonical_host,"https://contentanonymity.com (non-www, no trailing slash on host)"
+audit_tool,Ahrefs Site Audit (exported 05-sep-2026 05:01:39) + Google Search Console
+audit_date,2026-09-01 (Ahrefs) / 2026-09-05 (this remediation pass)
+crawlable_urls_checked,4 (homepage variants only - Ahrefs never reached subpages)
+redirect_loop_urls,3 crawled (1 self-referencing canonical) -> "Redirect loop" flag
+pages_in_sitemap_after_rebuild,72 (was 77+ with stale/hash URLs)
+gsc_not_found_404,14
+gsc_server_error_5xx,13
+gsc_crawled_not_indexed,5
+gsc_page_with_redirect,2
+gsc_duplicate_chose_diff_canonical,2
+indexed_pages,2 (stuck since 2026-06-13; was 17-19)
+not_indexed_pages,36
+hosting,Cloudflare (edge) in front of Coolify Docker (nginx) and/or Vercel static build
+detected_redirect_loop,"CONFIRMED live 2026-09-05 04:10 UTC: https://contentanonymity.com/ -> 301 -> https://www.contentanonymity.com/ (new Cloudflare rule) while https://www.contentanonymity.com/ -> 301 -> https://contentanonymity.com/ (existing rule) = www/non-www ping-pong. Canonical (non-www) must serve 200."
+status,fixed_in_repo / pending_cloudflare_deploy_revalidate

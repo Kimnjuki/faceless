@@ -1,0 +1,17 @@
+issue_id,severity,category,title,ahrefs_count,status,note
+NC-001,info,Links,Broken links (Ahrefs flagged page-level 404s),0 reported in current crawl,UNVERIFIED,"Ahrefs never got past homepage; count not confirmed. Run node scripts/check-routes.mjs after canonical fix to see true 404s; add legacy URL 301s to redirects.config.json."
+NC-002,info,Pages,Orphan pages,"0 at Ahrefs but 2 'duplicate-canonical' in GSC",UNVERIFIED,Re-audit after fix; use node scripts/audit-internal-links.mjs + GSC 'Linked from' to confirm no orphan indexable pages.
+NC-003,info,Pages,Duplicate content without canonical,0 flagged by Ahrefs,UNVERIFIED,GSC showed 2 'Google chose different canonical'; fixed /terms-of-service -> /terms in redirects.config.json. Re-verify after deploy.
+NC-004,info,Pages,Empty title tag,0 flagged by Ahrefs,UNVERIFIED,Possible false-negative due to loop; homepage title set in index.html (static) + SEO.tsx. Confirm with curl after canonical fix.
+NC-005,info,Pages,Missing meta description,0 flagged by Ahrefs,UNVERIFIED,SEO.tsx enforces <=160 chars with CTA. Verify per-page after fix.
+NC-006,info,Pages,H1 issues,0 flagged by Ahrefs,UNVERIFIED,"Structural H1 hierarchy exists (Hero H1, sections H2/H3). Verify per-page after fix."
+NC-007,info,Images,Images with missing alt text,0 in current crawl,UNVERIFIED,Check after fix: crawl /blog and templates; ensure alt attributes on <img>; OptimizedImage component present.
+NC-008,info,Images,og:image / social image file missing,0 flagged by Ahrefs,FIXED IN REPO,og-image.jpg/twitter-image.jpg 404 -> generated og-image.png (1200x630) and rewired SEO.tsx + index.html.
+NC-009,info,JavaScript,JS errors on page,0 flagged by Ahrefs,UNVERIFIED,index.html includes error-handler for ForeMedia/Ads; re-crawl after fix and audit console errors.
+NC-010,info,JavaScript,External scripts not loaded,0 flagged by Ahrefs,UNVERIFIED,Ads/analytics scripts skip on 4xx; verify script integrity after canonical fix.
+NC-011,info,Sitemap,Sitemap not referenced,0 flagged by Ahrefs,FIXED IN REPO,public/robots.txt references https://contentanonymity.com/sitemap.xml; nginx.conf + vercel.json serve it as application/xml. Re-crawl to confirm remove flag.
+NC-012,info,Sitemap,Sitemap includes non-canonical URLs,0 flagged by Ahrefs,FIXED IN REPO,"Regenerated sitemap (72 URLs): non-www, de-duped, no hash learning paths; validated by check-sitemap-hygiene.mjs."
+NC-013,info,Log-Scanner,Backlinks pointing to dead pages,0 flagged by Ahrefs,UNVERIFIED,Post-fix: monitor 404s; 301 any backlinked dead URLs to closest equivalent.
+NC-014,info,Log-Scanner,Crawled-not-indexed growth,5 in GSC,UNVERIFIED,Expected to resolve after loop fix; add internal links + request indexing for the 5 URLs.
+NC-015,info,Metadata,Hreflang tags missing,0 flagged by Ahrefs,NOT_APPLICABLE,Single-language site (en). Skip unless multilingual content added.
+NC-016,info,Performance,Page speed slow,0 flagged by Ahrefs,UNVERIFIED,re-audit after fix; verify CDN cache (Cloudflare) + compressed assets on 200 responses.

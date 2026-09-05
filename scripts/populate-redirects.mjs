@@ -38,13 +38,15 @@ function loadRegistry() {
   return Array.isArray(data.redirects) ? data.redirects : [];
 }
 
-function normalize(source, destination) {
+function normalize(source, destination, permanent) {
   const src = source.trim().replace(/\/+$/, '') || '/';
   const dst = destination.trim();
   if (!dst.startsWith('/') && !dst.startsWith('http')) {
     throw new Error(`Invalid destination for ${src}: must be a path or absolute URL`);
   }
-  return { source: src, destination: dst };
+  // Preserve the permanent flag (true => 301 for SEO link equity). Default to
+  // true so a mis-typed registry entry never silently downgrades to a 302.
+  return { source: src, destination: dst, permanent: permanent !== false };
 }
 
 function writeVercelRedirects(redirects) {
@@ -84,7 +86,7 @@ function main() {
     console.log(`   Wrote empty ${NGINX_OUT}`);
     return;
   }
-  const redirects = raw.map((r) => normalize(r.source, r.destination));
+  const redirects = raw.map((r) => normalize(r.source, r.destination, r.permanent));
   console.log(`🚀 Applying ${redirects.length} redirect(s)...`);
   const total = writeVercelRedirects(redirects);
   writeNginxInclude(redirects);

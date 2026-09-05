@@ -1,4 +1,17 @@
 {
-  "_comment": "P1-01 404-page redirect registry. Populate the empty 'redirects' array from the GSC export: Search Console > Indexing > Pages > 'Not found (404)'. Each entry: {\"source\": \"/old-url\", \"destination\": \"/new-url\", \"permanent\": true, \"reason\": \"...\"}. Then run: node scripts/populate-redirects.mjs (writes vercel.json redirects + nginx-redirects.conf).",
-  "redirects": []
+  "_comment": "P1-01 404-page redirect registry. Populate from GSC: Search Console > Indexing > Pages > 'Not found (404)'. Each entry: {\"source\": \"/old-url\", \"destination\": \"/new-url\", \"permanent\": true, \"reason\": \"...\"}. Then run: node scripts/populate-redirects.mjs (writes vercel.json redirects + nginx-redirects.conf).",
+  "redirects": [
+    {
+      "source": "/terms-of-service",
+      "destination": "/terms",
+      "permanent": true,
+      "reason": "Duplicate-canonical: /terms-of-service and /terms render the same TermsOfService page; collapse into the canonical /terms URL."
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true,
+      "reason": "Ensure /index.html resolves to the canonical homepage URL (avoids duplicate homepage indexation)."
+    }
+  ]
 }

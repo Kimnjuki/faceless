@@ -57,7 +57,7 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # P1-01 path-level 301 redirects (generated from redirects.config.json; always exists)
-COPY nginx-redirects.conf /etc/nginx/conf.d/redirects.conf
+COPY nginx-redirects.conf /etc/nginx/redirects.inc
 
 # Expose port 80 (Coolify handles SSL/TLS termination externally)
 EXPOSE 80

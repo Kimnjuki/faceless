@@ -13,7 +13,7 @@
     <!-- Primary Meta Tags (fallback; React Helmet overrides per page) -->
     <title>Build a Faceless Content Empire in 2026 | ContentAnonymity</title>
     <meta name="title" content="Build a Faceless Content Empire in 2026 | ContentAnonymity" />
-    <meta name="description" content="Build profitable faceless content businesses with AI automation. Join 10,000+ creators earning 6-figures anonymously. Start free today." />
+    <meta name="description" content="Build profitable faceless content businesses with AI automation. Step-by-step guides, monetization strategies, and free creator tools for anonymous content entrepreneurs." />
     <meta name="keywords" content="faceless content, anonymous content creator, content anonymity, faceless business, AI content creation" />
     <meta name="author" content="ContentAnonymity" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
@@ -117,6 +117,37 @@
   "youtube-monetization-ai-faceless-policy-2026": "Navigate YouTube's monetization policies for AI-generated and faceless content. Stay compliant while maximizing ad revenue in 2026."
 };
 
+  var routeMeta = {
+    '/getting-started': { t: 'Getting Started with Faceless Content | ContentAnonymity', d: 'Step-by-step guide to launching a faceless content business: niche selection, tooling, first content, and a monetization roadmap.' },
+    '/blog': { t: 'Faceless Content Blog & Guides | ContentAnonymity', d: 'In-depth guides on faceless YouTube channels, AI content tools, monetization, and anonymous creator strategy.' },
+    '/tools/calculator': { t: 'Faceless Channel Profitability Calculator | ContentAnonymity', d: 'Estimate your faceless channel revenue, RPM, and breakeven point with this free profitability calculator.' },
+    '/tools/niche-quiz': { t: 'Faceless Content Niche Quiz | ContentAnonymity', d: 'Find your ideal faceless content niche with this free quiz based on budget, skills, and monetization goals.' },
+    '/tools/seo-audit': { t: 'SEO Audit Tool | ContentAnonymity', d: 'Audit your content for search visibility with this free SEO analysis tool.' },
+    '/tools/keyword-research': { t: 'Keyword Research Tool | ContentAnonymity', d: 'Discover profitable keywords for your faceless content niche.' },
+    '/tools/backlink-checker': { t: 'Backlink Checker | ContentAnonymity', d: 'Check backlinks and domain authority for content and competitor analysis.' },
+    '/tools/performance': { t: 'Channel Performance Monitor | ContentAnonymity', d: 'Track your channel metrics and performance over time.' },
+    '/tools/script-generator': { t: 'AI Script Generator | ContentAnonymity', d: 'Generate faceless video scripts with AI in seconds.' },
+    '/tools/trend-scanner': { t: 'Content Trend Scanner | ContentAnonymity', d: 'Scan trending topics and niches for faceless content opportunities.' },
+    '/tools/channel-analyzer': { t: 'YouTube Channel Analyzer | ContentAnonymity', d: 'Analyze any faceless channel for growth insights and benchmarking.' },
+    '/tools/all': { t: 'All Creator Tools | ContentAnonymity', d: 'Free tools for faceless creators: calculators, quizzes, research, and analyzers.' },
+    '/learning-paths': { t: 'Faceless Content Learning Paths | ContentAnonymity', d: 'Structured learning paths to build and monetize a faceless content business.' },
+    '/platform-guides': { t: 'Platform Guides for Faceless Creators | ContentAnonymity', d: 'Platform-specific guides for YouTube, TikTok, Instagram, and more.' },
+    '/news': { t: 'Faceless Content Industry News | ContentAnonymity', d: 'Latest news and trends in faceless content creation and the creator economy.' },
+    '/resources/templates': { t: 'Creator Templates & Resources | ContentAnonymity', d: 'Free templates, checklists, and resources for faceless content creators.' },
+    '/resources/niches': { t: 'Profitable Faceless Niches | ContentAnonymity', d: 'Explore profitable niches for faceless content with RPM and competition data.' },
+    '/learning/case-studies': { t: 'Faceless Content Case Studies | ContentAnonymity', d: 'Real case studies of successful faceless channels and what made them work.' },
+    '/learning/workshops': { t: 'Creator Workshops | ContentAnonymity', d: 'Hands-on workshops for building faceless content businesses.' },
+    '/learning/resources': { t: 'Learning Resources | ContentAnonymity', d: 'Curated learning resources for faceless content creators.' },
+    '/privacy-policy': { t: 'Privacy Policy | ContentAnonymity', d: 'How ContentAnonymity collects, uses, and protects your data.' },
+    '/terms-of-service': { t: 'Terms of Service | ContentAnonymity', d: 'The terms governing your use of ContentAnonymity.' },
+    '/about': { t: 'About ContentAnonymity', d: 'ContentAnonymity helps creators build profitable faceless content businesses anonymously.' },
+    '/contact': { t: 'Contact ContentAnonymity', d: 'Get in touch with the ContentAnonymity team.' },
+    '/creator-roadmap': { t: 'Faceless Creator Roadmap | ContentAnonymity', d: 'A step-by-step roadmap from zero to a monetized faceless channel.' },
+    '/opportunity-finder': { t: 'Niche Opportunity Finder | ContentAnonymity', d: 'Find underserved faceless content niches with this opportunity analysis tool.' },
+    '/monetization-matcher': { t: 'Monetization Matcher | ContentAnonymity', d: 'Match your channel to the right monetization strategy.' },
+    '/start-here': { t: 'Start Here | ContentAnonymity', d: 'New to faceless content? Start here with a guided introduction.' }
+  };
+
   var slug = isBlog ? slugMatch[1] : null;
   var canonical = 'https://contentanonymity.com' + (path.endsWith('/') && path !== '/' ? path.slice(0, -1) : path) || 'https://contentanonymity.com';
 
@@ -133,6 +164,28 @@
   // Update canonical
   var canonLink = document.querySelector('link[rel="canonical"]');
   if (canonLink) canonLink.href = canonical;
+
+  // Route-level meta for non-blog pages (tools, hubs, legal pages)
+  var rm = routeMeta[path];
+  if (rm) {
+    document.title = rm.t;
+    var rmt = document.querySelector('meta[name="title"]');
+    if (rmt) rmt.setAttribute('content', rm.t);
+    var rmd = document.querySelector('meta[name="description"]');
+    if (rmd) rmd.setAttribute('content', rm.d);
+    var ogt = document.querySelector('meta[property="og:title"]');
+    if (ogt) ogt.setAttribute('content', rm.t);
+    var ogd = document.querySelector('meta[property="og:description"]');
+    if (ogd) ogd.setAttribute('content', rm.d);
+    var ogu = document.querySelector('meta[property="og:url"]');
+    if (ogu) ogu.setAttribute('content', canonical);
+    var twt = document.querySelector('meta[name="twitter:title"]');
+    if (twt) twt.setAttribute('content', rm.t);
+    var twd = document.querySelector('meta[name="twitter:description"]');
+    if (twd) twd.setAttribute('content', rm.d);
+    var twu = document.querySelector('meta[name="twitter:url"]');
+    if (twu) twu.setAttribute('content', canonical);
+  }
 
   if (slug && articleMeta[slug]) {
     var title = articleMeta[slug] + ' | ContentAnonymity';
@@ -192,7 +245,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://contentanonymity.com/" />
     <meta property="og:title" content="Build a Faceless Content Empire in 2026 | ContentAnonymity" />
-    <meta property="og:description" content="Discover the system 10,000+ creators use to build profitable faceless content businesses with privacy-first AI workflows, monetization strategies & step-by-step courses. Start free today." />
+    <meta property="og:description" content="Step-by-step guides, monetization strategies, and free creator tools for building a profitable faceless content business with privacy-first AI workflows." />
     <meta property="og:image" content="https://contentanonymity.com/og-image.png" />
     <meta property="og:site_name" content="ContentAnonymity" />
     <meta property="og:locale" content="en_US" />
@@ -201,7 +254,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://contentanonymity.com/" />
     <meta name="twitter:title" content="Build a Faceless Content Empire in 2026 | ContentAnonymity" />
-    <meta name="twitter:description" content="Discover the system 10,000+ creators use to earn 6-figures anonymously. AI automation, monetization strategies & step-by-step courses. Start free today." />
+    <meta name="twitter:description" content="Step-by-step guides, monetization strategies, and free creator tools for building a profitable anonymous content business." />
     <meta name="twitter:image" content="https://contentanonymity.com/og-image.png" />
     
     <!-- Favicons -->
@@ -543,7 +596,7 @@
           "name": "How much can I earn with faceless content?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Faceless content creators earn anywhere from $1,000 to $100,000+ per month depending on niche, platform, and monetization strategy. Our community members average $5,000-$15,000 monthly within 6-12 months of starting."
+            "text": "Faceless content creators earn a wide range depending on niche, platform, and monetization strategy. Documented faceless channels range from a few hundred to tens of thousands of dollars per month; most new channels take 6\u201318 months of consistent output to reach meaningful revenue."
           }
         },
         {
@@ -551,7 +604,7 @@
           "name": "Do I need technical skills to start?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No technical skills required. Our AI-powered tools and step-by-step guides help complete beginners create professional content. Most members start earning within 30-60 days with no prior experience."
+            "text": "No technical skills required. Our AI-powered tools and step-by-step guides help complete beginners create professional content. Most beginners can start producing content with no prior experience, though building revenue takes time and consistency."
           }
         }
       ]
@@ -572,7 +625,7 @@
             Build a Faceless Content Empire in 2026
           </h1>
           <p style="font-size: 1.25rem; color: #666; margin-bottom: 2rem; line-height: 1.6;">
-            ContentAnonymity is the definitive platform for anonymous digital entrepreneurship. Build profitable faceless content businesses with AI automation and complete privacy. Join thousands of creators building anonymous content empires.
+            ContentAnonymity is a platform for anonymous digital entrepreneurship. Build profitable faceless content businesses with AI automation and complete privacy — with step-by-step guides, monetization strategies, and free creator tools.
           </p>
           <div style="margin: 2rem 0;">
             <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">Why Choose Faceless Content?</h2>
@@ -580,12 +633,12 @@
               <li style="margin-bottom: 0.5rem;">✓ Complete Privacy Protection - Stay 100% anonymous</li>
               <li style="margin-bottom: 0.5rem;">✓ AI-Powered Content Creation - Automate your content</li>
               <li style="margin-bottom: 0.5rem;">✓ Proven Monetization Strategies - Follow step-by-step systems</li>
-              <li style="margin-bottom: 0.5rem;">✓ 10,000+ Creator Community - Learn from successful creators</li>
+              <li style="margin-bottom: 0.5rem;">✓ Creator Tools & Guides - Everything to start your faceless channel</li>
             </ul>
           </div>
           <div style="margin: 2rem 0;">
             <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">Get Started Today</h2>
-            <p style="margin-bottom: 1rem;">Join creators earning 6-figures anonymously through AI-powered content, proven monetization strategies, and step-by-step automation.</p>
+            <p style="margin-bottom: 1rem;">Learn AI-powered content creation, proven monetization strategies, and step-by-step automation to build an anonymous content business.</p>
             <a href="/auth/signup" style="display: inline-block; padding: 12px 24px; background: #8b5cf6; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; margin-top: 1rem;">
               Start Your Faceless Journey →
             </a>

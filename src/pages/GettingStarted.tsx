@@ -319,7 +319,7 @@ export default function GettingStarted() {
               Ready to Start Your Faceless Journey?
             </h2>
             <p className="text-lg mb-8 opacity-90">
-              Join 10,000+ creators building profitable faceless content businesses
+              Join creators building profitable faceless content businesses
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" variant="secondary" asChild>

@@ -35,7 +35,7 @@ export default function CTA() {
             Ready to Build Your Faceless Empire?
           </h2>
           <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
-            Join 10,000+ creators who are building profitable businesses without showing their face. Start your free trial today.
+            Join creators building profitable businesses without showing their face. Start your free trial today.
           </p>
           
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">

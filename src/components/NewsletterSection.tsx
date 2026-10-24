@@ -10,7 +10,7 @@ const COMMUNITY_LINKS = [
     label: "Discord Community",
     href: "https://discord.gg/contentanonymity",
     icon: MessageCircle,
-    description: "Join 10,000+ faceless creators",
+    description: "Join faceless creators",
   },
   {
     label: "Facebook Group",

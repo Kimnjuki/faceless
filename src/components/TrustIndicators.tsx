@@ -39,7 +39,7 @@ export default function TrustIndicators() {
                 <CheckCircle2 className="h-6 w-6 text-orange-600 dark:text-orange-400" />
               </div>
               <h3 className="font-semibold text-sm mb-1">Verified Platform</h3>
-              <p className="text-xs text-foreground/75">10,000+ members</p>
+              <p className="text-xs text-foreground/75">Privacy-first platform</p>
             </div>
           </div>
 

@@ -10,7 +10,7 @@ export default function HowToStartFacelessYouTube2026() {
     <>
       <SEO
         title="How to Start a Faceless YouTube Channel in 2026: Complete Blueprint"
-        description="Learn how to start a profitable faceless YouTube channel in 2026. Step-by-step guide with proven strategies, tools, and monetization methods. Join thousands earning 6-figures anonymously."
+        description="Learn how to start a profitable faceless YouTube channel in 2026. Step-by-step guide with proven strategies, tools, and monetization methods."
         keywords="faceless youtube channel 2026, how to start faceless youtube, anonymous youtube channel, faceless content 2026, faceless youtube strategy, faceless channel tutorial"
         url="https://contentanonymity.com/blog/how-to-start-faceless-youtube-channel-2026"
         canonical="https://contentanonymity.com/blog/how-to-start-faceless-youtube-channel-2026"
@@ -306,7 +306,7 @@ export default function HowToStartFacelessYouTube2026() {
             <div className="bg-gradient-to-r from-primary/10 to-purple-500/10 p-8 rounded-2xl my-12 text-center">
               <h3 className="text-2xl font-bold mb-4">Ready to Build Your Faceless YouTube Channel?</h3>
               <p className="text-muted-foreground mb-6">
-                Join 10,000+ creators earning 6-figures anonymously with our complete platform. Get step-by-step courses, 
+                Join creators building profitable faceless channels with our complete platform. Get step-by-step courses,
                 done-for-you templates, AI tool discounts, and ongoing support.
               </p>
               <Button size="lg" asChild className="gradient-primary">

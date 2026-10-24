@@ -38,12 +38,11 @@ export default function HomePage() {
     <>
       <SEO
         title="Faceless Content Business: Build Profitable Anonymous Channels in 2026"
-        description="Discover how to build a profitable faceless content business with AI automation and complete anonymity. Join 10,000+ creators earning 6-figures. Start free today."
+        description="Learn how to build a profitable faceless content business with AI automation and complete anonymity. Step-by-step guides, monetization strategies, and free creator tools."
         keywords="faceless content business, anonymous content creator, faceless YouTube channel, faceless TikTok, faceless Instagram, AI content creation, faceless business 2026, how to make money without showing face"
         url="https://contentanonymity.com"
         canonical="https://contentanonymity.com"
         faqData={faqData}
-        reviewData={{ rating: 4.8, reviewCount: 10000, bestRating: 5, worstRating: 1 }}
         softwareApplication={{
           name: "ContentAnonymity",
           description: "AI-powered platform for building profitable faceless content businesses. Complete toolkit for anonymous digital entrepreneurship with AI automation, monetization strategies, and step-by-step courses.",
@@ -144,7 +143,7 @@ export default function HomePage() {
                 "name": "Do I really need to show my face to make money online?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Absolutely not! Thousands of creators are earning 6-figures without ever showing their face. Our platform teaches you proven strategies for faceless content across YouTube, TikTok, Instagram, and more. You'll learn to use AI voices, stock footage, animations, and other techniques to create engaging content while staying completely anonymous."
+                  "text": "Absolutely not. Many successful channels operate without ever showing the creator's face. Our guides teach strategies for faceless content across YouTube, TikTok, and Instagram using AI voices, stock footage, and animations while keeping your identity private."
                 }
               },
               {
@@ -152,7 +151,7 @@ export default function HomePage() {
                 "name": "How much money can I realistically make with faceless content?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Earnings vary based on niche, consistency, and monetization strategies. Our community members report earnings ranging from $1K-$50K+ per month. Beginners typically start seeing their first $1K-$3K within 3-6 months. The key is choosing the right niche, following our proven systems, and staying consistent."
+                  "text": "Earnings vary widely by niche, consistency, and monetization strategy. Documented faceless channels range from a few hundred to tens of thousands of dollars per month. Most new channels take 6-18 months of consistent output to reach meaningful revenue."
                 }
               },
               {

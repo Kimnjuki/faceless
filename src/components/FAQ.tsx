@@ -10,11 +10,11 @@ import { Badge } from "@/components/ui/badge";
 export const faqs = [
   {
     question: "Do I really need to show my face to make money online?",
-    answer: "Absolutely not! Thousands of creators are earning 6-figures without ever showing their face. Our platform teaches you proven strategies for faceless content across YouTube, TikTok, Instagram, and more. You'll learn to use AI voices, stock footage, animations, and other techniques to create engaging content while staying completely anonymous."
+    answer: "Absolutely not. Many successful channels operate without ever showing the creator's face. Our guides teach strategies for faceless content across YouTube, TikTok, and Instagram using AI voices, stock footage, and animations while keeping your identity private."
   },
   {
     question: "How much money can I realistically make with faceless content?",
-    answer: "Earnings vary based on niche, consistency, and monetization strategies. Our community members report earnings ranging from $1K-$50K+ per month. Beginners typically start seeing their first $1K-$3K within 3-6 months. The key is choosing the right niche, following our proven systems, and staying consistent."
+    answer: "Earnings vary widely by niche, consistency, and monetization strategy. Documented faceless channels range from a few hundred to tens of thousands of dollars per month. Most new channels take 6-18 months of consistent output to reach meaningful revenue."
   },
   {
     question: "What tools and software do I need to get started?",
@@ -22,11 +22,11 @@ export const faqs = [
   },
   {
     question: "How long does it take to start making money?",
-    answer: "Most creators see their first earnings within 2-4 months. However, this depends on your niche, content quality, and consistency. Some niches like meditation content can monetize within 1-2 months, while others like finance education might take 3-4 months. Our platform helps you choose the fastest path to profitability for your situation."
+    answer: "Most channels take 4-6 months to reach YouTube's monetization threshold (1,000 subscribers and 4,000 watch hours) and 6-14 months to earn meaningful income. It depends on your niche, consistency, and content quality. Our platform helps you choose a faster path to profitability."
   },
   {
     question: "I have no experience with content creation. Can I still succeed?",
-    answer: "Yes! Most of our successful members started with zero experience. Our step-by-step courses walk you through everything from niche selection to content creation to monetization. You'll get templates, scripts, and done-for-you resources that make the process simple, even if you're a complete beginner."
+    answer: "Yes. Faceless content is well suited to beginners. Our step-by-step guides walk you through niche selection, content creation, and monetization, with templates and scripts that make the process approachable even with no prior experience."
   },
   {
     question: "What's included in the membership?",
@@ -34,7 +34,7 @@ export const faqs = [
   },
   {
     question: "Can I do this part-time while working a full-time job?",
-    answer: "Absolutely! Most of our members start part-time, dedicating 5-10 hours per week. Faceless content is perfect for side hustlers because you can batch-create content and schedule it in advance. Many members eventually transition to full-time once they hit $5K-$10K per month."
+    answer: "Absolutely. Many creators start part-time with 5-10 hours a week, since faceless content can be batch-created and scheduled in advance. Some transition to full-time once their revenue justifies it."
   },
   {
     question: "What if I choose the wrong niche?",

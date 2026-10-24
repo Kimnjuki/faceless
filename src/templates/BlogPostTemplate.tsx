@@ -165,7 +165,7 @@ export default function BlogPostTemplate({
             <div className="bg-gradient-to-r from-primary/10 to-purple-500/10 p-8 rounded-2xl my-12 text-center">
               <h3 className="text-2xl font-bold mb-4">Ready to Build Your Faceless Content Business?</h3>
               <p className="text-muted-foreground mb-6">
-                Join 10,000+ creators earning 6-figures anonymously with our complete platform.
+                Join creators building profitable faceless content businesses with our complete platform.
               </p>
               <Link
                 to="/auth/signup"

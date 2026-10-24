@@ -32,7 +32,7 @@ export default function Hero() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
               </span>
-              <span className="gradient-text font-bold">10,000+ Faceless Creators</span> Building Real Businesses
+              <span className="gradient-text font-bold">Faceless Creators</span> Building Real Businesses
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
@@ -90,8 +90,8 @@ export default function Hero() {
               <div className="flex items-center gap-3">
                 <Users className="h-8 w-8 text-primary" />
                 <div className="text-left">
-                  <div className="font-bold text-foreground">10,000+</div>
-                  <div className="text-xs text-muted-foreground">Active Creators</div>
+                  <div className="font-bold text-foreground">100%</div>
+                  <div className="text-xs text-muted-foreground">Anonymous</div>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -157,7 +157,7 @@ export default function Hero() {
                   <TrendingUp className="h-7 w-7 text-white" />
                 </div>
               </div>
-              <h3 className="font-bold text-lg mb-3 gradient-text">$5K–$15K/Month Within 6–12 Months</h3>
+              <h3 className="font-bold text-lg mb-3 gradient-text">Multiple Revenue Streams</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">Proven monetization strategies that actually work</p>
             </div>
 
@@ -175,7 +175,7 @@ export default function Hero() {
                   <Users className="h-7 w-7 text-white" />
                 </div>
               </div>
-              <h3 className="font-bold text-lg mb-3 gradient-text">10,000+ Creator Community</h3>
+              <h3 className="font-bold text-lg mb-3 gradient-text">Creator Community</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">Learn from successful faceless creators</p>
             </div>
           </div>

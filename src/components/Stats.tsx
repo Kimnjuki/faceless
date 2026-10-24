@@ -2,10 +2,10 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const stats = [
-  { label: "Active Creators", value: 10000, suffix: "+" },
-  { label: "Revenue Generated", value: 5, suffix: "M+", prefix: "$" },
-  { label: "Success Rate", value: 87, suffix: "%" },
-  { label: "Avg. Time to Profit", value: 90, suffix: " days" }
+  { label: "New creator ventures that are faceless (2026)", value: 38, suffix: "%" },
+  { label: "YouTube 2025 ad revenue", value: 40, suffix: "B+", prefix: "$" },
+  { label: "Faceless publish frequency vs. face-based", value: 4, suffix: "x" },
+  { label: "Faster Year-1 subscriber growth", value: 28, suffix: "%" }
 ];
 
 export default function Stats() {

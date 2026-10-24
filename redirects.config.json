@@ -6,12 +6,6 @@
       "destination": "/terms",
       "permanent": true,
       "reason": "Duplicate-canonical: /terms-of-service and /terms render the same TermsOfService page; collapse into the canonical /terms URL."
-    },
-    {
-      "source": "/index.html",
-      "destination": "/",
-      "permanent": true,
-      "reason": "Ensure /index.html resolves to the canonical homepage URL (avoids duplicate homepage indexation)."
     }
   ]
 }

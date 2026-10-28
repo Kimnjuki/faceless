@@ -26,7 +26,7 @@ export default function ChallengeFunnel() {
     <>
       <SEO
         title={name ? `5-Day Challenge: ${challengeName} | ContentAnonymity` : "5-Day Challenge: Launch Your Faceless Business | ContentAnonymity"}
-        description="Join 5,000+ creators in our free 5-day challenge to launch your faceless business. Step-by-step system to build a profitable anonymous content empire."
+        description="Join creators in our free 5-day challenge to launch your faceless business. Step-by-step system to build a profitable faceless content business."
         keywords="faceless business challenge, 5 day challenge, faceless content challenge, free challenge"
         url={canonicalUrl}
         canonical={canonicalUrl}
@@ -42,7 +42,7 @@ export default function ChallengeFunnel() {
                 Launch Your Faceless Business in 5 Days
               </h1>
               <p className="text-lg text-muted-foreground mb-8">
-                Join 5,000+ creators who transformed their income with our proven step-by-step challenge
+                Join creators who built their faceless business with our step-by-step challenge
               </p>
               
               <Card className="max-w-md mx-auto">
@@ -111,9 +111,9 @@ export default function ChallengeFunnel() {
             <div className="text-center">
               <h2 className="text-2xl font-bold mb-4">Success Stories</h2>
               <p className="text-muted-foreground mb-8">
-                "I launched my first faceless channel during the challenge and made my first $500 in week 2!" - Alex M.
+                A 5-day, step-by-step sprint to launch your first faceless channel.
               </p>
-              <Button size="lg">Join 5,000+ Creators</Button>
+              <Button size="lg">Join the Challenge</Button>
             </div>
           </div>
         </div>

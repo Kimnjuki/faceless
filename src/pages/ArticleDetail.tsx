@@ -417,7 +417,7 @@ export default function ArticleDetail() {
             <div className="max-w-4xl mx-auto text-center">
               <h2 id="related-articles-heading" className="text-3xl font-bold mb-4">Want More Content Strategies?</h2>
               <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">
-                Explore our complete library of faceless business resources, tools, and proven strategies to build your anonymous content empire.
+                Explore our complete library of faceless business resources, tools, and strategies to build your faceless content business.
               </p>
               <Button asChild size="lg">
                 <Link to="/blog">Browse All Articles</Link>

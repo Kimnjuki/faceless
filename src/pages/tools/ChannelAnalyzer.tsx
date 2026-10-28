@@ -326,7 +326,7 @@ export default function ChannelAnalyzer() {
                   <BarChart3 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                   <p className="text-muted-foreground mb-2">Enter any YouTube channel URL to perform a complete audit</p>
                   <p className="text-sm text-muted-foreground">
-                    No login required. 100% anonymous analysis with actionable recommendations
+                    No login required. Private analysis with actionable recommendations
                   </p>
                 </CardContent>
               </Card>

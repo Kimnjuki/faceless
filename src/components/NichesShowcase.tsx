@@ -65,10 +65,10 @@ export default function NichesShowcase() {
         <div className="text-center mb-12">
           <Badge className="mb-4">Profitable Niches</Badge>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Proven Faceless Content Niches
+            Profitable Faceless Content Niches
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            These niches are generating consistent income for faceless creators. Pick one and start building your empire today.
+            These niches are generating consistent income for faceless creators. Pick one and start building your faceless channel today.
           </p>
         </div>
 

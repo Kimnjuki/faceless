@@ -146,7 +146,7 @@ export default function BlogIndex() {
               </Button>
             </div>
             <p className="text-lg text-muted-foreground mb-8">
-              Guides, strategies, and insights to build your anonymous content empire
+              Guides, strategies, and insights to build your faceless content business
             </p>
             
             <div className="relative max-w-xl mx-auto">

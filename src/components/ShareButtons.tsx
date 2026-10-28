@@ -14,7 +14,7 @@ interface ShareButtonsProps {
 
 export default function ShareButtons({
   url = typeof window !== "undefined" ? window.location.href : "",
-  title = "ContentAnonymity - Build Your Faceless Content Empire",
+  title = "ContentAnonymity - Build Your Privacy-First Faceless Content Business",
   description = "Step-by-step guides and tools for building a faceless content business anonymously.",
   contentType = "page",
   contentId,

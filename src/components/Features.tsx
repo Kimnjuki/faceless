@@ -30,7 +30,7 @@ const features = [
   {
     icon: Shield,
     title: "Privacy First",
-    description: "Build your empire while maintaining complete anonymity and protecting your identity."
+    description: "Build your business while keeping your identity private."
   }
 ];
 

@@ -32,7 +32,7 @@ export default function PillarPage() {
 
   const pillarTitle = pillarSlug?.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase()) || 'Content Guide';
   const pageTitle = `${pillarTitle} - Complete Faceless Content Guide`;
-  const pageDescription = `Master ${pillarTitle.toLowerCase()} for your faceless content business. Learn proven strategies, tools, and tactics to build a profitable anonymous content empire.`;
+  const pageDescription = `Master ${pillarTitle.toLowerCase()} for your faceless content business. Learn step-by-step strategies, tools, and tactics to build a profitable privacy-first business.`;
   const canonicalUrl = `https://contentanonymity.com/${pillarSlug || ''}`;
 
   return (
@@ -89,7 +89,7 @@ export default function PillarPage() {
 
               <div className="prose prose-lg max-w-none">
                 <p className="text-lg text-muted-foreground mb-6">
-                  Comprehensive guide to mastering {pillarSlug?.replace(/-/g, " ")} for your faceless business. This in-depth resource covers everything you need to know to build a profitable anonymous content empire, from foundational concepts to advanced monetization strategies.
+                  Comprehensive guide to mastering {pillarSlug?.replace(/-/g, " ")} for your faceless business. This in-depth resource covers everything you need to know to build a profitable privacy-first business, from foundational concepts to advanced monetization strategies.
                 </p>
 
                 {sections.map((section, i) => (
@@ -98,13 +98,13 @@ export default function PillarPage() {
                     {section === "Introduction" && (
                       <div className="space-y-4 text-muted-foreground">
                         <p>
-                          Welcome to the complete guide on {pillarTitle.toLowerCase()} for faceless content creators. Whether you're just starting your anonymous content journey or looking to scale your existing business, this comprehensive resource provides actionable strategies, proven frameworks, and real-world examples to help you succeed.
+                          Welcome to the complete guide on {pillarTitle.toLowerCase()} for faceless content creators. Whether you're just starting your anonymous content journey or looking to scale your existing business, this comprehensive resource provides actionable strategies, step-by-step frameworks, and real-world examples to help you succeed.
                         </p>
                         <p>
-                          Faceless content creation has emerged as one of the most profitable and scalable business models in 2025. By leveraging AI tools, strategic content planning, and proven monetization methods, thousands of creators are building six-figure businesses without ever showing their face. This guide will walk you through every aspect of building a successful faceless content empire.
+                          Faceless content creation has emerged as one of the most profitable and scalable business models in 2025. By leveraging AI tools, strategic content planning, and monetization methods, many creators build profitable channels without ever showing their face. This guide will walk you through every aspect of building a successful faceless content business.
                         </p>
                         <p>
-                          Throughout this guide, you'll learn how to choose the right niche, create engaging content at scale, implement effective monetization strategies, and build systems that allow your business to grow while maintaining complete anonymity. Each section includes practical examples, tool recommendations, and step-by-step instructions you can implement immediately.
+                          Throughout this guide, you'll learn how to choose the right niche, create engaging content at scale, implement effective monetization strategies, and build systems that let your business grow while keeping your identity private. Each section includes practical examples, tool recommendations, and step-by-step instructions you can implement immediately.
                         </p>
                       </div>
                     )}
@@ -137,7 +137,7 @@ export default function PillarPage() {
                     {section === "Tools & Resources" && (
                       <div className="space-y-4 text-muted-foreground">
                         <p>
-                          The right tools can make the difference between struggling to create content and building a scalable content empire. For faceless creators, essential tools include AI voice generators for consistent narration, video editing software for professional production, stock footage libraries for visual content, and automation tools for workflow efficiency.
+                          The right tools can make the difference between struggling to create content and building a scalable content business. For faceless creators, essential tools include AI voice generators for consistent narration, video editing software for professional production, stock footage libraries for visual content, and automation tools for workflow efficiency.
                         </p>
                         <p>
                           When selecting tools, prioritize those that integrate well with your existing workflow and offer features specific to your niche. Many successful faceless creators use a combination of free and paid tools, starting with free options and upgrading as their revenue grows. Always test tools with a free trial before committing to a paid subscription.
@@ -150,13 +150,13 @@ export default function PillarPage() {
                     {section === "Case Studies" && (
                       <div className="space-y-4 text-muted-foreground">
                         <p>
-                          Real-world case studies provide valuable insights into what actually works in faceless content creation. One notable case study involves a horror story channel that reached $15,000 per month in revenue without ever showing a face. The creator used AI voice generation, stock footage, and strategic content planning to build a highly engaged audience.
+                          Real-world case studies provide valuable insights into what actually works in faceless content creation. One notable case study involves a horror story channel that built a substantial audience without ever showing a face. The creator used AI voice generation, stock footage, and strategic content planning to grow a highly engaged audience.
                         </p>
                         <p>
-                          Another successful case study features a philosophy channel that leveraged stoic content to build a six-figure business. By focusing on timeless wisdom and using consistent branding, the creator attracted a dedicated audience willing to pay for premium content and courses. The key was finding a niche with passionate audiences and creating content that provided genuine value.
+                          Another successful case study features a philosophy channel that leveraged stoic content to build a profitable business. By focusing on timeless wisdom and using consistent branding, the creator attracted a dedicated audience willing to pay for premium content and courses. The key was finding a niche with passionate audiences and creating content that provided genuine value.
                         </p>
                         <p>
-                          These case studies demonstrate that success in faceless content creation is achievable with the right strategy, tools, and consistency. The common threads among successful creators include choosing profitable niches, creating value-driven content, implementing multiple monetization streams, and maintaining consistent posting schedules. By following proven frameworks and learning from successful examples, you can build your own profitable faceless content business.
+                          These case studies demonstrate that success in faceless content creation is achievable with the right strategy, tools, and consistency. The common threads among successful creators include choosing profitable niches, creating value-driven content, implementing multiple monetization streams, and maintaining consistent posting schedules. By following step-by-step frameworks and learning from successful examples, you can build your own profitable faceless content business.
                         </p>
                       </div>
                     )}

@@ -343,7 +343,7 @@ export default function ProfitabilityCalculator() {
             <section className="mb-12">
               <h2 className="text-3xl font-bold mb-6">Understanding Faceless Content Revenue Streams</h2>
               <p className="text-lg leading-relaxed mb-4">
-                Faceless content creation has become one of the most profitable online business models in 2025. Unlike traditional content creation, faceless channels focus on value, entertainment, and information rather than personal branding. This approach allows creators to maintain complete anonymity while building substantial audiences.
+                Faceless content creation has become one of the most profitable online business models in 2025. Unlike traditional content creation, faceless channels focus on value, entertainment, and information rather than personal branding. This approach lets creators keep their identity private while building substantial audiences.
               </p>
               <p className="text-lg leading-relaxed mb-4">
                 The profitability calculator accounts for platform ad revenue, but successful faceless creators typically earn from multiple sources. Ad revenue from YouTube, TikTok, or Instagram provides a baseline income, but affiliate marketing can double or triple your earnings. Promoting tools, courses, and services relevant to your niche generates commissions without requiring additional content creation.

@@ -83,7 +83,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-              Empowering faceless creators to build profitable digital businesses with complete anonymity and AI-powered automation.
+              Empowering faceless creators to build profitable digital businesses with privacy-first workflows and AI-powered automation.
             </p>
           </div>
           

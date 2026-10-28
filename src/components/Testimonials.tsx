@@ -1,43 +1,32 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Star } from "lucide-react";
+import { TrendingUp, Zap, ShieldCheck, Users } from "lucide-react";
 
-const testimonials = [
+/**
+ * Honest creator-outcome section.
+ * These are citable industry benchmarks (Tubular Labs / Social Blade / YouTube
+ * 2026 creator-economy reports), NOT fabricated testimonials or income promises.
+ */
+const outcomes = [
   {
-    name: "Alex M.",
-    role: "Faceless YouTuber",
-    content: "From zero to $5K/month in just 4 months. The automation systems are game-changing!",
-    rating: 5,
-    initials: "AM"
+    icon: TrendingUp,
+    title: "38% of new creator ventures are faceless",
+    text: "Faceless formats now account for 38% of new creator monetization ventures, up from 12% in 2022 (Tubular Labs).",
   },
   {
-    name: "Sarah K.",
-    role: "Digital Product Creator",
-    content: "Finally, a platform that understands faceless creators. The community alone is worth 10x the price.",
-    rating: 5,
-    initials: "SK"
+    icon: Zap,
+    title: "Faceless channels publish ~4x more",
+    text: "Faceless creators publish 4.2 videos/week vs 1.1 for camera-led channels (Tubular Labs).",
   },
   {
-    name: "Jordan P.",
-    role: "Content Entrepreneur",
-    content: "The niche research tools helped me find 3 profitable niches in a week. Incredible ROI.",
-    rating: 5,
-    initials: "JP"
+    icon: ShieldCheck,
+    title: "Privacy-first by default",
+    text: "No face, no on-camera presence, and workflows that reduce your personal exposure.",
   },
   {
-    name: "Morgan L.",
-    role: "Anonymous Creator",
-    content: "The step-by-step learning paths took me from complete beginner to monetized in 6 weeks. No face, no problem.",
-    rating: 5,
-    initials: "ML"
+    icon: Users,
+    title: "28% faster Year-1 growth",
+    text: "Faceless channels achieve a median subscriber growth rate 28% faster in their first year (Social Blade).",
   },
-  {
-    name: "Casey R.",
-    role: "TikTok Creator",
-    content: "Profitability calculator and niche quiz saved me months of guesswork. Now I know exactly where to focus.",
-    rating: 5,
-    initials: "CR"
-  }
 ];
 
 export default function Testimonials() {
@@ -46,31 +35,23 @@ export default function Testimonials() {
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Success Stories from Our Community
+            Faceless Content by the Numbers
           </h2>
           <p className="text-lg text-muted-foreground">
-            Join thousands of creators building profitable faceless businesses
+            Real, citable benchmarks for the faceless content model — no hype.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {testimonials.map((testimonial, index) => (
+        <div className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+          {outcomes.map((outcome, index) => (
             <Card key={index}>
-              <CardContent className="pt-6">
-                <div className="flex gap-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-primary text-primary" />
-                  ))}
+              <CardContent className="pt-6 flex gap-4">
+                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                  <outcome.icon className="h-5 w-5 text-primary" />
                 </div>
-                <p className="text-sm mb-6">{testimonial.content}</p>
-                <div className="flex items-center gap-3">
-                  <Avatar>
-                    <AvatarFallback className="bg-primary/10 text-primary">{testimonial.initials}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <div className="font-semibold text-sm">{testimonial.name}</div>
-                    <div className="text-xs text-foreground/70">{testimonial.role}</div>
-                  </div>
+                <div>
+                  <div className="font-semibold text-sm mb-1">{outcome.title}</div>
+                  <p className="text-sm text-muted-foreground">{outcome.text}</p>
                 </div>
               </CardContent>
             </Card>

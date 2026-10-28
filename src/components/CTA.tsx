@@ -32,7 +32,7 @@ export default function CTA() {
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto bg-gradient-to-br from-primary to-primary/80 rounded-2xl p-8 md:p-12 text-center text-primary-foreground">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Ready to Build Your Faceless Empire?
+            Ready to Build Your Faceless Content Business?
           </h2>
           <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
             Join creators building profitable businesses without showing their face. Start your free trial today.

@@ -40,7 +40,7 @@ export default function ProductListing() {
     ? `${categoryName} Products - Digital Resources for Faceless Creators | ContentAnonymity`
     : 'Digital Products - Faceless Content Creator Resources | ContentAnonymity';
   const pageDescription = category && category !== 'all'
-    ? `Browse premium ${categoryName.toLowerCase()} products for faceless content creators. Templates, courses, and tools to build your anonymous content empire.`
+    ? `Browse premium ${categoryName.toLowerCase()} products for faceless content creators. Templates, courses, and tools to build your faceless content business.`
     : 'Discover premium digital products for faceless content creators. Templates, courses, automation tools, and resources to build your anonymous content business.';
   const canonicalUrl = category && category !== 'all'
     ? `https://contentanonymity.com/products/${category}`

@@ -11,7 +11,7 @@ export default function NotFound() {
     <>
       <SEO
         title="404 - Page Not Found | ContentAnonymity"
-        description="The page you're looking for doesn't exist. Explore our faceless content strategies, tools, and resources to build your anonymous content empire."
+        description="The page you're looking for doesn't exist. Explore our faceless content strategies, tools, and resources to build your faceless content business."
         noindex={true}
         canonical="https://contentanonymity.com/404"
         url="https://contentanonymity.com/404"

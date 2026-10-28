@@ -5,7 +5,7 @@ const benefits = [
   {
     icon: Shield,
     title: "Complete Identity Protection",
-    description: "Your real name is never required. Use a pseudonym and maintain complete anonymity while building your audience and revenue."
+    description: "Your real name is never required. Use a pseudonym and keep your identity private while building your audience and revenue."
   },
   {
     icon: EyeOff,

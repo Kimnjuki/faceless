@@ -36,14 +36,14 @@ export default function Hero() {
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
-              Build a Faceless Content Empire in 2026
+              Build a Privacy-First Faceless Content Business
             </h1>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-muted-foreground mb-6">
               Privacy-conscious workflows for research, production, distribution &amp; monetization across YouTube, TikTok, newsletters &amp; more
             </h2>
 
             <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
-               Create 30 days of content in 2 hours with AI. Build profitable income streams with <strong>a privacy-first approach</strong>. Proven strategies, step-by-step automation, and a growing community of faceless creators — <strong>all without putting your identity online.</strong>
+               Batch-create weeks of content with AI. Build profitable income streams with <strong>a privacy-first approach</strong>. Step-by-step strategies, automation, and a growing community of faceless creators — <strong>all without putting your identity online.</strong>
             </p>
 
             {/* Single primary CTA above the fold (P1: CTA hierarchy) */}
@@ -90,8 +90,8 @@ export default function Hero() {
               <div className="flex items-center gap-3">
                 <Users className="h-8 w-8 text-primary" />
                 <div className="text-left">
-                  <div className="font-bold text-foreground">100%</div>
-                  <div className="text-xs text-muted-foreground">Anonymous</div>
+                  <div className="font-bold text-foreground">No Face</div>
+                  <div className="text-xs text-muted-foreground">Required</div>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -139,7 +139,7 @@ export default function Hero() {
                   <Zap className="h-7 w-7 text-white" />
                 </div>
               </div>
-              <h3 className="font-bold text-lg mb-3 gradient-text">Create 30 Days of Content in 2 Hours</h3>
+              <h3 className="font-bold text-lg mb-3 gradient-text">Batch-Create Content with AI</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">AI-powered automation for faceless videos and posts</p>
             </div>
 
@@ -158,7 +158,7 @@ export default function Hero() {
                 </div>
               </div>
               <h3 className="font-bold text-lg mb-3 gradient-text">Multiple Revenue Streams</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Proven monetization strategies that actually work</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">Monetization strategies that actually work</p>
             </div>
 
             <div className="flex flex-col items-center text-center p-8 rounded-2xl glass border border-primary/10 hover-lift transition-all duration-300 group">

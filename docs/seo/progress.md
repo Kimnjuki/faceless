@@ -10,8 +10,8 @@
 |-------|------|--------|
 | P0 | Discovery and baseline | Done |
 | P1 | Unique crawlable HTML | Done (T1.1–T1.3) |
-| P2 | Internal linking | In progress (T2.1–T2.2) |
-| P3 | Indexation hygiene | Pending |
+| P2 | Internal linking | In progress (T2.1–T2.5) |
+| P3 | Indexation hygiene | In progress |
 | P4 | Content consolidate | Pending |
 | P5 | Structured data / E-E-A-T | Pending |
 | P6 | Monetization / privacy | Pending |
@@ -46,6 +46,17 @@
 - `build:seo` / `build:prerender` now call `prerender:routes` instead of meta-only inject.
 - Removed XML Sitemap anchor from `index.html` noscript.
 - **Verify:** `npm run build:seo` → 81/81 self-canonical; blog hub has crawlable `/blog/...` links; sample article has own title/H1/article body (not homepage H1).
+
+### Coolify gap fix (2026-11-23)
+
+- Live Coolify was on `main` `44da266` with `Dockerfile` → `build:quick` only; rebuild skipped via SHA cache.
+- Dockerfile now runs `build:seo` (vite + Convex prerender, no Chromium). See `docs/seo/coolify-deploy.md`.
+
+### T2.3–T2.5 / T3 / T8.2 (2026-11-23)
+
+- Topic clusters in `src/config/seoClusters.ts` + prerender related links + outbound platform docs.
+- Thin routes: `noindex,follow` in prerender; removed from sitemap (68 indexable URLs).
+- `npm run seo:check` + `npm run seo:links` (0 broken; orphans reduced vs audit 61).
 
 ### T2.1 — Rebuild global navigation and footer (2026-11-23)
 

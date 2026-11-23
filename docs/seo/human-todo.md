@@ -26,4 +26,5 @@ Items the agent cannot complete without human input, credentials, or legal/conte
 ## Infrastructure
 
 - [ ] TODO(HUMAN): Confirm Cloudflare has **no** self-redirect on canonical `https://contentanonymity.com/` (documented CRIT-001 in `nginx.conf`).
-- [ ] TODO(HUMAN): Confirm production build command is `build:prerender` (or successor) in Coolify, not plain `vite build` alone.
+- [ ] TODO(HUMAN): Merge `seo/overhaul` → `main`, then Coolify **Force Rebuild** with build-time `VITE_CONVEX_URL` (see `docs/seo/coolify-deploy.md`). Do not rely on “same SHA → skip build”.
+- [ ] TODO(HUMAN): After deploy, curl article `<title>` and unknown-URL `404` (commands in coolify-deploy.md).

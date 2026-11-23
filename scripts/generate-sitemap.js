@@ -37,10 +37,6 @@ const SITEMAP_EXCLUDED = new Set([
   '/learning/workshops',
   '/learning/resources',
   '/resources/templates',
-  '/tools/backlink-checker',
-  '/tools/seo-audit',
-  '/tools/keyword-research',
-  '/tools/performance',
 ]);
 
 const staticRoutes = [
@@ -51,10 +47,14 @@ const staticRoutes = [
   { path: '/getting-started', priority: '0.9', changefreq: 'weekly' },
   { path: '/blog', priority: '0.9', changefreq: 'daily' },
   
-  // Tools - High Priority (substantive only; thin tools excluded above)
+  // Tools - High Priority (indexable growth tools)
   { path: '/tools/all', priority: '0.8', changefreq: 'monthly' },
   { path: '/tools/calculator', priority: '0.8', changefreq: 'monthly' },
   { path: '/tools/niche-quiz', priority: '0.8', changefreq: 'monthly' },
+  { path: '/tools/seo-audit', priority: '0.8', changefreq: 'monthly' },
+  { path: '/tools/keyword-research', priority: '0.8', changefreq: 'monthly' },
+  { path: '/tools/backlink-checker', priority: '0.8', changefreq: 'monthly' },
+  { path: '/tools/performance', priority: '0.8', changefreq: 'monthly' },
   
   // Learning Resources - High Priority
   { path: '/platform-guides', priority: '0.8', changefreq: 'monthly' },

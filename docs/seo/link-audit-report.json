@@ -18,16 +18,16 @@
       678
     ],
     [
+      "/getting-started",
+      668
+    ],
+    [
       "/platform-guides",
       647
     ],
     [
       "/tools/all",
-      639
-    ],
-    [
-      "/getting-started",
-      631
+      645
     ],
     [
       "/faceless-content",
@@ -35,11 +35,27 @@
     ],
     [
       "/faceless-content/youtube",
-      405
+      417
     ],
     [
       "/faceless-content/monetization",
-      254
+      291
+    ],
+    [
+      "/tools/keyword-research",
+      258
+    ],
+    [
+      "/tools/seo-audit",
+      256
+    ],
+    [
+      "/tools/backlink-checker",
+      256
+    ],
+    [
+      "/tools/performance",
+      256
     ],
     [
       "/learning/case-studies",
@@ -67,23 +83,7 @@
     ],
     [
       "/tools/calculator",
-      213
-    ],
-    [
-      "/tools/niche-quiz",
-      213
-    ],
-    [
-      "/faceless-content/ai-workflows",
-      22
-    ],
-    [
-      "/faceless-content/quality-control",
-      22
-    ],
-    [
-      "/templates/faceless-youtube-script-template",
-      22
+      220
     ]
   ]
 }

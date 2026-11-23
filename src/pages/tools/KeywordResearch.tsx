@@ -16,6 +16,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import RelatedTools from "@/components/RelatedTools";
 
 interface Keyword {
   keyword: string;
@@ -312,6 +313,7 @@ export default function KeywordResearch() {
                 </div>
               </CardContent>
             </Card>
+            <RelatedTools currentPath="/tools/keyword-research" />
           </div>
         </div>
       </main>

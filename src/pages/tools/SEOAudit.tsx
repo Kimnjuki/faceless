@@ -21,6 +21,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import RelatedTools from "@/components/RelatedTools";
 
 interface SEOIssue {
   type: 'error' | 'warning' | 'info';
@@ -419,6 +420,7 @@ export default function SEOAudit() {
                 </div>
               </CardContent>
             </Card>
+            <RelatedTools currentPath="/tools/seo-audit" />
           </div>
         </div>
       </main>

@@ -40,6 +40,30 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://contentanonymity.com/tools/seo-audit</loc>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://contentanonymity.com/tools/keyword-research</loc>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://contentanonymity.com/tools/backlink-checker</loc>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://contentanonymity.com/tools/performance</loc>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://contentanonymity.com/platform-guides</loc>
     <lastmod>2026-11-23</lastmod>
     <changefreq>monthly</changefreq>

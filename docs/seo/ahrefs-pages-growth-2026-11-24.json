@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "source": "C:/Users/Administrator/Downloads/contentanonymity_24-nov-2026_pages_2026-11-24_00-57-04.csv",
+    "count": 7,
+    "ok200": 4,
+    "redirects": 3,
+    "thinTools": 4,
+    "notRendered": 7,
+    "lowOutlinks": 0,
+    "lowInlinks": 4,
+    "executedAt": "2026-11-24"
+  },
+  "execution": {
+    "status": "implemented",
+    "actions": [
+      "Removed seo-audit, keyword-research, backlink-checker, performance from THIN_NOINDEX",
+      "Enriched TOOL_DEFS with longCopy + FAQ + WebApplication/FAQPage JSON-LD in prerender",
+      "Added four tools to public/sitemap.xml and generate-sitemap.js",
+      "Footer, ExploreSection, MegaMenu, prerender footer/hub lists now link to all six tools",
+      "RelatedTools component on each growth tool page",
+      "Keyword→tool link opportunities injected on blog + platform-guide prerender (scripts/internal-link-opps.mjs)",
+      "www/http 301s remain Cloudflare/DNS — verify single-hop redirect separately"
+    ]
+  },
+  "opportunities": {
+    "thinNoindexToolsStillCrawled": [],
+    "growthBlueprint": [
+      "DONE: Index + enrich thin tool stubs",
+      "DONE: Contextual internal links from hubs/articles to tools",
+      "PENDING ops: Ensure JS rendering ON in Ahrefs Site Audit",
+      "PENDING ops: Collapse www/http to single hop in Cloudflare",
+      "PENDING ops: Recrawl after Coolify deploy of this commit"
+    ]
+  }
+}

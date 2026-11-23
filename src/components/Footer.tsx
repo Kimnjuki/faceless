@@ -13,6 +13,10 @@ const footerSections = [
       { label: "Creator Tools", href: "/tools/all" },
       { label: "Profitability Calculator", href: "/tools/calculator" },
       { label: "Niche Finder Quiz", href: "/tools/niche-quiz" },
+      { label: "SEO Audit", href: "/tools/seo-audit" },
+      { label: "Keyword Research", href: "/tools/keyword-research" },
+      { label: "Backlink Checker", href: "/tools/backlink-checker" },
+      { label: "Performance Monitor", href: "/tools/performance" },
     ],
   },
   {

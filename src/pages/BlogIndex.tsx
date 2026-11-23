@@ -165,6 +165,10 @@ export default function BlogIndex() {
             <span className="text-muted-foreground">·</span>
             <Link to="/tools/calculator" className="text-primary hover:underline font-medium">Estimate earnings with our Profitability Calculator</Link>
             <span className="text-muted-foreground">·</span>
+            <Link to="/tools/seo-audit" className="text-primary hover:underline font-medium">Run a free SEO Audit</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/tools/keyword-research" className="text-primary hover:underline font-medium">Research keywords</Link>
+            <span className="text-muted-foreground">·</span>
             <Link to="/getting-started" className="text-primary hover:underline font-medium">Start with our 4-step Getting Started guide</Link>
           </div>
 

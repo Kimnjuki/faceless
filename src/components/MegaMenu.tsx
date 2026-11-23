@@ -24,6 +24,8 @@ import {
   Route,
   DollarSign,
   Lightbulb,
+  Link as LinkIcon,
+  Gauge,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -331,12 +333,36 @@ export function ToolsMegaMenu({ trigger }: MegaMenuProps) {
                 </Link>
               </Button>
             </div>
-            <DropdownMenuLabel className="mb-3 mt-4">Calculators</DropdownMenuLabel>
+            <DropdownMenuLabel className="mb-3 mt-4">Calculators &amp; SEO</DropdownMenuLabel>
             <div className="space-y-2">
               <Button variant="ghost" className="w-full justify-start" asChild>
                 <Link to="/tools/calculator">
                   <Calculator className="mr-2 h-4 w-4" />
                   Profitability Calculator
+                </Link>
+              </Button>
+              <Button variant="ghost" className="w-full justify-start" asChild>
+                <Link to="/tools/seo-audit">
+                  <Search className="mr-2 h-4 w-4" />
+                  SEO Audit
+                </Link>
+              </Button>
+              <Button variant="ghost" className="w-full justify-start" asChild>
+                <Link to="/tools/keyword-research">
+                  <Search className="mr-2 h-4 w-4" />
+                  Keyword Research
+                </Link>
+              </Button>
+              <Button variant="ghost" className="w-full justify-start" asChild>
+                <Link to="/tools/backlink-checker">
+                  <LinkIcon className="mr-2 h-4 w-4" />
+                  Backlink Checker
+                </Link>
+              </Button>
+              <Button variant="ghost" className="w-full justify-start" asChild>
+                <Link to="/tools/performance">
+                  <Gauge className="mr-2 h-4 w-4" />
+                  Performance Monitor
                 </Link>
               </Button>
             </div>

@@ -19,6 +19,7 @@ import { ConvexHttpClient } from 'convex/browser';
 import { api } from '../convex/_generated/api.js';
 import { relatedPathsFor } from './seo-clusters.mjs';
 import { nichePublicSlug, isOpaqueNicheParam, VALID_NICHE_SLUG_RE } from './niche-slug.mjs';
+import { linkOpportunitiesForText } from './internal-link-opps.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
@@ -33,7 +34,8 @@ const VALID_SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const AUTO_GUIDE_SLUG_RE = /^guide-\d+-[a-z0-9]+$/;
 const EXCLUDED_ARTICLE_SLUGS = new Set(['workflows', 'anonymity']);
 
-/** Placeholder / thin routes — noindex until populated (T4.3). */
+/** Placeholder / thin routes — noindex until populated (T4.3).
+ * Growth tools (seo-audit, keyword-research, backlink-checker, performance) are now indexable. */
 const THIN_NOINDEX = new Set([
   '/products/all',
   '/news',
@@ -44,21 +46,123 @@ const THIN_NOINDEX = new Set([
   '/learning/workshops',
   '/learning/resources',
   '/resources/templates',
-  '/tools/backlink-checker',
-  '/tools/seo-audit',
-  '/tools/keyword-research',
-  '/tools/performance',
 ]);
 
 const TOOL_DEFS = [
-  { path: '/tools/calculator', title: 'Profitability Calculator', description: 'Estimate faceless channel revenue scenarios with transparent assumptions.' },
-  { path: '/tools/niche-quiz', title: 'Niche Finder Quiz', description: 'Find a faceless niche that matches your skills, risk tolerance, and goals.' },
-  { path: '/tools/seo-audit', title: 'SEO Audit Tool', description: 'Check on-page SEO signals for your faceless content pages.' },
-  { path: '/tools/keyword-research', title: 'Keyword Research', description: 'Discover keywords and topics for anonymous content channels.' },
-  { path: '/tools/backlink-checker', title: 'Backlink Checker', description: 'Inspect referring domains and link patterns for your site.' },
-  { path: '/tools/performance', title: 'Performance Monitor', description: 'Track Core Web Vitals and page speed for creator sites.' },
-  { path: '/tools/all', title: 'All Creator Tools', description: 'Free tools for faceless creators: calculator, niche quiz, SEO, and more.' },
+  {
+    path: '/tools/calculator',
+    title: 'Profitability Calculator',
+    description:
+      'Estimate faceless channel revenue with CPM, upload cadence, and monetization mix assumptions you can audit.',
+    longCopy:
+      'Model best/base/worst cases before you invest in production. Pair results with a niche from the database and a platform playbook so forecasts stay grounded.',
+    faqs: [
+      ['Is this CPM data guaranteed?', 'No — inputs are illustrative. Replace defaults with your niche research.'],
+      ['Who should use it?', 'Creators choosing between niches or deciding whether ads + affiliates can cover costs.'],
+    ],
+  },
+  {
+    path: '/tools/niche-quiz',
+    title: 'Niche Finder Quiz',
+    description:
+      'Answer short questions about skills, risk, and goals to surface faceless niches that fit your constraints.',
+    longCopy:
+      'Use the quiz as a filter, then open matching niche detail pages for formats, tools, and monetization notes. Re-run after you gain production experience.',
+    faqs: [
+      ['How accurate is the quiz?', 'It ranks fit signals — validate with the niche database and a small content test.'],
+      ['Can I change answers later?', 'Yes. Treat it as a planning helper, not a permanent lock-in.'],
+    ],
+  },
+  {
+    path: '/tools/seo-audit',
+    title: 'SEO Audit Tool',
+    description:
+      'Free on-page SEO audit for titles, H1s, meta descriptions, alt text, and internal links on faceless creator pages.',
+    longCopy:
+      'Run an audit before publishing guides or niche landing pages. Fix missing titles, thin copy, and weak internal links first — then re-check Core Web Vitals with the performance monitor.',
+    faqs: [
+      ['Does this replace Ahrefs Site Audit?', 'No. It is a lightweight on-page checker for your own pages, not a full crawl suite.'],
+      ['What should I fix first?', 'One H1, unique title/meta, crawlable internal links, and images with alt text.'],
+    ],
+  },
+  {
+    path: '/tools/keyword-research',
+    title: 'Keyword Research',
+    description:
+      'Generate keyword and question ideas for faceless YouTube, blogs, and short-form content without a paid suite.',
+    longCopy:
+      'Start from a seed topic (niche + platform), expand into questions and modifiers, then map winners to scripts and blog outlines. Cross-check intent with platform guides before filming.',
+    faqs: [
+      ['Are volumes exact?', 'Treat lists as ideation. Validate demand with Search Console and platform analytics.'],
+      ['Best workflow?', 'Seed → cluster → outline → internal links from related guides.'],
+    ],
+  },
+  {
+    path: '/tools/backlink-checker',
+    title: 'Backlink Checker',
+    description:
+      'Inspect referring domains and link patterns so you can prioritize outreach and cleanup for creator sites.',
+    longCopy:
+      'Use this when auditing a channel site or affiliate landing page. Focus on relevant referring domains, then earn links from niche roundups, tools directories, and original research posts.',
+    faqs: [
+      ['Is this a full backlink index?', 'No — it is a practical checker for planning, not a replacement for enterprise link databases.'],
+      ['What links matter most?', 'Topically relevant pages with real traffic beat raw link counts.'],
+    ],
+  },
+  {
+    path: '/tools/performance',
+    title: 'Performance Monitor',
+    description:
+      'Track Core Web Vitals and page-speed signals that affect rankings and ad viewability on creator sites.',
+    longCopy:
+      'After SEO fixes, measure LCP/CLS/INP style issues. Defer third-party scripts (ads load on-demand), compress hero media, and keep prerendered HTML lean for crawlers.',
+    faqs: [
+      ['Why performance for SEO?', 'Speed and stability improve UX signals and protect crawl efficiency.'],
+      ['Quick wins?', 'Defer ads, compress images, avoid layout shifts, keep critical CSS small.'],
+    ],
+  },
+  {
+    path: '/tools/all',
+    title: 'All Creator Tools',
+    description:
+      'Free faceless creator tools: profitability calculator, niche quiz, SEO audit, keyword research, backlinks, and performance.',
+    longCopy:
+      'Start with niche + calculator, then SEO/keyword tools before publishing. Use performance checks before scaling traffic campaigns.',
+    faqs: [
+      ['Which tool first?', 'Niche quiz → calculator → keyword research → SEO audit.'],
+      ['Are tools free?', 'Yes — built for anonymous creators planning faceless channels.'],
+    ],
+  },
 ];
+
+function toolFaqJsonLd(tool) {
+  if (!tool?.faqs?.length) return '';
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: tool.faqs.map(([q, a]) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  };
+  return `<script type="application/ld+json">${JSON.stringify(data)}</script>`;
+}
+
+function toolAppJsonLd(tool) {
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: tool.title,
+    url: `${SITE}${tool.path}`,
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: tool.description,
+    provider: { '@type': 'Organization', name: 'ContentAnonymity', url: SITE },
+  };
+  return `<script type="application/ld+json">${JSON.stringify(data)}</script>`;
+}
 
 const STATIC_PAGE_META = {
   '/': {
@@ -421,6 +525,10 @@ function siteFooterHtml() {
     <a href="/platform-guides">Platform Guides</a> ·
     <a href="/faceless-content">Faceless Content</a> ·
     <a href="/tools/all">Tools</a> ·
+    <a href="/tools/seo-audit">SEO Audit</a> ·
+    <a href="/tools/keyword-research">Keyword Research</a> ·
+    <a href="/tools/backlink-checker">Backlink Checker</a> ·
+    <a href="/tools/performance">Performance</a> ·
     <a href="/resources/niches">Niches</a> ·
     <a href="/starter-kit">Starter Kit</a>
   </p>
@@ -763,7 +871,8 @@ function bodyForRoute(route, meta, ctx) {
   const blog = route.match(/^\/blog\/([^/]+)$/);
   if (blog) {
     const a = articlesBySlug.get(blog[1]);
-    const contentHtml = markdownToHtml(typeof a?.content === 'string' ? a.content : a?.excerpt || '');
+    const rawText = typeof a?.content === 'string' ? a.content : a?.excerpt || '';
+    const contentHtml = markdownToHtml(rawText);
     const clusterRelated = relatedPathsFor(route, 8);
     const articleIdx = articles.findIndex((x) => x.slug === blog[1]);
     const neighborRelated = [];
@@ -787,9 +896,17 @@ function bodyForRoute(route, meta, ctx) {
       href: r.href,
       label: labelByHref.get(r.href) || r.label,
     }));
+    const oppLinks = linkOpportunitiesForText(`${a?.title || ''} ${a?.excerpt || ''} ${rawText}`, {
+      excludePath: route,
+      limit: 4,
+    });
     const published = a?.publishedAt || a?.createdAt;
     const modified = a?.updatedAt || published;
     const toIso = (n) => (typeof n === 'number' ? new Date(n).toISOString() : undefined);
+    const toolCta =
+      oppLinks.length > 0
+        ? `<h2>Recommended tools for this topic</h2>${linkList(oppLinks)}`
+        : `<p><a href="/tools/calculator">Next step: try the Profitability Calculator</a> · <a href="/tools/niche-quiz">or the Niche Finder Quiz</a> · <a href="/tools/seo-audit">SEO Audit</a></p>`;
     return wrapRoot({
       h1: meta.h1,
       lead: a?.excerpt || '',
@@ -808,7 +925,7 @@ function bodyForRoute(route, meta, ctx) {
       mainHtml: `<article>${contentHtml || `<p>${escapeHtml(a?.excerpt || 'Article content loading…')}</p>`}</article>
       <h2>Related Guides &amp; Articles</h2>
       ${linkList(relatedLabeled)}
-      <p><a href="/tools/calculator">Next step: try the Profitability Calculator</a> · <a href="/tools/niche-quiz">or the Niche Finder Quiz</a></p>
+      ${toolCta}
       <p>Authoritative references: <a href="https://support.google.com/youtube/answer/72851" rel="noopener" target="_blank">YouTube Partner Program</a>, <a href="https://www.tiktok.com/creators" rel="noopener" target="_blank">TikTok Creators</a>, <a href="https://creators.instagram.com/" rel="noopener" target="_blank">Instagram Creators</a>.</p>`,
     });
   }
@@ -816,13 +933,18 @@ function bodyForRoute(route, meta, ctx) {
   const guide = route.match(/^\/platform-guides\/([^/]+)$/);
   if (guide) {
     const g = guidesBySlug.get(guide[1]);
-    const contentHtml = markdownToHtml(typeof g?.content === 'string' ? g.content : g?.excerpt || '');
+    const rawText = typeof g?.content === 'string' ? g.content : g?.excerpt || '';
+    const contentHtml = markdownToHtml(rawText);
     const clusterRelated = relatedPathsFor(route, 5);
     const fallbackRelated = guides
       .filter((x) => x.slug !== guide[1])
       .slice(0, 5)
       .map((x) => ({ href: `/platform-guides/${x.slug}`, label: x.title }));
     const related = clusterRelated.length ? clusterRelated : fallbackRelated;
+    const oppLinks = linkOpportunitiesForText(`${g?.title || ''} ${g?.excerpt || ''} ${rawText}`, {
+      excludePath: route,
+      limit: 3,
+    });
     return wrapRoot({
       h1: meta.h1,
       lead: g?.excerpt || '',
@@ -834,12 +956,28 @@ function bodyForRoute(route, meta, ctx) {
       mainHtml: `<article>${contentHtml || `<p>${escapeHtml(g?.excerpt || 'Guide content loading…')}</p>`}</article>
       <h2>Related Guides &amp; Articles</h2>
       ${linkList(related)}
-      <p><a href="/blog">Browse the blog</a> · <a href="/faceless-content">Faceless Content Hub</a></p>`,
+      ${
+        oppLinks.length
+          ? `<h2>Tools that pair with this guide</h2>${linkList(oppLinks)}`
+          : ''
+      }
+      <p><a href="/blog">Browse the blog</a> · <a href="/faceless-content">Faceless Content Hub</a> · <a href="/tools/all">Creator tools</a></p>`,
     });
   }
 
   const tool = TOOL_DEFS.find((t) => t.path === route);
   if (tool) {
+    const siblingTools = TOOL_DEFS.filter((t) => t.path !== tool.path && t.path !== '/tools/all').map(
+      (t) => ({ href: t.path, label: t.title, excerpt: t.description }),
+    );
+    const faqHtml = tool.faqs?.length
+      ? `<h2>FAQ</h2><dl>${tool.faqs
+          .map(
+            ([q, a]) =>
+              `<dt>${escapeHtml(q)}</dt><dd>${escapeHtml(a)}</dd>`,
+          )
+          .join('\n')}</dl>`
+      : '';
     return wrapRoot({
       h1: meta.h1,
       lead: tool.description,
@@ -848,8 +986,13 @@ function bodyForRoute(route, meta, ctx) {
         { name: 'Tools', href: '/tools/all' },
         { name: tool.title, href: tool.path },
       ],
+      jsonLd: `${toolAppJsonLd(tool)}${toolFaqJsonLd(tool)}`,
       mainHtml: `<h2>What this tool helps you decide</h2>
-      <p>${escapeHtml(tool.description)} Use the interactive controls after the page loads to model scenarios with transparent assumptions. Pair results with a niche from the database and a platform playbook before you publish.</p>
+      <p>${escapeHtml(tool.longCopy || tool.description)}</p>
+      <p>Use the interactive controls after the page loads. Pair results with a niche from the database and a platform playbook before you publish.</p>
+      ${faqHtml}
+      <h2>Related tools</h2>
+      ${linkList(siblingTools)}
       <h2>Related resources</h2>
       ${linkList([
         { href: '/blog', label: 'Faceless content blog' },
@@ -905,6 +1048,10 @@ function bodyForRoute(route, meta, ctx) {
       { href: '/learning/case-studies', label: 'Case studies' },
       { href: '/tools/calculator', label: 'Profitability calculator' },
       { href: '/tools/niche-quiz', label: 'Niche finder quiz' },
+      { href: '/tools/seo-audit', label: 'SEO audit tool' },
+      { href: '/tools/keyword-research', label: 'Keyword research' },
+      { href: '/tools/backlink-checker', label: 'Backlink checker' },
+      { href: '/tools/performance', label: 'Performance monitor' },
       { href: '/starter-kit', label: 'Starter kit' },
       { href: '/templates/faceless-youtube-script-template', label: 'YouTube script template' },
       { href: '/compare/best-ai-video-generators-for-faceless-content', label: 'AI video generator comparison' },
@@ -1002,6 +1149,10 @@ async function main() {
   // Still emit HTML for thin/noindex pages (excluded from sitemap) so nginx can serve them.
   for (const thin of THIN_NOINDEX) {
     if (!routes.includes(thin)) routes.push(thin);
+  }
+  // Always prerender indexable tools (even if sitemap was stale).
+  for (const t of TOOL_DEFS) {
+    if (!routes.includes(t.path)) routes.push(t.path);
   }
 
   let articles = [];

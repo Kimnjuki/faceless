@@ -15,6 +15,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import RelatedTools from "@/components/RelatedTools";
 import { trackToolUsage } from "@/utils/analytics";
 
 interface Backlink {
@@ -333,6 +334,7 @@ export default function BacklinkChecker() {
                 </CardContent>
               </Card>
             )}
+            <RelatedTools currentPath="/tools/backlink-checker" />
           </div>
         </div>
       </main>

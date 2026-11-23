@@ -18,6 +18,7 @@ import { measureAllWebVitals } from "@/utils/webVitals";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import RelatedTools from "@/components/RelatedTools";
 
 interface WebVital {
   name: string;
@@ -327,6 +328,7 @@ export default function PerformanceMonitor() {
                 </div>
               </CardContent>
             </Card>
+            <RelatedTools currentPath="/tools/performance" />
           </div>
         </div>
       </main>

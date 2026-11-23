@@ -12,7 +12,7 @@
     "inject:seo": "node scripts/inject-route-seo.mjs",
     "prerender:routes": "node scripts/prerender-routes.mjs",
     "build:prerender": "npm run build:quick && npm run prerender:routes && npm run prepare:react-snap && react-snap",
-    "build:seo": "npm run build:quick && npm run prerender:routes && node scripts/verify-prerender.mjs",
+    "build:seo": "npm run build:quick && npm run prerender:routes && npm run seo:check",
     "build:check": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives",
     "lint:strict": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",

@@ -1,0 +1,83 @@
+﻿===== https://contentanonymity.com/blog =====
+TITLE: <title>Privacy-First Faceless Content Platform | ContentAnonymity</title>
+CANONICAL: 
+OG:URL: property="og:url" content="https://contentanonymity.com/" />
+H1: 
+
+===== https://contentanonymity.com/blog/faceless-youtube-channel-guide-2026 =====
+TITLE: <title>Privacy-First Faceless Content Platform | ContentAnonymity</title>
+CANONICAL: 
+OG:URL: property="og:url" content="https://contentanonymity.com/" />
+H1: 
+
+===== https://contentanonymity.com/platform-guides/youtube-faceless-strategy =====
+TITLE: <title>Privacy-First Faceless Content Platform | ContentAnonymity</title>
+CANONICAL: 
+OG:URL: property="og:url" content="https://contentanonymity.com/" />
+H1: 
+
+===== https://contentanonymity.com/tools/calculator =====
+TITLE: <title>Privacy-First Faceless Content Platform | ContentAnonymity</title>
+CANONICAL: 
+OG:URL: property="og:url" content="https://contentanonymity.com/" />
+H1: 
+
+===== https://contentanonymity.com/faceless-content/youtube =====
+TITLE: <title>Privacy-First Faceless Content Platform | ContentAnonymity</title>
+CANONICAL: 
+OG:URL: property="og:url" content="https://contentanonymity.com/" />
+H1: 
+
+===== https://contentanonymity.com/resources/niches =====
+TITLE: <title>Privacy-First Faceless Content Platform | ContentAnonymity</title>
+CANONICAL: 
+OG:URL: property="og:url" content="https://contentanonymity.com/" />
+H1: 
+
+===== UNKNOWN URL STATUS =====
+GET /this-does-not-exist-xyz -> HTTP 200
+
+===== HOST REDIRECT HOPS =====
+num_redirects=2 effective=https://contentanonymity.com/ code=200
+
+===== LIGHTHOUSE MOBILE (2026-11-23) =====
+Note: categories{} empty in LH 12.8.2 JSON for these runs; metrics/audits captured below.
+--- home (https://contentanonymity.com/) ---
+fetchTime: 2026-11-23T18:12:33.436Z
+LCP: 10.0 s
+CLS: 0
+TBT: 960 ms
+FCP: 4.9 s
+SI: 6.9 s
+document-title score: 1
+meta-description score: 1
+canonical score: 1
+warnings: 
+--- blog-post (https://contentanonymity.com/blog/faceless-youtube-channel-guide-2026) ---
+fetchTime: 2026-11-23T18:13:11.753Z
+LCP: 8.9 s
+CLS: 0
+TBT: 290 ms
+FCP: 4.8 s
+SI: 8.8 s
+document-title score: 1
+meta-description score: 1
+canonical score: 1
+warnings: 
+--- calculator (https://contentanonymity.com/tools/calculator) ---
+fetchTime: 2026-11-23T18:13:37.105Z
+LCP: 4.5 s
+CLS: 0
+TBT: 170 ms
+FCP: 4.2 s
+SI: 7.0 s
+document-title score: 1
+meta-description score: 1
+canonical score: 1
+warnings: 
+
+===== BASELINE FINDINGS =====
+F01 confirmed: all 6 sampled URLs share homepage <title>; no route H1 in raw HTML (only noscript homepage H1).
+F08 confirmed: /this-does-not-exist-xyz returns HTTP 200 (SPA soft-404).
+F09: http://www -> https://www -> https://apex = 2 redirects (want 1 hop).
+og:url stuck on homepage for inner routes in raw HTML.

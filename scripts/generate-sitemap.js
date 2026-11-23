@@ -26,6 +26,23 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 const SITE_URL = 'https://contentanonymity.com';
 const SITEMAP_PATH = path.join(__dirname, '../public/sitemap.xml');
 
+/** Thin/placeholder routes — kept on site with noindex, omitted from sitemap (T4.3). */
+const SITEMAP_EXCLUDED = new Set([
+  '/products/all',
+  '/news',
+  '/community/challenges',
+  '/community/events',
+  '/community/members',
+  '/learning-paths',
+  '/learning/workshops',
+  '/learning/resources',
+  '/resources/templates',
+  '/tools/backlink-checker',
+  '/tools/seo-audit',
+  '/tools/keyword-research',
+  '/tools/performance',
+]);
+
 const staticRoutes = [
   // Homepage - Highest Priority
   { path: '/', priority: '1.0', changefreq: 'daily' },
@@ -33,35 +50,27 @@ const staticRoutes = [
   // Core Pages - High Priority
   { path: '/getting-started', priority: '0.9', changefreq: 'weekly' },
   { path: '/blog', priority: '0.9', changefreq: 'daily' },
-  { path: '/news', priority: '0.8', changefreq: 'daily' },
   
-  // Tools - High Priority
+  // Tools - High Priority (substantive only; thin tools excluded above)
   { path: '/tools/all', priority: '0.8', changefreq: 'monthly' },
   { path: '/tools/calculator', priority: '0.8', changefreq: 'monthly' },
   { path: '/tools/niche-quiz', priority: '0.8', changefreq: 'monthly' },
-  { path: '/tools/seo-audit', priority: '0.7', changefreq: 'monthly' },
-  { path: '/tools/keyword-research', priority: '0.7', changefreq: 'monthly' },
-  { path: '/tools/backlink-checker', priority: '0.7', changefreq: 'monthly' },
-  { path: '/tools/performance', priority: '0.7', changefreq: 'monthly' },
   
   // Learning Resources - High Priority
-  { path: '/learning-paths', priority: '0.8', changefreq: 'monthly' },
   { path: '/platform-guides', priority: '0.8', changefreq: 'monthly' },
   { path: '/learning/case-studies', priority: '0.8', changefreq: 'weekly' },
-  { path: '/learning/workshops', priority: '0.7', changefreq: 'monthly' },
-  { path: '/learning/resources', priority: '0.7', changefreq: 'monthly' },
   
   // Resources - Medium Priority
-  { path: '/resources/templates', priority: '0.7', changefreq: 'monthly' },
   { path: '/resources/niches', priority: '0.7', changefreq: 'monthly' },
-  
-  // Products - Medium Priority
-  { path: '/products/all', priority: '0.8', changefreq: 'weekly' },
-  
-  // Community - Medium Priority
-  { path: '/community/members', priority: '0.6', changefreq: 'weekly' },
-  { path: '/community/events', priority: '0.6', changefreq: 'weekly' },
-  { path: '/community/challenges', priority: '0.6', changefreq: 'weekly' },
+  { path: '/starter-kit', priority: '0.8', changefreq: 'monthly' },
+  { path: '/templates/faceless-youtube-script-template', priority: '0.7', changefreq: 'monthly' },
+  { path: '/compare/best-ai-video-generators-for-faceless-content', priority: '0.7', changefreq: 'monthly' },
+  { path: '/trust-and-safety', priority: '0.8', changefreq: 'monthly' },
+  { path: '/faceless-content', priority: '0.8', changefreq: 'monthly' },
+  { path: '/faceless-content/ai-workflows', priority: '0.7', changefreq: 'monthly' },
+  { path: '/faceless-content/quality-control', priority: '0.7', changefreq: 'monthly' },
+  { path: '/faceless-content/youtube', priority: '0.7', changefreq: 'monthly' },
+  { path: '/faceless-content/monetization', priority: '0.7', changefreq: 'monthly' },
   
   // Legal & trust (AdSense / E-E-A-T)
   { path: '/about', priority: '0.7', changefreq: 'monthly' },
@@ -69,10 +78,7 @@ const staticRoutes = [
   { path: '/privacy-policy', priority: '0.5', changefreq: 'yearly' },
   { path: '/terms', priority: '0.5', changefreq: 'yearly' },
   // Note: /terms-of-service is intentionally excluded — the page canonicalizes to /terms.
-  
-  // Health Check (excluded from indexing but good to have in sitemap for monitoring)
-  // Note: Health endpoint should have noindex meta tag
-];
+].filter((r) => !SITEMAP_EXCLUDED.has(r.path));
 
 /**
  * Canonical URL hygiene — the sitemap must only publish URLs that are indexable,
@@ -195,6 +201,7 @@ async function main() {
     const seen = new Set();
     const allRoutes = before.filter((r) => {
       const path = typeof r.path === 'string' && r.path.startsWith('/') ? r.path : `/${r.path || ''}`;
+      if (SITEMAP_EXCLUDED.has(path)) return false;
       if (!isSitemapEligibleRoute(path)) return false;
       const url = SITE_URL + path;
       if (seen.has(url)) return false;

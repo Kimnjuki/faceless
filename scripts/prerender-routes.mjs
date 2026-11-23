@@ -17,6 +17,7 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { ConvexHttpClient } from 'convex/browser';
 import { api } from '../convex/_generated/api.js';
+import { relatedPathsFor } from './seo-clusters.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
@@ -30,6 +31,23 @@ const sitemapPath = path.join(root, 'public', 'sitemap.xml');
 const VALID_SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const AUTO_GUIDE_SLUG_RE = /^guide-\d+-[a-z0-9]+$/;
 const EXCLUDED_ARTICLE_SLUGS = new Set(['workflows', 'anonymity']);
+
+/** Placeholder / thin routes — noindex until populated (T4.3). */
+const THIN_NOINDEX = new Set([
+  '/products/all',
+  '/news',
+  '/community/challenges',
+  '/community/events',
+  '/community/members',
+  '/learning-paths',
+  '/learning/workshops',
+  '/learning/resources',
+  '/resources/templates',
+  '/tools/backlink-checker',
+  '/tools/seo-audit',
+  '/tools/keyword-research',
+  '/tools/performance',
+]);
 
 const TOOL_DEFS = [
   { path: '/tools/calculator', title: 'Profitability Calculator', description: 'Estimate faceless channel revenue scenarios with transparent assumptions.' },
@@ -561,10 +579,19 @@ function bodyForRoute(route, meta, ctx) {
   if (blog) {
     const a = articlesBySlug.get(blog[1]);
     const contentHtml = markdownToHtml(typeof a?.content === 'string' ? a.content : a?.excerpt || '');
-    const related = articles
+    const clusterRelated = relatedPathsFor(route, 5);
+    const fallbackRelated = articles
       .filter((x) => x.slug !== blog[1])
       .slice(0, 5)
       .map((x) => ({ href: `/blog/${x.slug}`, label: x.title }));
+    const related = clusterRelated.length ? clusterRelated : fallbackRelated;
+    const labelByHref = new Map(
+      articles.map((x) => [`/blog/${x.slug}`, x.title]),
+    );
+    const relatedLabeled = related.map((r) => ({
+      href: r.href,
+      label: labelByHref.get(r.href) || r.label,
+    }));
     return wrapRoot({
       h1: meta.h1,
       lead: a?.excerpt || '',
@@ -575,8 +602,9 @@ function bodyForRoute(route, meta, ctx) {
       ],
       mainHtml: `<article>${contentHtml || `<p>${escapeHtml(a?.excerpt || 'Article content loading…')}</p>`}</article>
       <h2>Related Guides &amp; Articles</h2>
-      ${linkList(related)}
-      <p><a href="/tools/calculator">Next step: try the Profitability Calculator</a> · <a href="/tools/niche-quiz">or the Niche Finder Quiz</a></p>`,
+      ${linkList(relatedLabeled)}
+      <p><a href="/tools/calculator">Next step: try the Profitability Calculator</a> · <a href="/tools/niche-quiz">or the Niche Finder Quiz</a></p>
+      <p>Authoritative references: <a href="https://support.google.com/youtube/answer/72851" rel="noopener" target="_blank">YouTube Partner Program</a>, <a href="https://www.tiktok.com/creators" rel="noopener" target="_blank">TikTok Creators</a>, <a href="https://creators.instagram.com/" rel="noopener" target="_blank">Instagram Creators</a>.</p>`,
     });
   }
 
@@ -584,10 +612,12 @@ function bodyForRoute(route, meta, ctx) {
   if (guide) {
     const g = guidesBySlug.get(guide[1]);
     const contentHtml = markdownToHtml(typeof g?.content === 'string' ? g.content : g?.excerpt || '');
-    const related = guides
+    const clusterRelated = relatedPathsFor(route, 5);
+    const fallbackRelated = guides
       .filter((x) => x.slug !== guide[1])
       .slice(0, 5)
       .map((x) => ({ href: `/platform-guides/${x.slug}`, label: x.title }));
+    const related = clusterRelated.length ? clusterRelated : fallbackRelated;
     return wrapRoot({
       h1: meta.h1,
       lead: g?.excerpt || '',
@@ -597,7 +627,7 @@ function bodyForRoute(route, meta, ctx) {
         { name: truncate(meta.h1, 48), href: route },
       ],
       mainHtml: `<article>${contentHtml || `<p>${escapeHtml(g?.excerpt || 'Guide content loading…')}</p>`}</article>
-      <h2>Related Guides</h2>
+      <h2>Related Guides &amp; Articles</h2>
       ${linkList(related)}
       <p><a href="/blog">Browse the blog</a> · <a href="/faceless-content">Faceless Content Hub</a></p>`,
     });
@@ -681,7 +711,11 @@ async function fetchConvexData() {
 async function main() {
   const shell = loadShell();
   const routes = routesFromSitemap();
-  console.log(`Prerender: ${routes.length} sitemap routes`);
+  // Still emit HTML for thin/noindex pages (excluded from sitemap) so nginx can serve them.
+  for (const thin of THIN_NOINDEX) {
+    if (!routes.includes(thin)) routes.push(thin);
+  }
+  console.log(`Prerender: ${routes.length} routes (${THIN_NOINDEX.size} thin/noindex included)`);
 
   let articles = [];
   let guides = [];
@@ -707,6 +741,9 @@ async function main() {
     const meta = metaForRoute(route, articlesBySlug, guidesBySlug);
     const body = bodyForRoute(route, meta, ctx);
     let html = applyHead(shell, meta);
+    if (THIN_NOINDEX.has(route)) {
+      html = replaceNamedMeta(html, 'robots', 'noindex, follow');
+    }
     html = injectRoot(html, body);
     // Remove homepage-only noscript duplicate H1 on inner routes
     if (route !== '/') {

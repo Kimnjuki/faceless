@@ -12,7 +12,6 @@ Disallow: /creator-studio
 Disallow: /checkout
 Disallow: /admin/
 Disallow: /_next/
-Disallow: /static/
 Disallow: /health
 
 # Internal search and filtered results (avoid duplicate/low-value indexing)

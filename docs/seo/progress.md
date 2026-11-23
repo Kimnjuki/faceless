@@ -10,13 +10,13 @@
 |-------|------|--------|
 | P0 | Discovery and baseline | Done |
 | P1 | Unique crawlable HTML | Done (T1.1–T1.3) |
-| P2 | Internal linking | In progress (T2.1–T2.5) |
-| P3 | Indexation hygiene | In progress |
-| P4 | Content consolidate | Pending |
-| P5 | Structured data / E-E-A-T | Pending |
-| P6 | Monetization / privacy | Pending |
-| P7 | Performance | Pending |
-| P8 | Measurement / CI | Pending |
+| P2 | Internal linking | Done (T2.1–T2.5; breadcrumbs in prerender + SPA) |
+| P3 | Indexation hygiene | Done (thin noindex; auth noindex; host hop = human) |
+| P4 | Content consolidate | Blocked on human approval (`cluster-decisions.md`) |
+| P5 | Structured data / E-E-A-T | Partial (T5.1 BlogPosting + BreadcrumbList; T5.2 authors = human) |
+| P6 | Monetization / privacy | Partial (T6.1 AdSense scoped; T6.2–6.3 = human/legal) |
+| P7 | Performance | Partial (AdSense off critical path; LH re-measure after deploy) |
+| P8 | Measurement / CI | Partial (T8.2 seo:check/links done; GSC/Bing/Ahrefs = human) |
 
 ## Task log
 
@@ -81,9 +81,26 @@
 - vercel.json: removed blanket SPA rewrite for all paths.
 - **Note:** Live 404 status requires deploy of nginx.conf; local dist verification via `404.html` presence.
 
+### T5.1 / HTML body fix (2026-11-23)
+
+- Prerender: `looksLikeHtml` + entity decode; hydrate short bodies via `articles.getBySlug`.
+- Inject `BreadcrumbList` + `BlogPosting` JSON-LD on article routes.
+- `seo:check` asserts BlogPosting/BreadcrumbList on `/blog/*` and forbids AdSense script in dist HTML.
+
+### T4.1 — Cluster decisions (2026-11-23)
+
+- Drafted `docs/seo/cluster-decisions.md`. **No merges applied** — awaiting human approval for YouTube (4–5) and monetize (2) redirects.
+
+### T6.1 — AdSense scoping (2026-11-23)
+
+- Removed global AdSense from `index.html`.
+- Allowlist in `src/config/adsAllowed.ts`; `AdSense.tsx` loads script on-demand only on allowed routes.
+- Prerender strips any residual adsbygoogle script from shell.
+
 ## Build / seo:check after each phase
 
 | After | `npm run build` | `npm run seo:check` | Notes |
 |-------|-----------------|---------------------|-------|
 | P0 | — | — (script not yet) | Discovery + baseline only |
 | P1 T1.1–T1.3 | `npm run build:seo` | — (script in T8.2) | Prerender + head + 404.html |
+| T5.1 / T6.1 | `npm run build:seo` | required | JSON-LD + no AdSense in HTML |

@@ -19,7 +19,7 @@ Vite + React SPA (confirmed). Content lives primarily in **Convex**; build alrea
 | Auth | Auth0 (`@auth0/auth0-react`) for `/auth/*`, `/dashboard/*` |
 | Backend / CMS | **Convex** (`convex/`, `VITE_CONVEX_URL`) — articles, platform guides, niches, HTTP sitemap feed |
 | Analytics | GA4 + Clarity (consent-gated); Ahrefs/ForeMedia hints in HTML |
-| Ads | Google AdSense `ca-pub-9278124025449370` loaded globally from `index.html` |
+| Ads | Google AdSense `ca-pub-9278124025449370` — on-demand via `AdSense.tsx` on `adsAllowed` routes only (not global) |
 
 ## Where pages / posts / metadata live
 

@@ -107,6 +107,21 @@ for (const file of files) {
   }
 
   if (/noindex/i.test(robots)) noindexRoutes.add(route);
+
+  // T6.1 — prerendered HTML must not embed AdSense loader
+  if (/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/i.test(html)) {
+    errors.push(`${route}: AdSense script must not be in prerender HTML (load on-demand only)`);
+  }
+
+  // T5.1 — article pages need BlogPosting + BreadcrumbList JSON-LD
+  if (route.startsWith('/blog/') && route !== '/blog') {
+    if (!/"@type"\s*:\s*"BlogPosting"/i.test(html)) {
+      errors.push(`${route}: missing BlogPosting JSON-LD`);
+    }
+    if (!/"@type"\s*:\s*"BreadcrumbList"/i.test(html)) {
+      errors.push(`${route}: missing BreadcrumbList JSON-LD`);
+    }
+  }
 }
 
 const sitemapRoutes = [];

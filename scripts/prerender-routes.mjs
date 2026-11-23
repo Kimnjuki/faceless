@@ -192,11 +192,24 @@ function isCanonicalArticle(a) {
   return true;
 }
 
+function looksLikeHtml(s) {
+  return /<(h[1-6]|p|div|section|article|ul|ol|li|table|blockquote|pre|figure|img|a)\b/i.test(s);
+}
+
 function markdownToHtml(md) {
   if (!md || typeof md !== 'string') return '';
-  const trimmed = md.trim();
-  if (trimmed.startsWith('<') && /<\/[a-z]+>/i.test(trimmed)) {
-    // Already HTML-ish — strip scripts only
+  let trimmed = md.trim();
+  // Some CSV imports store HTML as entities
+  if (!looksLikeHtml(trimmed) && /&lt;[a-z]/i.test(trimmed)) {
+    trimmed = trimmed
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&amp;/g, '&');
+  }
+  if (looksLikeHtml(trimmed)) {
+    // Already HTML — strip scripts only; do not escape
     return trimmed.replace(/<script[\s\S]*?<\/script>/gi, '');
   }
   const lines = md.replace(/\r\n/g, '\n').split('\n');
@@ -271,7 +284,13 @@ function loadShell() {
   if (!fs.existsSync(shellPath)) {
     throw new Error('dist/index.html missing — run vite build first');
   }
-  return fs.readFileSync(shellPath, 'utf8');
+  // Strip any residual AdSense loader from the Vite shell (T6.1 — load on-demand in SPA only)
+  return fs
+    .readFileSync(shellPath, 'utf8')
+    .replace(
+      /<script[^>]+pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js[^>]*>\s*<\/script>/gi,
+      '',
+    );
 }
 
 function replaceNamedMeta(html, name, content) {
@@ -369,7 +388,50 @@ function linkList(items) {
     .join('\n')}</ul>`;
 }
 
-function wrapRoot({ h1, lead, mainHtml, crumbs }) {
+function breadcrumbJsonLd(crumbs) {
+  if (!crumbs?.length) return '';
+  const items = crumbs.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.name,
+    item: c.href.startsWith('http') ? c.href : `${SITE}${c.href === '/' ? '/' : c.href}`,
+  }));
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items,
+  };
+  return `<script type="application/ld+json">${JSON.stringify(data)}</script>`;
+}
+
+function articleJsonLd({ headline, description, path, datePublished, dateModified }) {
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline,
+    description,
+    datePublished: datePublished || undefined,
+    dateModified: dateModified || datePublished || undefined,
+    author: {
+      '@type': 'Organization',
+      name: 'ContentAnonymity',
+      url: SITE,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ContentAnonymity',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE}/logo-icon.svg`,
+      },
+    },
+    mainEntityOfPage: `${SITE}${path}`,
+    image: `${SITE}/og-image.png`,
+  };
+  return `<script type="application/ld+json">${JSON.stringify(data)}</script>`;
+}
+
+function wrapRoot({ h1, lead, mainHtml, crumbs, jsonLd = '' }) {
   const crumbHtml = crumbs?.length
     ? `<nav aria-label="Breadcrumb"><ol>${crumbs
         .map((c, i) =>
@@ -380,6 +442,8 @@ function wrapRoot({ h1, lead, mainHtml, crumbs }) {
         .join(' › ')}</ol></nav>`
     : '';
   return `<div data-prerender-static="true">
+${breadcrumbJsonLd(crumbs)}
+${jsonLd}
 ${siteNavHtml()}
 ${crumbHtml}
 <main id="main-content">
@@ -592,6 +656,9 @@ function bodyForRoute(route, meta, ctx) {
       href: r.href,
       label: labelByHref.get(r.href) || r.label,
     }));
+    const published = a?.publishedAt || a?.createdAt;
+    const modified = a?.updatedAt || published;
+    const toIso = (n) => (typeof n === 'number' ? new Date(n).toISOString() : undefined);
     return wrapRoot({
       h1: meta.h1,
       lead: a?.excerpt || '',
@@ -600,6 +667,13 @@ function bodyForRoute(route, meta, ctx) {
         { name: 'Blog', href: '/blog' },
         { name: truncate(meta.h1, 48), href: route },
       ],
+      jsonLd: articleJsonLd({
+        headline: meta.h1,
+        description: meta.description,
+        path: route,
+        datePublished: toIso(published),
+        dateModified: toIso(modified),
+      }),
       mainHtml: `<article>${contentHtml || `<p>${escapeHtml(a?.excerpt || 'Article content loading…')}</p>`}</article>
       <h2>Related Guides &amp; Articles</h2>
       ${linkList(relatedLabeled)}
@@ -702,9 +776,30 @@ async function fetchConvexData() {
     client.query(api.platformGuides.list, { limit: 500 }),
     client.query(api.niches.list, {}),
   ]);
-  const articles = (rawArticles || []).filter(isCanonicalArticle);
+  let articles = (rawArticles || []).filter(isCanonicalArticle);
   const guides = (rawGuides || []).filter(isCanonicalGuide);
   const niches = Array.isArray(rawNiches) ? rawNiches : [];
+
+  // Hydrate short/empty bodies via getBySlug (list payloads are sometimes truncated)
+  const needBody = articles.filter((a) => String(a.content || '').trim().length < 400).slice(0, 80);
+  if (needBody.length) {
+    const enriched = await Promise.all(
+      needBody.map(async (a) => {
+        try {
+          const full = await client.query(api.articles.getBySlug, { slug: a.slug });
+          if (full && typeof full.content === 'string' && full.content.length > String(a.content || '').length) {
+            return { ...a, content: full.content, excerpt: full.excerpt || a.excerpt, seoTitle: full.seoTitle || a.seoTitle, metaDescription: full.metaDescription || a.metaDescription };
+          }
+        } catch {
+          /* keep list row */
+        }
+        return a;
+      }),
+    );
+    const bySlug = new Map(enriched.map((a) => [a.slug, a]));
+    articles = articles.map((a) => bySlug.get(a.slug) || a);
+  }
+
   return { articles, guides, niches, convexUrl };
 }
 

@@ -58,12 +58,17 @@ export default function SEO({
   softwareApplication,
   breadcrumbItems,
 }: SEOProps) {
-  // Enforce < 60 characters for title (SEO best practice)
-  const truncatedTitle = title.length > 60 ? title.substring(0, 57) + '...' : title;
-  const fullTitle = truncatedTitle.includes('ContentAnonymity') ? truncatedTitle : `${truncatedTitle} | ContentAnonymity`;
-
-  // Enforce < 60 characters for full title (with site name)
-  const finalTitle = fullTitle.length > 60 ? fullTitle.substring(0, 57) + '...' : fullTitle;
+  // Title: primary phrase + brand, <=60 chars, keep brand suffix intact
+  const brandSuffix = ' | ContentAnonymity';
+  const baseTitle = title.trim();
+  let finalTitle: string;
+  if (baseTitle.includes('ContentAnonymity')) {
+    finalTitle = baseTitle.length > 60 ? `${baseTitle.slice(0, 59).trimEnd()}…` : baseTitle;
+  } else if ((baseTitle + brandSuffix).length <= 60) {
+    finalTitle = baseTitle + brandSuffix;
+  } else {
+    finalTitle = `${baseTitle.slice(0, 60 - brandSuffix.length).trimEnd()}…${brandSuffix}`;
+  }
 
   // Enforce 155-160 characters for description (Google SERP display) and add strong CTA if missing
   let finalDescription = description;
@@ -87,10 +92,6 @@ export default function SEO({
   // strip it everywhere else so /blog/ never competes with /blog.
   const isRoot = rawCanonical.replace(/\/+$/, '') + '/' === `${SITE_URL}/`;
   const canonicalUrl = isRoot ? `${SITE_URL}/` : rawCanonical.replace(/\/+$/, '') || rawCanonical;
-  const strippedUrl = stripWwwHost(url || SITE_URL).replace(/\/+$/, '');
-  const finalUrl = strippedUrl || stripWwwHost(url || SITE_URL);
-  const urlIsRoot = strippedUrl === stripWwwHost(SITE_URL);
-  const resolvedUrl = urlIsRoot ? `${SITE_URL}/` : finalUrl;
   const baseStructuredData = {
     '@context': 'https://schema.org',
     '@type': type === 'article' ? 'Article' : type === 'product' ? 'Product' : 'WebPage',
@@ -371,20 +372,22 @@ export default function SEO({
 
   const allStructuredData = buildStructuredData();
 
+  const robotsContent = noindex
+    ? 'noindex, follow'
+    : 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1';
+
   return (
     <Helmet>
-      {/* Primary Meta Tags */}
+      {/* Primary Meta Tags — single <title>, no meta-title / keywords / revisit-after */}
       <title>{finalTitle}</title>
-      <meta name="title" content={finalTitle} />
       <meta name="description" content={finalDescription} />
       <meta name="author" content={author} />
-      <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+      <meta name="robots" content={robotsContent} />
       <link rel="canonical" href={canonicalUrl} />
-      <meta httpEquiv="Content-Type" content="text/html; charset=UTF-8" />
 
-      {/* Open Graph / Facebook - Enhanced */}
+      {/* Open Graph — og:url must equal canonical */}
       <meta property="og:type" content={type === 'article' ? 'article' : type === 'product' ? 'product' : 'website'} />
-      <meta property="og:url" content={resolvedUrl} />
+      <meta property="og:url" content={canonicalUrl} />
       <meta property="og:title" content={finalTitle} />
       <meta property="og:description" content={finalDescription} />
       <meta property="og:image" content={image} />
@@ -398,9 +401,9 @@ export default function SEO({
       {type === 'article' && author && <meta property="article:author" content={author} />}
       {type === 'article' && <meta property="article:section" content="Faceless Content Creation" />}
 
-      {/* Twitter Card - Enhanced */}
+      {/* Twitter Card */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:url" content={resolvedUrl} />
+      <meta name="twitter:url" content={canonicalUrl} />
       <meta name="twitter:title" content={finalTitle} />
       <meta name="twitter:description" content={finalDescription} />
       <meta name="twitter:image" content={image} />
@@ -409,7 +412,7 @@ export default function SEO({
       <meta name="twitter:creator" content="@contentanonymity" />
       <meta name="twitter:domain" content="contentanonymity.com" />
 
-      {/* Structured Data - Multiple schemas */}
+      {/* Structured Data */}
       {allStructuredData.map((data, index) => (
         <script key={index} type="application/ld+json">
           {JSON.stringify(data)}

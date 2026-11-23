@@ -9,7 +9,7 @@
 | Phase | Name | Status |
 |-------|------|--------|
 | P0 | Discovery and baseline | Done |
-| P1 | Unique crawlable HTML | In progress (T1.1 done) |
+| P1 | Unique crawlable HTML | Done (T1.1–T1.3) |
 | P2 | Internal linking | Pending |
 | P3 | Indexation hygiene | Pending |
 | P4 | Content consolidate | Pending |
@@ -47,9 +47,22 @@
 - Removed XML Sitemap anchor from `index.html` noscript.
 - **Verify:** `npm run build:seo` → 81/81 self-canonical; blog hub has crawlable `/blog/...` links; sample article has own title/H1/article body (not homepage H1).
 
+### T1.2 — Per-route head hygiene (2026-11-23)
+
+- Removed redundant `meta name="title"`, keywords, revisit-after from shell/SEO path.
+- `SEO.tsx`: brand-safe title truncation; robots contract; `og:url`/`twitter:url` = canonical.
+- Duplicate title/description CI fail deferred to T8.2 `seo-check.mjs`.
+
+### T1.3 — Real HTTP 404 (2026-11-23)
+
+- nginx: public `try_files` no longer falls back to `/index.html`; SPA fallback limited to `/auth/`, `/dashboard/`, `/creator-studio`, `/checkout`.
+- Build emits `dist/404.html` with `noindex,follow` + hub links.
+- vercel.json: removed blanket SPA rewrite for all paths.
+- **Note:** Live 404 status requires deploy of nginx.conf; local dist verification via `404.html` presence.
+
 ## Build / seo:check after each phase
 
 | After | `npm run build` | `npm run seo:check` | Notes |
 |-------|-----------------|---------------------|-------|
 | P0 | — | — (script not yet) | Discovery + baseline only |
-| P1 T1.1 | `npm run build:seo` OK (81 routes) | — (script in T8.2) | Prerender + verify-prerender passed |
+| P1 T1.1–T1.3 | `npm run build:seo` | — (script in T8.2) | Prerender + head + 404.html |

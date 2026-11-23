@@ -281,8 +281,16 @@ function replacePropertyMeta(html, property, content) {
 function applyHead(html, { title, description, canonical, type = 'website' }) {
   let out = html;
   out = out.replace(/<title>[^<]*<\/title>/i, `<title>${escapeHtml(title)}</title>`);
-  out = replaceNamedMeta(out, 'title', title);
+  // Drop obsolete meta-title (duplicate of <title>)
+  out = out.replace(/<meta\s+name=["']title["']\s+content=["'][^"']*["']\s*\/?>/gi, '');
+  out = out.replace(/<meta\s+name=["']keywords["']\s+content=["'][^"']*["']\s*\/?>/gi, '');
+  out = out.replace(/<meta\s+name=["']revisit-after["']\s+content=["'][^"']*["']\s*\/?>/gi, '');
   out = replaceNamedMeta(out, 'description', description);
+  out = replaceNamedMeta(
+    out,
+    'robots',
+    'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1',
+  );
   if (/<link[^>]+rel=["']canonical["']/i.test(out)) {
     out = out.replace(/<link[^>]+rel=["']canonical["'][^>]*>/i, `<link rel="canonical" href="${canonical}" />`);
   } else {
@@ -708,7 +716,33 @@ async function main() {
     written++;
   }
 
-  console.log(`✅ Prerendered ${written} HTML files under dist/`);
+  // T1.3 — static 404.html (nginx error_page / host 404)
+  const notFoundBody = wrapRoot({
+    h1: 'Page Not Found',
+    lead: 'This URL does not exist. Try one of these hubs instead.',
+    crumbs: [
+      { name: 'Home', href: '/' },
+      { name: '404', href: '/404' },
+    ],
+    mainHtml: linkList([
+      { href: '/blog', label: 'Blog & guides' },
+      { href: '/platform-guides', label: 'Platform guides' },
+      { href: '/tools/all', label: 'Creator tools' },
+      { href: '/getting-started', label: 'Getting started' },
+      { href: '/resources/niches', label: 'Niche database' },
+    ]),
+  });
+  let notFoundHtml = applyHead(shell, {
+    title: brandTitle('404 - Page Not Found'),
+    description: 'The page you requested was not found. Explore faceless content guides and tools on ContentAnonymity.',
+    canonical: `${SITE}/404`,
+    type: 'website',
+  });
+  notFoundHtml = replaceNamedMeta(notFoundHtml, 'robots', 'noindex, follow');
+  notFoundHtml = injectRoot(notFoundHtml, notFoundBody);
+  notFoundHtml = notFoundHtml.replace(/<noscript>[\s\S]*?<\/noscript>/i, '');
+  fs.writeFileSync(path.join(dist, '404.html'), notFoundHtml, 'utf8');
+  console.log(`✅ Prerendered ${written} HTML files under dist/ (+ 404.html)`);
 }
 
 main().catch((err) => {

@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -34,7 +34,6 @@ const platformIcons: Record<string, any> = {
 };
 
 export default function PlatformGuides() {
-  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [platformFilter, setPlatformFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -59,13 +58,6 @@ export default function PlatformGuides() {
     });
     return Array.from(bySlug.values());
   }, [convexGuides]);
-
-  const handleGuideClick = async (guide: any) => {
-    if (guide.id && !String(guide.id).startsWith("fallback-")) {
-      await incrementViewCount(guide.id);
-    }
-    navigate(`/platform-guides/${guide.slug}`);
-  };
 
   const getDifficultyColor = (level?: string) => {
     switch (level) {
@@ -212,9 +204,17 @@ export default function PlatformGuides() {
                           return (
                             <Card
                               key={guide.id ?? guide.slug}
-                              className="hover:shadow-lg transition-shadow flex flex-col cursor-pointer"
-                              onClick={() => handleGuideClick(guide)}
+                              className="hover:shadow-lg transition-shadow flex flex-col"
                             >
+                              <Link
+                                to={`/platform-guides/${guide.slug}`}
+                                className="flex flex-col flex-1"
+                                onClick={() => {
+                                  if (guide.id && !String(guide.id).startsWith("fallback-")) {
+                                    incrementViewCount(guide.id).catch(() => {});
+                                  }
+                                }}
+                              >
                               <CardHeader>
                                 <div className="flex items-start justify-between mb-2">
                                   <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -260,11 +260,12 @@ export default function PlatformGuides() {
                                       )}
                                     </div>
                                   )}
-                                  <Button className="w-full" variant="outline">
+                                  <span className="inline-flex w-full items-center justify-center rounded-md border px-4 py-2 text-sm font-medium">
                                     Read Guide <ArrowRight className="h-4 w-4 ml-1" />
-                                  </Button>
+                                  </span>
                                 </div>
                               </CardContent>
+                              </Link>
                             </Card>
                           );
                         })}

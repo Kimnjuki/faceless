@@ -8,8 +8,8 @@ const footerSections = [
       { label: "Getting Started", href: "/getting-started" },
       { label: "All Products", href: "/products/all" },
       { label: "Tool Comparison", href: "/tools/all" },
-      { label: "YouTube Automation", href: "/youtube" },
-      { label: "TikTok Growth", href: "/tiktok" },
+      { label: "YouTube Automation", href: "/faceless-content/youtube" },
+      { label: "TikTok Growth", href: "/platform-guides/tiktok-faceless-virality" },
       { label: "SEO Audit Tool", href: "/tools/seo-audit" },
       { label: "Keyword Research", href: "/tools/keyword-research" },
       { label: "Backlink Checker", href: "/tools/backlink-checker" },
@@ -112,7 +112,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-primary/10 pt-10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p className="font-medium">© 2025 <span className="gradient-text font-bold">ContentAnonymity</span>. All rights reserved.</p>
+          <p className="font-medium">© 2026 <Link to="/" className="gradient-text font-bold hover:underline">ContentAnonymity</Link>. All rights reserved.</p>
           <div className="flex gap-6">
             <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors font-medium hover:scale-110 transform duration-300">Twitter</a>
             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors font-medium hover:scale-110 transform duration-300">LinkedIn</a>

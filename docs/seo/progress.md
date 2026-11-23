@@ -10,7 +10,7 @@
 |-------|------|--------|
 | P0 | Discovery and baseline | Done |
 | P1 | Unique crawlable HTML | Done (T1.1–T1.3) |
-| P2 | Internal linking | Pending |
+| P2 | Internal linking | In progress (T2.1–T2.2) |
 | P3 | Indexation hygiene | Pending |
 | P4 | Content consolidate | Pending |
 | P5 | Structured data / E-E-A-T | Pending |
@@ -46,6 +46,16 @@
 - `build:seo` / `build:prerender` now call `prerender:routes` instead of meta-only inject.
 - Removed XML Sitemap anchor from `index.html` noscript.
 - **Verify:** `npm run build:seo` → 81/81 self-canonical; blog hub has crawlable `/blog/...` links; sample article has own title/H1/article body (not homepage H1).
+
+### T2.1 — Rebuild global navigation and footer (2026-11-23)
+
+- Header: ~7 crawlable links (Getting Started, Blog, Platform Guides, Faceless Content dropdown, Tools, Case Studies); logo → `/`.
+- Footer brand year + linked brand name; legal/hub links already present; no sitemap.xml anchor.
+
+### T2.2 — Hub pages list children as crawlable links (2026-11-23)
+
+- Prerender already emits full hub `<a href>` lists (T1.1).
+- BlogIndex + PlatformGuides cards converted from `onClick`/`navigate` to real `<Link href>`.
 
 ### T1.2 — Per-route head hygiene (2026-11-23)
 

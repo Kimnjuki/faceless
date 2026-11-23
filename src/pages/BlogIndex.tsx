@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Search, TrendingUp, Download, Loader2, Clock, Eye, RefreshCw, ArrowDownAZ, BarChart2, Share2, X } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -19,7 +19,6 @@ import ForeMediaAd from "@/components/ForeMediaAd";
 import DataStateMessage from "@/components/DataStateMessage";
 
 export default function BlogIndex() {
-  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -291,29 +290,16 @@ export default function BlogIndex() {
                       )}
                       <Card
                     key={article.id} 
-                    className="hover:border-primary transition-colors cursor-pointer group"
-                    onClick={() => {
-                      // Validate slug before navigation
-                      if (!article.slug || article.slug.trim() === '') {
-                        toast.error('Article slug is missing. Cannot navigate.');
-                        console.error('Article missing slug:', article);
-                        return;
-                      }
-                      
-                      // Increment view count in background (don't wait for it)
-                      incrementViewCount(article.slug ?? article.id ?? '').catch(err => {
-                        console.warn('Failed to increment view count:', err);
-                      });
-                      
-                      // Navigate immediately
-                      try {
-                        navigate(`/blog/${article.slug}`);
-                      } catch (navError) {
-                        console.error('Navigation error:', navError);
-                        toast.error('Failed to navigate to article');
-                      }
-                    }}
+                    className="hover:border-primary transition-colors group"
                   >
+                    <Link
+                      to={article.slug ? `/blog/${article.slug}` : '/blog'}
+                      className="block"
+                      onClick={() => {
+                        if (!article.slug?.trim()) return;
+                        incrementViewCount(article.slug ?? article.id ?? '').catch(() => {});
+                      }}
+                    >
                     <div className="aspect-video w-full overflow-hidden rounded-t-lg bg-muted">
                       <ArticleImage
                         src={article.featured_image}
@@ -355,37 +341,12 @@ export default function BlogIndex() {
                             </span>
                           )}
                         </div>
-                        <Button 
-                          variant="link" 
-                          className="p-0 h-auto text-primary group-hover:underline" 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            
-                            // Validate slug before navigation
-                            if (!article.slug || article.slug.trim() === '') {
-                              toast.error('Article slug is missing. Cannot navigate.');
-                              console.error('Article missing slug:', article);
-                              return;
-                            }
-                            
-                            // Increment view count in background
-                            incrementViewCount(article.slug ?? article.id ?? '').catch(err => {
-                              console.warn('Failed to increment view count:', err);
-                            });
-                            
-                            // Navigate immediately
-                            try {
-                              navigate(`/blog/${article.slug}`);
-                            } catch (navError) {
-                              console.error('Navigation error:', navError);
-                              toast.error('Failed to navigate to article');
-                            }
-                          }}
-                        >
+                        <span className="text-primary group-hover:underline text-sm font-medium">
                           Read More →
-                        </Button>
+                        </span>
                       </div>
                     </CardContent>
+                    </Link>
                     </Card>
                     </div>
                   ))}

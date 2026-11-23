@@ -10,11 +10,15 @@
     }
   ],
   "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+    { "source": "/auth/(.*)", "destination": "/index.html" },
+    { "source": "/dashboard/(.*)", "destination": "/index.html" },
+    { "source": "/creator-studio", "destination": "/index.html" },
+    { "source": "/creator-studio/(.*)", "destination": "/index.html" },
+    { "source": "/checkout", "destination": "/index.html" },
+    { "source": "/checkout/(.*)", "destination": "/index.html" }
   ],
+  "cleanUrls": true,
+  "trailingSlash": false,
   "headers": [
     {
       "source": "/robots.txt",

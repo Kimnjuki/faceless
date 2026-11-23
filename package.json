@@ -21,6 +21,8 @@
     "generate:og-image": "node scripts/generate-og-image.mjs",
     "verify:canonical": "node scripts/verify-canonical.mjs",
     "verify:prerender": "node scripts/verify-prerender.mjs",
+    "seo:check": "node scripts/seo-check.mjs",
+    "seo:links": "node scripts/link-audit.mjs",
     "check:csv": "node scripts/validate-csv.mjs",
     "check:sitemap": "node scripts/check-sitemap-hygiene.mjs",
     "check:routes": "node scripts/check-routes.mjs",

@@ -72,7 +72,7 @@ No MDX content collection. Metadata is a mix of Helmet props in page components 
 
 ## Decision for P1 (T1.1)
 
-**Keep Vite + React.** Harden build-time prerender so every sitemap URL emits `dist/<path>/index.html` with unique head **and** semantic body/hub link lists. Prefer ConvexHttpClient fetch at build (new `scripts/prerender-routes.ts` / extend inject) over a framework migration. Record any Astro/Next migration only if this fails acceptance after a focused attempt.
+**Keep Vite + React.** Implemented `scripts/prerender-routes.mjs` (ConvexHttpClient) so every sitemap URL emits `dist/<path>/index.html` with unique head **and** semantic body/hub link lists inside `#root`. Client replaces the static shell on boot (`data-prerender-static`). Framework migration deferred unless acceptance fails after deploy.
 
 ## Related existing docs / scripts
 

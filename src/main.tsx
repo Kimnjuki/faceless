@@ -1,5 +1,5 @@
 import { StrictMode } from 'react'
-import ReactDOM from 'react-dom/client'
+import { createRoot, hydrateRoot } from 'react-dom/client'
 import { HelmetProvider } from 'react-helmet-async'
 import { Auth0Provider } from '@auth0/auth0-react'
 import { ConvexProvider, ConvexReactClient } from "convex/react"
@@ -187,11 +187,32 @@ const app = (
   </StrictMode>
 );
 
-// Render app with error handling
+// Prerender strategy:
+// - Build-time static HTML (data-prerender-static) is for crawlers only — clear & client-render
+//   to avoid React hydration mismatches with simplified SSR markup.
+// - react-snap full DOM snapshots can still hydrate when markup matches.
 try {
-  const root = ReactDOM.createRoot(rootElement!);
-  root.render(app);
-  console.log('✅ React app rendered successfully');
+  const mountNode = rootElement!;
+  const hasStaticPrerender = Boolean(
+    mountNode.querySelector('[data-prerender-static]') ||
+      mountNode.getAttribute('data-prerender-static'),
+  );
+  const hasPrerenderedMarkup = Array.from(mountNode.childNodes).some((node) => {
+    if (node.nodeType === Node.ELEMENT_NODE) return true;
+    if (node.nodeType === Node.TEXT_NODE) return Boolean(node.textContent?.trim());
+    return false;
+  });
+  if (hasStaticPrerender) {
+    mountNode.innerHTML = '';
+    createRoot(mountNode).render(app);
+    console.log('✅ React app rendered (replaced static prerender shell)');
+  } else if (hasPrerenderedMarkup) {
+    hydrateRoot(mountNode, app);
+    console.log('✅ React app hydrated (prerender)');
+  } else {
+    createRoot(mountNode).render(app);
+    console.log('✅ React app rendered successfully');
+  }
 } catch (error) {
   console.error('❌ Failed to render React app:', error);
   // Show fallback content

@@ -8,8 +8,8 @@
 
 | Phase | Name | Status |
 |-------|------|--------|
-| P0 | Discovery and baseline | In progress |
-| P1 | Unique crawlable HTML | Pending |
+| P0 | Discovery and baseline | Done |
+| P1 | Unique crawlable HTML | In progress (T1.1 done) |
 | P2 | Internal linking | Pending |
 | P3 | Indexation hygiene | Pending |
 | P4 | Content consolidate | Pending |
@@ -38,8 +38,18 @@
 - Lighthouse mobile: LCP home ~10s, blog ~8.9s, calculator ~4.5s; CLS 0 (category scores empty in LH 12.8.2 JSON — raw audits retained).
 - **Build / seo:check:** N/A (baseline capture only).
 
+### T1.1 — Pre-render / SSG all routes (2026-11-23)
+
+- **Done.** Added `scripts/prerender-routes.mjs` (ConvexHttpClient → articles/guides/niches).
+- Writes `dist/<route>/index.html` with unique head + semantic `#root` body (hub link lists, article HTML, breadcrumbs).
+- `main.tsx`: static `data-prerender-static` shells are cleared then client-rendered (no hydrate mismatch).
+- `build:seo` / `build:prerender` now call `prerender:routes` instead of meta-only inject.
+- Removed XML Sitemap anchor from `index.html` noscript.
+- **Verify:** `npm run build:seo` → 81/81 self-canonical; blog hub has crawlable `/blog/...` links; sample article has own title/H1/article body (not homepage H1).
+
 ## Build / seo:check after each phase
 
 | After | `npm run build` | `npm run seo:check` | Notes |
 |-------|-----------------|---------------------|-------|
 | P0 | — | — (script not yet) | Discovery + baseline only |
+| P1 T1.1 | `npm run build:seo` OK (81 routes) | — (script in T8.2) | Prerender + verify-prerender passed |

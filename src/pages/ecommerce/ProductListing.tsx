@@ -51,7 +51,6 @@ export default function ProductListing() {
       <SEO
         title={pageTitle}
         description={pageDescription}
-        keywords={`${categoryName.toLowerCase()} products, faceless content products, digital products, anonymous creator resources, faceless business tools`}
         url={canonicalUrl}
         canonical={canonicalUrl}
         type="website"

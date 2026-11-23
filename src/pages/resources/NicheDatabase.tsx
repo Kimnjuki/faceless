@@ -41,9 +41,8 @@ export default function NicheDatabase() {
   return (
     <>
       <SEO
-        title="Profitable Niche Database (100+ Faceless Niches) | ContentAnonymity"
-        description="Explore 100+ proven faceless niches with profitability scores, difficulty levels, RPM context, and monetization stacks—finance, health, tech, business, education, and hobbies. Filter, search, and open full guides."
-        keywords="profitable faceless niches 2026, niche database, high RPM topics, anonymous YouTube niches, AI voiceover channel ideas, faceless TikTok niches, affiliate niches, ContentAnonymity"
+        title="Niche Database (100+ Faceless Niches) | ContentAnonymity"
+        description="Explore 100+ faceless niches with suitability scores, difficulty levels, monetization context, and content stacks—finance, health, tech, business, education, and hobbies. Filter, search, and open full guides."
         url="https://contentanonymity.com/resources/niches"
         canonical="https://contentanonymity.com/resources/niches"
         type="website"
@@ -188,16 +187,8 @@ export default function NicheDatabase() {
                       <div className="space-y-2 text-sm">
                         {niche.estimated_earnings_range && (
                           <div className="flex items-center gap-2">
-                            <DollarSign className="h-4 w-4 text-green-500" />
-                            <span className="text-muted-foreground">Revenue: </span>
+                            <span className="text-muted-foreground">Potential Revenue:</span>
                             <span className="font-medium">{niche.estimated_earnings_range}</span>
-                          </div>
-                        )}
-                        {niche.avg_rpm && (
-                          <div className="flex items-center gap-2">
-                            <DollarSign className="h-4 w-4 text-green-500" />
-                            <span className="text-muted-foreground">Avg RPM: </span>
-                            <span className="font-medium">${niche.avg_rpm}</span>
                           </div>
                         )}
                         {niche.startup_cost && (

@@ -298,7 +298,6 @@ export default function LearningPathDetail() {
       <SEO
         title={pageTitle}
         description={pageDescription}
-        keywords={`${path?.name?.toLowerCase() || 'learning path'}, faceless content course, structured learning, content creation training`}
         url={canonicalUrl}
         canonical={canonicalUrl}
         type="course"

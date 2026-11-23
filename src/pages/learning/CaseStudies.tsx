@@ -34,7 +34,6 @@ export default function CaseStudies() {
       <SEO
         title="Success Case Studies - Real Faceless Creator Stories | ContentAnonymity"
         description="Real success patterns from faceless creators across YouTube, TikTok, Instagram, Pinterest, LinkedIn, newsletters, and Facebook. Detailed roadmaps, methods, growth, and how to sustain momentum—composite educational case studies."
-        keywords="faceless creator success stories, case studies, anonymous creator earnings, faceless content case studies, YouTube faceless case study, TikTok productivity creator, Pinterest SEO affiliate"
         url={LIST_CANONICAL}
         canonical={LIST_CANONICAL}
         type="article"

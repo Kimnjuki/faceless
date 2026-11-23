@@ -47,7 +47,6 @@ export default function Challenges() {
       <SEO
         title="Community Challenges - Grow Your Faceless Skills | ContentAnonymity"
         description="Join community challenges to grow your skills and compete with fellow faceless creators. Content, growth, and monetization challenges."
-        keywords="faceless creator challenges, content challenges, growth challenges, creator competitions, skill building challenges"
         url="https://contentanonymity.com/community/challenges"
         canonical="https://contentanonymity.com/community/challenges"
         type="website"

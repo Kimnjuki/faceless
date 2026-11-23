@@ -15,9 +15,8 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { 
   ArrowLeft, 
-  Star, 
-  DollarSign, 
-  TrendingUp, 
+  Star,
+  TrendingUp,
   TrendingDown,
   Clock,
   Users,
@@ -102,11 +101,10 @@ export default function NicheDetail() {
   return (
     <>
       <SEO
-        title={`${niche.nicheName} - Profitable Faceless Niche Analysis | ContentAnonymity`}
-        description={`Complete analysis of ${niche.nicheName} niche: profitability score ${profitabilityScore}/10, difficulty ${niche.difficultyLevel}, earnings potential ${niche.estimatedEarningsRange || "high"}. Faceless formats, monetization, and risks.`}
+        title={`${niche.nicheName} - Faceless Niche Analysis | ContentAnonymity`}
+        description={`Complete analysis of ${niche.nicheName} niche: difficulty ${niche.difficultyLevel}. Faceless formats, monetization, and risks.`}
         url={`https://contentanonymity.com/niches/${nicheId}`}
         canonical={`https://contentanonymity.com/niches/${nicheId}`}
-        keywords={`${niche.nicheName}, faceless niche, ${niche.category?.name ?? ""}, profitable niches 2026, anonymous content ideas`}
       />
       <Header />
       <main className="min-h-screen bg-background">
@@ -163,7 +161,7 @@ export default function NicheDetail() {
                   <div className="p-4 rounded-lg bg-muted/50">
                     <div className="flex items-center gap-2 mb-2">
                       <Star className="h-5 w-5 text-yellow-500" />
-                      <span className="text-sm text-muted-foreground">Profitability</span>
+                      <span className="text-sm text-muted-foreground">Suitability</span>
                     </div>
                     <div className="text-3xl font-bold">{profitabilityScore}/10</div>
                     <Progress value={profitabilityScore * 10} className="mt-2" />
@@ -184,17 +182,11 @@ export default function NicheDetail() {
 
                   <div className="p-4 rounded-lg bg-muted/50">
                     <div className="flex items-center gap-2 mb-2">
-                      <DollarSign className="h-5 w-5 text-green-500" />
-                      <span className="text-sm text-muted-foreground">Earnings</span>
+                      <span className="text-sm text-muted-foreground">Potential Revenue</span>
                     </div>
                     <div className="text-lg font-bold">
-                      {niche.estimatedEarningsRange || "High Potential"}
+                      {niche.estimatedEarningsRange || "Variable"}
                     </div>
-                    {niche.avgRpm && (
-                      <div className="text-xs text-muted-foreground mt-1">
-                        Avg RPM: ${niche.avgRpm}
-                      </div>
-                    )}
                   </div>
 
                   <div className="p-4 rounded-lg bg-muted/50">

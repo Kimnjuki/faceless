@@ -15,21 +15,20 @@ export default function GettingStarted() {
   return (
     <>
       <SEO
-        title="How to Start a Faceless Content Business: Beginner's 30-Day Plan"
-        description="Follow this proven 30-day roadmap to start your faceless content business from scratch. Step-by-step system with AI automation, niche selection & monetization. Start free today."
-        keywords="faceless content business, anonymous content creation, faceless business roadmap, content anonymity guide, faceless content strategy 2026, how to start faceless content"
+        title="How to Start a Faceless Content Business: Beginner's Guide"
+        description="Follow this 4-week learning path to start your faceless content business. Research, produce, publish, and explore monetization — with realistic expectations and ethical AI use. Start free today."
         url="https://contentanonymity.com/getting-started"
         canonical="https://contentanonymity.com/getting-started"
         type="article"
         breadcrumbItems={[{ name: 'Getting Started', url: 'https://contentanonymity.com/getting-started' }]}
         howToData={{
-          name: "How to Launch Your Faceless Content Business in 30 Days",
-          description: "A proven 4-step system to choose your niche, set up your content system, create your first videos, and launch monetization.",
+          name: "How to Launch Your Faceless Content Business",
+          description: "A 4-step system to choose your niche, set up your content system, create your first videos, and explore monetization.",
           steps: [
             { name: "Choose Your Profitable Niche", text: "Use our Niche Finder Quiz and profitability calculator to select a niche with high demand and low competition. Week 1 • 2-3 hours.", url: "https://contentanonymity.com/getting-started#step-1-choose-niche" },
             { name: "Set Up Your Content System", text: "Get the right tools and templates to create professional content efficiently. Choose AI tools, download templates, set up your channel. Week 2 • 5-7 hours.", url: "https://contentanonymity.com/getting-started#step-2-create-content" },
             { name: "Create Your First 10 Videos", text: "Follow our proven content frameworks to batch-create your first videos. Quality over quantity, but consistency is key. Week 3-4 • 10-15 hours.", url: "https://contentanonymity.com/getting-started#step-3-automate" },
-            { name: "Launch & Monetize", text: "Publish consistently, analyze performance, and activate multiple revenue streams. Your first $1K is just the beginning. Ongoing • scale as you grow.", url: "https://contentanonymity.com/getting-started#step-4-monetize" }
+            { name: "Launch & Explore Monetization", text: "Publish consistently, analyze performance, and explore revenue streams. Results depend on effort, niche, and market conditions. Ongoing • scale as you grow.", url: "https://contentanonymity.com/getting-started#step-4-monetize" }
           ]
         }}
         structuredData={{

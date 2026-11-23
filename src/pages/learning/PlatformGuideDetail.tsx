@@ -141,7 +141,6 @@ export default function PlatformGuideDetail() {
       <SEO
         title={pageTitle}
         description={pageDescription}
-        keywords={`${guide?.platform || 'platform'} guide, faceless content strategy, ${guide?.platform || ''} automation, anonymous creator guide`}
         url={canonicalUrl}
         canonical={canonicalUrl}
         type="article"

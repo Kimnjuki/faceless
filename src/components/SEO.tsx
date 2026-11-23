@@ -41,9 +41,8 @@ interface SEOProps {
 }
 
 export default function SEO({
-  title = 'ContentAnonymity - Build Your Privacy-First Faceless Content Business',
-  description = 'Build profitable faceless content businesses with AI automation. Step-by-step guides, monetization strategies, and free creator tools for anonymous content entrepreneurs.',
-  keywords = 'faceless content, anonymous content creator, content anonymity, faceless business, AI content creation',
+  title = 'Privacy-First Faceless Content Platform | ContentAnonymity',
+  description = 'Launch a profitable faceless content business with AI workflows, monetization playbooks, and free creator tools—without showing your face.',
   image = `${SITE_URL}/og-image.png`,
   url = SITE_URL,
   type = 'website',
@@ -378,7 +377,6 @@ export default function SEO({
       <title>{finalTitle}</title>
       <meta name="title" content={finalTitle} />
       <meta name="description" content={finalDescription} />
-      <meta name="keywords" content={keywords} />
       <meta name="author" content={author} />
       <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
       <link rel="canonical" href={canonicalUrl} />
@@ -399,7 +397,6 @@ export default function SEO({
       {type === 'article' && modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
       {type === 'article' && author && <meta property="article:author" content={author} />}
       {type === 'article' && <meta property="article:section" content="Faceless Content Creation" />}
-      {keywords && <meta property="og:keywords" content={keywords} />}
 
       {/* Twitter Card - Enhanced */}
       <meta name="twitter:card" content="summary_large_image" />

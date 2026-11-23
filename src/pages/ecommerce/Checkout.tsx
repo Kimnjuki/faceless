@@ -18,7 +18,6 @@ export default function Checkout() {
       <SEO
         title="Secure Checkout - Complete Your Purchase | ContentAnonymity"
         description="Complete your purchase securely. 30-day money-back guarantee. Instant access to faceless content business resources, tools, and courses."
-        keywords="checkout, purchase, payment, secure checkout, faceless content products"
         url="https://contentanonymity.com/checkout"
         canonical="https://contentanonymity.com/checkout"
         noindex={true}

@@ -9,7 +9,6 @@ export default function TermsOfService() {
       <SEO
         title="Terms of Service - User Agreement & Refund Policy | ContentAnonymity"
         description="ContentAnonymity's Terms of Service. Read our terms and conditions for using our platform. Includes service description, user rights, refund policy, and acceptable use policy."
-        keywords="terms of service, terms and conditions, user agreement, service terms, refund policy"
         url="https://contentanonymity.com/terms"
         canonical="https://contentanonymity.com/terms"
         noindex={false}
@@ -133,9 +132,9 @@ export default function TermsOfService() {
                 <p className="text-muted-foreground">
                   For questions about these Terms, please contact us at:
                   <br />
-                  <strong>Email:</strong> legal@facelesssuccess.com
+                  <strong>Email:</strong> legal@contentanonymity.com
                   <br />
-                  <strong>Support:</strong> support@facelesssuccess.com
+                  <strong>Support:</strong> support@contentanonymity.com
                 </p>
               </section>
             </div>

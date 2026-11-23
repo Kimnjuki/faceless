@@ -23,7 +23,6 @@ export default function TrustSafety() {
       <SEO
         title="Trust & Safety | Editorial Standards, AI Policy, Copyright & Privacy"
         description="Our commitment to editorial independence, AI ethics, copyright compliance, affiliate transparency, and creator privacy."
-        keywords="trust, safety, editorial standards, AI use policy, copyright policy, affiliate disclosure, privacy policy"
         url={`${SITE_URL}/trust-and-safety`}
         canonical={`${SITE_URL}/trust-and-safety`}
         breadcrumbItems={breadcrumbItems}

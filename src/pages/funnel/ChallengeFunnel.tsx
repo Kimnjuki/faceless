@@ -27,7 +27,6 @@ export default function ChallengeFunnel() {
       <SEO
         title={name ? `5-Day Challenge: ${challengeName} | ContentAnonymity` : "5-Day Challenge: Launch Your Faceless Business | ContentAnonymity"}
         description="Join creators in our free 5-day challenge to launch your faceless business. Step-by-step system to build a profitable faceless content business."
-        keywords="faceless business challenge, 5 day challenge, faceless content challenge, free challenge"
         url={canonicalUrl}
         canonical={canonicalUrl}
         type="event"

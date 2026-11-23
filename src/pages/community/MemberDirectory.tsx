@@ -58,7 +58,6 @@ export default function MemberDirectory() {
       <SEO
         title="Member Directory - Connect with Faceless Creators | ContentAnonymity"
         description="Connect with fellow faceless content creators. Browse member profiles, find collaborators, and grow your network."
-        keywords="faceless creator community, member directory, anonymous creator network, faceless content community"
         url="https://contentanonymity.com/community/members"
         canonical="https://contentanonymity.com/community/members"
         type="website"

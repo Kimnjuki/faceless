@@ -88,7 +88,6 @@ export default function PlatformGuides() {
       <SEO
         title="Master YouTube, TikTok & Instagram Faceless in 2026"
         description="Master YouTube, TikTok & Instagram without revealing your identity. Platform-specific guides with proven strategies and AI tools. Dive in today."
-        keywords="YouTube automation guide, TikTok growth guide, Instagram Reels guide, platform-specific content strategies, faceless platform guides"
         url="https://contentanonymity.com/platform-guides"
         canonical="https://contentanonymity.com/platform-guides"
         type="article"

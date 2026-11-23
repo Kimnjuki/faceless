@@ -40,7 +40,6 @@ export default function PillarPage() {
       <SEO
         title={pageTitle}
         description={pageDescription}
-        keywords={`${pillarTitle.toLowerCase()}, faceless content strategy, anonymous content creation, faceless business guide`}
         url={canonicalUrl}
         canonical={canonicalUrl}
         type="article"

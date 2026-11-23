@@ -92,7 +92,6 @@ export default function ToolComparison() {
       <SEO
         title={pageTitle}
         description={pageDescription}
-        keywords={`${category ? category.replace(/-/g, " ") + " " : ""}tools, faceless content tools, AI content creation tools, video editing tools, anonymous content creator tools`}
         url={canonicalUrl}
         canonical={canonicalUrl}
         type="website"

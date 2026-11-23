@@ -31,9 +31,8 @@ export default function WebinarRegistration() {
   return (
     <>
       <SEO
-        title={slug ? `Free Webinar: ${webinarTitle} | ContentAnonymity` : "Free Webinar: Build $10K/Month Faceless Business | ContentAnonymity"}
-        description="Join our free live webinar and learn the exact system used by 1,000+ creators to generate $10K/month passive income without showing their face. Limited spots available."
-        keywords="free webinar, faceless business webinar, passive income webinar, faceless content training"
+        title={slug ? `Free Webinar: ${webinarTitle} | ContentAnonymity` : "Free Webinar: Faceless Creator Workflows | ContentAnonymity"}
+        description="Join our free live webinar and learn the step-by-step system for building a privacy-first faceless content business. Covers strategy, tools, and publishing workflows."
         url={canonicalUrl}
         canonical={canonicalUrl}
         type="event"
@@ -45,10 +44,10 @@ export default function WebinarRegistration() {
             <div className="text-center mb-8">
               <Badge className="mb-4">FREE LIVE WEBINAR</Badge>
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                Build a $10K/Month Faceless Business in 90 Days
+                Build a Scalable Faceless Content Business in 90 Days
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
-                Learn the exact system used by 1,000+ creators to generate passive income without showing their face
+                Learn the step-by-step system used by creators to build privacy-first content businesses
               </p>
               
               <div className="flex justify-center gap-4 text-center mb-8">

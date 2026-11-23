@@ -10,7 +10,6 @@ export default function PrivacyPolicy() {
       <SEO
         title="Privacy Policy - Data Protection & GDPR Compliance | ContentAnonymity"
         description="ContentAnonymity's Privacy Policy. Learn how we collect, use, and protect your personal information. GDPR compliant privacy practices for anonymous content creators."
-        keywords="privacy policy, data protection, GDPR, privacy rights, data security, anonymous data"
         url="https://contentanonymity.com/privacy-policy"
         canonical="https://contentanonymity.com/privacy-policy"
         noindex={false}

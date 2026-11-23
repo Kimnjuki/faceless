@@ -158,7 +158,6 @@ export default function LearningPaths() {
       <SEO
         title="11 Step-by-Step Learning Paths to Master Faceless Content in 2026"
         description="Choose from 11 curated learning paths designed to take you from beginner to pro in faceless content creation. Start your free journey today."
-        keywords="faceless content courses, learning paths, content creation training, anonymous creator education, faceless business courses"
         url="https://contentanonymity.com/learning-paths"
         canonical="https://contentanonymity.com/learning-paths"
         type="course"

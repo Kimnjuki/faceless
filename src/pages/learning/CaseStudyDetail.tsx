@@ -36,7 +36,6 @@ export default function CaseStudyDetail() {
       <SEO
         title={`${study.title} | ContentAnonymity Case Study`}
         description={study.excerpt}
-        keywords={`${study.platform} case study, faceless creator, ${study.niche}, anonymous content business, ${study.strategy.slice(0, 80)}`}
         url={canonical}
         canonical={canonical}
         type="article"

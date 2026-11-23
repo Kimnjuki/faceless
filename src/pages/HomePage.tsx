@@ -37,9 +37,8 @@ export default function HomePage() {
   return (
     <>
       <SEO
-        title="Build a Privacy-First Faceless Content Business"
-        description="Learn how to build a profitable faceless content business with AI automation and privacy-first workflows. Step-by-step guides, monetization strategies, and free creator tools."
-        keywords="faceless content business, anonymous content creator, faceless YouTube channel, faceless TikTok, faceless Instagram, AI content creation, faceless business 2026, how to make money without showing face"
+        title="Privacy-First Faceless Content Platform | ContentAnonymity"
+        description="Launch a profitable faceless content business with AI workflows, monetization playbooks, and free creator tools—without showing your face."
         url="https://contentanonymity.com"
         canonical="https://contentanonymity.com"
         faqData={faqData}

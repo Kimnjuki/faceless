@@ -29,7 +29,6 @@ export default function StartHere() {
       <SEO
         title="Your Faceless Content Journey Begins Here | ContentAnonymity"
         description="Build a profitable faceless brand in 90 days. From complete beginner to monetized creator with our AI-powered learning system. Take the quiz to get started."
-        keywords="faceless content creator, anonymous content business, faceless brand, faceless content journey, AI content creation"
         url="https://contentanonymity.com/start-here"
         canonical="https://contentanonymity.com/start-here"
         breadcrumbItems={[{ name: 'Start Here', url: 'https://contentanonymity.com/start-here' }]}

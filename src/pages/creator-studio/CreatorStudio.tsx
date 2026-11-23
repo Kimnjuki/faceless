@@ -83,7 +83,6 @@ export default function CreatorStudio() {
       <SEO
         title="Creator Studio — AI Tools for Faceless Content | ContentAnonymity"
         description="Full AI content creation suite: funnel-mapped scripts, voice anonymization, content calendars, A/B testing, storyboards, affiliate matching, income projections, and persona management."
-        keywords="AI content creation, script generator, voice anonymization, content calendar, AB testing, faceless content tools, anonymity score"
         url="https://contentanonymity.com/creator-studio"
         canonical="https://contentanonymity.com/creator-studio"
       />

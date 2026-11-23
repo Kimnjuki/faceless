@@ -55,7 +55,6 @@ export default function LiveWorkshops() {
       <SEO
         title="Live Workshops - Interactive Learning Sessions | ContentAnonymity"
         description="Join live interactive workshops on YouTube automation, TikTok growth, monetization, and more. Recorded replays available."
-        keywords="live workshops, faceless creator workshops, YouTube automation workshop, TikTok growth workshop, monetization masterclass"
         url="https://contentanonymity.com/workshops"
         canonical="https://contentanonymity.com/learning/workshops"
         type="event"

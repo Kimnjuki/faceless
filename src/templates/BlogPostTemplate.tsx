@@ -8,7 +8,7 @@
  * 1. Educational: "How to Start a Faceless YouTube Channel in 2025"
  * 2. Tools: "15 Best AI Tools for Faceless Content Creators"
  * 3. Case Studies: "How [Name] Made $10K/Month with Faceless TikTok"
- * 4. Comparisons: "Faceless vs Traditional Content: Which Makes More Money?"
+ * 4. Comparisons: "Faceless vs Traditional Content: Key Differences Explained"
  * 5. Tutorials: "Step-by-Step: Creating Your First Faceless Video"
  */
 
@@ -49,7 +49,6 @@ export default function BlogPostTemplate({
       <SEO
         title={title}
         description={description}
-        keywords={keywords}
         url={url}
         canonical={url}
         type="article"
@@ -202,7 +201,6 @@ export default function BlogPostTemplate({
 //   slug="how-to-start-faceless-youtube-channel-2025"
 //   title="How to Start a Faceless YouTube Channel in 2025: Complete Guide"
 //   description="Learn how to start a profitable faceless YouTube channel in 2025. Step-by-step guide with proven strategies, tools, and monetization methods. Join thousands earning 6-figures anonymously."
-//   keywords="faceless YouTube channel, how to start faceless YouTube, anonymous YouTube channel, faceless content 2025"
 //   publishedDate="2025-01-27"
 //   category="Education"
 //   readingTime={15}

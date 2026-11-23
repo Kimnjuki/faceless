@@ -84,7 +84,6 @@ export default function TemplatesLibrary() {
       <SEO
         title="Free Faceless Content Templates — Scripts, Hooks & Calendars | ContentAnonymity"
         description="Download SEO-friendly, human-written templates for faceless TikTok, YouTube, Instagram Reels, Shorts, carousels, hook banks, and brand voice. Each resource is 900+ words of actionable guidance."
-        keywords="faceless content templates, TikTok script template, YouTube script outline, Instagram Reels template, YouTube Shorts batch scripting, carousel template, content calendar faceless creator, hook bank, brand voice framework"
         url="https://contentanonymity.com/resources/templates"
         canonical="https://contentanonymity.com/resources/templates"
         type="website"

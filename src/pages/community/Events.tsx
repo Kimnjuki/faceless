@@ -61,7 +61,6 @@ export default function Events() {
       <SEO
         title="Events & Webinars - Live Sessions for Faceless Creators | ContentAnonymity"
         description="Join live webinars, workshops, and networking events with the faceless creator community. Learn from experts and connect with peers."
-        keywords="faceless creator events, webinars, workshops, live sessions, creator networking, faceless content events"
         url="https://contentanonymity.com/community/events"
         canonical="https://contentanonymity.com/community/events"
         type="website"

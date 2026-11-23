@@ -142,7 +142,6 @@ export default function ResourceDownloads() {
       <SEO
         title="Resource Downloads - Free Templates & Checklists | ContentAnonymity"
         description="Download free resources: content calendars, niche lists, script templates, SEO checklists, and worksheets for faceless creators."
-        keywords="free templates, content calendar template, niche research worksheet, video script template, SEO checklist, faceless creator resources"
         url="https://contentanonymity.com/resources/downloads"
         canonical="https://contentanonymity.com/learning/resources"
         type="website"

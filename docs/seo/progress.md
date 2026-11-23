@@ -97,6 +97,14 @@
 - Allowlist in `src/config/adsAllowed.ts`; `AdSense.tsx` loads script on-demand only on allowed routes.
 - Prerender strips any residual adsbygoogle script from shell.
 
+### Ahrefs Health 37→90 execution (2026-11-24)
+
+- **P1:** Niche URLs use slugs only; nginx 301 for UUID/opaque IDs → `/resources/niches`; prerender 147 `/niches/{slug}`; link-audit fails opaque IDs.
+- **P2:** Footer / MegaMenu / Explore / prerender footer unlink noindex stubs (news, products, learning-paths, thin tools, templates).
+- **P3:** Blog hub + niche peer graph densified; orphans 161→21; 0 broken links.
+- **P4–5:** Richer hub/tool prerender copy; titles capped ~55 chars; H1 truncate; Explore heading demoted from H2.
+- **P6:** Security headers on www redirect server; opaque niche rewrite rules in `nginx.conf`.
+
 ## Build / seo:check after each phase
 
 | After | `npm run build` | `npm run seo:check` | Notes |

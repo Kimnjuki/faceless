@@ -123,9 +123,9 @@ export function LearnMegaMenu({ trigger }: MegaMenuProps) {
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/learning-paths">
+                <Link to="/getting-started">
                   <GraduationCap className="mr-2 h-4 w-4" />
-                  Learning Paths
+                  Getting Started
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
@@ -146,21 +146,21 @@ export function LearnMegaMenu({ trigger }: MegaMenuProps) {
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/resources/templates">
+                <Link to="/starter-kit">
                   <PenTool className="mr-2 h-4 w-4" />
-                  Templates
+                  Starter Kit
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/learning/resources">
+                <Link to="/blog">
                   <FolderOpen className="mr-2 h-4 w-4" />
-                  Downloads
+                  Blog Guides
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/learning/workshops">
+                <Link to="/faceless-content">
                   <Calendar className="mr-2 h-4 w-4" />
-                  Live Workshops
+                  Faceless Content Hub
                 </Link>
               </Button>
             </div>
@@ -235,9 +235,9 @@ export function ResourcesMegaMenu({ trigger }: MegaMenuProps) {
             <DropdownMenuLabel className="mb-3">Tools & Templates</DropdownMenuLabel>
             <div className="space-y-2">
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/resources/templates">
+                <Link to="/templates/faceless-youtube-script-template">
                   <PenTool className="mr-2 h-4 w-4" />
-                  Template Library
+                  Script Template
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
@@ -282,9 +282,9 @@ export function ResourcesMegaMenu({ trigger }: MegaMenuProps) {
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/news">
+                <Link to="/faceless-content/youtube">
                   <TrendingUp className="mr-2 h-4 w-4" />
-                  LiveWire News
+                  YouTube Faceless Hub
                 </Link>
               </Button>
             </div>
@@ -342,30 +342,30 @@ export function ToolsMegaMenu({ trigger }: MegaMenuProps) {
             </div>
           </div>
           <div>
-            <DropdownMenuLabel className="mb-3">SEO & Analysis</DropdownMenuLabel>
+            <DropdownMenuLabel className="mb-3">Guides & Hubs</DropdownMenuLabel>
             <div className="space-y-2">
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/tools/seo-audit">
+                <Link to="/platform-guides">
                   <Search className="mr-2 h-4 w-4" />
-                  SEO Audit Tool
+                  Platform Guides
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/tools/keyword-research">
+                <Link to="/blog">
                   <Search className="mr-2 h-4 w-4" />
-                  Keyword Research
+                  Faceless Blog
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/tools/backlink-checker">
+                <Link to="/faceless-content/monetization">
                   <TrendingUp className="mr-2 h-4 w-4" />
-                  Backlink Checker
+                  Monetization Hub
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/tools/performance">
+                <Link to="/learning/case-studies">
                   <BarChart3 className="mr-2 h-4 w-4" />
-                  Performance Monitor
+                  Case Studies
                 </Link>
               </Button>
             </div>
@@ -376,13 +376,13 @@ export function ToolsMegaMenu({ trigger }: MegaMenuProps) {
               <Button variant="ghost" className="w-full justify-start" asChild>
                 <Link to="/tools/all">
                   <Wrench className="mr-2 h-4 w-4" />
-                  Tool Comparison
+                  All Creator Tools
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/resources/templates">
+                <Link to="/starter-kit">
                   <PenTool className="mr-2 h-4 w-4" />
-                  Templates
+                  Starter Kit
                 </Link>
               </Button>
               <Button variant="ghost" className="w-full justify-start" asChild>

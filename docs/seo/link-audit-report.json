@@ -1,190 +1,89 @@
 {
-  "pages": 81,
-  "orphans": 25,
+  "pages": 228,
+  "orphans": 0,
   "brokenInternal": 0,
-  "orphanList": [
-    {
-      "path": "/blog/ai-content-disclosure-ethical-guide-2026",
-      "inlinks": 1
-    },
-    {
-      "path": "/blog/ai-news-automation-channel-daily-workflow",
-      "inlinks": 1
-    },
-    {
-      "path": "/blog/ai-voice-brand-builder-quiz",
-      "inlinks": 1
-    },
-    {
-      "path": "/blog/anonymous-creator-privacy-security-stack-2026",
-      "inlinks": 1
-    },
-    {
-      "path": "/blog/convert-faceless-traffic-to-newsletter-2026",
-      "inlinks": 2
-    },
-    {
-      "path": "/blog/corporate-true-crime-30-day-calendar",
-      "inlinks": 1
-    },
-    {
-      "path": "/blog/edit-business-documentaries-magnates-media-style",
-      "inlinks": 1
-    },
-    {
-      "path": "/blog/faceless-content-legal-guide",
-      "inlinks": 1
-    },
-    {
-      "path": "/blog/faceless-growth-challenge-30-days-2026",
-      "inlinks": 2
-    },
-    {
-      "path": "/blog/faceless-strategy-playbook-2025",
-      "inlinks": 1
-    },
-    {
-      "path": "/blog/faceless-travel-vlog-drone-pov-2026",
-      "inlinks": 2
-    },
-    {
-      "path": "/blog/future-of-faceless-content-2027-predictions",
-      "inlinks": 2
-    },
-    {
-      "path": "/blog/pinterest-marketing-strategy-blog-traffic-2026",
-      "inlinks": 1
-    },
-    {
-      "path": "/blog/psychology-of-faceless-branding-2026",
-      "inlinks": 2
-    },
-    {
-      "path": "/blog/reddit-story-automation-shorts-reels-2026",
-      "inlinks": 2
-    },
-    {
-      "path": "/blog/silent-vlog-asmr-faceless-trend-2026",
-      "inlinks": 2
-    },
-    {
-      "path": "/blog/thumbnail-psychology-framework",
-      "inlinks": 1
-    },
-    {
-      "path": "/blog/ultimate-top-10-ai-faceless-content-tools-review",
-      "inlinks": 2
-    },
-    {
-      "path": "/blog/youtube-automation-strategy-2025",
-      "inlinks": 1
-    },
-    {
-      "path": "/compare/best-ai-video-generators-for-faceless-content",
-      "inlinks": 0
-    },
-    {
-      "path": "/faceless-content/ai-workflows",
-      "inlinks": 0
-    },
-    {
-      "path": "/faceless-content/quality-control",
-      "inlinks": 0
-    },
-    {
-      "path": "/starter-kit",
-      "inlinks": 0
-    },
-    {
-      "path": "/templates/faceless-youtube-script-template",
-      "inlinks": 0
-    },
-    {
-      "path": "/trust-and-safety",
-      "inlinks": 0
-    }
-  ],
+  "orphanList": [],
   "brokenSample": [],
   "topInlinks": [
     [
+      "/resources/niches",
+      784
+    ],
+    [
       "/",
-      240
+      681
     ],
     [
       "/blog",
-      156
+      678
     ],
     [
       "/platform-guides",
-      119
-    ],
-    [
-      "/resources/niches",
-      115
+      647
     ],
     [
       "/tools/all",
-      112
+      639
     ],
     [
       "/getting-started",
-      109
+      631
     ],
     [
       "/faceless-content",
-      89
+      493
     ],
     [
       "/faceless-content/youtube",
-      88
+      405
     ],
     [
       "/faceless-content/monetization",
-      84
-    ],
-    [
-      "/about",
-      81
+      254
     ],
     [
       "/learning/case-studies",
-      81
+      250
+    ],
+    [
+      "/starter-kit",
+      249
+    ],
+    [
+      "/about",
+      228
     ],
     [
       "/contact",
-      81
+      228
     ],
     [
       "/privacy-policy",
-      81
+      228
     ],
     [
       "/terms",
-      81
+      228
     ],
     [
-      "/learning-paths",
-      80
+      "/tools/calculator",
+      213
     ],
     [
-      "/learning/workshops",
-      80
+      "/tools/niche-quiz",
+      213
     ],
     [
-      "/learning/resources",
-      80
+      "/faceless-content/ai-workflows",
+      22
     ],
     [
-      "/resources/templates",
-      80
+      "/faceless-content/quality-control",
+      22
     ],
     [
-      "/products/all",
-      80
-    ],
-    [
-      "/news",
-      80
+      "/templates/faceless-youtube-script-template",
+      22
     ]
   ]
 }

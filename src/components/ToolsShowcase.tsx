@@ -92,7 +92,7 @@ export default function ToolsShowcase() {
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link to="/learning-paths">
+              <Link to="/getting-started">
                 <BookOpen className="mr-2 h-4 w-4" />
                 Learn How to Use Tools
               </Link>

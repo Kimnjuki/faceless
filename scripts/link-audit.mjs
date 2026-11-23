@@ -7,6 +7,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { isOpaqueNichePath } from './niche-slug.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
@@ -90,9 +91,11 @@ for (const file of files) {
     const target = normalizeHref(m[1], route);
     if (!target) continue;
     if (target === route) continue;
+    if (isOpaqueNichePath(target)) {
+      broken.push({ from: route, to: target, reason: 'opaque-niche-id' });
+      continue;
+    }
     if (!htmlExists(target) && !target.startsWith('/auth/') && !target.startsWith('/dashboard/')) {
-      // niches detail pages may not be prerendered
-      if (target.startsWith('/niches/')) continue;
       broken.push({ from: route, to: target });
       continue;
     }
@@ -127,8 +130,15 @@ if (broken.length > 0) {
   for (const b of broken.slice(0, 15)) console.error(`  ${b.from} -> ${b.to}`);
 }
 
-// Soft fail orphans for now (nav/prerender should clear most); hard-fail broken among prerendered paths
-const hardBroken = broken.filter((b) => htmlExists(b.from) && !b.to.startsWith('/niches/'));
+const opaqueNicheLinks = broken.filter((b) => b.reason === 'opaque-niche-id');
+if (opaqueNicheLinks.length) {
+  console.error(`Opaque niche ID links forbidden (${opaqueNicheLinks.length}):`);
+  for (const b of opaqueNicheLinks.slice(0, 15)) console.error(`  ${b.from} -> ${b.to}`);
+  process.exit(1);
+}
+
+// Soft fail orphans for now; hard-fail excessive broken among prerendered paths
+const hardBroken = broken.filter((b) => htmlExists(b.from));
 if (hardBroken.length > 40) {
   console.error(`Too many broken links (${hardBroken.length})`);
   process.exit(1);

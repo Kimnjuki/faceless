@@ -297,6 +297,8 @@ export interface NicheCategory {
 export interface Niche {
   _id?: string;
   id?: string;
+  /** Public URL segment for /niches/{slug} — never a Convex document id */
+  slug?: string;
   nicheName?: string;
   niche_name?: string;
   categoryId?: string;
@@ -309,7 +311,6 @@ export interface Niche {
   description?: string;
   trend_status?: string;
   estimated_earnings_range?: string;
-  avg_rpm?: number;
   startup_cost?: string;
   competition_level?: string;
   best_ai_tools?: string[];

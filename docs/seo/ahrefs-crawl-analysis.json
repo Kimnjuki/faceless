@@ -1,0 +1,2278 @@
+{
+  "crawlMeta": {
+    "source": "Ahrefs Site Audit exports 2026-11-23",
+    "healthScoreReported": 37,
+    "targetHealthScore": 90,
+    "issuesCount": 20,
+    "pagesExportCount": 10,
+    "internalUrls": 95,
+    "indexableCount": 65
+  },
+  "issues": [
+    {
+      "name": "Response Codes: Internal Client Error (4xx)",
+      "type": "Issue",
+      "priority": "High",
+      "urls": 19,
+      "pct": "19.190",
+      "desc": "Internal URLs with a client-side error. This indicates a problem occurred with the URL request and can include responses such as 400 bad request, 403 Forbidden, 404 Page Not Found, 410 Removed, 429 Too Many Requests and more. A 404 'Page Not Found' is the most common, and often referred to as a broken link. View URLs that link to errors using the lower 'inlinks' tab and export them in bulk via 'Bulk Export > Response Codes > Internal > Client Error (4xx) inlinks'.",
+      "how": "All links on a website should ideally resolve to 200 'OK' URLs. Errors such as a 404 or 410 should be updated to their correct locations, removed and redirected where appropriate. A 403 forbidden error occurs when a web server denies access to the SEO Spider's request and can often be resolved by switching the user-agent to Chrome via 'Config > User-Agent' and crawling again."
+    },
+    {
+      "name": "Directives: Noindex",
+      "type": "Warning",
+      "priority": "High",
+      "urls": 10,
+      "pct": "13.330",
+      "desc": "URLs containing a 'noindex' directive in either a robots meta tag or X-Robots-Tag in the HTTP header. This instructs the search engines not to index the page. The page will still be crawled (to see the directive), but it will then be dropped from the index.",
+      "how": "URLs with a 'noindex' should be reviewed carefully to ensure they are correct and shouldn't be indexed. If these pages should be indexed, then the 'noindex' directive should be removed."
+    },
+    {
+      "name": "Page Titles: Over 561 Pixels",
+      "type": "Opportunity",
+      "priority": "Medium",
+      "urls": 21,
+      "pct": "29.170",
+      "desc": "Pages which have page titles over Google's estimated pixel length limit for titles in search results. Google snippet length is actually based upon pixels limits, rather than a character length. The SEO Spider tries to match the latest pixel truncation points in the SERPs, but it is an approximation and Google adjusts them frequently.",
+      "how": "Write concise page titles to ensure important words are not truncated in the search results, not visible to users and potentially weighted less in scoring."
+    },
+    {
+      "name": "Content: Low Content Pages",
+      "type": "Opportunity",
+      "priority": "Medium",
+      "urls": 19,
+      "pct": "26.390",
+      "desc": "Pages with a word count that is below the default 200 words. The word count is based upon the content area settings used in the analysis which can be configured via 'Config > Content > Area'. There isn't a minimum word count for pages in reality, but the search engines do require descriptive text to understand the purpose of a page. This filter should only be used as a rough guide to help identify pages that might be improved by adding more descriptive content in the context of the website and page's purpose. Some websites, such as ecommerce, will naturally have lower word counts, which can be acceptable if a products details can be communicated efficiently.",
+      "how": "Consider including additional descriptive content to help the user and search engines better understand the page."
+    },
+    {
+      "name": "Page Titles: Below 30 Characters",
+      "type": "Opportunity",
+      "priority": "Medium",
+      "urls": 2,
+      "pct": "2.780",
+      "desc": "Pages which have page titles under the configured limit. This isn't necessarily an issue, but it does indicate there might be room to target additional keywords or communicate your USPs.",
+      "how": "Consider updating the page title to take advantage of the space left to include additional target keywords or USPs."
+    },
+    {
+      "name": "H2: Duplicate",
+      "type": "Opportunity",
+      "priority": "Low",
+      "urls": 45,
+      "pct": "62.500",
+      "desc": "Pages which have duplicate <h2>s. It's important to have distinct, unique and useful pages. If every page has the same <h2>, then it can make it more challenging for users and the search engines to understand one page from another.",
+      "how": "Update duplicate <h2>s as necessary, so important pages contain a unique and descriptive <h2> for users and search engines.  If these are duplicate pages, then fix the duplicated pages by linking to a single version, and redirect or use canonicals where appropriate."
+    },
+    {
+      "name": "Content: Readability Difficult",
+      "type": "Opportunity",
+      "priority": "Low",
+      "urls": 41,
+      "pct": "56.940",
+      "desc": "Copy on the page is difficult to read and best understood by college graduates according to the Flesch reading-ease score formula. Copy that has long sentences and uses complex words are generally harder to read and understand.",
+      "how": "Consider improving the readability of copy for your target audience. Copy that uses shorter sentences with less complex words is often easier to read and understand."
+    },
+    {
+      "name": "H2: Missing",
+      "type": "Warning",
+      "priority": "Low",
+      "urls": 15,
+      "pct": "20.830",
+      "desc": "Pages which have a missing <h2>, the content is empty or has a whitespace. The <h2> heading is often used to describe sections or topics within a document. They act as signposts for the user, and can help search engines understand the page.",
+      "how": "Consider using logical and descriptive <h2>s on important pages that help the user and search engines better understand the page."
+    },
+    {
+      "name": "H1: Over 70 Characters",
+      "type": "Opportunity",
+      "priority": "Low",
+      "urls": 13,
+      "pct": "18.060",
+      "desc": "Pages which have <h1>s over the configured length. There is no hard limit for characters in an <h1>, however they should be clear and concise for users and long headings might be less helpful",
+      "how": "Write concise <h1>s for users, including target keywords where natural for users - without keyword stuffing."
+    },
+    {
+      "name": "H2: Multiple",
+      "type": "Warning",
+      "priority": "Low",
+      "urls": 5,
+      "pct": "6.940",
+      "desc": "Pages which have multiple <h2>s. This is not an issue as HTML standards allow multiple <h2>'s when used in a logical hierarchical heading structure. However, this filter can help you quickly scan to review if they are used appropriately.",
+      "how": "Ensure <h2>s are used in a logical hierarchical heading structure, and update where appropriate utilising the full heading rank between (h3 - h6) for additional headings."
+    },
+    {
+      "name": "Meta Description: Below 70 Characters",
+      "type": "Opportunity",
+      "priority": "Low",
+      "urls": 4,
+      "pct": "5.560",
+      "desc": "Pages which have meta descriptions below the configured limit. This isn't strictly an issue, but an opportunity. There is additional room to communicate benefits, USPs or call to actions.",
+      "how": "Consider updating the meta description to take advantage of the space left to include additional benefits, USPs or call to actions to improve click through rates (CTR)."
+    },
+    {
+      "name": "Security: Missing HSTS Header",
+      "type": "Warning",
+      "priority": "Low",
+      "urls": 3,
+      "pct": "3.160",
+      "desc": "URLs that are missing the HSTS response header. The HTTP Strict-Transport-Security response header (HSTS) instructs browsers that it should only be accessed using HTTPS, rather than HTTP. If a website accepts a connection to HTTP, before being redirected to HTTPS, visitors will initially still communicate over HTTP. The HSTS header instructs the browser to never load over HTTP and to automatically convert all requests to HTTPS.",
+      "how": "The HSTS header should be used across all pages to instruct the browser that it should always request pages via HTTPS, rather than HTTP."
+    },
+    {
+      "name": "Security: Missing Secure Referrer-Policy Header",
+      "type": "Warning",
+      "priority": "Low",
+      "urls": 3,
+      "pct": "3.160",
+      "desc": "URLs missing 'no-referrer-when-downgrade', 'strict-origin-when-cross-origin', 'no-referrer' or 'strict-origin' policies in the Referrer-Policy header. When using HTTPS, it's important that the URLs do not leak in non-HTTPS requests. This can expose users to 'man in the middle' attacks, as anyone on the network can view them.",
+      "how": "Consider setting a referrer policy of strict-origin-when-cross-origin. It retains much of the referrer's usefulness, while mitigating the risk of leaking data cross-origins."
+    },
+    {
+      "name": "Security: Missing X-Content-Type-Options Header",
+      "type": "Warning",
+      "priority": "Low",
+      "urls": 3,
+      "pct": "3.160",
+      "desc": "URLs that are missing the 'X-Content-Type-Options' response header with a 'nosniff' value. In the absence of a MIME type, browsers may 'sniff' to guess the content type to interpret it correctly for users. However, this can be exploited by attackers who can try and load malicious code, such as JavaScript via an image they have compromised.",
+      "how": "To minimise security issues, the X-Content-Type-Options response header should be supplied and set to 'nosniff'. This instructs browsers to rely only on the Content-Type header and block anything that does not match accurately. This also means the content-type set needs to be accurate."
+    },
+    {
+      "name": "Meta Description: Over 155 Characters",
+      "type": "Opportunity",
+      "priority": "Low",
+      "urls": 3,
+      "pct": "4.170",
+      "desc": "Pages which have meta descriptions over the configured limit. Characters over this limit might be truncated in Google's search results.",
+      "how": "Write concise meta descriptions to ensure important words are not truncated in the search results, and not visible to users."
+    },
+    {
+      "name": "Page Titles: Same as H1",
+      "type": "Opportunity",
+      "priority": "Low",
+      "urls": 1,
+      "pct": "1.390",
+      "desc": "Page titles which match the h1 on the page exactly. This is not necessarily an issue, but may point to a potential opportunity to target alternative keywords, synonyms, or related key phrases.",
+      "how": "This is not necessarily an issue, but may point to a potential opportunity to target alternative keywords, synonyms, or related key phrases."
+    },
+    {
+      "name": "H2: Over 70 Characters",
+      "type": "Opportunity",
+      "priority": "Low",
+      "urls": 1,
+      "pct": "1.390",
+      "desc": "Pages which have <h2>s over the configured limit. There is no hard limit for characters in an <h2>, however they should be clear and concise for users and long headings might be less helpful",
+      "how": "Write concise <h2>s for users, including target keywords where natural for users - without keyword stuffing."
+    },
+    {
+      "name": "Response Codes: External Client Error (4xx)",
+      "type": "Warning",
+      "priority": "Low",
+      "urls": 1,
+      "pct": "1.010",
+      "desc": "External URLs with a client-side error. This indicates a problem occurred with the URL request and can include responses such as 400 bad request, 403 Forbidden, 404 Page Not Found, 410 Removed, 429 Too Many Requests and more. A 404 'Page Not Found' is the most common, and often referred to as a broken link. View URLs that link to errors using the lower 'inlinks' tab and export them in bulk via 'Bulk Export > Response Codes > External > Client Error (4xx) inlinks'.",
+      "how": "All links on a website should ideally resolve to 200 'OK' URLs. Errors such as 404 broken links should be updated so users are taken to the correct URL, or removed. A 403 forbidden error occurs when a web server denies access to the SEO Spider's request and can often be resolved by switching the user-agent to Chrome via 'Config > User-Agent'. If they can be viewed in a browser, then it's often not an issue."
+    },
+    {
+      "name": "Meta Description: Below 400 Pixels",
+      "type": "Opportunity",
+      "priority": "Low",
+      "urls": 1,
+      "pct": "1.390",
+      "desc": "Pages which have meta descriptions much shorter than Google's estimated pixel length limit. This isn't necessarily an issue, but it does indicate there might be room to communicate benefits, USPs or call to actions.",
+      "how": "Consider updating the meta description to take advantage of the space left to include additional benefits, USPs or call to actions to improve click through rates (CTR)."
+    },
+    {
+      "name": "Response Codes: Internal Redirection (3xx)",
+      "type": "Warning",
+      "priority": "Low",
+      "urls": 1,
+      "pct": "1.010",
+      "desc": "Internal URLs which redirect to another URL. These will include server-side redirects, such as 301 or 302 redirects (and more). View URLs that link to redirects using the lower 'inlinks' tab and export them in bulk via 'Bulk Export > Response Codes > Internal > Redirection (3xx) inlinks'.",
+      "how": "Ideally all internal links would be to canonical resolving URLs, and avoid linking to URLs that redirect. This reduces latency of redirect hops for users, and enhanced efficiency for search engines."
+    }
+  ],
+  "pages": {
+    "count": 10,
+    "byStatus": {
+      "200": 10
+    },
+    "byIndexable": {
+      "false": 10
+    },
+    "avgInlinks": 46.6,
+    "low": [
+      {
+        "url": "https://contentanonymity.com/tools/backlink-checker",
+        "title": "Backlink Checker | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 1,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/tools/backlink-checker"
+      },
+      {
+        "url": "https://contentanonymity.com/tools/performance",
+        "title": "Performance Monitor | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 1,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/tools/performance"
+      },
+      {
+        "url": "https://contentanonymity.com/tools/keyword-research",
+        "title": "Keyword Research | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 1,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/tools/keyword-research"
+      },
+      {
+        "url": "https://contentanonymity.com/tools/seo-audit",
+        "title": "SEO Audit Tool | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 1,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/tools/seo-audit"
+      },
+      {
+        "url": "https://contentanonymity.com/products/all",
+        "title": "All | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 77,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/products/all"
+      },
+      {
+        "url": "https://contentanonymity.com/news",
+        "title": "News | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 77,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/news"
+      },
+      {
+        "url": "https://contentanonymity.com/learning-paths",
+        "title": "Learning Paths | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 77,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/learning-paths"
+      },
+      {
+        "url": "https://contentanonymity.com/learning/resources",
+        "title": "Resources | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 77,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/learning/resources"
+      },
+      {
+        "url": "https://contentanonymity.com/resources/templates",
+        "title": "Templates | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 77,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/resources/templates"
+      },
+      {
+        "url": "https://contentanonymity.com/learning/workshops",
+        "title": "Workshops | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 77,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/learning/workshops"
+      }
+    ],
+    "high": [
+      {
+        "url": "https://contentanonymity.com/products/all",
+        "title": "All | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 77,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/products/all"
+      },
+      {
+        "url": "https://contentanonymity.com/news",
+        "title": "News | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 77,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/news"
+      },
+      {
+        "url": "https://contentanonymity.com/learning-paths",
+        "title": "Learning Paths | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 77,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/learning-paths"
+      },
+      {
+        "url": "https://contentanonymity.com/learning/resources",
+        "title": "Resources | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 77,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/learning/resources"
+      },
+      {
+        "url": "https://contentanonymity.com/resources/templates",
+        "title": "Templates | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 77,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/resources/templates"
+      },
+      {
+        "url": "https://contentanonymity.com/learning/workshops",
+        "title": "Workshops | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 77,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/learning/workshops"
+      },
+      {
+        "url": "https://contentanonymity.com/tools/backlink-checker",
+        "title": "Backlink Checker | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 1,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/tools/backlink-checker"
+      },
+      {
+        "url": "https://contentanonymity.com/tools/performance",
+        "title": "Performance Monitor | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 1,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/tools/performance"
+      },
+      {
+        "url": "https://contentanonymity.com/tools/keyword-research",
+        "title": "Keyword Research | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 1,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/tools/keyword-research"
+      },
+      {
+        "url": "https://contentanonymity.com/tools/seo-audit",
+        "title": "SEO Audit Tool | ContentAnonymity",
+        "status": "200",
+        "indexable": "false",
+        "depth": 1,
+        "inlinks": 1,
+        "rendered": "false",
+        "canon": "https://contentanonymity.com/tools/seo-audit"
+      }
+    ],
+    "renderedFalse": 10
+  },
+  "internal": {
+    "statusCounts": {
+      "200": 75,
+      "301": 1,
+      "404": 19
+    },
+    "indexability": {
+      "Non-Indexable": 30,
+      "Indexable": 65
+    },
+    "depthBuckets": {
+      "0": 1,
+      "1": 1,
+      "2": 24,
+      "3": 69
+    },
+    "clientErrors": [
+      {
+        "addr": "https://contentanonymity.com/niches/f1f14ad2-49ba-490a-bebc-10492cbe0e52",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 6
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/300e53a4-0a1f-48a6-93b6-703e9c4d4bcb",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 6
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/1ede1b28-a666-4160-9c73-6b8086d7659c",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 6
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/fa0da183-5ee6-4f2d-9bef-b37ca670f24a",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 6
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/f8e96059-9c07-403a-ae18-367be3c196b8",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 6
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/m97dfww2ac1a206kmkdxrdrqhd837f18",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 1
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/m973gtj9qmm2cd8cj8s2q84fmd836tz7",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 1
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/m9737pqt4ph4x04dr41wd6fhp9836rk7",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 1
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/a25b7f36-0508-4426-b0e9-13c50115e1a3",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 6
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/20a16a2f-43d9-439a-90f9-6c3ad6bb802f",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 6
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/292699c1-4d94-4cda-bb08-203b0b3c61f6",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 6
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/a6b08025-cea5-4e98-8aa8-4a8e32dada0b",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 6
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/5be6d739-a4d8-42bf-8641-64aaae5d6763",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 6
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/35599fed-93c8-451d-8de3-66dc0203380d",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 6
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/034ee41d-d614-4ea4-bb7f-a0d40835ce75",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 6
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/m975g3nh5mesz2g8ypvnab1fqx836807",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 1
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/m97ew2smdc1cws7rby7geenqgx837931",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 1
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/1eb8e54c-6fd3-46b4-9082-81152dd36539",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 6
+      },
+      {
+        "addr": "https://contentanonymity.com/niches/5e8c3256-fc7e-4d7e-b73b-cba284723b61",
+        "status": "404",
+        "uniqIn": 1,
+        "inlinks": 6
+      }
+    ],
+    "redirects": [
+      {
+        "addr": "https://www.contentanonymity.com/",
+        "status": "301",
+        "to": "https://contentanonymity.com/",
+        "uniqIn": 0
+      }
+    ],
+    "missingTitle": [
+      "https://contentanonymity.com/og-image.png",
+      "https://contentanonymity.com/assets/js/index-D93HhUSF.js",
+      "https://contentanonymity.com/assets/index-C8iqBP_w.css"
+    ],
+    "missingDesc": [
+      "https://contentanonymity.com/og-image.png",
+      "https://contentanonymity.com/assets/js/index-D93HhUSF.js",
+      "https://contentanonymity.com/assets/index-C8iqBP_w.css"
+    ],
+    "missingH1": [
+      "https://contentanonymity.com/og-image.png",
+      "https://contentanonymity.com/assets/js/index-D93HhUSF.js",
+      "https://contentanonymity.com/assets/index-C8iqBP_w.css"
+    ],
+    "shortDesc": [
+      {
+        "addr": "https://contentanonymity.com/terms",
+        "descLen": 63
+      },
+      {
+        "addr": "https://contentanonymity.com/privacy-policy",
+        "descLen": 64
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/future-of-faceless-content-2027-predictions",
+        "descLen": 60
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/convert-faceless-traffic-to-newsletter-2026",
+        "descLen": 67
+      }
+    ],
+    "longTitle": [],
+    "thin": [
+      {
+        "addr": "https://contentanonymity.com/",
+        "words": 45,
+        "uniqIn": 72,
+        "uniqOut": 22,
+        "depth": 1
+      },
+      {
+        "addr": "https://contentanonymity.com/faceless-content",
+        "words": 38,
+        "uniqIn": 72,
+        "uniqOut": 20,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/faceless-content/monetization",
+        "words": 157,
+        "uniqIn": 72,
+        "uniqOut": 25,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/about",
+        "words": 33,
+        "uniqIn": 72,
+        "uniqOut": 20,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/og-image.png",
+        "words": 0,
+        "uniqIn": 0,
+        "uniqOut": 0,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/getting-started",
+        "words": 38,
+        "uniqIn": 72,
+        "uniqOut": 20,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/learning/case-studies",
+        "words": 38,
+        "uniqIn": 72,
+        "uniqOut": 20,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/tools/calculator",
+        "words": 35,
+        "uniqIn": 43,
+        "uniqOut": 21,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/tools/all",
+        "words": 100,
+        "uniqIn": 72,
+        "uniqOut": 26,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/assets/js/index-D93HhUSF.js",
+        "words": 0,
+        "uniqIn": 0,
+        "uniqOut": 0,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/tools/niche-quiz",
+        "words": 40,
+        "uniqIn": 43,
+        "uniqOut": 21,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/contact",
+        "words": 30,
+        "uniqIn": 72,
+        "uniqOut": 20,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/terms",
+        "words": 33,
+        "uniqIn": 72,
+        "uniqOut": 20,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/privacy-policy",
+        "words": 31,
+        "uniqIn": 72,
+        "uniqOut": 20,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/assets/index-C8iqBP_w.css",
+        "words": 0,
+        "uniqIn": 0,
+        "uniqOut": 0,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/platform-guides/faceless-youtube-setup-2025",
+        "words": 56,
+        "uniqIn": 9,
+        "uniqOut": 25,
+        "depth": 3
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/faceless-youtube-channel-guide-2026",
+        "words": 132,
+        "uniqIn": 29,
+        "uniqOut": 27,
+        "depth": 3
+      },
+      {
+        "addr": "https://contentanonymity.com/platform-guides/youtube-faceless-strategy",
+        "words": 138,
+        "uniqIn": 7,
+        "uniqOut": 25,
+        "depth": 3
+      },
+      {
+        "addr": "https://contentanonymity.com/platform-guides/tiktok-faceless-virality",
+        "words": 129,
+        "uniqIn": 6,
+        "uniqOut": 25,
+        "depth": 3
+      },
+      {
+        "addr": "https://contentanonymity.com/platform-guides/instagram-faceless-aesthetic",
+        "words": 119,
+        "uniqIn": 5,
+        "uniqOut": 24,
+        "depth": 3
+      },
+      {
+        "addr": "https://contentanonymity.com/platform-guides/instagram-reels-monetization",
+        "words": 46,
+        "uniqIn": 5,
+        "uniqOut": 24,
+        "depth": 3
+      },
+      {
+        "addr": "https://contentanonymity.com/platform-guides/tiktok-account-warming-strategy",
+        "words": 50,
+        "uniqIn": 6,
+        "uniqOut": 25,
+        "depth": 3
+      }
+    ],
+    "lowInlinksIndexable": [
+      {
+        "addr": "https://contentanonymity.com/og-image.png",
+        "uniqIn": 0,
+        "uniqOut": 0,
+        "words": 0,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/assets/js/index-D93HhUSF.js",
+        "uniqIn": 0,
+        "uniqOut": 0,
+        "words": 0,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/assets/index-C8iqBP_w.css",
+        "uniqIn": 0,
+        "uniqOut": 0,
+        "words": 0,
+        "depth": 2
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/faceless-content-legal-guide",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1101,
+        "depth": 3
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/ai-voice-brand-builder-quiz",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1103,
+        "depth": 3
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/youtube-automation-strategy-2025",
+        "uniqIn": 2,
+        "uniqOut": 27,
+        "words": 1089,
+        "depth": 3
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/pinterest-marketing-strategy-blog-traffic-2026",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1102,
+        "depth": 3
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/ai-content-disclosure-ethical-guide-2026",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1101,
+        "depth": 3
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/ai-news-automation-channel-daily-workflow",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1102,
+        "depth": 3
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/corporate-true-crime-30-day-calendar",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1004,
+        "depth": 3
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/thumbnail-psychology-framework",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1089,
+        "depth": 3
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/edit-business-documentaries-magnates-media-style",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1099,
+        "depth": 3
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/faceless-strategy-playbook-2025",
+        "uniqIn": 2,
+        "uniqOut": 27,
+        "words": 1084,
+        "depth": 3
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/anonymous-creator-privacy-security-stack-2026",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1089,
+        "depth": 3
+      }
+    ],
+    "orphans": [
+      "https://contentanonymity.com/og-image.png",
+      "https://contentanonymity.com/assets/js/index-D93HhUSF.js",
+      "https://contentanonymity.com/assets/index-C8iqBP_w.css"
+    ],
+    "weakOutlinks": [
+      {
+        "addr": "https://contentanonymity.com/og-image.png",
+        "uniqOut": 0,
+        "uniqIn": 0,
+        "words": 0
+      },
+      {
+        "addr": "https://contentanonymity.com/assets/js/index-D93HhUSF.js",
+        "uniqOut": 0,
+        "uniqIn": 0,
+        "words": 0
+      },
+      {
+        "addr": "https://contentanonymity.com/assets/index-C8iqBP_w.css",
+        "uniqOut": 0,
+        "uniqIn": 0,
+        "words": 0
+      }
+    ],
+    "dupTitles": [],
+    "robotsNoindex": [
+      {
+        "addr": "https://contentanonymity.com/resources/templates",
+        "uniqIn": 72,
+        "words": 32
+      },
+      {
+        "addr": "https://contentanonymity.com/news",
+        "uniqIn": 72,
+        "words": 32
+      },
+      {
+        "addr": "https://contentanonymity.com/learning-paths",
+        "uniqIn": 72,
+        "words": 34
+      },
+      {
+        "addr": "https://contentanonymity.com/products/all",
+        "uniqIn": 72,
+        "words": 32
+      },
+      {
+        "addr": "https://contentanonymity.com/learning/workshops",
+        "uniqIn": 72,
+        "words": 32
+      },
+      {
+        "addr": "https://contentanonymity.com/learning/resources",
+        "uniqIn": 72,
+        "words": 32
+      },
+      {
+        "addr": "https://contentanonymity.com/tools/backlink-checker",
+        "uniqIn": 2,
+        "words": 36
+      },
+      {
+        "addr": "https://contentanonymity.com/tools/seo-audit",
+        "uniqIn": 2,
+        "words": 37
+      },
+      {
+        "addr": "https://contentanonymity.com/tools/performance",
+        "uniqIn": 2,
+        "words": 37
+      },
+      {
+        "addr": "https://contentanonymity.com/tools/keyword-research",
+        "uniqIn": 2,
+        "words": 35
+      }
+    ],
+    "indexableTopOutlinks": [
+      {
+        "addr": "https://contentanonymity.com/blog",
+        "title": "Faceless Content Blog & Guides | ContentAnonymity",
+        "uniqIn": 72,
+        "inlinks": 140,
+        "uniqOut": 60,
+        "outlinks": 63,
+        "words": 1203,
+        "depth": 2,
+        "h1": "Faceless Content Blog & Guides",
+        "h2": "",
+        "descLen": 128,
+        "titleLen": 49,
+        "readability": "NORMAL"
+      },
+      {
+        "addr": "https://contentanonymity.com/faceless-content/youtube",
+        "title": "Faceless YouTube Hub | ContentAnonymity",
+        "uniqIn": 72,
+        "inlinks": 81,
+        "uniqOut": 42,
+        "outlinks": 51,
+        "words": 667,
+        "depth": 2,
+        "h1": "Faceless YouTube",
+        "h2": "Related platform guides",
+        "descLen": 104,
+        "titleLen": 39,
+        "readability": "NORMAL"
+      },
+      {
+        "addr": "https://contentanonymity.com/resources/niches",
+        "title": "Faceless Niche Database | ContentAnonymity",
+        "uniqIn": 72,
+        "inlinks": 99,
+        "uniqOut": 39,
+        "outlinks": 112,
+        "words": 1170,
+        "depth": 2,
+        "h1": "Faceless Niche Database",
+        "h2": "",
+        "descLen": 118,
+        "titleLen": 42,
+        "readability": "FAIRLY_HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/faceless-tech-tutorial-affiliate-strategy-2026",
+        "title": "The 2026 Tech Tutorial Blueprint: High C… | ContentAnonymity",
+        "uniqIn": 4,
+        "inlinks": 4,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1097,
+        "depth": 3,
+        "h1": "The 2026 Tech Tutorial Blueprint: High Commissions with Screen Recording",
+        "h2": "Related Guides & Articles",
+        "descLen": 113,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/faceless-growth-challenge-30-days-2026",
+        "title": "0 to 10,000 Followers: The 30-Day Facele… | ContentAnonymity",
+        "uniqIn": 3,
+        "inlinks": 3,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1097,
+        "depth": 3,
+        "h1": "0 to 10,000 Followers: The 30-Day Faceless Growth Challenge",
+        "h2": "Related Guides & Articles",
+        "descLen": 108,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/future-of-faceless-content-2027-predictions",
+        "title": "The Future of Faceless: 2027 Predictions… | ContentAnonymity",
+        "uniqIn": 3,
+        "inlinks": 3,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1085,
+        "depth": 3,
+        "h1": "The Future of Faceless: 2027 Predictions and Beyond",
+        "h2": "Related Guides & Articles",
+        "descLen": 60,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/reddit-story-automation-shorts-reels-2026",
+        "title": "Automating Reddit Stories for YouTube Sh… | ContentAnonymity",
+        "uniqIn": 3,
+        "inlinks": 3,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1099,
+        "depth": 3,
+        "h1": "Automating Reddit Stories for YouTube Shorts: The 2026 Viral Blueprint",
+        "h2": "Related Guides & Articles",
+        "descLen": 127,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/psychology-of-faceless-branding-2026",
+        "title": "The Psychology of Anonymity: Why Viewers… | ContentAnonymity",
+        "uniqIn": 3,
+        "inlinks": 3,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1090,
+        "depth": 3,
+        "h1": "The Psychology of Anonymity: Why Viewers Trust Faceless Brands",
+        "h2": "Related Guides & Articles",
+        "descLen": 81,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/convert-faceless-traffic-to-newsletter-2026",
+        "title": "Beyond the View: Turning Faceless Traffi… | ContentAnonymity",
+        "uniqIn": 3,
+        "inlinks": 3,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1086,
+        "depth": 3,
+        "h1": "Beyond the View: Turning Faceless Traffic into a Newsletter Empire",
+        "h2": "Related Guides & Articles",
+        "descLen": 67,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/silent-vlog-asmr-faceless-trend-2026",
+        "title": "The Rise of Silent Vlogs: How to Build a… | ContentAnonymity",
+        "uniqIn": 3,
+        "inlinks": 3,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1101,
+        "depth": 3,
+        "h1": "The Rise of Silent Vlogs: How to Build a Global Audience with Pure ASMR",
+        "h2": "Related Guides & Articles",
+        "descLen": 141,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/faceless-travel-vlog-drone-pov-2026",
+        "title": "Global Exploration Without a Face: POV a… | ContentAnonymity",
+        "uniqIn": 3,
+        "inlinks": 3,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1092,
+        "depth": 3,
+        "h1": "Global Exploration Without a Face: POV and Drone Travel Vlogs",
+        "h2": "Related Guides & Articles",
+        "descLen": 99,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/vtuber-startup-guide-ai-motion-capture-2026",
+        "title": "Faceless 2.0: Starting a VTubing Channel… | ContentAnonymity",
+        "uniqIn": 22,
+        "inlinks": 22,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1108,
+        "depth": 3,
+        "h1": "Faceless 2.0: Starting a VTubing Channel with AI Motion Capture",
+        "h2": "Related Guides & Articles",
+        "descLen": 134,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/faceless-content-legal-guide",
+        "title": "Faceless Content Legal Guide: Copyright,… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1101,
+        "depth": 3,
+        "h1": "Faceless Content Legal Guide: Copyright, Fair Use & AI Content Laws 2026",
+        "h2": "Related Guides & Articles",
+        "descLen": 117,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/ai-voice-brand-builder-quiz",
+        "title": "AI Voice Brand Builder Quiz: Find Your P… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1103,
+        "depth": 3,
+        "h1": "AI Voice Brand Builder Quiz: Find Your Perfect Faceless Voice",
+        "h2": "Related Guides & Articles",
+        "descLen": 125,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/dangerous-sea-historical-mystery-tiktok-2026",
+        "title": "The Dangerous Sea: Mastering the Histori… | ContentAnonymity",
+        "uniqIn": 4,
+        "inlinks": 4,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1098,
+        "depth": 3,
+        "h1": "The Dangerous Sea: Mastering the Historical Mystery Niche on TikTok",
+        "h2": "Related Guides & Articles",
+        "descLen": 113,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/pinterest-marketing-strategy-blog-traffic-2026",
+        "title": "The 2026 Pinterest Strategy: Driving 100… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1102,
+        "depth": 3,
+        "h1": "The 2026 Pinterest Strategy: Driving 100k Monthly Visitors to Your Blog",
+        "h2": "Related Guides & Articles",
+        "descLen": 125,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/ai-content-disclosure-ethical-guide-2026",
+        "title": "The Ethical Creator: Handling AI Disclos… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1101,
+        "depth": 3,
+        "h1": "The Ethical Creator: Handling AI Disclosures on Social Platforms",
+        "h2": "Related Guides & Articles",
+        "descLen": 124,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/ai-news-automation-channel-daily-workflow",
+        "title": "The AI News Machine: Building an Automat… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1102,
+        "depth": 3,
+        "h1": "The AI News Machine: Building an Automated Daily Tech Update Channel",
+        "h2": "Related Guides & Articles",
+        "descLen": 93,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/corporate-true-crime-30-day-calendar",
+        "title": "30-Day Corporate True Crime YouTube Cont… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1004,
+        "depth": 3,
+        "h1": "30-Day Launch Calendar: Corporate True Crime Channel",
+        "h2": "Related Guides & Articles",
+        "descLen": 139,
+        "titleLen": 60,
+        "readability": "EASY"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/ai-storytelling-brain-rot-economy-2026",
+        "title": "The \"Brain Rot\" Economy: High-Frequency… | ContentAnonymity",
+        "uniqIn": 21,
+        "inlinks": 21,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1099,
+        "depth": 3,
+        "h1": "The \"Brain Rot\" Economy: High-Frequency AI Storytelling on Shorts",
+        "h2": "Related Guides & Articles",
+        "descLen": 121,
+        "titleLen": 59,
+        "readability": "HARD"
+      }
+    ],
+    "indexableLowInlinks": [
+      {
+        "addr": "https://contentanonymity.com/og-image.png",
+        "title": "",
+        "uniqIn": 0,
+        "inlinks": 0,
+        "uniqOut": 0,
+        "outlinks": 0,
+        "words": 0,
+        "depth": 2,
+        "h1": "",
+        "h2": "",
+        "descLen": 0,
+        "titleLen": 0,
+        "readability": ""
+      },
+      {
+        "addr": "https://contentanonymity.com/assets/js/index-D93HhUSF.js",
+        "title": "",
+        "uniqIn": 0,
+        "inlinks": 0,
+        "uniqOut": 0,
+        "outlinks": 0,
+        "words": 0,
+        "depth": 2,
+        "h1": "",
+        "h2": "",
+        "descLen": 0,
+        "titleLen": 0,
+        "readability": ""
+      },
+      {
+        "addr": "https://contentanonymity.com/assets/index-C8iqBP_w.css",
+        "title": "",
+        "uniqIn": 0,
+        "inlinks": 0,
+        "uniqOut": 0,
+        "outlinks": 0,
+        "words": 0,
+        "depth": 2,
+        "h1": "",
+        "h2": "",
+        "descLen": 0,
+        "titleLen": 0,
+        "readability": ""
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/faceless-content-legal-guide",
+        "title": "Faceless Content Legal Guide: Copyright,… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1101,
+        "depth": 3,
+        "h1": "Faceless Content Legal Guide: Copyright, Fair Use & AI Content Laws 2026",
+        "h2": "Related Guides & Articles",
+        "descLen": 117,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/ai-voice-brand-builder-quiz",
+        "title": "AI Voice Brand Builder Quiz: Find Your P… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1103,
+        "depth": 3,
+        "h1": "AI Voice Brand Builder Quiz: Find Your Perfect Faceless Voice",
+        "h2": "Related Guides & Articles",
+        "descLen": 125,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/youtube-automation-strategy-2025",
+        "title": "Platform 1: YouTube Automation (The Cash… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 27,
+        "outlinks": 31,
+        "words": 1089,
+        "depth": 3,
+        "h1": "Platform 1: YouTube Automation (The Cash Cow)",
+        "h2": "Related Guides & Articles",
+        "descLen": 104,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/pinterest-marketing-strategy-blog-traffic-2026",
+        "title": "The 2026 Pinterest Strategy: Driving 100… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1102,
+        "depth": 3,
+        "h1": "The 2026 Pinterest Strategy: Driving 100k Monthly Visitors to Your Blog",
+        "h2": "Related Guides & Articles",
+        "descLen": 125,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/ai-content-disclosure-ethical-guide-2026",
+        "title": "The Ethical Creator: Handling AI Disclos… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1101,
+        "depth": 3,
+        "h1": "The Ethical Creator: Handling AI Disclosures on Social Platforms",
+        "h2": "Related Guides & Articles",
+        "descLen": 124,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/ai-news-automation-channel-daily-workflow",
+        "title": "The AI News Machine: Building an Automat… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1102,
+        "depth": 3,
+        "h1": "The AI News Machine: Building an Automated Daily Tech Update Channel",
+        "h2": "Related Guides & Articles",
+        "descLen": 93,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/corporate-true-crime-30-day-calendar",
+        "title": "30-Day Corporate True Crime YouTube Cont… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1004,
+        "depth": 3,
+        "h1": "30-Day Launch Calendar: Corporate True Crime Channel",
+        "h2": "Related Guides & Articles",
+        "descLen": 139,
+        "titleLen": 60,
+        "readability": "EASY"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/thumbnail-psychology-framework",
+        "title": "The Psychology Behind High-Click Thumbna… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1089,
+        "depth": 3,
+        "h1": "The Psychology Behind High-Click Thumbnails: Our Analysis Framework",
+        "h2": "Related Guides & Articles",
+        "descLen": 89,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/edit-business-documentaries-magnates-media-style",
+        "title": "How to Edit High-End Business Documentar… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1099,
+        "depth": 3,
+        "h1": "How to Edit High-End Business Documentaries Like MagnatesMedia Using AI",
+        "h2": "Related Guides & Articles",
+        "descLen": 117,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/faceless-strategy-playbook-2025",
+        "title": "The Faceless Solopreneur Strategy Playbo… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 27,
+        "outlinks": 31,
+        "words": 1084,
+        "depth": 3,
+        "h1": "The Faceless Solopreneur Strategy Playbook (2025 Edition)",
+        "h2": "Related Guides & Articles",
+        "descLen": 125,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/anonymous-creator-privacy-security-stack-2026",
+        "title": "The Anonymous Creator’s Privacy Stack: S… | ContentAnonymity",
+        "uniqIn": 2,
+        "inlinks": 2,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1089,
+        "depth": 3,
+        "h1": "The Anonymous Creator’s Privacy Stack: Staying Hidden in 2026",
+        "h2": "Related Guides & Articles",
+        "descLen": 71,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/faceless-growth-challenge-30-days-2026",
+        "title": "0 to 10,000 Followers: The 30-Day Facele… | ContentAnonymity",
+        "uniqIn": 3,
+        "inlinks": 3,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1097,
+        "depth": 3,
+        "h1": "0 to 10,000 Followers: The 30-Day Faceless Growth Challenge",
+        "h2": "Related Guides & Articles",
+        "descLen": 108,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/future-of-faceless-content-2027-predictions",
+        "title": "The Future of Faceless: 2027 Predictions… | ContentAnonymity",
+        "uniqIn": 3,
+        "inlinks": 3,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1085,
+        "depth": 3,
+        "h1": "The Future of Faceless: 2027 Predictions and Beyond",
+        "h2": "Related Guides & Articles",
+        "descLen": 60,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/reddit-story-automation-shorts-reels-2026",
+        "title": "Automating Reddit Stories for YouTube Sh… | ContentAnonymity",
+        "uniqIn": 3,
+        "inlinks": 3,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1099,
+        "depth": 3,
+        "h1": "Automating Reddit Stories for YouTube Shorts: The 2026 Viral Blueprint",
+        "h2": "Related Guides & Articles",
+        "descLen": 127,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/psychology-of-faceless-branding-2026",
+        "title": "The Psychology of Anonymity: Why Viewers… | ContentAnonymity",
+        "uniqIn": 3,
+        "inlinks": 3,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1090,
+        "depth": 3,
+        "h1": "The Psychology of Anonymity: Why Viewers Trust Faceless Brands",
+        "h2": "Related Guides & Articles",
+        "descLen": 81,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/convert-faceless-traffic-to-newsletter-2026",
+        "title": "Beyond the View: Turning Faceless Traffi… | ContentAnonymity",
+        "uniqIn": 3,
+        "inlinks": 3,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1086,
+        "depth": 3,
+        "h1": "Beyond the View: Turning Faceless Traffic into a Newsletter Empire",
+        "h2": "Related Guides & Articles",
+        "descLen": 67,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/silent-vlog-asmr-faceless-trend-2026",
+        "title": "The Rise of Silent Vlogs: How to Build a… | ContentAnonymity",
+        "uniqIn": 3,
+        "inlinks": 3,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1101,
+        "depth": 3,
+        "h1": "The Rise of Silent Vlogs: How to Build a Global Audience with Pure ASMR",
+        "h2": "Related Guides & Articles",
+        "descLen": 141,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/faceless-travel-vlog-drone-pov-2026",
+        "title": "Global Exploration Without a Face: POV a… | ContentAnonymity",
+        "uniqIn": 3,
+        "inlinks": 3,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1092,
+        "depth": 3,
+        "h1": "Global Exploration Without a Face: POV and Drone Travel Vlogs",
+        "h2": "Related Guides & Articles",
+        "descLen": 99,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/ultimate-top-10-ai-faceless-content-tools-review",
+        "title": "The Ultimate Toolkit: Top 10 AI Tools fo… | ContentAnonymity",
+        "uniqIn": 3,
+        "inlinks": 3,
+        "uniqOut": 24,
+        "outlinks": 28,
+        "words": 1063,
+        "depth": 3,
+        "h1": "The Ultimate Toolkit: Top 10 AI Tools for Faceless Content Solopreneurs (2026 Update)",
+        "h2": "Related Guides & Articles",
+        "descLen": 160,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/faceless-tech-tutorial-affiliate-strategy-2026",
+        "title": "The 2026 Tech Tutorial Blueprint: High C… | ContentAnonymity",
+        "uniqIn": 4,
+        "inlinks": 4,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1097,
+        "depth": 3,
+        "h1": "The 2026 Tech Tutorial Blueprint: High Commissions with Screen Recording",
+        "h2": "Related Guides & Articles",
+        "descLen": 113,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/top-10-ai-video-generators-2026",
+        "title": "Top 10 AI Video Generators for Faceless… | ContentAnonymity",
+        "uniqIn": 4,
+        "inlinks": 4,
+        "uniqOut": 24,
+        "outlinks": 28,
+        "words": 1064,
+        "depth": 3,
+        "h1": "Top 10 AI Video Generators for Faceless Creators: 2026 Review",
+        "h2": "Related Guides & Articles",
+        "descLen": 139,
+        "titleLen": 59,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/dangerous-sea-historical-mystery-tiktok-2026",
+        "title": "The Dangerous Sea: Mastering the Histori… | ContentAnonymity",
+        "uniqIn": 4,
+        "inlinks": 4,
+        "uniqOut": 28,
+        "outlinks": 31,
+        "words": 1098,
+        "depth": 3,
+        "h1": "The Dangerous Sea: Mastering the Historical Mystery Niche on TikTok",
+        "h2": "Related Guides & Articles",
+        "descLen": 113,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/platform-guides/instagram-faceless-aesthetic",
+        "title": "Instagram Faceless Aesthetic and Value C… | ContentAnonymity",
+        "uniqIn": 5,
+        "inlinks": 8,
+        "uniqOut": 24,
+        "outlinks": 30,
+        "words": 119,
+        "depth": 3,
+        "h1": "Instagram Faceless Aesthetic and Value Curation",
+        "h2": "Related Guides & Articles",
+        "descLen": 147,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/platform-guides/instagram-reels-monetization",
+        "title": "Instagram Reels: Converting Views to Hig… | ContentAnonymity",
+        "uniqIn": 5,
+        "inlinks": 7,
+        "uniqOut": 24,
+        "outlinks": 30,
+        "words": 46,
+        "depth": 3,
+        "h1": "Instagram Reels: Converting Views to High-Ticket Sales",
+        "h2": "Instagram Reels Monetization Funnel",
+        "descLen": 114,
+        "titleLen": 60,
+        "readability": "NORMAL"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/how-to-create-ai-influencers-instagram-2026",
+        "title": "How to Create Realistic AI Influencers f… | ContentAnonymity",
+        "uniqIn": 5,
+        "inlinks": 5,
+        "uniqOut": 26,
+        "outlinks": 30,
+        "words": 1060,
+        "depth": 3,
+        "h1": "How to Create Realistic AI Influencers for Instagram Without Showing Your Face",
+        "h2": "Related Guides & Articles",
+        "descLen": 111,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/instagram-reels-faceless-brand",
+        "title": "Platform 3: Instagram Reels (The Brand B… | ContentAnonymity",
+        "uniqIn": 5,
+        "inlinks": 5,
+        "uniqOut": 26,
+        "outlinks": 30,
+        "words": 1055,
+        "depth": 3,
+        "h1": "Platform 3: Instagram Reels (The Brand Builder)",
+        "h2": "Related Guides & Articles",
+        "descLen": 109,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/monetize-faceless-channel-without-ads-2026",
+        "title": "The \"Anti-Ad\" Strategy: How to Monetize… | ContentAnonymity",
+        "uniqIn": 6,
+        "inlinks": 6,
+        "uniqOut": 25,
+        "outlinks": 29,
+        "words": 1061,
+        "depth": 3,
+        "h1": "The \"Anti-Ad\" Strategy: How to Monetize Low-View Faceless Channels",
+        "h2": "Related Guides & Articles",
+        "descLen": 101,
+        "titleLen": 59,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/youtube-monetization-ai-faceless-policy-2026",
+        "title": "Are AI-Generated Faceless Channels Still… | ContentAnonymity",
+        "uniqIn": 6,
+        "inlinks": 6,
+        "uniqOut": 25,
+        "outlinks": 29,
+        "words": 1070,
+        "depth": 3,
+        "h1": "Are AI-Generated Faceless Channels Still Monetizable? YouTube’s Latest 2026 Policy",
+        "h2": "Related Guides & Articles",
+        "descLen": 125,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/platform-guides/tiktok-faceless-virality",
+        "title": "TikTok Faceless Virality: Hook & Trendin… | ContentAnonymity",
+        "uniqIn": 6,
+        "inlinks": 9,
+        "uniqOut": 25,
+        "outlinks": 31,
+        "words": 129,
+        "depth": 3,
+        "h1": "TikTok Faceless Virality: Hook & Trending Audio",
+        "h2": "Related Guides & Articles",
+        "descLen": 131,
+        "titleLen": 60,
+        "readability": "NORMAL"
+      },
+      {
+        "addr": "https://contentanonymity.com/platform-guides/tiktok-account-warming-strategy",
+        "title": "TikTok Account Warming: The 0-Views Fix | ContentAnonymity",
+        "uniqIn": 6,
+        "inlinks": 8,
+        "uniqOut": 25,
+        "outlinks": 31,
+        "words": 50,
+        "depth": 3,
+        "h1": "TikTok Account Warming: The 0-Views Fix",
+        "h2": "TikTok Account Warming Strategy",
+        "descLen": 99,
+        "titleLen": 58,
+        "readability": "NORMAL"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/horror-story-channel-case-study",
+        "title": "From Zero to $15K/Month: The Horror Stor… | ContentAnonymity",
+        "uniqIn": 6,
+        "inlinks": 6,
+        "uniqOut": 27,
+        "outlinks": 31,
+        "words": 1096,
+        "depth": 3,
+        "h1": "From Zero to $15K/Month: The Horror Story Channel That Never Shows a Face",
+        "h2": "Related Guides & Articles",
+        "descLen": 102,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/tiktok-growth-strategy-faceless",
+        "title": "Platform 2: TikTok Growth (The Viral Eng… | ContentAnonymity",
+        "uniqIn": 6,
+        "inlinks": 6,
+        "uniqOut": 27,
+        "outlinks": 31,
+        "words": 1065,
+        "depth": 3,
+        "h1": "Platform 2: TikTok Growth (The Viral Engine)",
+        "h2": "Related Guides & Articles",
+        "descLen": 86,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/niche-idea-generator-guide",
+        "title": "How to Use Our Niche Idea Generator for… | ContentAnonymity",
+        "uniqIn": 6,
+        "inlinks": 6,
+        "uniqOut": 27,
+        "outlinks": 31,
+        "words": 1084,
+        "depth": 3,
+        "h1": "How to Use Our Niche Idea Generator for Maximum Results",
+        "h2": "Related Guides & Articles",
+        "descLen": 102,
+        "titleLen": 59,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/tiktok-shop-faceless-creator-strategy-2026",
+        "title": "TikTok Shop 2026: Scaling a Faceless E-c… | ContentAnonymity",
+        "uniqIn": 7,
+        "inlinks": 7,
+        "uniqOut": 27,
+        "outlinks": 31,
+        "words": 1069,
+        "depth": 3,
+        "h1": "TikTok Shop 2026: Scaling a Faceless E-commerce Empire",
+        "h2": "Related Guides & Articles",
+        "descLen": 114,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/stoic-philosophy-faceless-niche-2026",
+        "title": "The Stoic Creator: Why Philosophy Channe… | ContentAnonymity",
+        "uniqIn": 7,
+        "inlinks": 7,
+        "uniqOut": 27,
+        "outlinks": 31,
+        "words": 1093,
+        "depth": 3,
+        "h1": "The Stoic Creator: Why Philosophy Channels are Exploding in 2026",
+        "h2": "Related Guides & Articles",
+        "descLen": 114,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/blog/automate-faceless-tiktok-guide-2026",
+        "title": "The Step-by-Step Guide to Automating You… | ContentAnonymity",
+        "uniqIn": 7,
+        "inlinks": 7,
+        "uniqOut": 27,
+        "outlinks": 31,
+        "words": 1069,
+        "depth": 3,
+        "h1": "The Step-by-Step Guide to Automating Your Faceless TikTok Using AI in 2026",
+        "h2": "Related Guides & Articles",
+        "descLen": 127,
+        "titleLen": 60,
+        "readability": "HARD"
+      },
+      {
+        "addr": "https://contentanonymity.com/platform-guides/youtube-faceless-strategy",
+        "title": "Ultimate YouTube Faceless Content Strate… | ContentAnonymity",
+        "uniqIn": 7,
+        "inlinks": 13,
+        "uniqOut": 25,
+        "outlinks": 31,
+        "words": 138,
+        "depth": 3,
+        "h1": "Ultimate YouTube Faceless Content Strategy",
+        "h2": "Related Guides & Articles",
+        "descLen": 130,
+        "titleLen": 60,
+        "readability": "FAIRLY_HARD"
+      }
+    ],
+    "linkGraph": [
+      {
+        "path": "/",
+        "uniqIn": 72,
+        "uniqOut": 22,
+        "words": 45,
+        "depth": 1
+      },
+      {
+        "path": "/faceless-content",
+        "uniqIn": 72,
+        "uniqOut": 20,
+        "words": 38,
+        "depth": 2
+      },
+      {
+        "path": "/faceless-content/monetization",
+        "uniqIn": 72,
+        "uniqOut": 25,
+        "words": 157,
+        "depth": 2
+      },
+      {
+        "path": "/about",
+        "uniqIn": 72,
+        "uniqOut": 20,
+        "words": 33,
+        "depth": 2
+      },
+      {
+        "path": "/og-image.png",
+        "uniqIn": 0,
+        "uniqOut": 0,
+        "words": 0,
+        "depth": 2
+      },
+      {
+        "path": "/faceless-content/youtube",
+        "uniqIn": 72,
+        "uniqOut": 42,
+        "words": 667,
+        "depth": 2
+      },
+      {
+        "path": "/resources/niches",
+        "uniqIn": 72,
+        "uniqOut": 39,
+        "words": 1170,
+        "depth": 2
+      },
+      {
+        "path": "/platform-guides",
+        "uniqIn": 72,
+        "uniqOut": 26,
+        "words": 395,
+        "depth": 2
+      },
+      {
+        "path": "/getting-started",
+        "uniqIn": 72,
+        "uniqOut": 20,
+        "words": 38,
+        "depth": 2
+      },
+      {
+        "path": "/learning/case-studies",
+        "uniqIn": 72,
+        "uniqOut": 20,
+        "words": 38,
+        "depth": 2
+      },
+      {
+        "path": "/blog",
+        "uniqIn": 72,
+        "uniqOut": 60,
+        "words": 1203,
+        "depth": 2
+      },
+      {
+        "path": "/tools/calculator",
+        "uniqIn": 43,
+        "uniqOut": 21,
+        "words": 35,
+        "depth": 2
+      },
+      {
+        "path": "/tools/all",
+        "uniqIn": 72,
+        "uniqOut": 26,
+        "words": 100,
+        "depth": 2
+      },
+      {
+        "path": "/assets/js/index-D93HhUSF.js",
+        "uniqIn": 0,
+        "uniqOut": 0,
+        "words": 0,
+        "depth": 2
+      },
+      {
+        "path": "/tools/niche-quiz",
+        "uniqIn": 43,
+        "uniqOut": 21,
+        "words": 40,
+        "depth": 2
+      },
+      {
+        "path": "/contact",
+        "uniqIn": 72,
+        "uniqOut": 20,
+        "words": 30,
+        "depth": 2
+      },
+      {
+        "path": "/terms",
+        "uniqIn": 72,
+        "uniqOut": 20,
+        "words": 33,
+        "depth": 2
+      },
+      {
+        "path": "/privacy-policy",
+        "uniqIn": 72,
+        "uniqOut": 20,
+        "words": 31,
+        "depth": 2
+      },
+      {
+        "path": "/assets/index-C8iqBP_w.css",
+        "uniqIn": 0,
+        "uniqOut": 0,
+        "words": 0,
+        "depth": 2
+      },
+      {
+        "path": "/blog/luxury-lifestyle-faceless-high-cpm-2026",
+        "uniqIn": 8,
+        "uniqOut": 27,
+        "words": 1080,
+        "depth": 3
+      },
+      {
+        "path": "/blog/how-to-monetize-faceless-channel-without-adsense",
+        "uniqIn": 26,
+        "uniqOut": 25,
+        "words": 1064,
+        "depth": 3
+      },
+      {
+        "path": "/blog/monetize-faceless-channel-without-ads-2026",
+        "uniqIn": 6,
+        "uniqOut": 25,
+        "words": 1061,
+        "depth": 3
+      },
+      {
+        "path": "/blog/faceless-tech-tutorial-affiliate-strategy-2026",
+        "uniqIn": 4,
+        "uniqOut": 28,
+        "words": 1097,
+        "depth": 3
+      },
+      {
+        "path": "/blog/youtube-monetization-ai-faceless-policy-2026",
+        "uniqIn": 6,
+        "uniqOut": 25,
+        "words": 1070,
+        "depth": 3
+      },
+      {
+        "path": "/blog/best-faceless-youtube-niches-2026-ultimate-guide",
+        "uniqIn": 27,
+        "uniqOut": 27,
+        "words": 2329,
+        "depth": 3
+      },
+      {
+        "path": "/platform-guides/faceless-youtube-setup-2025",
+        "uniqIn": 9,
+        "uniqOut": 25,
+        "words": 56,
+        "depth": 3
+      },
+      {
+        "path": "/blog/how-to-start-faceless-youtube-ai-voiceover-2026",
+        "uniqIn": 9,
+        "uniqOut": 27,
+        "words": 1088,
+        "depth": 3
+      },
+      {
+        "path": "/blog/faceless-growth-challenge-30-days-2026",
+        "uniqIn": 3,
+        "uniqOut": 28,
+        "words": 1097,
+        "depth": 3
+      },
+      {
+        "path": "/blog/faceless-youtube-channel-guide-2026",
+        "uniqIn": 29,
+        "uniqOut": 27,
+        "words": 132,
+        "depth": 3
+      },
+      {
+        "path": "/blog/future-of-faceless-content-2027-predictions",
+        "uniqIn": 3,
+        "uniqOut": 28,
+        "words": 1085,
+        "depth": 3
+      },
+      {
+        "path": "/blog/tiktok-shop-faceless-creator-strategy-2026",
+        "uniqIn": 7,
+        "uniqOut": 27,
+        "words": 1069,
+        "depth": 3
+      },
+      {
+        "path": "/blog/reddit-story-automation-shorts-reels-2026",
+        "uniqIn": 3,
+        "uniqOut": 28,
+        "words": 1099,
+        "depth": 3
+      },
+      {
+        "path": "/blog/stoic-philosophy-faceless-niche-2026",
+        "uniqIn": 7,
+        "uniqOut": 27,
+        "words": 1093,
+        "depth": 3
+      },
+      {
+        "path": "/blog/psychology-of-faceless-branding-2026",
+        "uniqIn": 3,
+        "uniqOut": 28,
+        "words": 1090,
+        "depth": 3
+      },
+      {
+        "path": "/blog/automate-faceless-tiktok-guide-2026",
+        "uniqIn": 7,
+        "uniqOut": 27,
+        "words": 1069,
+        "depth": 3
+      },
+      {
+        "path": "/blog/top-10-ai-video-generators-2026",
+        "uniqIn": 4,
+        "uniqOut": 24,
+        "words": 1064,
+        "depth": 3
+      },
+      {
+        "path": "/platform-guides/youtube-faceless-strategy",
+        "uniqIn": 7,
+        "uniqOut": 25,
+        "words": 138,
+        "depth": 3
+      },
+      {
+        "path": "/blog/convert-faceless-traffic-to-newsletter-2026",
+        "uniqIn": 3,
+        "uniqOut": 28,
+        "words": 1086,
+        "depth": 3
+      },
+      {
+        "path": "/blog/silent-vlog-asmr-faceless-trend-2026",
+        "uniqIn": 3,
+        "uniqOut": 28,
+        "words": 1101,
+        "depth": 3
+      },
+      {
+        "path": "/blog/faceless-travel-vlog-drone-pov-2026",
+        "uniqIn": 3,
+        "uniqOut": 28,
+        "words": 1092,
+        "depth": 3
+      },
+      {
+        "path": "/blog/vtuber-startup-guide-ai-motion-capture-2026",
+        "uniqIn": 22,
+        "uniqOut": 28,
+        "words": 1108,
+        "depth": 3
+      },
+      {
+        "path": "/platform-guides/tiktok-faceless-virality",
+        "uniqIn": 6,
+        "uniqOut": 25,
+        "words": 129,
+        "depth": 3
+      },
+      {
+        "path": "/blog/faceless-content-legal-guide",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1101,
+        "depth": 3
+      },
+      {
+        "path": "/blog/ai-voice-brand-builder-quiz",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1103,
+        "depth": 3
+      },
+      {
+        "path": "/platform-guides/instagram-faceless-aesthetic",
+        "uniqIn": 5,
+        "uniqOut": 24,
+        "words": 119,
+        "depth": 3
+      },
+      {
+        "path": "/platform-guides/instagram-reels-monetization",
+        "uniqIn": 5,
+        "uniqOut": 24,
+        "words": 46,
+        "depth": 3
+      },
+      {
+        "path": "/platform-guides/tiktok-account-warming-strategy",
+        "uniqIn": 6,
+        "uniqOut": 25,
+        "words": 50,
+        "depth": 3
+      },
+      {
+        "path": "/blog/dangerous-sea-historical-mystery-tiktok-2026",
+        "uniqIn": 4,
+        "uniqOut": 28,
+        "words": 1098,
+        "depth": 3
+      },
+      {
+        "path": "/blog/youtube-automation-strategy-2025",
+        "uniqIn": 2,
+        "uniqOut": 27,
+        "words": 1089,
+        "depth": 3
+      },
+      {
+        "path": "/blog/ultimate-top-10-ai-faceless-content-tools-review",
+        "uniqIn": 3,
+        "uniqOut": 24,
+        "words": 1063,
+        "depth": 3
+      },
+      {
+        "path": "/blog/pinterest-marketing-strategy-blog-traffic-2026",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1102,
+        "depth": 3
+      },
+      {
+        "path": "/blog/how-to-create-ai-influencers-instagram-2026",
+        "uniqIn": 5,
+        "uniqOut": 26,
+        "words": 1060,
+        "depth": 3
+      },
+      {
+        "path": "/blog/horror-story-channel-case-study",
+        "uniqIn": 6,
+        "uniqOut": 27,
+        "words": 1096,
+        "depth": 3
+      },
+      {
+        "path": "/blog/ai-content-disclosure-ethical-guide-2026",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1101,
+        "depth": 3
+      },
+      {
+        "path": "/blog/ai-news-automation-channel-daily-workflow",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1102,
+        "depth": 3
+      },
+      {
+        "path": "/blog/tiktok-growth-strategy-faceless",
+        "uniqIn": 6,
+        "uniqOut": 27,
+        "words": 1065,
+        "depth": 3
+      },
+      {
+        "path": "/blog/niche-idea-generator-guide",
+        "uniqIn": 6,
+        "uniqOut": 27,
+        "words": 1084,
+        "depth": 3
+      },
+      {
+        "path": "/blog/corporate-true-crime-30-day-calendar",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1004,
+        "depth": 3
+      },
+      {
+        "path": "/blog/ai-storytelling-brain-rot-economy-2026",
+        "uniqIn": 21,
+        "uniqOut": 28,
+        "words": 1099,
+        "depth": 3
+      },
+      {
+        "path": "/blog/thumbnail-psychology-framework",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1089,
+        "depth": 3
+      },
+      {
+        "path": "/blog/edit-business-documentaries-magnates-media-style",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1099,
+        "depth": 3
+      },
+      {
+        "path": "/blog/faceless-youtube-blueprint-2025",
+        "uniqIn": 8,
+        "uniqOut": 27,
+        "words": 1087,
+        "depth": 3
+      },
+      {
+        "path": "/blog/instagram-reels-faceless-brand",
+        "uniqIn": 5,
+        "uniqOut": 26,
+        "words": 1055,
+        "depth": 3
+      },
+      {
+        "path": "/blog/faceless-strategy-playbook-2025",
+        "uniqIn": 2,
+        "uniqOut": 27,
+        "words": 1084,
+        "depth": 3
+      },
+      {
+        "path": "/blog/anonymous-creator-privacy-security-stack-2026",
+        "uniqIn": 2,
+        "uniqOut": 28,
+        "words": 1089,
+        "depth": 3
+      }
+    ]
+  }
+}

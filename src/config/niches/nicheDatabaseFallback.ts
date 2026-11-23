@@ -24,6 +24,7 @@ export function getFallbackNicheBySlug(slug: string): FallbackNicheFull | undefi
 export function fallbackToListNiche(n: FallbackNicheFull): Niche {
   return {
     id: n.slug,
+    slug: n.slug,
     niche_name: n.nicheName,
     description: n.description,
     category: { name: n.categoryName },
@@ -31,7 +32,6 @@ export function fallbackToListNiche(n: FallbackNicheFull): Niche {
     difficulty_level: n.difficultyLevel,
     trend_status: n.trendStatus,
     estimated_earnings_range: n.estimatedEarningsRange,
-    avg_rpm: n.avgRpm,
     startup_cost: n.startupCost,
     competition_level: n.competitionLevel,
     best_ai_tools: n.bestAiTools,
@@ -49,7 +49,6 @@ export function fallbackToDetailNiche(f: FallbackNicheFull) {
     difficultyLevel: f.difficultyLevel,
     competitionLevel: f.competitionLevel,
     estimatedEarningsRange: f.estimatedEarningsRange,
-    avgRpm: f.avgRpm,
     evergreenScore: f.evergreenScore,
     targetAudience: f.targetAudience,
     primaryContentFocus: f.primaryContentFocus,

@@ -18,6 +18,7 @@ import dotenv from 'dotenv';
 import { ConvexHttpClient } from 'convex/browser';
 import { api } from '../convex/_generated/api.js';
 import { relatedPathsFor } from './seo-clusters.mjs';
+import { nichePublicSlug, isOpaqueNicheParam, VALID_NICHE_SLUG_RE } from './niche-slug.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
@@ -156,14 +157,63 @@ function truncate(s, max) {
   return `${t.slice(0, max - 1).trimEnd()}…`;
 }
 
-/** Keep brand suffix intact while staying <= 60 chars. */
+/** Keep brand suffix intact while staying <= 55 chars (pixel-safe for SERPs). */
 function brandTitle(headline) {
   const suffix = ' | ContentAnonymity';
+  const max = 55;
   const h = String(headline ?? '').trim();
-  if (!h) return truncate(`ContentAnonymity${suffix}`, 60);
-  if (h.includes('ContentAnonymity')) return truncate(h, 60);
-  if ((h + suffix).length <= 60) return h + suffix;
-  return `${truncate(h, 60 - suffix.length)}${suffix}`;
+  if (!h) return truncate(`ContentAnonymity${suffix}`, max);
+  if (h.includes('ContentAnonymity')) return truncate(h, max);
+  if ((h + suffix).length <= max) return h + suffix;
+  return `${truncate(h, max - suffix.length)}${suffix}`;
+}
+
+/** Load slug list from fallback niche TS sources (authoritative public URLs). */
+function loadFallbackNicheRecords() {
+  const files = [
+    path.join(root, 'src/config/niches/fallbackCore.ts'),
+    path.join(root, 'src/config/niches/fallbackBulk.ts'),
+  ];
+  const bySlug = new Map();
+  for (const file of files) {
+    if (!fs.existsSync(file)) continue;
+    const text = fs.readFileSync(file, 'utf8');
+    const blocks = text.split(/\{\s*slug:\s*"/).slice(1);
+    for (const block of blocks) {
+      const slug = block.match(/^([^"]+)"/)?.[1];
+      if (!slug || !VALID_NICHE_SLUG_RE.test(slug)) continue;
+      const nicheName = block.match(/nicheName:\s*"([^"]+)"/)?.[1] || titleFromSlug(slug);
+      const description = block.match(/description:\s*"([^"]+)"/)?.[1] || '';
+      bySlug.set(slug, { slug, nicheName, description });
+    }
+  }
+  return [...bySlug.values()];
+}
+
+function normalizeNichesForSeo(convexNiches, fallbackNiches) {
+  const bySlug = new Map();
+  for (const f of fallbackNiches) {
+    bySlug.set(f.slug, {
+      slug: f.slug,
+      nicheName: f.nicheName,
+      description: f.description,
+      source: 'fallback',
+    });
+  }
+  for (const n of convexNiches || []) {
+    const slug = nichePublicSlug(n);
+    if (!slug || isOpaqueNicheParam(slug)) continue;
+    const prev = bySlug.get(slug);
+    bySlug.set(slug, {
+      slug,
+      nicheName: n.nicheName || prev?.nicheName || titleFromSlug(slug),
+      description: n.description || prev?.description || '',
+      difficultyLevel: n.difficultyLevel,
+      profitabilityScore: n.profitabilityScore,
+      source: prev ? 'merged' : 'convex',
+    });
+  }
+  return [...bySlug.values()].sort((a, b) => a.nicheName.localeCompare(b.nicheName));
 }
 
 function titleFromSlug(slug) {
@@ -366,12 +416,13 @@ function siteFooterHtml() {
     <a href="/contact">Contact</a> ·
     <a href="/privacy-policy">Privacy Policy</a> ·
     <a href="/terms">Terms</a> ·
-    <a href="/learning-paths">Learning Paths</a> ·
-    <a href="/learning/workshops">Workshops</a> ·
-    <a href="/learning/resources">Resources</a> ·
-    <a href="/resources/templates">Templates</a> ·
-    <a href="/products/all">Products</a> ·
-    <a href="/news">News</a>
+    <a href="/getting-started">Getting Started</a> ·
+    <a href="/blog">Blog</a> ·
+    <a href="/platform-guides">Platform Guides</a> ·
+    <a href="/faceless-content">Faceless Content</a> ·
+    <a href="/tools/all">Tools</a> ·
+    <a href="/resources/niches">Niches</a> ·
+    <a href="/starter-kit">Starter Kit</a>
   </p>
 </footer>`;
 }
@@ -455,15 +506,16 @@ ${siteFooterHtml()}
 </div>`;
 }
 
-function metaForRoute(route, articlesBySlug, guidesBySlug) {
+function metaForRoute(route, articlesBySlug, guidesBySlug, nichesBySlug) {
   if (STATIC_PAGE_META[route]) {
     const m = STATIC_PAGE_META[route];
+    const h1 = m.h1.length > 70 ? truncate(m.h1, 68) : m.h1;
     return {
-      title: brandTitle(m.title),
-      description: truncate(m.description, 160),
+      title: brandTitle(m.title.replace(/\s*\|\s*ContentAnonymity\s*$/i, '')),
+      description: truncate(m.description, 155),
       canonical: route === '/' ? `${SITE}/` : `${SITE}${route}`,
       type: 'website',
-      h1: m.h1,
+      h1,
     };
   }
 
@@ -475,12 +527,13 @@ function metaForRoute(route, articlesBySlug, guidesBySlug) {
       a?.metaDescription ||
       a?.excerpt ||
       `Read ${headline} — practical guidance for faceless creators on ContentAnonymity.`;
+    const h1raw = a?.title || headline;
     return {
       title: brandTitle(headline),
-      description: truncate(description, 160),
+      description: truncate(description, 155),
       canonical: `${SITE}${route}`,
       type: 'article',
-      h1: a?.title || headline,
+      h1: h1raw.length > 70 ? truncate(h1raw, 68) : h1raw,
     };
   }
 
@@ -493,10 +546,26 @@ function metaForRoute(route, articlesBySlug, guidesBySlug) {
       `${headline} — platform guide for faceless creators on ContentAnonymity.`;
     return {
       title: brandTitle(headline),
-      description: truncate(description, 160),
+      description: truncate(description, 155),
       canonical: `${SITE}${route}`,
       type: 'article',
-      h1: headline,
+      h1: headline.length > 70 ? truncate(headline, 68) : headline,
+    };
+  }
+
+  const niche = route.match(/^\/niches\/([^/]+)$/);
+  if (niche) {
+    const n = nichesBySlug?.get(niche[1]);
+    const headline = n?.nicheName || titleFromSlug(niche[1]);
+    const description =
+      n?.description ||
+      `${headline} niche analysis for faceless creators — formats, monetization, and tools on ContentAnonymity.`;
+    return {
+      title: brandTitle(`${headline} Niche`),
+      description: truncate(description, 155),
+      canonical: `${SITE}${route}`,
+      type: 'article',
+      h1: headline.length > 70 ? truncate(headline, 68) : headline,
     };
   }
 
@@ -504,7 +573,7 @@ function metaForRoute(route, articlesBySlug, guidesBySlug) {
   if (tool) {
     return {
       title: brandTitle(tool.title),
-      description: truncate(tool.description, 160),
+      description: truncate(tool.description, 155),
       canonical: `${SITE}${route}`,
       type: 'website',
       h1: tool.title,
@@ -516,7 +585,7 @@ function metaForRoute(route, articlesBySlug, guidesBySlug) {
     title: brandTitle(headline),
     description: truncate(
       `${headline} on ContentAnonymity — privacy-first faceless content guides and tools.`,
-      160,
+      155,
     ),
     canonical: `${SITE}${route}`,
     type: 'website',
@@ -528,6 +597,10 @@ function bodyForRoute(route, meta, ctx) {
   const { articles, guides, niches, articlesBySlug, guidesBySlug } = ctx;
 
   if (route === '/blog') {
+    const topNiches = niches.slice(0, 12).map((n) => ({
+      href: `/niches/${n.slug}`,
+      label: n.nicheName,
+    }));
     return wrapRoot({
       h1: meta.h1,
       lead: 'All published guides and articles for faceless creators.',
@@ -535,13 +608,17 @@ function bodyForRoute(route, meta, ctx) {
         { name: 'Home', href: '/' },
         { name: 'Blog', href: '/blog' },
       ],
-      mainHtml: linkList(
+      mainHtml: `<h2>Latest guides</h2>
+      ${linkList(
         articles.map((a) => ({
           href: `/blog/${a.slug}`,
           label: a.title,
           excerpt: a.excerpt,
         })),
-      ),
+      )}
+      <h2>Pair articles with a niche</h2>
+      ${linkList(topNiches)}
+      <p><a href="/resources/niches">Full niche database</a> · <a href="/platform-guides">Platform guides</a> · <a href="/faceless-content">Faceless Content Hub</a></p>`,
     });
   }
 
@@ -582,22 +659,66 @@ function bodyForRoute(route, meta, ctx) {
   }
 
   if (route === '/resources/niches') {
-    const items = niches.slice(0, 200).map((n) => {
-      const id = n.legacyId || n._id;
-      return {
-        href: `/niches/${id}`,
-        label: n.nicheName || 'Niche',
-        excerpt: n.description,
-      };
-    });
+    const items = niches.slice(0, 200).map((n) => ({
+      href: `/niches/${n.slug}`,
+      label: n.nicheName || 'Niche',
+      excerpt: n.description,
+    }));
     return wrapRoot({
       h1: meta.h1,
-      lead: 'Browse niches suited to faceless and AI-assisted content.',
+      lead:
+        'Browse faceless-friendly niches with difficulty, monetization notes, and startup considerations. Every niche below uses a stable slug URL for crawlers.',
       crumbs: [
         { name: 'Home', href: '/' },
         { name: 'Niches', href: '/resources/niches' },
       ],
-      mainHtml: linkList(items),
+      mainHtml: `<h2>How to use this niche database</h2>
+      <p>Pick a niche that matches your skills and risk tolerance, then open the detail page for formats, tools, and monetization ideas. Cross-check with the <a href="/tools/niche-quiz">Niche Finder Quiz</a> and <a href="/tools/calculator">Profitability Calculator</a>.</p>
+      <h2>All niches</h2>
+      ${linkList(items)}
+      <p>Related: <a href="/blog">Blog guides</a> · <a href="/faceless-content">Faceless Content Hub</a> · <a href="/getting-started">Getting Started</a></p>`,
+    });
+  }
+
+  const nicheRoute = route.match(/^\/niches\/([^/]+)$/);
+  if (nicheRoute) {
+    const slug = nicheRoute[1];
+    const idx = niches.findIndex((x) => x.slug === slug);
+    const n = idx >= 0 ? niches[idx] : null;
+    // Circular neighbors so every niche earns multiple peer inlinks (anti-orphan)
+    const related = [];
+    if (niches.length > 1 && idx >= 0) {
+      for (let step = 1; step <= 8 && related.length < 8; step++) {
+        const other = niches[(idx + step) % niches.length];
+        if (other.slug !== slug) {
+          related.push({ href: `/niches/${other.slug}`, label: other.nicheName });
+        }
+      }
+    }
+    return wrapRoot({
+      h1: meta.h1,
+      lead: n?.description || meta.description,
+      crumbs: [
+        { name: 'Home', href: '/' },
+        { name: 'Niches', href: '/resources/niches' },
+        { name: truncate(meta.h1, 40), href: route },
+      ],
+      mainHtml: `<article>
+        <h2>Why this niche works for faceless creators</h2>
+        <p>${escapeHtml(n?.description || meta.description)}</p>
+        <h2>Next steps</h2>
+        <ul>
+          <li><a href="/tools/niche-quiz">Validate fit with the Niche Finder Quiz</a></li>
+          <li><a href="/tools/calculator">Model revenue with the Profitability Calculator</a></li>
+          <li><a href="/faceless-content/youtube">Read the Faceless YouTube hub</a></li>
+          <li><a href="/blog">Browse related blog guides</a></li>
+          <li><a href="/platform-guides">Platform guides</a></li>
+          <li><a href="/getting-started">Getting started</a></li>
+        </ul>
+      </article>
+      <h2>Related niches</h2>
+      ${linkList(related)}
+      <p><a href="/resources/niches">Back to the full niche database</a> · <a href="/tools/all">Creator tools</a></p>`,
     });
   }
 
@@ -643,12 +764,22 @@ function bodyForRoute(route, meta, ctx) {
   if (blog) {
     const a = articlesBySlug.get(blog[1]);
     const contentHtml = markdownToHtml(typeof a?.content === 'string' ? a.content : a?.excerpt || '');
-    const clusterRelated = relatedPathsFor(route, 5);
-    const fallbackRelated = articles
-      .filter((x) => x.slug !== blog[1])
-      .slice(0, 5)
-      .map((x) => ({ href: `/blog/${x.slug}`, label: x.title }));
-    const related = clusterRelated.length ? clusterRelated : fallbackRelated;
+    const clusterRelated = relatedPathsFor(route, 8);
+    const articleIdx = articles.findIndex((x) => x.slug === blog[1]);
+    const neighborRelated = [];
+    if (articles.length > 1 && articleIdx >= 0) {
+      for (let step = 1; step <= 8 && neighborRelated.length < 8; step++) {
+        const other = articles[(articleIdx + step) % articles.length];
+        if (other.slug !== blog[1]) {
+          neighborRelated.push({ href: `/blog/${other.slug}`, label: other.title });
+        }
+      }
+    }
+    const related = [...clusterRelated];
+    for (const r of neighborRelated) {
+      if (related.length >= 10) break;
+      if (!related.some((x) => x.href === r.href)) related.push(r);
+    }
     const labelByHref = new Map(
       articles.map((x) => [`/blog/${x.slug}`, x.title]),
     );
@@ -717,16 +848,41 @@ function bodyForRoute(route, meta, ctx) {
         { name: 'Tools', href: '/tools/all' },
         { name: tool.title, href: tool.path },
       ],
-      mainHtml: `<p>Use this tool interactively after the page loads. Related resources:</p>
+      mainHtml: `<h2>What this tool helps you decide</h2>
+      <p>${escapeHtml(tool.description)} Use the interactive controls after the page loads to model scenarios with transparent assumptions. Pair results with a niche from the database and a platform playbook before you publish.</p>
+      <h2>Related resources</h2>
       ${linkList([
         { href: '/blog', label: 'Faceless content blog' },
         { href: '/resources/niches', label: 'Niche database' },
         { href: '/getting-started', label: 'Getting started guide' },
+        { href: '/faceless-content', label: 'Faceless Content Hub' },
+        { href: '/platform-guides', label: 'Platform guides' },
+        { href: '/tools/all', label: 'All creator tools' },
       ])}`,
     });
   }
 
-  // Generic static / marketing page
+  // Generic static / marketing page — richer crawlable copy for Low Content scores
+  const hubExtras = {
+    '/': `<h2>What you can do here</h2>
+      <p>ContentAnonymity teaches privacy-first faceless content: YouTube automation, TikTok and Instagram formats, monetization without relying on a single ad network, and free planning tools. Start with Getting Started, then pick a platform hub and a niche.</p>
+      <h2>Start with these hubs</h2>`,
+    '/getting-started': `<h2>Your first week</h2>
+      <p>Choose a niche, pick one platform, draft a simple content system, and validate monetization paths before you scale tooling. Use the quiz and calculator to avoid guessing.</p>
+      <h2>Core resources</h2>`,
+    '/about': `<h2>Our approach</h2>
+      <p>We publish practical, privacy-first education for anonymous creators. Guides emphasize verifiable workflows, platform policy awareness, and sustainable monetization—not hype.</p>
+      <h2>Explore the library</h2>`,
+    '/contact': `<h2>How to reach us</h2>
+      <p>Use this page for support, partnerships, and editorial questions. For product how-tos, start with Getting Started and the Faceless Content Hub.</p>
+      <h2>Helpful links</h2>`,
+    '/faceless-content': `<h2>Faceless content pillars</h2>
+      <p>This hub connects YouTube, monetization, AI workflows, and quality control so you can build a channel without showing your face—while staying aligned with platform rules.</p>
+      <h2>Go deeper</h2>`,
+  };
+  const intro = hubExtras[route] || `<h2>Explore related guides</h2>
+    <p>${escapeHtml(meta.description)}</p>`;
+
   return wrapRoot({
     h1: meta.h1,
     lead: meta.description,
@@ -734,13 +890,25 @@ function bodyForRoute(route, meta, ctx) {
       { name: 'Home', href: '/' },
       { name: meta.h1, href: route === '/' ? '/' : route },
     ],
-    mainHtml: `<p>Explore:</p>
+    mainHtml: `${intro}
     ${linkList([
       { href: '/blog', label: 'Blog & guides' },
       { href: '/platform-guides', label: 'Platform guides' },
+      { href: '/faceless-content', label: 'Faceless Content Hub' },
+      { href: '/faceless-content/youtube', label: 'Faceless YouTube hub' },
+      { href: '/faceless-content/monetization', label: 'Monetization hub' },
+      { href: '/faceless-content/ai-workflows', label: 'AI workflows' },
+      { href: '/faceless-content/quality-control', label: 'Quality control' },
       { href: '/tools/all', label: 'Creator tools' },
       { href: '/resources/niches', label: 'Niche database' },
       { href: '/getting-started', label: 'Getting started' },
+      { href: '/learning/case-studies', label: 'Case studies' },
+      { href: '/tools/calculator', label: 'Profitability calculator' },
+      { href: '/tools/niche-quiz', label: 'Niche finder quiz' },
+      { href: '/starter-kit', label: 'Starter kit' },
+      { href: '/templates/faceless-youtube-script-template', label: 'YouTube script template' },
+      { href: '/compare/best-ai-video-generators-for-faceless-content', label: 'AI video generator comparison' },
+      { href: '/trust-and-safety', label: 'Trust & safety' },
     ])}`,
   });
 }
@@ -803,6 +971,31 @@ async function fetchConvexData() {
   return { articles, guides, niches, convexUrl };
 }
 
+function appendNichesToSitemap(nicheSlugs) {
+  if (!fs.existsSync(sitemapPath) || !nicheSlugs.length) return;
+  let xml = fs.readFileSync(sitemapPath, 'utf8');
+  const today = new Date().toISOString().slice(0, 10);
+  const additions = [];
+  for (const slug of nicheSlugs.slice(0, 80)) {
+    const loc = `${SITE}/niches/${slug}`;
+    if (xml.includes(`<loc>${loc}</loc>`)) continue;
+    additions.push(`  <url>
+    <loc>${loc}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>`);
+  }
+  if (!additions.length) return;
+  xml = xml.replace('</urlset>', `${additions.join('\n')}\n</urlset>`);
+  fs.writeFileSync(sitemapPath, xml, 'utf8');
+  // Keep dist copy in sync when present
+  const distSitemap = path.join(dist, 'sitemap.xml');
+  if (fs.existsSync(path.dirname(distSitemap))) {
+    fs.writeFileSync(distSitemap, xml, 'utf8');
+  }
+}
+
 async function main() {
   const shell = loadShell();
   const routes = routesFromSitemap();
@@ -810,30 +1003,45 @@ async function main() {
   for (const thin of THIN_NOINDEX) {
     if (!routes.includes(thin)) routes.push(thin);
   }
-  console.log(`Prerender: ${routes.length} routes (${THIN_NOINDEX.size} thin/noindex included)`);
 
   let articles = [];
   let guides = [];
-  let niches = [];
+  let rawNiches = [];
   try {
     const data = await fetchConvexData();
     articles = data.articles;
     guides = data.guides;
-    niches = data.niches;
+    rawNiches = data.niches;
     console.log(
-      `Convex OK (${data.convexUrl}): ${articles.length} articles, ${guides.length} guides, ${niches.length} niches`,
+      `Convex OK (${data.convexUrl}): ${articles.length} articles, ${guides.length} guides, ${rawNiches.length} niches`,
     );
   } catch (err) {
     console.warn('⚠️ Convex fetch failed — writing head+hub stubs only:', err?.message || err);
   }
 
+  const fallbackNiches = loadFallbackNicheRecords();
+  // Public niche URLs = bundled slug dataset only (never Convex document ids)
+  const niches = normalizeNichesForSeo(rawNiches, fallbackNiches).filter((n) =>
+    fallbackNiches.some((f) => f.slug === n.slug),
+  );
+  console.log(`Niches for SEO: ${niches.length} slug URLs (fallback canonical)`);
+
+  for (const n of niches) {
+    const r = `/niches/${n.slug}`;
+    if (!routes.includes(r)) routes.push(r);
+  }
+  appendNichesToSitemap(niches.map((n) => n.slug));
+
+  console.log(`Prerender: ${routes.length} routes (${THIN_NOINDEX.size} thin/noindex included)`);
+
   const articlesBySlug = new Map(articles.map((a) => [a.slug, a]));
   const guidesBySlug = new Map(guides.map((g) => [g.slug, g]));
-  const ctx = { articles, guides, niches, articlesBySlug, guidesBySlug };
+  const nichesBySlug = new Map(niches.map((n) => [n.slug, n]));
+  const ctx = { articles, guides, niches, articlesBySlug, guidesBySlug, nichesBySlug };
 
   let written = 0;
   for (const route of routes) {
-    const meta = metaForRoute(route, articlesBySlug, guidesBySlug);
+    const meta = metaForRoute(route, articlesBySlug, guidesBySlug, nichesBySlug);
     const body = bodyForRoute(route, meta, ctx);
     let html = applyHead(shell, meta);
     if (THIN_NOINDEX.has(route)) {

@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, Navigate } from "react-router-dom";
 import { useQuery } from "convex/react";
 import ReactMarkdown from "react-markdown";
 import { api } from "../../../convex/_generated/api";
@@ -9,6 +9,7 @@ import {
   getFallbackNicheBySlug,
   fallbackToDetailNiche,
 } from "@/config/niches/nicheDatabaseFallback";
+import { isOpaqueNicheParam, slugifyNicheName } from "@/lib/nicheSlug";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,21 +38,30 @@ const DETAIL_PROSE =
 export default function NicheDetail() {
   const { nicheId } = useParams<{ nicheId: string }>();
   const hasConvex = Boolean(import.meta.env.VITE_CONVEX_URL);
+  const opaque = Boolean(nicheId && isOpaqueNicheParam(nicheId));
 
   const fallbackRecord = nicheId ? getFallbackNicheBySlug(nicheId) : undefined;
 
+  // Never query Convex with UUID / opaque ids — those 404'd in Ahrefs as /niches/{id}
   const convexNiche = useQuery(
     api.niches.getById,
-    hasConvex && nicheId && !fallbackRecord
+    hasConvex && nicheId && !fallbackRecord && !opaque
       ? { nicheId: nicheId as Id<"niches"> }
       : "skip"
   );
 
   const niche = fallbackRecord
     ? fallbackToDetailNiche(fallbackRecord)
-    : convexNiche;
+    : opaque
+      ? null
+      : convexNiche;
 
-  const loading = !fallbackRecord && hasConvex && nicheId && convexNiche === undefined;
+  const loading =
+    !fallbackRecord && !opaque && hasConvex && nicheId && convexNiche === undefined;
+
+  if (opaque && !fallbackRecord) {
+    return <Navigate to="/resources/niches" replace />;
+  }
 
   if (loading) {
     return (
@@ -87,6 +97,17 @@ export default function NicheDetail() {
     );
   }
 
+  const publicSlug =
+    fallbackRecord?.slug ||
+    slugifyNicheName(niche.nicheName || '') ||
+    nicheId ||
+    '';
+
+  // If somehow loaded via non-canonical param, bounce to slug URL
+  if (nicheId && publicSlug && nicheId !== publicSlug && !fallbackRecord) {
+    return <Navigate to={`/niches/${publicSlug}`} replace />;
+  }
+
   const profitabilityScore = niche.profitabilityScore ?? 0;
   const evergreenScore = niche.evergreenScore ?? 0;
   const longFormContent =
@@ -101,10 +122,14 @@ export default function NicheDetail() {
   return (
     <>
       <SEO
-        title={`${niche.nicheName} - Faceless Niche Analysis | ContentAnonymity`}
-        description={`Complete analysis of ${niche.nicheName} niche: difficulty ${niche.difficultyLevel}. Faceless formats, monetization, and risks.`}
-        url={`https://contentanonymity.com/niches/${nicheId}`}
-        canonical={`https://contentanonymity.com/niches/${nicheId}`}
+        title={`${niche.nicheName} Niche Guide | ContentAnonymity`}
+        description={`Complete analysis of ${niche.nicheName}: difficulty ${niche.difficultyLevel}, faceless formats, monetization, and risks.`}
+        url={`https://contentanonymity.com/niches/${publicSlug}`}
+        canonical={`https://contentanonymity.com/niches/${publicSlug}`}
+        breadcrumbItems={[
+          { name: 'Niches', url: 'https://contentanonymity.com/resources/niches' },
+          { name: niche.nicheName || 'Niche', url: `https://contentanonymity.com/niches/${publicSlug}` },
+        ]}
       />
       <Header />
       <main className="min-h-screen bg-background">

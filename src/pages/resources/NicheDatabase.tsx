@@ -12,6 +12,7 @@ import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { useNiches } from "@/hooks/useNiches";
 import { NICHE_DATABASE_INTRO_MARKDOWN } from "@/config/niches/fallbackIntro";
+import { nichePublicPath } from "@/lib/nicheSlug";
 
 const TrendIcon = ({ status }: { status: string }) => {
   switch (status) {
@@ -217,7 +218,7 @@ export default function NicheDatabase() {
                                   )}
 
                       <Button className="w-full" size="sm" asChild>
-                        <Link to={`/niches/${niche.id}`}>
+                        <Link to={nichePublicPath(niche)}>
                           View Details
                         </Link>
                       </Button>

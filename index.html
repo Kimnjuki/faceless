@@ -400,14 +400,11 @@
     <!-- Keep #root empty in source so hydrateRoot only runs on react-snap output -->
     <div id="root"></div>
 
-    <!-- Outside #root so crawlers without JS still see links; does not affect React hydrate -->
+    <!-- Outside #root: fallback links only (no H1 — route H1 lives in prerendered #root) -->
     <noscript>
       <div style="max-width: 1200px; margin: 0 auto; padding: 40px 20px; font-family: system-ui, -apple-system, sans-serif;">
-        <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 1rem;">
-          Build a Privacy-First Faceless Content Business
-        </h1>
         <p style="font-size: 1.125rem; color: #666; margin-bottom: 2rem; line-height: 1.6;">
-          ContentAnonymity helps creators build profitable faceless content businesses with AI automation, monetization guides, and free tools.
+          ContentAnonymity — privacy-first faceless content guides and tools. Enable JavaScript for the full experience, or use these links:
         </p>
         <nav aria-label="Popular resources">
           <ul style="list-style: none; padding: 0; line-height: 2;">

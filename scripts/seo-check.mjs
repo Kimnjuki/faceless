@@ -79,7 +79,13 @@ for (const file of files) {
 
   if (!title) errors.push(`${route}: missing <title>`);
   else {
-    const len = title.replace(/&amp;/g, '&').length;
+    const len = title
+      .replace(/&amp;/g, '&')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .length;
     if (len < 20 || len > 65) warnings.push(`${route}: title length ${len} (want 20-65)`);
     if (titles.has(title)) errors.push(`${route}: duplicate title with ${titles.get(title)}`);
     else titles.set(title, route);

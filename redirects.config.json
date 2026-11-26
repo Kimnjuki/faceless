@@ -6,6 +6,48 @@
       "destination": "/terms",
       "permanent": true,
       "reason": "Duplicate-canonical: /terms-of-service and /terms render the same TermsOfService page; collapse into the canonical /terms URL."
+    },
+    {
+      "source": "/platform-guides/guide-1770820903899-ataf0t3",
+      "destination": "/platform-guides",
+      "permanent": true,
+      "reason": "GSC 'Page with redirect': auto-generated CSV-import placeholder guide (guide-<ts>-<rand>) returns 404; collapse to the platform-guides hub."
+    },
+    {
+      "source": "/platform-guides/guide-1769626646112-qd6zhg3",
+      "destination": "/platform-guides",
+      "permanent": true,
+      "reason": "GSC 'Page with redirect': auto-generated CSV-import placeholder guide (guide-<ts>-<rand>) returns 404; collapse to the platform-guides hub."
+    },
+    {
+      "source": "/platform-guides/guide-1770820898330-gqu3rld",
+      "destination": "/platform-guides",
+      "permanent": true,
+      "reason": "GSC 'Page with redirect': auto-generated CSV-import placeholder guide (guide-<ts>-<rand>) returns 404; collapse to the platform-guides hub."
+    },
+    {
+      "source": "/platform-guides/guide-1769626107741-7zwtp46",
+      "destination": "/platform-guides",
+      "permanent": true,
+      "reason": "GSC 'Page with redirect': auto-generated CSV-import placeholder guide (guide-<ts>-<rand>) returns 404; collapse to the platform-guides hub."
+    },
+    {
+      "source": "/platform-guides/guide-1769626640492-sjftml0",
+      "destination": "/platform-guides",
+      "permanent": true,
+      "reason": "GSC 'Page with redirect': auto-generated CSV-import placeholder guide (guide-<ts>-<rand>) returns 404; collapse to the platform-guides hub."
+    },
+    {
+      "source": "/platform-guides/guide-1770820901797-xss9poy",
+      "destination": "/platform-guides",
+      "permanent": true,
+      "reason": "GSC 'Page with redirect': auto-generated CSV-import placeholder guide (guide-<ts>-<rand>) returns 404; collapse to the platform-guides hub."
+    },
+    {
+      "source": "/platform-guides/guide-1769626099225-x7fgq60",
+      "destination": "/platform-guides",
+      "permanent": true,
+      "reason": "GSC 'Page with redirect': auto-generated CSV-import placeholder guide (guide-<ts>-<rand>) returns 404; collapse to the platform-guides hub."
     }
   ]
 }

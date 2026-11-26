@@ -26,14 +26,16 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 const SITE_URL = 'https://contentanonymity.com';
 const SITEMAP_PATH = path.join(__dirname, '../public/sitemap.xml');
 
-/** Thin/placeholder routes — kept on site with noindex, omitted from sitemap (T4.3). */
+/** Thin/placeholder routes — kept on site with noindex, omitted from sitemap (T4.3).
+ *
+ * 2026-11-26 GSC remediation: /news and /learning-paths were removed from this set.
+ * Both are now indexable (see THIN_NOINDEX in scripts/prerender-routes.mjs) and are
+ * linked from the header/footer nav, so they must be discoverable in the sitemap. */
 const SITEMAP_EXCLUDED = new Set([
   '/products/all',
-  '/news',
   '/community/challenges',
   '/community/events',
   '/community/members',
-  '/learning-paths',
   '/learning/workshops',
   '/learning/resources',
   '/resources/templates',
@@ -58,7 +60,10 @@ const staticRoutes = [
   
   // Learning Resources - High Priority
   { path: '/platform-guides', priority: '0.8', changefreq: 'monthly' },
+  { path: '/learning-paths', priority: '0.8', changefreq: 'weekly' },
   { path: '/learning/case-studies', priority: '0.8', changefreq: 'weekly' },
+  // News feed (LiveWire) - Convex-backed, refreshed hourly by cron
+  { path: '/news', priority: '0.7', changefreq: 'daily' },
   
   // Resources - Medium Priority
   { path: '/resources/niches', priority: '0.7', changefreq: 'monthly' },

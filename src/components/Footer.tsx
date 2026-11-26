@@ -23,6 +23,7 @@ const footerSections = [
     title: "Learn",
     links: [
       { label: "Blog", href: "/blog" },
+      { label: "Learning Paths", href: "/learning-paths" },
       { label: "Platform Guides", href: "/platform-guides" },
       { label: "Case Studies", href: "/learning/case-studies" },
       { label: "YouTube Faceless Strategy", href: "/platform-guides/youtube-faceless-strategy" },
@@ -35,6 +36,7 @@ const footerSections = [
     links: [
       { label: "Niche Database", href: "/resources/niches" },
       { label: "Starter Kit", href: "/starter-kit" },
+      { label: "News Feed", href: "/news" },
       { label: "Trust & Safety", href: "/trust-and-safety" },
       { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },

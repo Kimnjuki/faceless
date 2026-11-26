@@ -35,14 +35,18 @@ const AUTO_GUIDE_SLUG_RE = /^guide-\d+-[a-z0-9]+$/;
 const EXCLUDED_ARTICLE_SLUGS = new Set(['workflows', 'anonymity']);
 
 /** Placeholder / thin routes — noindex until populated (T4.3).
- * Growth tools (seo-audit, keyword-research, backlink-checker, performance) are now indexable. */
+ * Growth tools (seo-audit, keyword-research, backlink-checker, performance) are now indexable.
+ *
+ * 2026-11-26 GSC remediation: /news and /learning-paths were removed from this set.
+ * Both now render substantial content (LearningPaths renders 11 curated paths with FAQ
+ * schema; News renders the LiveWire Convex-backed feed) and both are linked from the
+ * header/footer nav, so they are no longer thin. Keeping them noindexed was the direct
+ * cause of the GSC "Page with redirect" / "Crawled - currently not indexed" reports. */
 const THIN_NOINDEX = new Set([
   '/products/all',
-  '/news',
   '/community/challenges',
   '/community/events',
   '/community/members',
-  '/learning-paths',
   '/learning/workshops',
   '/learning/resources',
   '/resources/templates',
@@ -502,12 +506,14 @@ function siteNavHtml() {
   <a href="/">Home</a> ·
   <a href="/getting-started">Getting Started</a> ·
   <a href="/blog">Blog</a> ·
+  <a href="/learning-paths">Learning Paths</a> ·
   <a href="/platform-guides">Platform Guides</a> ·
   <a href="/faceless-content">Faceless Content</a> ·
   <a href="/faceless-content/youtube">YouTube</a> ·
   <a href="/faceless-content/monetization">Monetization</a> ·
   <a href="/tools/all">Tools</a> ·
   <a href="/learning/case-studies">Case Studies</a> ·
+  <a href="/news">News</a> ·
   <a href="/resources/niches">Niches</a>
 </nav>`;
 }
@@ -522,6 +528,7 @@ function siteFooterHtml() {
     <a href="/terms">Terms</a> ·
     <a href="/getting-started">Getting Started</a> ·
     <a href="/blog">Blog</a> ·
+    <a href="/learning-paths">Learning Paths</a> ·
     <a href="/platform-guides">Platform Guides</a> ·
     <a href="/faceless-content">Faceless Content</a> ·
     <a href="/tools/all">Tools</a> ·
@@ -529,6 +536,7 @@ function siteFooterHtml() {
     <a href="/tools/keyword-research">Keyword Research</a> ·
     <a href="/tools/backlink-checker">Backlink Checker</a> ·
     <a href="/tools/performance">Performance</a> ·
+    <a href="/news">News</a> ·
     <a href="/resources/niches">Niches</a> ·
     <a href="/starter-kit">Starter Kit</a>
   </p>
@@ -1036,6 +1044,7 @@ function bodyForRoute(route, meta, ctx) {
     mainHtml: `${intro}
     ${linkList([
       { href: '/blog', label: 'Blog & guides' },
+      { href: '/learning-paths', label: 'Learning paths' },
       { href: '/platform-guides', label: 'Platform guides' },
       { href: '/faceless-content', label: 'Faceless Content Hub' },
       { href: '/faceless-content/youtube', label: 'Faceless YouTube hub' },

@@ -188,6 +188,18 @@ export function LearnMegaMenu({ trigger }: MegaMenuProps) {
                   Getting Started
                 </Link>
               </Button>
+              <Button variant="ghost" className="w-full justify-start" asChild>
+                <Link to="/learning-paths">
+                  <GraduationCap className="mr-2 h-4 w-4" />
+                  Learning Paths
+                </Link>
+              </Button>
+              <Button variant="ghost" className="w-full justify-start" asChild>
+                <Link to="/news">
+                  <TrendingUp className="mr-2 h-4 w-4" />
+                  News Feed
+                </Link>
+              </Button>
             </div>
           </div>
         </div>

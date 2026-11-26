@@ -26,6 +26,7 @@ const footerSections = [
       { label: "Learning Paths", href: "/learning-paths" },
       { label: "Platform Guides", href: "/platform-guides" },
       { label: "Case Studies", href: "/learning/case-studies" },
+      { label: "Resource Downloads", href: "/learning/resources" },
       { label: "YouTube Faceless Strategy", href: "/platform-guides/youtube-faceless-strategy" },
       { label: "TikTok Faceless Virality", href: "/platform-guides/tiktok-faceless-virality" },
       { label: "Instagram Faceless Aesthetic", href: "/platform-guides/instagram-faceless-aesthetic" },

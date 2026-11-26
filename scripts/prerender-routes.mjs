@@ -41,14 +41,20 @@ const EXCLUDED_ARTICLE_SLUGS = new Set(['workflows', 'anonymity']);
  * Both now render substantial content (LearningPaths renders 11 curated paths with FAQ
  * schema; News renders the LiveWire Convex-backed feed) and both are linked from the
  * header/footer nav, so they are no longer thin. Keeping them noindexed was the direct
- * cause of the GSC "Page with redirect" / "Crawled - currently not indexed" reports. */
+ * cause of the GSC "Page with redirect" / "Crawled - currently not indexed" reports.
+ *
+ * 2026-11-26 GSC "Not found (404)" remediation: /learning/resources was also removed.
+ * ResourceDownloads renders 6 static resources + Convex templates/digital assets + an
+ * email opt-in — real unique content, now linked from the footer and in the sitemap.
+ * /products/all stays noindexed (thin 3-product stub whose cards link to unprerendered
+ * /product/<slug> 404s); /learning/workshops stays noindexed (stale Jan-2025 dates);
+ * /community/* stay noindexed (empty Convex-backed directories). */
 const THIN_NOINDEX = new Set([
   '/products/all',
   '/community/challenges',
   '/community/events',
   '/community/members',
   '/learning/workshops',
-  '/learning/resources',
   '/resources/templates',
 ]);
 
@@ -205,6 +211,12 @@ const STATIC_PAGE_META = {
       'Case studies and breakdowns of faceless content strategies across YouTube, TikTok, and Instagram.',
     h1: 'Faceless Creator Case Studies',
   },
+  '/learning/resources': {
+    title: 'Free Resource Downloads - Templates & Checklists | ContentAnonymity',
+    description:
+      'Download free resources for faceless creators: content calendars, niche lists, script templates, SEO checklists, and worksheets.',
+    h1: 'Resource Downloads',
+  },
   '/faceless-content': {
     title: 'Faceless Content Hub | ContentAnonymity',
     description:
@@ -274,6 +286,70 @@ function brandTitle(headline) {
   if (h.includes('ContentAnonymity')) return truncate(h, max);
   if ((h + suffix).length <= max) return h + suffix;
   return `${truncate(h, max - suffix.length)}${suffix}`;
+}
+
+/**
+ * Load case-study records from the TS fallback config (authoritative public URLs).
+ *
+ * Parses src/config/caseStudies/caseStudiesFallback.ts for slug/title/excerpt/etc.
+ * and resolves each `content: combine(NAME_A, NAME_B, ...)` against the four
+ * sibling markdown files (each `export const NAME = \`...\`;` — verified to contain
+ * no internal backticks or ${} interpolations, so a non-greedy regex is safe).
+ */
+function loadCaseStudyRecords() {
+  const dir = path.join(root, 'src/config/caseStudies');
+  const mainFile = path.join(dir, 'caseStudiesFallback.ts');
+  if (!fs.existsSync(mainFile)) return [];
+  const text = fs.readFileSync(mainFile, 'utf8');
+
+  // Index every `export const NAME = \`...\`;` across the 4 markdown files.
+  const mdFiles = [
+    'caseStudiesMarkdown.ts',
+    'caseStudiesMarkdownExpand.ts',
+    'caseStudiesMarkdownExpand2.ts',
+    'caseStudiesMarkdownExpand3.ts',
+  ];
+  const consts = new Map();
+  for (const f of mdFiles) {
+    const p = path.join(dir, f);
+    if (!fs.existsSync(p)) continue;
+    const src = fs.readFileSync(p, 'utf8');
+    for (const m of src.matchAll(/export const (\w+) = `([\s\S]*?)`;/g)) {
+      consts.set(m[1], m[2]);
+    }
+  }
+
+  const bySlug = new Map();
+  const blocks = text.split(/\{\s*slug:\s*"/).slice(1);
+  for (const block of blocks) {
+    const slug = block.match(/^([^"]+)"/)?.[1];
+    if (!slug || !VALID_SLUG_RE.test(slug)) continue;
+    const title = block.match(/title:\s*"([^"]+)"/)?.[1] || titleFromSlug(slug);
+    const excerpt = block.match(/excerpt:\s*"([\s\S]*?)"\s*,?\s*\n\s*content:/)?.[1]
+      || block.match(/excerpt:\s*"([^"]+)"/)?.[1]
+      || '';
+    const platform = block.match(/platform:\s*"([^"]+)"/)?.[1] || '';
+    const niche = block.match(/niche:\s*"([^"]+)"/)?.[1] || '';
+    const strategy = block.match(/strategy:\s*"([^"]+)"/)?.[1] || '';
+    const timeline = block.match(/timeline:\s*"([^"]+)"/)?.[1] || '';
+    const revenue = block.match(/revenue:\s*"([^"]+)"/)?.[1] || '';
+    const keyPointsMatch = block.match(/keyPoints:\s*\[([\s\S]*?)\]/);
+    const keyPoints = keyPointsMatch
+      ? [...keyPointsMatch[1].matchAll(/"([^"]+)"/g)].map((m) => m[1])
+      : [];
+    // Resolve combine(NAME, NAME, ...) argument names against the markdown consts.
+    const combineMatch = block.match(/content:\s*combine\(([\s\S]*?)\)/);
+    let content = '';
+    if (combineMatch) {
+      const names = [...combineMatch[1].matchAll(/(\w+)/g)].map((m) => m[1]);
+      content = names
+        .map((n) => (consts.get(n) || '').trim())
+        .filter(Boolean)
+        .join('\n\n');
+    }
+    bySlug.set(slug, { slug, title, excerpt, platform, niche, strategy, timeline, revenue, keyPoints, content });
+  }
+  return [...bySlug.values()];
 }
 
 /** Load slug list from fallback niche TS sources (authoritative public URLs). */
@@ -513,6 +589,7 @@ function siteNavHtml() {
   <a href="/faceless-content/monetization">Monetization</a> ·
   <a href="/tools/all">Tools</a> ·
   <a href="/learning/case-studies">Case Studies</a> ·
+  <a href="/learning/resources">Resources</a> ·
   <a href="/news">News</a> ·
   <a href="/resources/niches">Niches</a>
 </nav>`;
@@ -532,6 +609,7 @@ function siteFooterHtml() {
     <a href="/platform-guides">Platform Guides</a> ·
     <a href="/faceless-content">Faceless Content</a> ·
     <a href="/tools/all">Tools</a> ·
+    <a href="/learning/resources">Resources</a> ·
     <a href="/tools/seo-audit">SEO Audit</a> ·
     <a href="/tools/keyword-research">Keyword Research</a> ·
     <a href="/tools/backlink-checker">Backlink Checker</a> ·
@@ -622,7 +700,7 @@ ${siteFooterHtml()}
 </div>`;
 }
 
-function metaForRoute(route, articlesBySlug, guidesBySlug, nichesBySlug) {
+function metaForRoute(route, articlesBySlug, guidesBySlug, nichesBySlug, caseStudiesBySlug) {
   if (STATIC_PAGE_META[route]) {
     const m = STATIC_PAGE_META[route];
     const h1 = m.h1.length > 70 ? truncate(m.h1, 68) : m.h1;
@@ -660,6 +738,22 @@ function metaForRoute(route, articlesBySlug, guidesBySlug, nichesBySlug) {
     const description =
       g?.excerpt ||
       `${headline} — platform guide for faceless creators on ContentAnonymity.`;
+    return {
+      title: brandTitle(headline),
+      description: truncate(description, 155),
+      canonical: `${SITE}${route}`,
+      type: 'article',
+      h1: headline.length > 70 ? truncate(headline, 68) : headline,
+    };
+  }
+
+  const caseStudy = route.match(/^\/learning\/case-studies\/([^/]+)$/);
+  if (caseStudy) {
+    const cs = caseStudiesBySlug?.get(caseStudy[1]);
+    const headline = cs?.title || titleFromSlug(caseStudy[1]);
+    const description =
+      cs?.excerpt ||
+      `${headline} — faceless creator case study on ContentAnonymity.`;
     return {
       title: brandTitle(headline),
       description: truncate(description, 155),
@@ -710,7 +804,7 @@ function metaForRoute(route, articlesBySlug, guidesBySlug, nichesBySlug) {
 }
 
 function bodyForRoute(route, meta, ctx) {
-  const { articles, guides, niches, articlesBySlug, guidesBySlug } = ctx;
+  const { articles, guides, niches, articlesBySlug, guidesBySlug, caseStudies, caseStudiesBySlug } = ctx;
 
   if (route === '/blog') {
     const topNiches = niches.slice(0, 12).map((n) => ({
@@ -735,6 +829,98 @@ function bodyForRoute(route, meta, ctx) {
       <h2>Pair articles with a niche</h2>
       ${linkList(topNiches)}
       <p><a href="/resources/niches">Full niche database</a> · <a href="/platform-guides">Platform guides</a> · <a href="/faceless-content">Faceless Content Hub</a></p>`,
+    });
+  }
+
+  if (route === '/learning/case-studies') {
+    return wrapRoot({
+      h1: meta.h1,
+      lead: 'Real breakdowns of faceless content strategies across YouTube, TikTok, Instagram, and more.',
+      crumbs: [
+        { name: 'Home', href: '/' },
+        { name: 'Case Studies', href: '/learning/case-studies' },
+      ],
+      mainHtml: `<h2>All case studies</h2>
+      ${linkList(
+        (caseStudies || []).map((cs) => ({
+          href: `/learning/case-studies/${cs.slug}`,
+          label: cs.title,
+          excerpt: cs.excerpt,
+        })),
+      )}
+      <p>Related: <a href="/blog">Blog guides</a> · <a href="/platform-guides">Platform guides</a> · <a href="/learning-paths">Learning paths</a> · <a href="/tools/all">Creator tools</a></p>`,
+    });
+  }
+
+  const caseStudy = route.match(/^\/learning\/case-studies\/([^/]+)$/);
+  if (caseStudy) {
+    const cs = caseStudiesBySlug?.get(caseStudy[1]);
+    const contentHtml = cs?.content ? markdownToHtml(cs.content) : '';
+    const siblings = (caseStudies || [])
+      .filter((x) => x.slug !== caseStudy[1])
+      .slice(0, 6)
+      .map((x) => ({ href: `/learning/case-studies/${x.slug}`, label: x.title }));
+    const facts = cs
+      ? `<ul>
+          ${cs.platform ? `<li><strong>Platform:</strong> ${escapeHtml(cs.platform)}</li>` : ''}
+          ${cs.niche ? `<li><strong>Niche:</strong> ${escapeHtml(cs.niche)}</li>` : ''}
+          ${cs.timeline ? `<li><strong>Timeline:</strong> ${escapeHtml(cs.timeline)}</li>` : ''}
+          ${cs.strategy ? `<li><strong>Strategy:</strong> ${escapeHtml(cs.strategy)}</li>` : ''}
+        </ul>`
+      : '';
+    const keyPointsHtml = cs?.keyPoints?.length
+      ? `<h2>Key takeaways</h2><ul>${cs.keyPoints.map((k) => `<li>${escapeHtml(k)}</li>`).join('')}</ul>`
+      : '';
+    return wrapRoot({
+      h1: meta.h1,
+      lead: cs?.excerpt || meta.description,
+      crumbs: [
+        { name: 'Home', href: '/' },
+        { name: 'Case Studies', href: '/learning/case-studies' },
+        { name: truncate(meta.h1, 48), href: route },
+      ],
+      jsonLd: articleJsonLd({
+        headline: meta.h1,
+        description: meta.description,
+        path: route,
+      }),
+      mainHtml: `<article>
+        ${facts}
+        ${keyPointsHtml}
+        ${contentHtml || `<p>${escapeHtml(cs?.excerpt || 'Case study content loading…')}</p>`}
+      </article>
+      <h2>More case studies</h2>
+      ${linkList(siblings)}
+      <p><a href="/learning/case-studies">All case studies</a> · <a href="/blog">Blog</a> · <a href="/platform-guides">Platform guides</a> · <a href="/tools/all">Creator tools</a></p>`,
+    });
+  }
+
+  if (route === '/learning/resources') {
+    const resources = [
+      { label: 'Content Calendar Template', excerpt: 'Monthly content planning calendar with posting schedule (Excel).' },
+      { label: 'Profitable Niches List', excerpt: '100+ profitable niches with competition analysis (PDF).' },
+      { label: 'Video Script Template', excerpt: 'Ready-to-use script template for faceless videos (Word).' },
+      { label: 'SEO Checklist', excerpt: 'Complete SEO checklist for YouTube optimization (PDF).' },
+      { label: 'Niche Research Worksheet', excerpt: 'Interactive worksheet for niche validation (Excel).' },
+      { label: 'Community Engagement Guide', excerpt: 'Strategies for building engaged communities (PDF).' },
+    ];
+    return wrapRoot({
+      h1: meta.h1,
+      lead: 'Checklists, PDFs, spreadsheets, and templates to accelerate your faceless content success.',
+      crumbs: [
+        { name: 'Home', href: '/' },
+        { name: 'Resources', href: '/learning/resources' },
+      ],
+      mainHtml: `<h2>Free downloads</h2>
+      <ul>${resources
+        .map(
+          (r) =>
+            `<li><strong>${escapeHtml(r.label)}</strong> — ${escapeHtml(r.excerpt)}</li>`,
+        )
+        .join('\n')}</ul>
+      <h2>Get new resources by email</h2>
+      <p>Join the list for templates, prompts, and checklists. Unsubscribe anytime.</p>
+      <p>Related: <a href="/resources/templates">Template library</a> · <a href="/starter-kit">Starter kit</a> · <a href="/tools/all">Creator tools</a> · <a href="/blog">Blog guides</a></p>`,
     });
   }
 
@@ -1192,16 +1378,26 @@ async function main() {
   }
   appendNichesToSitemap(niches.map((n) => n.slug));
 
+  // Case-study detail pages are indexable content (7 fallback records) — always
+  // prerender them so nginx serves 200 instead of 404 (GSC "Not found (404)" fix).
+  const caseStudies = loadCaseStudyRecords();
+  for (const cs of caseStudies) {
+    const r = `/learning/case-studies/${cs.slug}`;
+    if (!routes.includes(r)) routes.push(r);
+  }
+  console.log(`Case studies for SEO: ${caseStudies.length} detail URLs`);
+
   console.log(`Prerender: ${routes.length} routes (${THIN_NOINDEX.size} thin/noindex included)`);
 
   const articlesBySlug = new Map(articles.map((a) => [a.slug, a]));
   const guidesBySlug = new Map(guides.map((g) => [g.slug, g]));
   const nichesBySlug = new Map(niches.map((n) => [n.slug, n]));
-  const ctx = { articles, guides, niches, articlesBySlug, guidesBySlug, nichesBySlug };
+  const caseStudiesBySlug = new Map(caseStudies.map((c) => [c.slug, c]));
+  const ctx = { articles, guides, niches, articlesBySlug, guidesBySlug, nichesBySlug, caseStudies, caseStudiesBySlug };
 
   let written = 0;
   for (const route of routes) {
-    const meta = metaForRoute(route, articlesBySlug, guidesBySlug, nichesBySlug);
+    const meta = metaForRoute(route, articlesBySlug, guidesBySlug, nichesBySlug, caseStudiesBySlug);
     const body = bodyForRoute(route, meta, ctx);
     let html = applyHead(shell, meta);
     if (THIN_NOINDEX.has(route)) {

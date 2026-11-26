@@ -30,14 +30,17 @@ const SITEMAP_PATH = path.join(__dirname, '../public/sitemap.xml');
  *
  * 2026-11-26 GSC remediation: /news and /learning-paths were removed from this set.
  * Both are now indexable (see THIN_NOINDEX in scripts/prerender-routes.mjs) and are
- * linked from the header/footer nav, so they must be discoverable in the sitemap. */
+ * linked from the header/footer nav, so they must be discoverable in the sitemap.
+ *
+ * 2026-11-26 GSC "Not found (404)" remediation: /learning/resources was also removed —
+ * it renders 6 static resources + Convex templates/assets + an email opt-in and is now
+ * linked from the footer. */
 const SITEMAP_EXCLUDED = new Set([
   '/products/all',
   '/community/challenges',
   '/community/events',
   '/community/members',
   '/learning/workshops',
-  '/learning/resources',
   '/resources/templates',
 ]);
 
@@ -62,6 +65,7 @@ const staticRoutes = [
   { path: '/platform-guides', priority: '0.8', changefreq: 'monthly' },
   { path: '/learning-paths', priority: '0.8', changefreq: 'weekly' },
   { path: '/learning/case-studies', priority: '0.8', changefreq: 'weekly' },
+  { path: '/learning/resources', priority: '0.7', changefreq: 'monthly' },
   // News feed (LiveWire) - Convex-backed, refreshed hourly by cron
   { path: '/news', priority: '0.7', changefreq: 'daily' },
   
@@ -140,6 +144,30 @@ function generateSitemap(routes) {
 }
 
 /**
+ * Case-study detail routes parsed from the TS fallback config (authoritative
+ * public URLs). These pages are indexable long-form content and must be in the
+ * sitemap so crawlers discover them (GSC "Not found (404)" fix).
+ */
+function caseStudyRoutes() {
+  const file = path.join(__dirname, '../src/config/caseStudies/caseStudiesFallback.ts');
+  if (!fs.existsSync(file)) return [];
+  const text = fs.readFileSync(file, 'utf8');
+  const routes = [];
+  const seen = new Set();
+  for (const m of text.matchAll(/\{\s*slug:\s*"([^"]+)"/g)) {
+    const slug = m[1];
+    if (!VALID_SLUG_RE.test(slug) || seen.has(slug)) continue;
+    seen.add(slug);
+    routes.push({
+      path: `/learning/case-studies/${slug}`,
+      priority: '0.7',
+      changefreq: 'monthly',
+    });
+  }
+  return routes;
+}
+
+/**
  * Fetch dynamic routes from Convex HTTP API (/api/sitemap-data)
  */
 async function fetchDynamicRoutes() {
@@ -201,8 +229,12 @@ async function main() {
   try {
     console.log('🚀 Generating sitemap...');
     const dynamic = await fetchDynamicRoutes();
+    const caseStudies = caseStudyRoutes();
+    if (caseStudies.length) {
+      console.log(`   ✅ Parsed ${caseStudies.length} case-study detail routes`);
+    }
     // Keep only canonical, indexable, self-canonicalizing routes.
-    const before = [...staticRoutes, ...dynamic];
+    const before = [...staticRoutes, ...dynamic, ...caseStudies];
     const seen = new Set();
     const allRoutes = before.filter((r) => {
       const path = typeof r.path === 'string' && r.path.startsWith('/') ? r.path : `/${r.path || ''}`;
